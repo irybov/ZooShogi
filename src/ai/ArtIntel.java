@@ -69,10 +69,10 @@ public class ArtIntel implements Runnable{
 			minimax(board, "black", 6);
 			break;
 		case 6:
-			minimaxAB(board, "black", 10, Integer.MIN_VALUE+1, Integer.MAX_VALUE);
+			minimaxAB(board, "black", 8, Integer.MIN_VALUE+1, Integer.MAX_VALUE);
 			break;
 		case 7:
-			minimaxEX(board, "black", 8, Integer.MIN_VALUE+1, Integer.MAX_VALUE, false);
+			minimaxEX(board, "black", 6, Integer.MIN_VALUE+1, Integer.MAX_VALUE, false);
 			break;
 			}
 	}
@@ -907,7 +907,7 @@ public class ArtIntel implements Runnable{
 			return -(2000+(depth*10));	
 			}	
 		
-		if(check(field, turn) && depth < 8){
+		if(check(field, turn) && depth < 6){
 			if(turn=="white"){
 				return -(1000+(depth*10));
 			}
@@ -927,14 +927,14 @@ public class ArtIntel implements Runnable{
 		List<Node> legal = new ArrayList<>();
 		List<Node> start = new ArrayList<>();
 
-		if(depth == 8){
+		if(depth == 6){
 			legal.add(root);
 		}
-		else if(depth != 8 && turn=="black"){
+		else if(depth != 6 && turn=="black"){
 			start = generateBlackMoves(field);
 			legal.addAll(sortingMoveList(field, start, "black", false));			
 		}
-		else if(depth != 8 && turn=="white"){
+		else if(depth != 6 && turn=="white"){
 			start = generateWhiteMoves(field);
 			legal.addAll(sortingMoveList(field, start, "white", false));			
 		}
@@ -992,7 +992,7 @@ public class ArtIntel implements Runnable{
 						alpha = value;
 						scores.add(value);
 						}
-					if(depth==8){
+					if(depth==6){
 						root.setValue(value);
 						Integrator.mergeMoves(root);
 						hash.clear();
@@ -1090,7 +1090,7 @@ public class ArtIntel implements Runnable{
 			return -(2000+(depth*10));	
 			}	
 		
-		if(check(field, turn) && depth < 10){
+		if(check(field, turn) && depth < 8){
 			if(turn=="white"){
 				return -(1000+(depth*10));
 			}
@@ -1106,14 +1106,14 @@ public class ArtIntel implements Runnable{
 		List<Node> legal = new ArrayList<>();
 		List<Node> start = new ArrayList<>();
 
-		if(depth == 10){
+		if(depth == 8){
 			legal.add(root);
 		}
-		else if(depth != 10 && turn=="black"){
+		else if(depth != 8 && turn=="black"){
 			start = generateBlackMoves(field);
 			legal.addAll(sortingMoveList(field, start, "black", false));			
 		}
-		else if(depth != 10 && turn=="white"){
+		else if(depth != 8 && turn=="white"){
 			start = generateWhiteMoves(field);
 			legal.addAll(sortingMoveList(field, start, "white", false));			
 		}
@@ -1159,7 +1159,7 @@ public class ArtIntel implements Runnable{
 						alpha = value;
 						scores.add(value);
 						}
-					if(depth==10){
+					if(depth==8){
 						root.setValue(value);
 						Integrator.mergeMoves(root);
 						hash.clear();
