@@ -2,6 +2,7 @@ package ai;
 
 public class Node implements Comparable<Node>{
 
+	private int depth;
 	private int value;
 	
 	private final int R;
@@ -15,6 +16,12 @@ public class Node implements Comparable<Node>{
 		R2 = r2;
 		C2 = c2;
 	}
+	
+	@Override
+	public String toString() {
+		return "Node [depth=" + depth + ", value=" + value + ", R=" + R + ", C=" + C + ", R2=" + R2 + ", C2=" + C2
+				+ "]";
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -23,6 +30,7 @@ public class Node implements Comparable<Node>{
 		result = prime * result + C2;
 		result = prime * result + R;
 		result = prime * result + R2;
+//		result = prime * result + depth;
 //		result = prime * result + value;
 		return result;
 	}
@@ -43,6 +51,8 @@ public class Node implements Comparable<Node>{
 			return false;
 		if (R2 != other.R2)
 			return false;
+//		if (depth != other.depth)
+//		return false;
 //		if (value != other.value)
 //			return false;
 		return true;
@@ -73,6 +83,14 @@ public class Node implements Comparable<Node>{
 	}
 	public int getC2() {
 		return C2;
+	}
+
+
+	public int getDepth() {
+		return depth;
+	}
+	public void setDepth(int depth) {
+		this.depth = depth;
 	}
 	
 	public int getValue() {

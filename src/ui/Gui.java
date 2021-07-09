@@ -66,7 +66,7 @@ public class Gui {
 	static JLabel behave = new JLabel("Select AI level / behave:");
 	static JPanel panel = new JPanel(new GridLayout(2,4));
 	static ButtonGroup level = new ButtonGroup();	
-	static String[] levelArray = {"Stupid", "Naive", "Tricky", "Greedy", 
+	static String[] levelArray = {"Stupid", "Naive", "Greedy", "Tricky", 
 								  "Active", "Clever", "Expert", "Master"};
 	static JToggleButton[] brain = new JToggleButton[levelArray.length];
 	

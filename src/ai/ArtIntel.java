@@ -49,17 +49,17 @@ public class ArtIntel implements Runnable{
 			break;
 		case 1:
 			expectimax(board, "black", 6);
-			break;
+			break;		
 		case 2:
+			greedy(board);
+			sendMovelist();
+			break;
+		case 3:
 			Map<String[][], List<Node>> start = new HashMap<>();
 			List<Node> node = new ArrayList<>();
 			node.add(root);
 			start.put(board, node);
 			breadthMM(start, "black", 4);
-			break;		
-		case 3:
-			greedy(board);
-			sendMovelist();
 			break;
 		case 4:
 			forward(board, "black", 6);

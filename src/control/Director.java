@@ -198,13 +198,13 @@ public class Director{
 		}
 		switch(level){
 		case 0:
-		case 3:
+		case 2:
 		case 4:	
 			ArtIntel t0 = new ArtIntel(level, board);
 			t0.run();
 			break;
 		case 1:
-		case 2:
+		case 3:
 		case 5:
 		case 6:
 		case 7:
