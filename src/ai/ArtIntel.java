@@ -1509,7 +1509,7 @@ public class ArtIntel implements Runnable{
 		Map<String[][], List<Node>> nodes = new HashMap<>();
 		List<Integer> scores = new ArrayList<>();
 
-		if(depth>1){
+		if(depth > 1){
 		for(String[][] field: plate.keySet()){
 			List<Node> legal = plate.get(field);
 			
@@ -1616,7 +1616,7 @@ public class ArtIntel implements Runnable{
 			int value;
 			if(turn=="black"){
 				value = breadthMM(nodes, "white", depth-1);
-				if(depth==4){
+				if(depth == 4){
 					root.setValue(value);
 					Integrator.mergeMoves(root);
 					}
