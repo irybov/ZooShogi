@@ -112,7 +112,7 @@ public class Capture {
 		return value;
 	}
 
-	// controls piece's capture
+	// controls piece's capturing
 	public static int take(String[][] field, int r2, int c2) {
 		
 		int c3 = 9;

@@ -1,8 +1,8 @@
 package control;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -53,19 +53,21 @@ public class Director{
 	}	
 	private void setBoard(String[][] field){
 		board = Copier.deepCopy(field);
-		clearing();
 		Gui.doClick();
-/*		
-	    for(int i=0; i<board.length; i++){
-	    	for(int j=0; j<board[i].length; j++){
-	    		System.out.print(board[i][j]);
-	    	}
-	    }
-	    System.out.println();
-*/	}
-	public String[][] getBoard(){
-		String[][] field = Copier.deepCopy(board);
-		return field;
+	}
+	private String[][] getBoard(){
+
+		return Copier.deepCopy(board);
+	}
+
+	private void setMoves(Map<String, Integer> moves) {
+		
+		game = Copier.deepCopy(moves);
+	}
+	
+	private Map<String, Integer> getMoves(){
+		
+		return Copier.deepCopy(game);
 	}
 	
 	public void initialize() {
@@ -74,12 +76,8 @@ public class Director{
 		board[1] = new String[]{" "," "," "};
 		board[2] = new String[]{" "," "," "};		
 		board[3] = new String[]{" "," "," "," "," "," "," "," "," "," "};
-/*		
-		for(r=0; r<board.length; r++){
-			for(c=0; c<board[0].length; c++){
-				board[r][c] = " ";
-			}
-*/			board[1][1] = "p";
+
+		board[1][1] = "p";
 			board[0][0] = "r";
 			board[0][1] = "k";
 			board[0][2] = "b";			
@@ -88,7 +86,6 @@ public class Director{
 			board[3][0] = "B";
 			board[3][1] = "K";
 			board[3][2] = "R";
-//			}
 	}
 	
 	public String refresh(int r, int c) {
@@ -329,43 +326,29 @@ public class Director{
 	}
 
 	public void saveGame(){
-	
-		String[][] field = getBoard();
+		
+		GameState state = new GameState(getBoard(), getMoves());
 		
 	    try(FileOutputStream fos = new FileOutputStream("game.ser");
 	    		ObjectOutputStream oos = new ObjectOutputStream(fos)){
-	           oos.writeUnshared(field);
+	           oos.writeUnshared(state);
 	           oos.flush();
 	           oos.reset();
 	    }
 	    catch (IOException ex) {
 			ex.printStackTrace();
 		}
-/*	    
-	    for(int i=0; i<field.length; i++){
-	    	for(int j=0; j<field[0].length; j++){
-	    		System.out.print(field[i][j]);
-	    	}
-	    }
-	    System.out.println();
-*/	    
+	    
 	}
 	
 	public void loadGame(){
 	
 	    try(FileInputStream fis = new FileInputStream("game.ser");
 	    		ObjectInputStream ois = new ObjectInputStream(fis)){
-	    	String[][] field = (String[][]) ois.readUnshared();
-			setBoard(field);
-//			push.setEnabled(false);
-/*			
-		    for(int i=0; i<field.length; i++){
-		    	for(int j=0; j<field[0].length; j++){
-		    		System.out.print(field[i][j]);
-		    	}
-		    }
-		    System.out.println();
-*/		    	
+	    	GameState state = (GameState) ois.readUnshared();
+			setBoard(state.getBoard());
+			setMoves(state.getMoves());
+	    	ois.close();		    	
 	    }
 	    catch (IOException | ClassNotFoundException ex) {
 			ex.printStackTrace();
