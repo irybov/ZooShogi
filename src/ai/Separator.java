@@ -30,10 +30,10 @@ public class Separator {
 		int r2, c2;
 
 		for(int i=3; i<9; i++) {
-			if(field[0][i]!=" "){
+			if(!field[0][i].equals(" ")){
 				for(int r=0; r<4; r++){
 					for(int c=0; c<3; c++){
-						if(field[r][c]==" "){
+						if(field[r][c].equals(" ")){
 							legal.add(new Node(0, i, r, c));
 						}
 					}
@@ -43,7 +43,7 @@ public class Separator {
 			
 		for(int r=0; r<4; r++){
 			for(int c=0; c<3; c++){					
-				if(field[r][c]=="p"){
+				if(field[r][c].equals("p")){
 					r2 = r+1;
 					c2 = c;
 					if((Pawn.move(r, c, r2, c2))&&
@@ -51,7 +51,7 @@ public class Separator {
 						legal.add(new Node(r, c, r2, c2));
 					}
 				}				
-				else if(field[r][c]=="r"){					
+				else if(field[r][c].equals("r")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
 						if((Rook.move(r, c, r2, c2))&&
@@ -61,7 +61,7 @@ public class Separator {
 						}							
 					}
 				}				
-				else if(field[r][c]=="k"){					
+				else if(field[r][c].equals("k")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
 						if((King.move(r, c, r2, c2))&&
@@ -71,7 +71,7 @@ public class Separator {
 						}							
 					}
 				}				
-				else if(field[r][c]=="b"){					
+				else if(field[r][c].equals("b")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
 						if((Bishop.move(r, c, r2, c2))&&
@@ -81,7 +81,7 @@ public class Separator {
 						}							
 					}
 				}				
-				else if(field[r][c]=="q"){					
+				else if(field[r][c].equals("q")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
 						if((Queen.move(r, c, r2, c2, "black"))&&

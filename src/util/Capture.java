@@ -5,12 +5,14 @@ public class Capture {
 	// checks if capture is possible
 	public static boolean check(String[][] field, int r2, int c2, String side) {
 		
-		if((side == "white") & (field[r2][c2]==" "||field[r2][c2]=="p"||field[r2][c2]=="q"||
-								field[r2][c2]=="r"||field[r2][c2]=="b"||field[r2][c2]=="k")) {
+		if((side.equals("white"))&(field[r2][c2].equals(" ")||field[r2][c2].equals("p")||
+			field[r2][c2].equals("q")||field[r2][c2].equals("r")||field[r2][c2].equals("b")
+			||field[r2][c2].equals("k"))) {
 			return true;
 		}
-		else if((side == "black") & (field[r2][c2]==" "||field[r2][c2]=="P"||field[r2][c2]=="Q"||
-								field[r2][c2]=="R"||field[r2][c2]=="B"||field[r2][c2]=="K")) {
+		else if((side.equals("black"))&(field[r2][c2].equals(" ")||field[r2][c2].equals("P")||
+				field[r2][c2].equals("Q")||field[r2][c2].equals("R")||field[r2][c2].equals("B")
+				||field[r2][c2].equals("K"))) {
 			return true;
 		}
 		else
@@ -20,10 +22,12 @@ public class Capture {
 	// checks capture extensions
 	public static boolean extend(String piece, String side) {
 		
-		if((side == "white") & (piece=="p"||piece=="q"||piece=="r"||piece=="b"||piece=="k")) {
+		if((side.equals("white"))&(piece.equals("p")||piece.equals("q")||piece.equals("r")
+				||piece.equals("b")||piece.equals("k"))) {
 			return true;
 		}
-		else if((side == "black") & (piece=="P"||piece=="Q"||piece=="R"||piece=="B"||piece=="K")) {
+		else if((side.equals("black"))&(piece.equals("P")||piece.equals("Q")||piece.equals("R")
+				||piece.equals("B")||piece.equals("K"))) {
 			return true;
 		}
 		else
@@ -33,10 +37,10 @@ public class Capture {
 	// checks current king's state
 	public static boolean king(String[][] field, int r2, int c2, String side) {
 		
-		if(side == "white" & field[r2][c2]=="k") {
+		if(side.equals("white") & field[r2][c2].equals("k")) {
 			return true;
 		}
-		else if(side == "black" & field[r2][c2]=="K") {
+		else if(side.equals("black") & field[r2][c2].equals("K")) {
 			return true;
 		}
 		else
@@ -46,10 +50,10 @@ public class Capture {
 	// checks king's promotion
 	public static boolean prom(String[][] field, int r2, int c2, String side) {
 		
-		if(((side == "white") & (field[r2][c2]=="K")) & (r2==0&(c2==0||c2==1||c2==2))) {
+		if((side.equals("white") & field[r2][c2].equals("K")) & (r2==0&(c2==0||c2==1||c2==2))) {
 			return true;
 		}
-		else if(((side == "black") & (field[r2][c2]=="k")) & (r2==3&(c2==0||c2==1||c2==2))) {
+		else if((side.equals("black") & field[r2][c2].equals("k"))&(r2==3&(c2==0||c2==1||c2==2))) {
 			return true;
 		}
 		else
@@ -61,7 +65,7 @@ public class Capture {
 		
 		int value = 0;
 
-		if(side == "black") {
+		if(side.equals("black")) {
 			switch(field[r2][c2]){
 			case " ":				
 				value = 1;
@@ -115,81 +119,81 @@ public class Capture {
 		
 		switch(field[r2][c2]){
 		case "b":
-			if(field[3][3]==" "){
+			if(field[3][3].equals(" ")){
 			field[3][3] = "B";
 			c3 = 3;
 			}
-			else if(field[3][3]!=" "){
+			else if(!field[3][3].equals(" ")){
 			field[3][6] = "B";
 			c3 = 6;
 			}
 			break;
 		case "p":
-			if(field[3][4]==" "){
+			if(field[3][4].equals(" ")){
 			field[3][4] = "P";
 			c3 = 4;
 			}
-			else if(field[3][4]!=" "){
+			else if(!field[3][4].equals(" ")){
 			field[3][7] = "P";
 			c3 = 7;
 			}
 			break;
 		case "r":
-			if(field[3][5]==" "){
+			if(field[3][5].equals(" ")){
 			field[3][5] = "R";
 			c3 = 5;
 			}
-			else if(field[3][5]!=" "){
+			else if(!field[3][5].equals(" ")){
 			field[3][8] = "R";
 			c3 = 8;
 			}
 			break;
 		case "q":
-			if(field[3][4]==" "){
+			if(field[3][4].equals(" ")){
 			field[3][4] = "P";
 			c3 = 4;
 			}
-			else if(field[3][4]!=" "){
+			else if(!field[3][4].equals(" ")){
 			field[3][7] = "P";
 			c3 = 7;
 			}
 			break;						
 		case "B":
-			if(field[0][3]==" "){
+			if(field[0][3].equals(" ")){
 			field[0][3] = "b";
 			c3 = 3;
 			}
-			else if(field[0][3]!=" "){
+			else if(!field[0][3].equals(" ")){
 			field[0][6] = "b";
 			c3 = 6;
 			}
 			break;
 		case "P":
-			if(field[0][4]==" "){
+			if(field[0][4].equals(" ")){
 			field[0][4] = "p";
 			c3 = 4;
 			}
-			else if(field[0][4]!=" "){
+			else if(!field[0][4].equals(" ")){
 			field[0][7] = "p";
 			c3 = 7;
 			}
 			break;
 		case "R":
-			if(field[0][5]==" "){
+			if(field[0][5].equals(" ")){
 			field[0][5] = "r";
 			c3 = 5;
 			}
-			else if(field[0][5]!=" "){
+			else if(!field[0][5].equals(" ")){
 			field[0][8] = "r";
 			c3 = 8;
 			}
 			break;
 		case "Q":
-			if(field[0][4]==" "){
+			if(field[0][4].equals(" ")){
 			field[0][4] = "p";
 			c3 = 4;
 			}
-			else if(field[0][4]!=" "){
+			else if(!field[0][4].equals(" ")){
 			field[0][7] = "p";
 			c3 = 7;
 			}

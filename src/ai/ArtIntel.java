@@ -85,10 +85,10 @@ public class ArtIntel implements Runnable{
 		int r2, c2;
 
 		for(int i=3; i<9; i++) {
-			if(field[0][i]!=" "){
+			if(!field[0][i].equals(" ")){
 				for(int r=0; r<4; r++){
 					for(int c=0; c<3; c++){
-						if(field[r][c]==" "){
+						if(field[r][c].equals(" ")){
 							legal.add(new Node(0, i, r, c));
 						}
 					}
@@ -98,7 +98,7 @@ public class ArtIntel implements Runnable{
 			
 		for(int r=0; r<4; r++){
 			for(int c=0; c<3; c++){					
-				if(field[r][c]=="p"){
+				if(field[r][c].equals("p")){
 					r2 = r+1;
 					c2 = c;
 					if((Pawn.move(r, c, r2, c2))&&
@@ -106,7 +106,7 @@ public class ArtIntel implements Runnable{
 						legal.add(new Node(r, c, r2, c2));
 					}
 				}				
-				else if(field[r][c]=="r"){					
+				else if(field[r][c].equals("r")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
 						if((Rook.move(r, c, r2, c2))&&
@@ -116,7 +116,7 @@ public class ArtIntel implements Runnable{
 						}							
 					}
 				}				
-				else if(field[r][c]=="k"){					
+				else if(field[r][c].equals("k")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
 						if((King.move(r, c, r2, c2))&&
@@ -126,7 +126,7 @@ public class ArtIntel implements Runnable{
 						}							
 					}
 				}				
-				else if(field[r][c]=="b"){					
+				else if(field[r][c].equals("b")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
 						if((Bishop.move(r, c, r2, c2))&&
@@ -136,7 +136,7 @@ public class ArtIntel implements Runnable{
 						}							
 					}
 				}				
-				else if(field[r][c]=="q"){					
+				else if(field[r][c].equals("q")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
 						if((Queen.move(r, c, r2, c2, "black"))&&
@@ -159,10 +159,10 @@ public class ArtIntel implements Runnable{
 		int r2, c2;
 
 		for(int i=3; i<9; i++) {
-			if(field[3][i]!=" "){
+			if(!field[3][i].equals(" ")){
 				for(int r=0; r<4; r++){
 					for(int c=0; c<3; c++){
-						if(field[r][c]==" "){
+						if(field[r][c].equals(" ")){
 							legal.add(new Node(3, i, r, c));
 						}
 					}
@@ -172,7 +172,7 @@ public class ArtIntel implements Runnable{
 			
 		for(int r=0; r<4; r++){
 			for(int c=0; c<3; c++){					
-				if(field[r][c]=="P"){
+				if(field[r][c].equals("P")){
 					r2 = r-1;
 					c2 = c;
 					if((Pawn.move(r, c, r2, c2))&&
@@ -180,7 +180,7 @@ public class ArtIntel implements Runnable{
 						legal.add(new Node(r, c, r2, c2));
 					}
 				}
-				else if(field[r][c]=="R"){					
+				else if(field[r][c].equals("R")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
 						if((Rook.move(r, c, r2, c2))&&
@@ -190,7 +190,7 @@ public class ArtIntel implements Runnable{
 						}							
 					}
 				}
-				else if(field[r][c]=="K"){					
+				else if(field[r][c].equals("K")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
 						if((King.move(r, c, r2, c2))&&
@@ -200,7 +200,7 @@ public class ArtIntel implements Runnable{
 						}							
 					}
 				}				
-				else if(field[r][c]=="B"){					
+				else if(field[r][c].equals("B")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
 						if((Bishop.move(r, c, r2, c2))&&
@@ -210,7 +210,7 @@ public class ArtIntel implements Runnable{
 						}							
 					}
 				}				
-				else if(field[r][c]=="Q"){					
+				else if(field[r][c].equals("Q")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
 						if((Queen.move(r, c, r2, c2, "white"))&&
@@ -232,16 +232,16 @@ public class ArtIntel implements Runnable{
 		
 		for(int r=0; r<4; r++){
 			for(int c=0; c<3; c++){
-				if(field[r][c]=="K"){
+				if(field[r][c].equals("K")){
 					a = 2;
 				}
-				if(field[r][c]=="k"){
+				if(field[r][c].equals("k")){
 					b = 1;
 				}
 			}
 		}		
-		return((a+b==1) || ((a+b==3 & turn=="black") & 
-			   (field[3][0]=="k"||field[3][1]=="k"||field[3][2]=="k")));
+		return((a+b==1) || ((a+b==3 & turn.equals("black")) & 
+			   (field[3][0].equals("k")||field[3][1].equals("k")||field[3][2].equals("k"))));
 	}
 	
 	private boolean winPositionWhite(String[][] field, String turn)  {		
@@ -251,16 +251,16 @@ public class ArtIntel implements Runnable{
 		
 		for(int r=0; r<4; r++){
 			for(int c=0; c<3; c++){
-				if(field[r][c]=="K"){
+				if(field[r][c].equals("K")){
 					a = 2;
 				}
-				if(field[r][c]=="k"){
+				if(field[r][c].equals("k")){
 					b = 1;
 				}
 			}
 		}		
-		return((a+b==2) || ((a+b==3 & turn=="white") & 
-			   (field[0][0]=="K"||field[0][1]=="K"||field[0][2]=="K")));
+		return((a+b==2) || ((a+b==3 & turn.equals("white")) & 
+			   (field[0][0].equals("K")||field[0][1].equals("K")||field[0][2].equals("K"))));
 	}	
 	
 	private int evaluationMaterial(String[][] field, boolean exp) {
@@ -269,7 +269,7 @@ public class ArtIntel implements Runnable{
 
 		for(int r=0; r<4; r++){
 			for(int c=0; c<field[r].length; c++){
-				if(field[r][c]!=" "){
+				if(!field[r][c].equals(" ")){
 					switch(field[r][c]){
 						case "p":
 							score += exp ? Pawn.getValue()*10 : Pawn.getValue();
@@ -309,7 +309,7 @@ public class ArtIntel implements Runnable{
 	
 		for(r=0; r<4; r++){
 			for(c=0; c<3; c++){					
-				if(field[r][c]=="p"){
+				if(field[r][c].equals("p")){
 					r2 = r+1;
 					c2 = c;
 					if((Pawn.move(r, c, r2, c2))&&
@@ -318,7 +318,7 @@ public class ArtIntel implements Runnable{
 					}
 				}
 				
-				else if(field[r][c]=="r"){					
+				else if(field[r][c].equals("r")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
 						if((Rook.move(r, c, r2, c2))&&
@@ -329,7 +329,7 @@ public class ArtIntel implements Runnable{
 					}
 				}
 				
-				else if(field[r][c]=="k"){					
+				else if(field[r][c].equals("k")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
 						if((King.move(r, c, r2, c2))&&
@@ -340,7 +340,7 @@ public class ArtIntel implements Runnable{
 					}
 				}
 				
-				else if(field[r][c]=="b"){					
+				else if(field[r][c].equals("b")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
 						if((Bishop.move(r, c, r2, c2))&&
@@ -351,7 +351,7 @@ public class ArtIntel implements Runnable{
 					}
 				}
 				
-				else if(field[r][c]=="q"){					
+				else if(field[r][c].equals("q")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
 						if((Queen.move(r, c, r2, c2, "black"))&&
@@ -362,7 +362,7 @@ public class ArtIntel implements Runnable{
 					}
 				}
 	
-				else if(field[r][c]=="P"){
+				else if(field[r][c].equals("P")){
 					r2 = r-1;
 					c2 = c;
 					if((Pawn.move(r, c, r2, c2))&&
@@ -371,7 +371,7 @@ public class ArtIntel implements Runnable{
 					}
 				}
 				
-				else if(field[r][c]=="R"){				
+				else if(field[r][c].equals("R")){				
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
 						if((Rook.move(r, c, r2, c2))&&
@@ -382,7 +382,7 @@ public class ArtIntel implements Runnable{
 					}
 				}
 				
-				else if(field[r][c]=="K"){					
+				else if(field[r][c].equals("K")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
 						if((King.move(r, c, r2, c2))&&
@@ -393,7 +393,7 @@ public class ArtIntel implements Runnable{
 					}
 				}
 				
-				else if(field[r][c]=="B"){					
+				else if(field[r][c].equals("B")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
 						if((Bishop.move(r, c, r2, c2))&&
@@ -404,7 +404,7 @@ public class ArtIntel implements Runnable{
 					}
 				}
 	
-				else if(field[r][c]=="Q"){					
+				else if(field[r][c].equals("Q")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
 						if((Queen.move(r, c, r2, c2, "white"))&&
@@ -423,56 +423,56 @@ public class ArtIntel implements Runnable{
 		
 			int r,c,r2,c2;
 			
-		if(turn=="black"){	
+		if(turn.equals("black")){	
 			for(r=0; r<4; r++){
 				for(c=0; c<3; c++){					
-					if(field[r][c]=="p"){
+					if(field[r][c].equals("p")){
 						r2 = r+1;
 						c2 = c;
 						if((Pawn.move(r, c, r2, c2))&&
-						   (field[r2][c2]=="K")){
+						   (field[r2][c2].equals("K"))){
 							return true;
 						}
 					}
 					
-					else if(field[r][c]=="r"){						
+					else if(field[r][c].equals("r")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((Rook.move(r, c, r2, c2))&&
-								(field[r2][c2]=="K")){
+								(field[r2][c2].equals("K"))){
 								return true;
 								}
 							}							
 						}
 					}
 
-					else if(field[r][c]=="k"){						
+					else if(field[r][c].equals("k")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((King.move(r, c, r2, c2))&&
-								(field[r2][c2]=="K")){
+								(field[r2][c2].equals("K"))){
 								return true;
 								}
 							}							
 						}
 					}
 					
-					else if(field[r][c]=="b"){						
+					else if(field[r][c].equals("b")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((Bishop.move(r, c, r2, c2))&&
-								(field[r2][c2]=="K")){
+								(field[r2][c2].equals("K"))){
 								return true;
 								}
 							}							
 						}
 					}
 					
-					else if(field[r][c]=="q"){						
+					else if(field[r][c].equals("q")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((Queen.move(r, c, r2, c2, "black"))&&
-								(field[r2][c2]=="K")){
+								(field[r2][c2].equals("K"))){
 								return true;
 								}
 							}							
@@ -482,56 +482,56 @@ public class ArtIntel implements Runnable{
 			}
 		}
 				
-		else if(turn=="white"){
+		else{
 			for(r=0; r<4; r++){
 				for(c=0; c<3; c++){					
-					if(field[r][c]=="P"){
+					if(field[r][c].equals("P")){
 						r2 = r-1;
 						c2 = c;
 						if((Pawn.move(r, c, r2, c2))&&
-						   (field[r2][c2]=="k")){
+						   (field[r2][c2].equals("k"))){
 							return true;
 						}
 					}
 					
-					else if(field[r][c]=="R"){						
+					else if(field[r][c].equals("R")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((Rook.move(r, c, r2, c2))&&
-								(field[r2][c2]=="k")){
+								(field[r2][c2].equals("k"))){
 								return true;
 								}
 							}							
 						}
 					}
 					
-					else if(field[r][c]=="K"){						
+					else if(field[r][c].equals("K")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((King.move(r, c, r2, c2))&&
-								(field[r2][c2]=="k")){
+								(field[r2][c2].equals("k"))){
 								return true;
 								}
 							}							
 						}
 					}
 
-					else if(field[r][c]=="B"){						
+					else if(field[r][c].equals("B")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((Bishop.move(r, c, r2, c2))&&
-								(field[r2][c2]=="k")){
+								(field[r2][c2].equals("k"))){
 								return true;
 								}
 							}							
 						}
 					}
 					
-					else if(field[r][c]=="Q"){						
+					else if(field[r][c].equals("Q")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((Queen.move(r, c, r2, c2, "white"))&&
-								(field[r2][c2]=="k")){
+								(field[r2][c2].equals("k"))){
 								return true;
 								}
 							}							
@@ -547,56 +547,56 @@ public class ArtIntel implements Runnable{
 		
 			int r,c,r2,c2;
 		
-		if(turn=="white"){	
+		if(turn.equals("white")){	
 			for(r=0; r<4; r++){
 				for(c=0; c<3; c++){					
-					if(field[r][c]=="p"){
+					if(field[r][c].equals("p")){
 						r2 = r+1;
 						c2 = c;
 						if((Pawn.move(r, c, r2, c2))&&
-						   (field[r2][c2]=="K")){
+						   (field[r2][c2].equals("K"))){
 							return true;
 						}
 					}
 					
-					else if(field[r][c]=="r"){						
+					else if(field[r][c].equals("r")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((Rook.move(r, c, r2, c2))&&
-								(field[r2][c2]=="K")){
+								(field[r2][c2].equals("K"))){
 								return true;
 								}
 							}							
 						}
 					}
 					
-					else if(field[r][c]=="k"){						
+					else if(field[r][c].equals("k")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((King.move(r, c, r2, c2))&&
-								(field[r2][c2]=="K")){
+								(field[r2][c2].equals("K"))){
 								return true;
 								}
 							}							
 						}
 					}
 
-					else if(field[r][c]=="b"){						
+					else if(field[r][c].equals("b")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((Bishop.move(r, c, r2, c2))&&
-								(field[r2][c2]=="K")){
+								(field[r2][c2].equals("K"))){
 								return true;
 								}
 							}							
 						}
 					}
 					
-					else if(field[r][c]=="q"){						
+					else if(field[r][c].equals("q")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((Queen.move(r, c, r2, c2, "black"))&&
-								(field[r2][c2]=="K")){
+								(field[r2][c2].equals("K"))){
 								return true;
 								}
 							}							
@@ -606,56 +606,56 @@ public class ArtIntel implements Runnable{
 			}
 		}
 				
-		else if(turn=="black"){
+		else{
 			for(r=0; r<4; r++){
 				for(c=0; c<3; c++){					
-					if(field[r][c]=="P"){
+					if(field[r][c].equals("P")){
 						r2 = r-1;
 						c2 = c;
 						if((Pawn.move(r, c, r2, c2))&&
-						   (field[r2][c2]=="k")){
+						   (field[r2][c2].equals("k"))){
 							return true;
 						}
 					}
 					
-					else if(field[r][c]=="R"){						
+					else if(field[r][c].equals("R")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((Rook.move(r, c, r2, c2))&&
-								(field[r2][c2]=="k")){
+								(field[r2][c2].equals("k"))){
 								return true;
 								}
 							}							
 						}
 					}
 					
-					else if(field[r][c]=="K"){						
+					else if(field[r][c].equals("K")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((King.move(r, c, r2, c2))&&
-								(field[r2][c2]=="k")){
+								(field[r2][c2].equals("k"))){
 								return true;
 								}
 							}							
 						}
 					}
 
-					else if(field[r][c]=="B"){						
+					else if(field[r][c].equals("B")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((Bishop.move(r, c, r2, c2))&&
-								(field[r2][c2]=="k")){
+								(field[r2][c2].equals("k"))){
 								return true;
 								}
 							}							
 						}
 					}
 					
-					else if(field[r][c]=="Q"){						
+					else if(field[r][c].equals("Q")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((Queen.move(r, c, r2, c2, "white"))&&
-								(field[r2][c2]=="k")){
+								(field[r2][c2].equals("k"))){
 								return true;
 								}
 							}							
@@ -736,7 +736,7 @@ public class ArtIntel implements Runnable{
 				prev = evaluationMaterial(field, false) + evaluationPositional(field);
 		}
 	
-	if(turn=="black"){	
+	if(turn.equals("black")){	
 		for(int i=0; i<legal.size(); i++){
 
 				int r = legal.get(i).getR();
@@ -749,14 +749,14 @@ public class ArtIntel implements Runnable{
 				int c3 = 9;
 												
 				r3 = 0;
-				if((field[r][c]=="p" & (r!=0 & (c!=4||c!=7)))&(r2==3&(c2==0||c2==1||c2==2))){
+				if((field[r][c].equals("p")&(r!=0 & (c!=4||c!=7)))&(r2==3&(c2==0||c2==1||c2==2))){
 					prom = "p";
 					c3 = Capture.take(field, r2, c2);
 					temp = field[r2][c2];
 					field[r2][c2] = "q";
 					field[r][c] = " ";
 				}
-				else if(field[r][c]=="p" & (r==0 & (c==4||c==7))){
+				else if(field[r][c].equals("p") & (r==0 & (c==4||c==7))){
 					prom = " ";
 					temp = field[r2][c2];
 					field[r2][c2] = "p";
@@ -771,11 +771,11 @@ public class ArtIntel implements Runnable{
 				}
 				
 				int value;				
-				if(temp=="K"){
+				if(temp.equals("K")){
 					value = 2000;	
 					}
-				else if((field[3][0]=="k"||field[3][1]=="k"||field[3][2]=="k") &
-						check(field, "white")==false){
+				else if((field[3][0].equals("k")||field[3][1].equals("k")||field[3][2].equals("k"))
+						&check(field, "white")==false){
 					value = 1000;
 				}				
 				else if(check(field, "white")){
@@ -791,7 +791,7 @@ public class ArtIntel implements Runnable{
 				legal.get(i).setValue(value);
 				sorted.add(legal.get(i));
 				
-				if(prom == "p" & field[r2][c2]=="q"){
+				if(prom.equals("p") & field[r2][c2].equals("q")){
 					field[r][c] = "p";
 					field[r2][c2] = temp;
 					Capture.undo(field, r3, c3);
@@ -823,14 +823,14 @@ public class ArtIntel implements Runnable{
 				int c3 = 9;
 		
 				r3 = 3;
-				if((field[r][c]=="P" & (r!=3 & (c!=4||c!=7)))&(r2==0&(c2==0||c2==1||c2==2))){
+				if((field[r][c].equals("P")&(r!=3 & (c!=4||c!=7)))&(r2==0&(c2==0||c2==1||c2==2))){
 					prom = "P";
 					c3 = Capture.take(field, r2, c2);
 					temp = field[r2][c2];
 					field[r2][c2] = "Q";
 					field[r][c] = " ";
 				}
-				else if(field[r][c]=="P" & (r==3 & (c==4||c==7))){
+				else if(field[r][c].equals("P") & (r==3 & (c==4||c==7))){
 					prom = " ";
 					temp = field[r2][c2];
 					field[r2][c2] = "P";
@@ -845,11 +845,11 @@ public class ArtIntel implements Runnable{
 				}
 		
 				int value;				
-				if(temp=="k"){
+				if(temp.equals("k")){
 					value = -2000;	
 					}
-				else if((field[0][0]=="K"||field[0][1]=="K"||field[0][2]=="K") &
-						check(field, "black")==false){
+				else if((field[0][0].equals("K")||field[0][1].equals("K")||field[0][2].equals("K"))
+						&check(field, "black")==false){
 					value = -1000;
 				}				
 				else if(check(field, "black")){
@@ -865,7 +865,7 @@ public class ArtIntel implements Runnable{
 				legal.get(i).setValue(value);
 				sorted.add(legal.get(i));
 				
-				if(prom == "P" & field[r2][c2]=="Q"){
+				if(prom.equals("P") & field[r2][c2].equals("Q")){
 					field[r][c] = "P";
 					field[r2][c2] = temp;
 					Capture.undo(field, r3, c3);

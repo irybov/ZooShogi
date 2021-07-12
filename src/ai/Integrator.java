@@ -100,7 +100,7 @@ public class Integrator {
 		String spot = field[r2][c2];
 		String pieceName = Message.pieceName(field[r][c]);
 
-	if(field[r][c]=="p" & (r2==3 & (c2==0||c2==1||c2==2))){
+	if(field[r][c].equals("p") & (r2==3 & (c2==0||c2==1||c2==2))){
 		if(r==0 & (c==4||c==7)){
 			field[r2][c2] = "p";
 			field[r][c] = " ";
@@ -192,10 +192,11 @@ public class Integrator {
 */	
 	private void output(String name, int c, String col, int r, String spot, String col2, int r2){
 		
-		Gui.output.setText(name+" "+(c>2?"drops":"from "+col+(r+1))+(spot==" "?" to ":" takes on ")+col2+(r2+1));
+		Gui.output.setText(name+" "+(c>2?"drops":"from "+col+(r+1))+
+				(spot.equals(" ")?" to ":" takes on ")+col2+(r2+1));
 		if(!mute){
 		sound.voice(name);
-		if(spot != " "){
+		if(!spot.equals(" ")){
 			sound.voice("takes");			
 		}
 		sound.voice(col2+String.valueOf(r2+1));
@@ -208,53 +209,53 @@ public class Integrator {
 			
 			for(r=0; r<4; r++){
 				for(c=0; c<3; c++){					
-					if(field[r][c]=="p"){
+					if(field[r][c].equals("p")){
 						r2 = r+1;
 						c2 = c;
 						if((Pawn.move(r, c, r2, c2))&&
-						   (field[r2][c2]=="K")){
+						   (field[r2][c2].equals("K"))){
 							return true;
 						}
 					}
 					
-					else if(field[r][c]=="r"){						
+					else if(field[r][c].equals("r")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((Rook.move(r, c, r2, c2))&&
-								(field[r2][c2]=="K")){
+								(field[r2][c2].equals("K"))){
 								return true;
 								}
 							}							
 						}
 					}
 	
-					else if(field[r][c]=="k"){						
+					else if(field[r][c].equals("k")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((King.move(r, c, r2, c2))&&
-								(field[r2][c2]=="K")){
+								(field[r2][c2].equals("K"))){
 								return true;
 								}
 							}							
 						}
 					}
 					
-					else if(field[r][c]=="b"){						
+					else if(field[r][c].equals("b")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((Bishop.move(r, c, r2, c2))&&
-								(field[r2][c2]=="K")){
+								(field[r2][c2].equals("K"))){
 								return true;
 								}
 							}							
 						}
 					}
 					
-					else if(field[r][c]=="q"){						
+					else if(field[r][c].equals("q")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((Queen.move(r, c, r2, c2, "black"))&&
-								(field[r2][c2]=="K")){
+								(field[r2][c2].equals("K"))){
 								return true;
 								}
 							}							

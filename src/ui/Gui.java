@@ -691,13 +691,14 @@ public class Gui {
 		
 		loadgame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+
+				newgame.doClick();
 				
 				 javax.swing.SwingUtilities.invokeLater(new Runnable() {
 						public void run() {
 				plate.loadGame();
 						}
 					});
-				push.setEnabled(false);
 			}
 		});			
 		

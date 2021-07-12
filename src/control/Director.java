@@ -53,6 +53,8 @@ public class Director{
 	}	
 	private void setBoard(String[][] field){
 		board = Copier.deepCopy(field);
+		clearing();
+		Gui.doClick();
 /*		
 	    for(int i=0; i<board.length; i++){
 	    	for(int j=0; j<board[i].length; j++){
@@ -356,7 +358,6 @@ public class Director{
 	    	String[][] field = (String[][]) ois.readUnshared();
 			setBoard(field);
 //			push.setEnabled(false);
-			Gui.doClick();
 /*			
 		    for(int i=0; i<field.length; i++){
 		    	for(int j=0; j<field[0].length; j++){
