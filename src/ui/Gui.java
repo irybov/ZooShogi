@@ -255,7 +255,7 @@ public class Gui {
 				public void actionPerformed(ActionEvent e) {
 					JToggleButton theButton = (JToggleButton) e.getSource();
 					for(int i=0; i<levelArray.length; i++){
-						if(theButton == brain[i]){
+						if(theButton.equals(brain[i])){
 							plate.setLevel(i);
 							Gui.output.setText("Level " + Integer.toString(i+1)+ " selected");
 							return;
@@ -282,23 +282,23 @@ public class Gui {
 						JButton theButton = (JButton) e.getSource();						
 						for(int r=0;r<4;r++) {
 							for(int c=0;c<3;c++) {
-						if(theButton == squares[r][c] & click == 1 & 
+						if(theButton.equals(squares[r][c]) & click == 1 & 
 								plate.list(squares[r][c].getName())){
 							squares[r][c].setBackground(Color.YELLOW);
 							highlight(r, c);
 							plate.from(r, c, squares[r][c].getName());
 							click = 2;
 							output.setText(Message.pieceName(squares[r][c].getName()) +" choosen");
-							drop = false;							
+							drop = false;
 							return;
 							}
-						else if(theButton == squares[r][c] & click == 2 & 
+						else if(theButton.equals(squares[r][c]) & click == 2 & 
 								plate.list(squares[r][c].getName())==false){
 							if(plate.to(r, c)){
-								if(drop & squares[r][c].getName()==" "){
+								if(drop & squares[r][c].getName().equals(" ")){
 									plate.drop();
 								}
-								else if(drop & squares[r][c].getName()!=" "){
+								else if(drop & !squares[r][c].getName().equals(" ")){
 									drop = false;
 									output.setText("Wrong move!");
 									updateGui();
@@ -332,7 +332,7 @@ public class Gui {
 								return;
 								}
 							}
-						else if(theButton == squares[r][c] & click == 2 & 
+						else if(theButton.equals(squares[r][c]) & click == 2 & 
 								plate.list(squares[r][c].getName())){
 							squares[r][c].setBackground(Color.decode("#db9356"));
 							click = 1;
@@ -361,7 +361,7 @@ public class Gui {
 					public void actionPerformed(ActionEvent e) {
 						JButton theButton = (JButton) e.getSource();
 						for(int c=0;c<6;c++) {
-						if(theButton == dropW[c] & click == 1 & plate.list(dropW[c].getName())){
+						if(theButton.equals(dropW[c]) & click==1 & plate.list(dropW[c].getName())){
 							drop = true;
 							dropW[c].setBackground(Color.YELLOW);
 							highlight();
@@ -369,7 +369,7 @@ public class Gui {
 							click = 2;							
 							return;
 							}
-						else if(theButton == dropW[c] & click == 2){
+						else if(theButton.equals(dropW[c]) & click == 2){
 							dropW[c].setBackground(Color.decode("#db9356"));
 							click = 1;
 							drop = false;
@@ -406,9 +406,6 @@ public class Gui {
 				squares[r][c].setName(plate.refresh(r,c));
 				squares[r][c].setIcon(new ImageIcon(getClass().getResource
 									 (image(squares[r][c].getName()))));
-				if(warn){
-					warning();
-				}
 			}
 		}		
 		for(int c=0;c<6;c++) {
@@ -423,6 +420,14 @@ public class Gui {
 			dropB[c].setIcon(new ImageIcon(getClass().getResource
 							(imageSmall(dropB[c].getName()))));			
 		}
+		
+		if(warn){
+			for(int r=0;r<4;r++) {
+				for(int c=0;c<3;c++) {
+					warning();
+				}
+			}	
+		}
 	}
 	
 	void warning(){
@@ -431,44 +436,44 @@ public class Gui {
 		
 		for(int r=0;r<4;r++) {
 			for(int c=0;c<3;c++) {
-		if(squares[r][c].getName()=="p"){
+		if(squares[r][c].getName().equals("p")){
 			r2 = r+1;
 			c2 = c;
-			if((Pawn.move(r, c, r2, c2)&&(squares[r2][c2].getName()=="K"))){
+			if((Pawn.move(r, c, r2, c2)&&(squares[r2][c2].getName().equals("K")))){
 				squares[r2][c2].setBackground(Color.RED);
 			}
 		}
-		else if(squares[r][c].getName()=="r"){
+		else if(squares[r][c].getName().equals("r")){
 			for(r2=r-1; r2<r+2; r2++){
 				for(c2=c-1; c2<c+2; c2++){
-			if((Rook.move(r, c, r2, c2)&&(squares[r2][c2].getName()=="K"))){
+			if((Rook.move(r, c, r2, c2)&&(squares[r2][c2].getName().equals("K")))){
 				squares[r2][c2].setBackground(Color.RED);				
 			}
 				}
 			}
 		}
-		else if(squares[r][c].getName()=="k"){
+		else if(squares[r][c].getName().equals("k")){
 			for(r2=r-1; r2<r+2; r2++){
 				for(c2=c-1; c2<c+2; c2++){
-			if((King.move(r, c, r2, c2)&&(squares[r2][c2].getName()=="K"))){
+			if((King.move(r, c, r2, c2)&&(squares[r2][c2].getName().equals("K")))){
 				squares[r2][c2].setBackground(Color.RED);				
 			}
 				}
 			}
 		}
-		else if(squares[r][c].getName()=="b"){
+		else if(squares[r][c].getName().equals("b")){
 			for(r2=r-1; r2<r+2; r2++){
 				for(c2=c-1; c2<c+2; c2++){
-			if((Bishop.move(r, c, r2, c2)&&(squares[r2][c2].getName()=="K"))){
+			if((Bishop.move(r, c, r2, c2)&&(squares[r2][c2].getName().equals("K")))){
 				squares[r2][c2].setBackground(Color.RED);				
 			}
 				}
 			}
 		}
-		else if(squares[r][c].getName()=="q"){
+		else if(squares[r][c].getName().equals("q")){
 			for(r2=r-1; r2<r+2; r2++){
 				for(c2=c-1; c2<c+2; c2++){
-			if((Queen.move(r, c, r2, c2, "black")&&(squares[r2][c2].getName()=="K"))){
+			if((Queen.move(r, c, r2, c2, "black")&&(squares[r2][c2].getName().equals("K")))){
 				squares[r2][c2].setBackground(Color.RED);				
 			}
 				}
@@ -560,7 +565,7 @@ public class Gui {
 		
 		for(int r=0;r<4;r++) {
 			for(int c=0;c<3;c++) {
-				if(drop & squares[r][c].getName()==" "){
+				if(drop & squares[r][c].getName().equals(" ")){
 				squares[r][c].setBackground(Color.GREEN);
 				}
 			}
@@ -571,14 +576,14 @@ public class Gui {
 		
 		int r2, c2;
 		
-		if(squares[r][c].getName()=="P"){
+		if(squares[r][c].getName().equals("P")){
 			r2 = r-1;
 			c2 = c;
 			if((Pawn.move(r, c, r2, c2)&&plate.legal(squares[r2][c2].getName()))){
 				squares[r2][c2].setBackground(Color.GREEN);				
 			}
 		}
-		else if(squares[r][c].getName()=="R"){
+		else if(squares[r][c].getName().equals("R")){
 			for(r2=r-1; r2<r+2; r2++){
 				for(c2=c-1; c2<c+2; c2++){
 			if((Rook.move(r, c, r2, c2)&&plate.legal(squares[r2][c2].getName()))){
@@ -587,7 +592,7 @@ public class Gui {
 				}
 			}
 		}
-		else if(squares[r][c].getName()=="K"){
+		else if(squares[r][c].getName().equals("K")){
 			for(r2=r-1; r2<r+2; r2++){
 				for(c2=c-1; c2<c+2; c2++){
 			if((King.move(r, c, r2, c2)&&plate.legal(squares[r2][c2].getName()))){
@@ -596,7 +601,7 @@ public class Gui {
 				}
 			}
 		}
-		else if(squares[r][c].getName()=="B"){
+		else if(squares[r][c].getName().equals("B")){
 			for(r2=r-1; r2<r+2; r2++){
 				for(c2=c-1; c2<c+2; c2++){
 			if((Bishop.move(r, c, r2, c2)&&plate.legal(squares[r2][c2].getName()))){
@@ -605,7 +610,7 @@ public class Gui {
 				}
 			}
 		}
-		else if(squares[r][c].getName()=="Q"){
+		else if(squares[r][c].getName().equals("Q")){
 			for(r2=r-1; r2<r+2; r2++){
 				for(c2=c-1; c2<c+2; c2++){
 			if((Queen.move(r, c, r2, c2, "white")&&plate.legal(squares[r2][c2].getName()))){
@@ -651,7 +656,7 @@ public class Gui {
 		loop:
 		for(int r=0;r<4;r++) {
 			for(int c=0;c<3;c++) {
-				if(squares[r][c].getName()=="k"){
+				if(squares[r][c].getName().equals("k")){
 					squares[r][c].doClick();
 					break loop;
 				}

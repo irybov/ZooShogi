@@ -96,12 +96,14 @@ public class Director{
 	
 	public boolean list(String probe){
 		
-		return probe == "K" || probe == "Q" || probe == "R" || probe == "B" || probe == "P";
+		return probe.equals("K") || probe.equals("Q") || probe.equals("R")
+								 || probe.equals("B") || probe.equals("P");
 	}
 	
 	public boolean legal(String probe){
 		
-		return probe=="k" || probe=="q" || probe=="r" || probe=="b" || probe=="p" || probe==" ";
+		return probe.equals("k") || probe.equals("q") || probe.equals("r") ||
+			   probe.equals("b") || probe.equals("p") || probe.equals(" ");
 	}
 
 	public void from(int x, int y, String probe) {
@@ -141,40 +143,40 @@ public class Director{
 		
 		switch(board[r2][c2]){
 		case "b":
-			if(board[3][3]==" "){
+			if(board[3][3].equals(" ")){
 			board[3][3] = "B";
 			}
-			else if(board[3][3]!=" "){
+			else if(!board[3][3].equals(" ")){
 			board[3][6] = "B";
 			}
 			break;
 		case "p":
-			if(board[3][4]==" "){
+			if(board[3][4].equals(" ")){
 			board[3][4] = "P";
 			}
-			else if(board[3][4]!=" "){
+			else if(!board[3][4].equals(" ")){
 			board[3][7] = "P";
 			}
 			break;
 		case "r":
-			if(board[3][5]==" "){
+			if(board[3][5].equals(" ")){
 			board[3][5] = "R";
 			}
-			else if(board[3][5]!=" "){
+			else if(!board[3][5].equals(" ")){
 			board[3][8] = "R";
 			}
 			break;
 		case "q":
-			if(board[3][4]==" "){
+			if(board[3][4].equals(" ")){
 			board[3][4] = "P";
 			}
-			else if(board[3][4]!=" "){
+			else if(!board[3][4].equals(" ")){
 			board[3][7] = "P";
 			}
 			break;
 		}
 			
-		if(board[r][c]=="P" & r2==0){
+		if(board[r][c].equals("P") & r2==0){
 			board[r2][c2] = "Q";
 			}
 		else{
@@ -252,10 +254,10 @@ public class Director{
 		
 		for(int r=0; r<4; r++){
 			for(int c=0; c<3; c++){
-				if(board[r][c]=="K"){
+				if(board[r][c].equals("K")){
 					a = 2;
 				}
-				else if(board[r][c]=="k"){
+				else if(board[r][c].equals("k")){
 					b = 1;
 				}
 			}
@@ -266,14 +268,14 @@ public class Director{
 			voice("draw");
 			return true;
 		}
-		else if((a+b==2 & turn=="black")||(a+b==3 & turn=="white") & 
-				(board[0][0]=="K"||board[0][1]=="K"||board[0][2]=="K")){
+		else if((a+b==2 & turn.equals("black"))||(a+b==3 & turn.equals("white")) & 
+				(board[0][0].equals("K")||board[0][1].equals("K")||board[0][2].equals("K"))){
 			Message.output("white");
 			voice("mate");
 			return true;
 		}
-		else if((a+b==1 & turn=="white")||(a+b==3 & turn=="black") & 
-				(board[3][0]=="k"||board[3][1]=="k"||board[3][2]=="k")){
+		else if((a+b==1 & turn.equals("white"))||(a+b==3 & turn.equals("black")) & 
+				(board[3][0].equals("k")||board[3][1].equals("k")||board[3][2].equals("k"))){
 			Message.output("black");
 			voice("mate");
 			return true;
@@ -287,9 +289,9 @@ public class Director{
 		
 		int v = 0;
 		
-		StringBuilder current = new StringBuilder(board.length * board[0].length);
+		StringBuilder current = new StringBuilder(26);
 		
-		if(turn=="black"){
+		if(turn.equals("black")){
 		for(int r=0; r<board.length ; r++){
 			for(int c=0; c<board[r].length ; c++){
 				current.append(board[r][c]);				
