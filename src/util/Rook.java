@@ -8,8 +8,7 @@ public class Rook {
 
 	static String getName() {		
 		return NAME;
-	}
-	
+	}	
 	public static int getValue() {
 		return VALUE;
 	}

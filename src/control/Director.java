@@ -48,25 +48,20 @@ public class Director{
 	public void aiWarn(boolean c){	
 		integrator.setWarn(c);
 	}
+	
 	public void setLevel(int level){
 		this.level = level;
 	}	
 	private void setBoard(String[][] field){
 		board = Copier.deepCopy(field);
-		Gui.doClick();
 	}
 	private String[][] getBoard(){
-
 		return Copier.deepCopy(board);
 	}
-
-	private void setMoves(Map<String, Integer> moves) {
-		
+	private void setMoves(Map<String, Integer> moves) {		
 		game = Copier.deepCopy(moves);
-	}
-	
-	private Map<String, Integer> getMoves(){
-		
+	}	
+	private Map<String, Integer> getMoves(){		
 		return Copier.deepCopy(game);
 	}
 	
@@ -265,23 +260,43 @@ public class Director{
 		if(addToList("black")){
 			Message.output("draw");
 			voice("draw");
+			try {
+				new FileOutputStream("game.ser").close();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			return true;
 		}
 		else if((a+b==2 & turn.equals("black"))||(a+b==3 & turn.equals("white")) & 
 				(board[0][0].equals("K")||board[0][1].equals("K")||board[0][2].equals("K"))){
 			Message.output("white");
 			voice("mate");
+			try {
+				new FileOutputStream("game.ser").close();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			return true;
 		}
 		else if((a+b==1 & turn.equals("white"))||(a+b==3 & turn.equals("black")) & 
 				(board[3][0].equals("k")||board[3][1].equals("k")||board[3][2].equals("k"))){
 			Message.output("black");
 			voice("mate");
+			try {
+				new FileOutputStream("game.ser").close();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			return true;
 		}		
-		else{
+		else
 			return false;
-		}
 	}
 	
 	private boolean addToList(String turn) {
@@ -298,8 +313,8 @@ public class Director{
 		}
 		String hash = current.toString();
 		
-		game.putIfAbsent(hash, v);
-		game.merge(hash, 1, (oldVal, newVal) -> oldVal + newVal);		
+			game.putIfAbsent(hash, v);
+			game.merge(hash, 1, (oldVal, newVal) -> oldVal + newVal);		
 		return(game.get(hash)==3);
 		}
 		else
@@ -320,8 +335,7 @@ public class Director{
 		}
 	}
 	
-	public void clearing(){
-		
+	public void clearing(){		
 		game.clear();
 	}
 
@@ -341,7 +355,7 @@ public class Director{
 	    
 	}
 	
-	public void loadGame(){
+	public boolean loadGame(){
 	
 	    try(FileInputStream fis = new FileInputStream("game.ser");
 	    		ObjectInputStream ois = new ObjectInputStream(fis)){
@@ -352,7 +366,9 @@ public class Director{
 	    }
 	    catch (IOException | ClassNotFoundException ex) {
 			ex.printStackTrace();
+			return false;
 		}
+	    return true;
 	    
 	}
 	

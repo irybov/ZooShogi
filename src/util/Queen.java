@@ -8,8 +8,7 @@ public class Queen {
 	
 	static String getName() {		
 		return NAME;
-	}
-	
+	}	
 	public static int getValue() {		
 		return VALUE;
 	}

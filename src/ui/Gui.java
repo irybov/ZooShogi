@@ -70,16 +70,13 @@ public class Gui {
 								  "Active", "Clever", "Expert", "Master"};
 	static JToggleButton[] brain = new JToggleButton[levelArray.length];
 	
-    // Создание строки главного меню
     static JMenuBar menuBar = new JMenuBar();
     
 	public Gui() {
 		
-        // Добавление в главное меню выпадающих пунктов меню  
         menuBar.add(createFileMenu());
         menuBar.add(createAccountMenu());
-//        menuBar.add(createViewMenu());
-        // Подключаем меню к интерфейсу приложения
+
         frame.setJMenuBar(menuBar);
 		
 		plate.initialize();
@@ -683,7 +680,7 @@ public class Gui {
 				
 				 javax.swing.SwingUtilities.invokeLater(new Runnable() {
 						public void run() {
-				plate.saveGame();
+							plate.saveGame();
 						}
 					});
 			}
@@ -691,12 +688,18 @@ public class Gui {
 		
 		loadgame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
-				newgame.doClick();
 				
 				 javax.swing.SwingUtilities.invokeLater(new Runnable() {
 						public void run() {
-				plate.loadGame();
+							if(plate.loadGame()) {
+								Gui.doClick();								
+							}
+							else {
+								JOptionPane.showMessageDialog(loadgame,
+										"No game to load found",
+											"Fail",
+												JOptionPane.DEFAULT_OPTION);
+							}
 						}
 					});
 			}
