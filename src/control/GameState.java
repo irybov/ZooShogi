@@ -9,15 +9,15 @@ public class GameState implements Serializable {
 	private String[][] board;
 	private Map<String, Integer> moves = new HashMap<>();
 	
-	public GameState(String[][] board, Map<String, Integer> moves) {
+	GameState(String[][] board, Map<String, Integer> moves) {
 		this.board = board;
 		this.moves = moves;
 	}
 
-	public String[][] getBoard() {
+	String[][] getBoard() {
 		return board;
 	}
-	public Map<String, Integer> getMoves() {
+	Map<String, Integer> getMoves() {
 		return moves;
 	}	
 	

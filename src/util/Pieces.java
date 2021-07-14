@@ -2,51 +2,73 @@ package util;
 
 public enum Pieces {
 
-	PAWN("Pawn", 20) {
+	WPAWN("Pawn", 20) {
 		@Override
-		boolean move(int r, int c, int r2, int c2){
-			return ((r2>=0 & r2<=3) & (c2>=0 & c2<=2));
+		public boolean move(int r, int c, int r2, int c2){
+			if(indexOFB(r, c, r2, c2)){
+				return (r2==r-1 & c2==c);
+			}
+			return false;
+		}
+	},
+	BPAWN("Pawn", 20) {
+		@Override
+		public boolean move(int r, int c, int r2, int c2){
+			if(indexOFB(r, c, r2, c2)){
+				return (r2==r+1 & c2==c);
+			}
+			return false;
 		}
 	},
 	ROOK("Rook", 40) {
 		@Override
-		boolean move(int r, int c, int r2, int c2){
-			return((((r2==r)&(c2==c-1||c2==c+1)) || ((r2==r-1||r2==r+1)&(c2==c))) &
-					   ((r2>=0 & r2<=3) & (c2>=0 & c2<=2)));
+		public boolean move(int r, int c, int r2, int c2){
+			if(indexOFB(r, c, r2, c2)){
+				return (((r2==r)&(c2==c-1||c2==c+1)) || ((r2==r-1||r2==r+1)&(c2==c)));
+			}
+			return false;
 		}
 	},
 	BISHOP("Bishop", 30) {
 		@Override
-		boolean move(int r, int c, int r2, int c2){
-			return(((r2==r-1||r2==r+1) & (c2==c-1||c2==c+1)) &
-					   ((r2>=0 & r2<=3) & (c2>=0 & c2<=2)));
+		public boolean move(int r, int c, int r2, int c2){
+			if(indexOFB(r, c, r2, c2)){
+				return ((r2==r-1||r2==r+1) & (c2==c-1||c2==c+1));
+			}
+			return false;
 		}
 	},
 	KING("King", 0) {
 		@Override
-		boolean move(int r, int c, int r2, int c2){
-			return(((r2==r||r2==r-1||r2==r+1) & (c2==c||c2==c-1||c2==c+1)) &
-					   ((r2>=0 & r2<=3) & (c2>=0 & c2<=2)));
+		public boolean move(int r, int c, int r2, int c2){
+			if(indexOFB(r, c, r2, c2)){
+				return ((r2==r||r2==r-1||r2==r+1) & (c2==c||c2==c-1||c2==c+1));
+			}
+			return false;
 		}
 	},
 	WQUEEN("Queen", 50) {
 		@Override
-		boolean move(int r, int c, int r2, int c2){
+		public boolean move(int r, int c, int r2, int c2){
 			if((r2 == r+1) & (c2 == c-1 || c2 == c+1)) {
 				return false;
 			}
-			return (((r2==r||r2==r-1||r2==r+1) & (c2==c||c2==c-1||c2==c+1)) &
-					   ((r2>=0 & r2<=3) & (c2>=0 & c2<=2)));
+			if(indexOFB(r, c, r2, c2)){
+				return ((r2==r||r2==r-1||r2==r+1) & (c2==c||c2==c-1||c2==c+1));
+			}
+			return false;
 		}
 	},
 	BQUEEN("Queen", 50) {
 		@Override
-		boolean move(int r, int c, int r2, int c2){
+		public boolean move(int r, int c, int r2, int c2){
 			if((r2 == r-1) & (c2 == c-1 || c2 == c+1)) {
 				return false;
 			}
-			return (((r2==r||r2==r-1||r2==r+1) & (c2==c||c2==c-1||c2==c+1)) &
-					   ((r2>=0 & r2<=3) & (c2>=0 & c2<=2)));
+			if(indexOFB(r, c, r2, c2)){
+				return ((r2==r||r2==r-1||r2==r+1) & (c2==c||c2==c-1||c2==c+1));
+			}
+			return false;
 		}
 	};
 
@@ -64,8 +86,11 @@ public enum Pieces {
 	int getValue() {
 		return value;
 	}
-	boolean move(int r, int c, int r2, int c2) {
+	public boolean move(int r, int c, int r2, int c2) {
 		return false;
 	}
-		
+	private static boolean indexOFB(int r, int c, int r2, int c2) {
+		return ((r2>=0 && r2<=3) & (c2>=0 && c2<=2));
+	}
+	
 }

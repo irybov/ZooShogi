@@ -3,15 +3,11 @@ package ai;
 import java.util.ArrayList;
 import java.util.List;
 
-import util.Bishop;
 import util.Capture;
-import util.King;
-import util.Pawn;
-import util.Queen;
-import util.Rook;
+import util.Pieces;
 
 public class Separator {
-	
+/*	
 	private static List<Node> head = new ArrayList<>();
 	private static List<Node> tail = new ArrayList<>();
 
@@ -22,7 +18,7 @@ public class Separator {
 	public static List<Node> getTail() {
 		return tail;
 	}
-
+*/
 	public static List<Node> generateNodes(String[][] field) {
 		
 		List<Node> legal = new ArrayList<>();
@@ -46,7 +42,7 @@ public class Separator {
 				if(field[r][c].equals("p")){
 					r2 = r+1;
 					c2 = c;
-					if((Pawn.move(r, c, r2, c2))&&
+					if((Pieces.BPAWN.move(r, c, r2, c2))&&
 					   (Capture.check(field, r2, c2, "black"))){
 						legal.add(new Node(r, c, r2, c2));
 					}
@@ -54,7 +50,7 @@ public class Separator {
 				else if(field[r][c].equals("r")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
-						if((Rook.move(r, c, r2, c2))&&
+						if((Pieces.ROOK.move(r, c, r2, c2))&&
 						   (Capture.check(field, r2, c2, "black"))){
 							legal.add(new Node(r, c, r2, c2));
 							}
@@ -64,7 +60,7 @@ public class Separator {
 				else if(field[r][c].equals("k")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
-						if((King.move(r, c, r2, c2))&&
+						if((Pieces.KING.move(r, c, r2, c2))&&
 						   (Capture.check(field, r2, c2, "black"))){
 							legal.add(new Node(r, c, r2, c2));
 							}
@@ -74,7 +70,7 @@ public class Separator {
 				else if(field[r][c].equals("b")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
-						if((Bishop.move(r, c, r2, c2))&&
+						if((Pieces.BISHOP.move(r, c, r2, c2))&&
 						   (Capture.check(field, r2, c2, "black"))){
 							legal.add(new Node(r, c, r2, c2));
 							}
@@ -84,7 +80,7 @@ public class Separator {
 				else if(field[r][c].equals("q")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
-						if((Queen.move(r, c, r2, c2, "black"))&&
+						if((Pieces.BQUEEN.move(r, c, r2, c2))&&
 						   (Capture.check(field, r2, c2, "black"))){
 							legal.add(new Node(r, c, r2, c2));
 							}

@@ -12,12 +12,9 @@ import ai.ArtIntel;
 import ai.Integrator;
 import ai.Node;
 import ai.Separator;
-import util.Bishop;
 import util.Copier;
-import util.King;
 import util.Message;
-import util.Queen;
-import util.Rook;
+import util.Pieces;
 import sound.Sound;
 import ui.Gui;
 
@@ -72,7 +69,7 @@ public class Director{
 		board[2] = new String[]{" "," "," "};		
 		board[3] = new String[]{" "," "," "," "," "," "," "," "," "," "};
 
-		board[1][1] = "p";
+			board[1][1] = "p";
 			board[0][0] = "r";
 			board[0][1] = "k";
 			board[0][2] = "b";			
@@ -118,15 +115,15 @@ public class Director{
 		else{
 		switch(piece){
 			case "P":
-				return (r2==r-1 & c2==c);
+				return Pieces.WPAWN.move(r, c, r2, c2);
 			case "R":
-				return Rook.move(r, c, r2, c2);
+				return Pieces.ROOK.move(r, c, r2, c2);
 			case "B":
-				return Bishop.move(r, c, r2, c2);
+				return Pieces.BISHOP.move(r, c, r2, c2);
 			case "K":
-				return King.move(r, c, r2, c2);
+				return Pieces.KING.move(r, c, r2, c2);
 			case "Q":
-				return Queen.move(r, c, r2, c2, "white");
+				return Pieces.WQUEEN.move(r, c, r2, c2);
 			default:
 				return false;
 			}
