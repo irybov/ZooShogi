@@ -21,8 +21,7 @@ public class GameState implements Serializable {
 	}
 	Map<String, Integer> getMoves() {
 		return moves;
-	}	
-	
+	}		
 	int getLevel() {
 		return level;
 	}

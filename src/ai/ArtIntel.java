@@ -890,7 +890,7 @@ public class ArtIntel implements Runnable{
 	private int minimaxEX(String[][] field, String turn, int depth,
 			int alpha, int beta, boolean node) {
 		
-		if(turn == "white" && MoveList.repeat(field)){
+		if(turn.equals("white") && MoveList.repeat(field)){
 			return 0;
 		}
 		
@@ -908,10 +908,10 @@ public class ArtIntel implements Runnable{
 			}	
 		
 		if(check(field, turn) && depth < 6){
-			if(turn=="white"){
+			if(turn.equals("white")){
 				return -(1000+(depth*10));
 			}
-			else if(turn=="black"){
+			else if(turn.equals("black")){
 				return 1000+(depth*10);
 			}
 		}
@@ -930,11 +930,11 @@ public class ArtIntel implements Runnable{
 		if(depth == 6){
 			legal.add(root);
 		}
-		else if(depth != 6 && turn=="black"){
+		else if(depth != 6 && turn.equals("black")){
 			start = generateBlackMoves(field);
 			legal.addAll(sortingMoveList(field, start, "black", false));			
 		}
-		else if(depth != 6 && turn=="white"){
+		else if(depth != 6 && turn.equals("white")){
 			start = generateWhiteMoves(field);
 			legal.addAll(sortingMoveList(field, start, "white", false));			
 		}
@@ -954,21 +954,22 @@ public class ArtIntel implements Runnable{
 				
 				node = false;
 												
-				if(turn=="black"){
+				if(turn.equals("black")){
 					
-					if(field[r][c]=="k"){
+					if(field[r][c].equals("k")){
 						node = unsafe(field, "black");
 						}
 					
 					r3 = 0;
-					if((field[r][c]=="p" & (r!=0 & (c!=4||c!=7)))&(r2==3&(c2==0||c2==1||c2==2))){
+					if((field[r][c].equals("p")&(r!=0 & (c!=4||c!=7)))&
+										(r2==3&(c2==0||c2==1||c2==2))){
 						prom = "p";
 						c3 = Capture.take(field, r2, c2);
 						temp = field[r2][c2];
 						field[r2][c2] = "q";
 						field[r][c] = " ";
 					}
-					else if(field[r][c]=="p" & (r==0 & (c==4||c==7))){
+					else if(field[r][c].equals("p") & (r==0 & (c==4||c==7))){
 						prom = " ";
 						temp = field[r2][c2];
 						field[r2][c2] = "p";
@@ -992,7 +993,7 @@ public class ArtIntel implements Runnable{
 						alpha = value;
 						scores.add(value);
 						}
-					if(depth==6){
+					if(depth == 6){
 						root.setValue(value);
 						Integrator.mergeMoves(root);
 						hash.clear();
@@ -1000,19 +1001,20 @@ public class ArtIntel implements Runnable{
 				}				
 				else{
 					
-					if(field[r][c]=="K"){
+					if(field[r][c].equals("K")){
 						node = unsafe(field, "white");
 						}
 					
 					r3 = 3;
-					if((field[r][c]=="P" & (r!=3 & (c!=4||c!=7)))&(r2==0&(c2==0||c2==1||c2==2))){
+					if((field[r][c].equals("P")&(r!=3 & (c!=4||c!=7)))&
+										(r2==0&(c2==0||c2==1||c2==2))){
 						prom = "P";
 						c3 = Capture.take(field, r2, c2);
 						temp = field[r2][c2];
 						field[r2][c2] = "Q";
 						field[r][c] = " ";
 					}
-					else if(field[r][c]=="P" & (r==3 & (c==4||c==7))){
+					else if(field[r][c].equals("P") & (r==3 & (c==4||c==7))){
 						prom = " ";
 						temp = field[r2][c2];
 						field[r2][c2] = "P";
@@ -1038,12 +1040,12 @@ public class ArtIntel implements Runnable{
 						}
 				}
 				
-				if(prom == "p" & field[r2][c2]=="q"){
+				if(prom.equals("p") & field[r2][c2].equals("q")){
 					field[r][c] = "p";
 					field[r2][c2] = temp;
 					Capture.undo(field, r3, c3);
 				}
-				else if(prom == "P" & field[r2][c2]=="Q"){
+				else if(prom.equals("P") & field[r2][c2].equals("Q")){
 					field[r][c] = "P";
 					field[r2][c2] = temp;
 					Capture.undo(field, r3, c3);
@@ -1062,7 +1064,7 @@ public class ArtIntel implements Runnable{
 					}
 			}
 		
-		if(turn=="black"){
+		if(turn.equals("black")){
 			return alpha(scores, alpha, beta);
 		}
 		else{
@@ -1073,7 +1075,7 @@ public class ArtIntel implements Runnable{
 	// minimax algorithm with alpha-beta pruning
 	private int minimaxAB(String[][] field, String turn, int depth, int alpha, int beta) {
 		
-		if(turn == "white" && MoveList.repeat(field)){
+		if(turn.equals("white") && MoveList.repeat(field)){
 			return 0;
 		}
 		
@@ -1091,15 +1093,15 @@ public class ArtIntel implements Runnable{
 			}	
 		
 		if(check(field, turn) && depth < 8){
-			if(turn=="white"){
+			if(turn.equals("white")){
 				return -(1000+(depth*10));
 			}
-			else if(turn=="black"){
+			else if(turn.equals("black")){
 				return 1000+(depth*10);
 			}
 		}
 	
-		if(depth==1){
+		if(depth == 1){
 			return  evaluationMaterial(field, false);
 			}
 
@@ -1109,11 +1111,11 @@ public class ArtIntel implements Runnable{
 		if(depth == 8){
 			legal.add(root);
 		}
-		else if(depth != 8 && turn=="black"){
+		else if(depth != 8 && turn.equals("black")){
 			start = generateBlackMoves(field);
 			legal.addAll(sortingMoveList(field, start, "black", false));			
 		}
-		else if(depth != 8 && turn=="white"){
+		else if(depth != 8 && turn.equals("white")){
 			start = generateWhiteMoves(field);
 			legal.addAll(sortingMoveList(field, start, "white", false));			
 		}
@@ -1133,14 +1135,15 @@ public class ArtIntel implements Runnable{
 												
 				if(turn=="black"){					
 					r3 = 0;
-					if((field[r][c]=="p" & (r!=0 & (c!=4||c!=7)))&(r2==3&(c2==0||c2==1||c2==2))){
+					if((field[r][c].equals("p")&(r!=0 & (c!=4||c!=7)))&
+										(r2==3&(c2==0||c2==1||c2==2))){
 						prom = "p";
 						c3 = Capture.take(field, r2, c2);
 						temp = field[r2][c2];
 						field[r2][c2] = "q";
 						field[r][c] = " ";
 					}
-					else if(field[r][c]=="p" & (r==0 & (c==4||c==7))){
+					else if(field[r][c].equals("p") & (r==0 & (c==4||c==7))){
 						prom = " ";
 						temp = field[r2][c2];
 						field[r2][c2] = "p";
@@ -1159,7 +1162,7 @@ public class ArtIntel implements Runnable{
 						alpha = value;
 						scores.add(value);
 						}
-					if(depth==8){
+					if(depth == 8){
 						root.setValue(value);
 						Integrator.mergeMoves(root);
 						hash.clear();
@@ -1167,14 +1170,15 @@ public class ArtIntel implements Runnable{
 				}				
 				else{				
 					r3 = 3;
-					if((field[r][c]=="P" & (r!=3 & (c!=4||c!=7)))&(r2==0&(c2==0||c2==1||c2==2))){
+					if((field[r][c].equals("P")&(r!=3 & (c!=4||c!=7)))&
+										(r2==0&(c2==0||c2==1||c2==2))){
 						prom = "P";
 						c3 = Capture.take(field, r2, c2);
 						temp = field[r2][c2];
 						field[r2][c2] = "Q";
 						field[r][c] = " ";
 					}
-					else if(field[r][c]=="P" & (r==3 & (c==4||c==7))){
+					else if(field[r][c].equals("P") & (r==3 & (c==4||c==7))){
 						prom = " ";
 						temp = field[r2][c2];
 						field[r2][c2] = "P";
@@ -1195,12 +1199,12 @@ public class ArtIntel implements Runnable{
 						}
 				}
 				
-				if(prom == "p" & field[r2][c2]=="q"){
+				if(prom.equals("p") & field[r2][c2].equals("q")){
 					field[r][c] = "p";
 					field[r2][c2] = temp;
 					Capture.undo(field, r3, c3);
 				}
-				else if(prom == "P" & field[r2][c2]=="Q"){
+				else if(prom.equals("P") & field[r2][c2].equals("Q")){
 					field[r][c] = "P";
 					field[r2][c2] = temp;
 					Capture.undo(field, r3, c3);
@@ -1219,7 +1223,7 @@ public class ArtIntel implements Runnable{
 					}
 			}
 		
-		if(turn=="black"){
+		if(turn.equals("black")){
 			return alpha(scores, alpha, beta);
 		}
 		else{
@@ -1230,7 +1234,7 @@ public class ArtIntel implements Runnable{
 	// basic minimax algorithm
 	private int minimax(String[][] field, String turn, int depth) {
 		
-		if(turn == "white" && MoveList.repeat(field)){
+		if(turn.equals("white") && MoveList.repeat(field)){
 			return 0;
 		}
 		
@@ -1242,15 +1246,15 @@ public class ArtIntel implements Runnable{
 			}
 		
 		if(check(field, turn) && depth < 6){
-			if(turn=="white"){
+			if(turn.equals("white")){
 				return -(1000+(depth*100));
 			}
-			else if(turn=="black"){
+			else if(turn.equals("black")){
 				return 1000+(depth*100);
 			}
 		}
 
-		if(depth==1){
+		if(depth == 1){
 			return evaluationMaterial(field, false);
 			}
 		
@@ -1279,9 +1283,10 @@ public class ArtIntel implements Runnable{
 				int r3;
 				int c3 = 9;
 												
-				if(turn=="black"){
+				if(turn.equals("black")){
 					r3 = 0;
-					if((field[r][c]=="p" & (r!=0 & (c!=4||c!=7)))&(r2==3&(c2==0||c2==1||c2==2))){
+					if((field[r][c].equals("p")&(r!=0 & (c!=4||c!=7)))&
+										(r2==3&(c2==0||c2==1||c2==2))){
 						prom = "p";
 						c3 = Capture.take(field, r2, c2);
 						temp = field[r2][c2];
@@ -1304,14 +1309,15 @@ public class ArtIntel implements Runnable{
 					
 					int value = minimax(field, "white", depth-1);
 						scores.add(value);
-					if(depth==6){
+					if(depth == 6){
 						root.setValue(value);
 						Integrator.mergeMoves(root);
 						}
 				}				
 				else{
 					r3 = 3;
-					if((field[r][c]=="P" & (r!=3 & (c!=4||c!=7)))&(r2==0&(c2==0||c2==1||c2==2))){
+					if((field[r][c].equals("P")&(r!=3 & (c!=4||c!=7)))&
+										(r2==0&(c2==0||c2==1||c2==2))){
 						prom = "P";
 						c3 = Capture.take(field, r2, c2);
 						temp = field[r2][c2];
@@ -1336,12 +1342,12 @@ public class ArtIntel implements Runnable{
 						scores.add(value);	
 				}
 				
-				if(prom == "p" & field[r2][c2]=="q"){
+				if(prom.equals("p") & field[r2][c2].equals("q")){
 					field[r][c] = "p";
 					field[r2][c2] = temp;
 					Capture.undo(field, r3, c3);
 				}
-				else if(prom == "P" & field[r2][c2]=="Q"){
+				else if(prom.equals("P") & field[r2][c2].equals("Q")){
 					field[r][c] = "P";
 					field[r2][c2] = temp;
 					Capture.undo(field, r3, c3);
@@ -1357,7 +1363,7 @@ public class ArtIntel implements Runnable{
 				}
 			}
 		
-		if(turn=="black"){
+		if(turn.equals("black")){
 			return max(scores);
 		}
 		else{
@@ -1368,7 +1374,7 @@ public class ArtIntel implements Runnable{
 	// expectimax (a.k.a. poker) algorithm
 	private int expectimax(String[][] field, String turn, int depth) {
 		
-		if(turn == "white" && MoveList.repeat(field)){
+		if(turn.equals("white") && MoveList.repeat(field)){
 			return 0;
 		}
 		
@@ -1380,15 +1386,15 @@ public class ArtIntel implements Runnable{
 			}
 		
 		if(check(field, turn) && depth < 6){
-			if(turn=="white"){
+			if(turn.equals("white")){
 				return -(2000*depth);
 			}
-			else if(turn=="black"){
+			else if(turn.equals("black")){
 				return 50/depth;
 			}
 		}
 		
-		if(depth==1){
+		if(depth == 1){
 			return evaluationMaterial(field, true)/depth;
 			}
 		
@@ -1397,10 +1403,10 @@ public class ArtIntel implements Runnable{
 		if(depth == 6){
 			legal.add(root);
 		}
-		else if(depth != 6 && turn=="black"){
+		else if(depth != 6 && turn.equals("black")){
 		legal = generateBlackMoves(field);
 		}
-		else if(depth != 6 && turn=="white"){
+		else if(depth != 6 && turn.equals("white")){
 		legal = generateWhiteMoves(field);
 		}
 		
@@ -1417,16 +1423,17 @@ public class ArtIntel implements Runnable{
 				int r3;
 				int c3 = 9;
 												
-				if(turn=="black"){
+				if(turn.equals("black")){
 					r3 = 0;
-					if((field[r][c]=="p" & (r!=0 & (c!=4||c!=7)))&(r2==3&(c2==0||c2==1||c2==2))){
+					if((field[r][c].equals("p")&(r!=0 & (c!=4||c!=7)))&
+										(r2==3&(c2==0||c2==1||c2==2))){
 						prom = "p";
 						c3 = Capture.take(field, r2, c2);
 						temp = field[r2][c2];
 						field[r2][c2] = "q";
 						field[r][c] = " ";	
 					}
-					else if(field[r][c]=="p" & (r==0 & (c==4||c==7))){
+					else if(field[r][c].equals("p") & (r==0 & (c==4||c==7))){
 						prom = " ";
 						temp = field[r2][c2];
 						field[r2][c2] = "p";
@@ -1442,21 +1449,22 @@ public class ArtIntel implements Runnable{
 					
 					int value = expectimax(field, "white", depth-1);
 						scores.add(value);
-					if(depth==6){
+					if(depth == 6){
 						root.setValue(value);
 						Integrator.mergeMoves(root);
 						}
 				}				
 				else{
 					r3 = 3;
-					if((field[r][c]=="P" & (r!=3 & (c!=4||c!=7)))&(r2==0&(c2==0||c2==1||c2==2))){
+					if((field[r][c].equals("P")&(r!=3 & (c!=4||c!=7)))&
+										(r2==0&(c2==0||c2==1||c2==2))){
 						prom = "P";
 						c3 = Capture.take(field, r2, c2);
 						temp = field[r2][c2];
 						field[r2][c2] = "Q";
 						field[r][c] = " ";	
 					}
-					else if(field[r][c]=="P" & (r==3 & (c==4||c==7))){
+					else if(field[r][c].equals("P") & (r==3 & (c==4||c==7))){
 						prom = " ";
 						temp = field[r2][c2];
 						field[r2][c2] = "P";
@@ -1474,12 +1482,12 @@ public class ArtIntel implements Runnable{
 						scores.add(value);	
 				}
 				
-				if(prom == "p" & field[r2][c2]=="q"){
+				if(prom.equals("p") & field[r2][c2].equals("q")){
 					field[r][c] = "p";
 					field[r2][c2] = temp;
 					Capture.undo(field, r3, c3);
 				}
-				else if(prom == "P" & field[r2][c2]=="Q"){
+				else if(prom.equals("P") & field[r2][c2].equals("Q")){
 					field[r][c] = "P";
 					field[r2][c2] = temp;
 					Capture.undo(field, r3, c3);
@@ -1495,7 +1503,7 @@ public class ArtIntel implements Runnable{
 				}
 			}
 		
-		if(turn=="black"){
+		if(turn.equals("black")){
 			return max(scores);
 		}
 		else{
@@ -1523,9 +1531,10 @@ public class ArtIntel implements Runnable{
 				int r3;
 				int c3 = 9;
 				
-				if(turn=="black"){
+				if(turn.equals("black")){
 					r3 = 0;
-					if((field[r][c]=="p" & (r!=0 & (c!=4||c!=7)))&(r2==3&(c2==0||c2==1||c2==2))){
+					if((field[r][c].equals("p")&(r!=0 & (c!=4||c!=7)))&
+										(r2==3&(c2==0||c2==1||c2==2))){
 						prom = "p";
 						c3 = Capture.take(field, r2, c2);
 						temp = field[r2][c2];
@@ -1547,7 +1556,7 @@ public class ArtIntel implements Runnable{
 					}
 					nodes.putIfAbsent(Copier.deepCopy(field), generateWhiteMoves(field));
 					
-					if(temp=="K"){
+					if(temp.equals("K")){
 						scores.add(2000+(depth*100));
 					}
 					else if(unsafe(field, turn)){
@@ -1559,7 +1568,8 @@ public class ArtIntel implements Runnable{
 				}				
 				else{
 					r3 = 3;
-					if((field[r][c]=="P" & (r!=3 & (c!=4||c!=7)))&(r2==0&(c2==0||c2==1||c2==2))){
+					if((field[r][c].equals("P")&(r!=3 & (c!=4||c!=7)))&
+										(r2==0&(c2==0||c2==1||c2==2))){
 						prom = "P";
 						c3 = Capture.take(field, r2, c2);
 						temp = field[r2][c2];
@@ -1581,7 +1591,7 @@ public class ArtIntel implements Runnable{
 					}
 					nodes.putIfAbsent(Copier.deepCopy(field), generateBlackMoves(field));
 					
-					if(temp=="k"){
+					if(temp.equals("k")){
 						scores.add(-(2000+(depth*100)));
 					}
 					else if(unsafe(field, turn)){
@@ -1592,12 +1602,12 @@ public class ArtIntel implements Runnable{
 					}
 				}
 				
-				if(prom == "p" & field[r2][c2]=="q"){
+				if(prom.equals("p") & field[r2][c2].equals("q")){
 					field[r][c] = "p";
 					field[r2][c2] = temp;
 					Capture.undo(field, r3, c3);
 				}
-				else if(prom == "P" & field[r2][c2]=="Q"){
+				else if(prom.equals("P") & field[r2][c2].equals("Q")){
 					field[r][c] = "P";
 					field[r2][c2] = temp;
 					Capture.undo(field, r3, c3);
@@ -1614,7 +1624,7 @@ public class ArtIntel implements Runnable{
 				}
 			}
 			int value;
-			if(turn=="black"){
+			if(turn.equals("black")){
 				value = breadthMM(nodes, "white", depth-1);
 				if(depth == 4){
 					root.setValue(value);
@@ -1625,7 +1635,7 @@ public class ArtIntel implements Runnable{
 				value = breadthMM(nodes, "black", depth-1);
 			}
 		}				
-			if(turn=="black"){
+			if(turn.equals("black")){
 				return max(scores);
 			}
 			else{
@@ -1636,7 +1646,7 @@ public class ArtIntel implements Runnable{
 	
 	private int forward(String[][] field, String turn, int depth) {
 		
-		if(turn == "white" && MoveList.repeat(field)){
+		if(turn.equals("white" )&& MoveList.repeat(field)){
 			return 0;
 		}
 		
@@ -1648,26 +1658,26 @@ public class ArtIntel implements Runnable{
 			}
 		
 		if(check(field, turn) && depth < 6){
-			if(turn=="white"){
+			if(turn.equals("white")){
 				return -(1000+(depth*100));
 			}
-			else if(turn=="black"){
+			else if(turn.equals("black")){
 				return 1000+(depth*100);
 			}
 		}
 	
-		if(depth==1){
+		if(depth == 1){
 			return evaluationMaterial(field, false) + evaluationPositional(field);
 			}
 		
 		List<Node> legal = new ArrayList<>();
 		List<Node> start = new ArrayList<>();
 	
-		if(turn=="black"){
+		if(turn.equals("black")){
 			start = generateBlackMoves(field);
 			legal.addAll(sortingMoveList(field, start, "black", true));			
 		}
-		else if(turn=="white"){
+		else if(turn.equals("white")){
 			start = generateWhiteMoves(field);
 			legal.addAll(sortingMoveList(field, start, "white", true));			
 		}
@@ -1685,9 +1695,10 @@ public class ArtIntel implements Runnable{
 				int r3;
 				int c3 = 9;
 												
-				if(turn=="black"){
+				if(turn.equals("black")){
 					r3 = 0;
-					if((field[r][c]=="p" & (r!=0 & (c!=4||c!=7)))&(r2==3&(c2==0||c2==1||c2==2))){
+					if((field[r][c].equals("p")&(r!=0 & (c!=4||c!=7)))&
+										(r2==3&(c2==0||c2==1||c2==2))){
 						prom = "p";
 						c3 = Capture.take(field, r2, c2);
 						temp = field[r2][c2];
@@ -1710,14 +1721,15 @@ public class ArtIntel implements Runnable{
 					
 					int value = forward(field, "white", depth-1);
 						scores.add(value);
-					if(depth==6){
+					if(depth == 6){
 						legal.get(i).setValue(value);
 						moves.add(legal.get(i));
 						}
 				}				
 				else{
 					r3 = 3;
-					if((field[r][c]=="P" & (r!=3 & (c!=4||c!=7)))&(r2==0&(c2==0||c2==1||c2==2))){
+					if((field[r][c].equals("P")&(r!=3 & (c!=4||c!=7)))&
+										(r2==0&(c2==0||c2==1||c2==2))){
 						prom = "P";
 						c3 = Capture.take(field, r2, c2);
 						temp = field[r2][c2];
@@ -1742,12 +1754,12 @@ public class ArtIntel implements Runnable{
 						scores.add(value);	
 				}
 				
-				if(prom == "p" & field[r2][c2]=="q"){
+				if(prom.equals("p") & field[r2][c2].equals("q")){
 					field[r][c] = "p";
 					field[r2][c2] = temp;
 					Capture.undo(field, r3, c3);
 				}
-				else if(prom == "P" & field[r2][c2]=="Q"){
+				else if(prom.equals("P") & field[r2][c2].equals("Q")){
 					field[r][c] = "P";
 					field[r2][c2] = temp;
 					Capture.undo(field, r3, c3);
@@ -1763,7 +1775,7 @@ public class ArtIntel implements Runnable{
 				}
 			}
 		
-		if(turn=="black"){
+		if(turn.equals("black")){
 			return max(scores);
 		}
 		else{
@@ -1789,14 +1801,15 @@ public class ArtIntel implements Runnable{
 				int r3 = 0;
 				int c3 = 9;
 	
-					if((field[r][c]=="p" & (r!=0 & (c!=4||c!=7)))&(r2==3&(c2==0||c2==1||c2==2))){
+					if((field[r][c].equals("p")&(r!=0 & (c!=4||c!=7)))&
+										(r2==3&(c2==0||c2==1||c2==2))){
 						prom = "p";
 						c3 = Capture.take(field, r2, c2);
 						temp = field[r2][c2];
 						field[r2][c2] = "q";
 						field[r][c] = " ";	
 					}
-					else if(field[r][c]=="p" & (r==0 & (c==4||c==7))){
+					else if(field[r][c].equals("p") & (r==0 & (c==4||c==7))){
 						prom = " ";
 						temp = field[r2][c2];
 						field[r2][c2] = "p";
@@ -1810,7 +1823,7 @@ public class ArtIntel implements Runnable{
 						field[r][c] = " ";	
 					}
 				
-				if(temp=="K"){
+				if(temp.equals("K")){
 					score = 1000;
 				}
 				else if(check(field, "white")){
@@ -1822,7 +1835,7 @@ public class ArtIntel implements Runnable{
 				legal.get(i).setValue(score);
 				moves.add(legal.get(i));
 				
-				if(prom == "p" & field[r2][c2]=="q"){
+				if(prom.equals("p") & field[r2][c2].equals("q")){
 					field[r][c] = "p";
 					field[r2][c2] = temp;
 					Capture.undo(field, r3, c3);
@@ -1842,7 +1855,7 @@ public class ArtIntel implements Runnable{
 		
 		int i = (int)(Math.random()*legal.size());
 		
-		legal.get(i).setValue(Integer.MIN_VALUE+2);
+		legal.get(i).setValue(Integer.MIN_VALUE+1);
 		moves.add(legal.get(i));
 	}
 
