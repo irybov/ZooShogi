@@ -6,8 +6,6 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.event.*;
 
-// import java.io.*;
-
 import control.Director;
 import sound.Sound;
 import util.Bishop;
@@ -32,6 +30,10 @@ public class Gui {
 	static JPanel board = new JPanel(new GridLayout(4,3));
 	static JPanel handW = new JPanel(new GridLayout(2,3));
 	static JPanel handB = new JPanel(new GridLayout(2,3));
+	static JPanel cols = new JPanel(new GridLayout(1,3));
+	static JPanel rows = new JPanel(new GridLayout(4,1));
+	
+//	static JPanel sound = new JPanel(new GridLayout(2,1));	
 	
 	//Arrays of JButtons which handle the visual for the Square objects
 	static JButton[][] squares = new JButton[4][3];
@@ -88,25 +90,25 @@ public class Gui {
 		frame.setTitle("Zoo Shogi");
 		frame.add(board);
 		frame.add(handW);
-		frame.add(handB);
+		frame.add(handB);		
+		frame.add(cols);		
+		frame.add(rows);		
 		frame.add(output);
 		frame.add(behave);
 		frame.add(score);
 		frame.add(showO);
-		frame.add(showS);
-		frame.add(colA);
-		frame.add(colB);
-		frame.add(colC);
-		frame.add(row1);
-		frame.add(row2);
-		frame.add(row3);
-		frame.add(row4);
+		frame.add(showS);		
 		frame.add(white);
 		frame.add(black);
 		
+//		frame.add(sound);
+//		sound.setBounds(100, 500, 300, 100);
+		
 		board.setBounds(500,100,600,800);
 		handB.setBounds(100,100,300,200);
-		handW.setBounds(1200,700,300,200);
+		handW.setBounds(1200,700,300,200);		
+		cols.setBounds(500,50,600,50);
+		rows.setBounds(450,100,50,800);		
 		output.setFont(new Font("Dialog", Font.PLAIN, 25));
 		output.setHorizontalAlignment(JLabel.CENTER);
 		output.setBounds(50,450,400,50);
@@ -124,35 +126,43 @@ public class Gui {
 		showS.setBounds(100,700,300,50);
 		colA.setFont(new Font("Dialog", Font.PLAIN, 25));
 		colA.setHorizontalAlignment(JLabel.CENTER);
-		colA.setBounds(500,50,200,50);
+//		colA.setBounds(500,50,200,50);
 		colB.setFont(new Font("Dialog", Font.PLAIN, 25));
 		colB.setHorizontalAlignment(JLabel.CENTER);
-		colB.setBounds(700,50,200,50);
+//		colB.setBounds(700,50,200,50);
 		colC.setFont(new Font("Dialog", Font.PLAIN, 25));
 		colC.setHorizontalAlignment(JLabel.CENTER);
-		colC.setBounds(900,50,200,50);
+//		colC.setBounds(900,50,200,50);
 		row1.setFont(new Font("Dialog", Font.PLAIN, 25));
 		row1.setHorizontalAlignment(JLabel.CENTER);
-		row1.setBounds(450,175,50,50);
+//		row1.setBounds(450,175,50,50);
 		row2.setFont(new Font("Dialog", Font.PLAIN, 25));
 		row2.setHorizontalAlignment(JLabel.CENTER);
-		row2.setBounds(450,375,50,50);
+//		row2.setBounds(450,375,50,50);
 		row3.setFont(new Font("Dialog", Font.PLAIN, 25));
 		row3.setHorizontalAlignment(JLabel.CENTER);
-		row3.setBounds(450,575,50,50);
+//		row3.setBounds(450,575,50,50);
 		row4.setFont(new Font("Dialog", Font.PLAIN, 25));
 		row4.setHorizontalAlignment(JLabel.CENTER);
-		row4.setBounds(450,775,50,50);
+//		row4.setBounds(450,775,50,50);
 		white.setFont(new Font("Dialog", Font.PLAIN, 25));
 		white.setHorizontalAlignment(JLabel.CENTER);
 		white.setBounds(1200,650,300,50);
 		black.setFont(new Font("Dialog", Font.PLAIN, 25));
 		black.setHorizontalAlignment(JLabel.CENTER);
 		black.setBounds(100,50,300,50);
+
+		cols.add(colA);
+		cols.add(colB);
+		cols.add(colC);
+		rows.add(row1);
+		rows.add(row2);
+		rows.add(row3);
+		rows.add(row4);
 		
-		volume.setFont(new Font("Dialog", Font.PLAIN, 25));
+		volume.setFont(new Font("Dialog", Font.PLAIN, 20));
 		volume.setHorizontalAlignment(JCheckBox.CENTER);
-		volume.setBounds(100,550,300,50);
+		volume.setBounds(175,550,150,50);
 		volume.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				volume = (JCheckBox) e.getSource();
@@ -168,6 +178,7 @@ public class Gui {
 			}
 		});
 		frame.add(volume);
+//		sound.add(volume);
 		
 		boost.setFont(new Font("Dialog", Font.PLAIN, 25));
 		boost.setBounds(100,600,300,50);
@@ -183,13 +194,13 @@ public class Gui {
 			}
 		});
 		frame.add(boost);
+//		sound.add(boost);
 
 		newgame.setFont(new Font("Dialog", Font.PLAIN, 25));
 		newgame.setBounds(1200,250,300,50);
 		newgame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				newgame = (JButton) e.getSource();
-				push.setEnabled(true);
 				unlock();
 				output.setText(" ");
 				score.setText(" ");
@@ -223,9 +234,9 @@ public class Gui {
 		});
 		frame.add(push);
 		
-		check.setFont(new Font("Dialog", Font.PLAIN, 15));
+		check.setFont(new Font("Dialog", Font.PLAIN, 25));
 		check.setHorizontalAlignment(JCheckBox.CENTER);
-		check.setBounds(1200,625,300,25);
+		check.setBounds(1250,350,200,50);
 		check.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				check = (JCheckBox) e.getSource();
@@ -254,18 +265,14 @@ public class Gui {
 					for(int i=0; i<levelArray.length; i++){
 						if(theButton.equals(brain[i])){
 							plate.setLevel(i);
-							Gui.output.setText("Level " + Integer.toString(i+1)+ " selected");
+							Gui.output.setText("Level " + Integer.toString(i)+ " selected");
 							return;
 						}
 					}
 				}
 			});
 		}
-		frame.setLocationRelativeTo(null);
 		frame.getContentPane().add(panel);
-		
-		//allow the frame to be closed
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		for(int r=0;r<4;r++) {
 			for(int c=0;c<3;c++) {
@@ -306,7 +313,7 @@ public class Gui {
 								}
 								updateGui();
 								click = 1;
-								push.setEnabled(false);
+								disable();
 								drop = false;
 									javax.swing.SwingUtilities.invokeLater(new Runnable() {
 										public void run() {
@@ -388,6 +395,8 @@ public class Gui {
 				//add each square to the GUI panel
 				handB.add(dropB[c]);
 		}
+		frame.setLocationRelativeTo(null);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		updateGui();
 		frame.setVisible(true);
 		//Redraw the graphics to show the squares
@@ -646,6 +655,12 @@ public class Gui {
 		for(int c=0;c<6;c++) {
 			dropB[c].setEnabled(true);			
 		}
+		
+		push.setEnabled(true);
+		for(int i=0; i<levelArray.length; i++){
+			brain[i].setEnabled(true);
+		}
+		
 	}
 	
 	public static void doClick(){
@@ -659,6 +674,19 @@ public class Gui {
 				}
 			}
 		}
+	}
+	
+	public static void setLevel(int i) {
+		brain[i].doClick();
+	}
+	
+	private void disable() {
+		
+		push.setEnabled(false);
+		for(int i=0; i<levelArray.length; i++){
+			brain[i].setEnabled(false);
+		}
+		
 	}
 	
 	JMenu createFileMenu(){
@@ -692,7 +720,8 @@ public class Gui {
 				 javax.swing.SwingUtilities.invokeLater(new Runnable() {
 						public void run() {
 							if(plate.loadGame()) {
-								Gui.doClick();								
+								Gui.doClick();
+								disable();
 							}
 							else {
 								JOptionPane.showMessageDialog(loadgame,

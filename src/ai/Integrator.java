@@ -34,20 +34,17 @@ public class Integrator {
 	}
 
 	// merges results from different threads
-	public static synchronized void mergeMoves(List<Node> input){
-		
+	public static synchronized void mergeMoves(List<Node> input){		
 		moves.addAll(input);
 	}
 	
 	// merges results from different threads
-	public static synchronized void mergeMoves(Node input){
-		
+	public static synchronized void mergeMoves(Node input){		
 		moves.add(input);
 	}
 	
 	// sends data to move selector
 	public String[][] activate(String[][] field){
-
 		return best(moves, field);
 	}
 	
@@ -95,6 +92,9 @@ public class Integrator {
 			c2 = random.get(i).getC2();	
 		}
 		
+		if(score==Integer.MIN_VALUE+1) {
+			score = 0;
+		}
 		Gui.score.setText(score > 0 ? "+" + Integer.toString(score) : Integer.toString(score));
 		
 		String spot = field[r2][c2];

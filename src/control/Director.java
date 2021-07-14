@@ -13,7 +13,6 @@ import ai.Integrator;
 import ai.Node;
 import ai.Separator;
 import util.Copier;
-import util.Message;
 import util.Pieces;
 import sound.Sound;
 import ui.Gui;
@@ -80,19 +79,16 @@ public class Director{
 			board[3][2] = "R";
 	}
 	
-	public String refresh(int r, int c) {
-				
+	public String refresh(int r, int c) {				
 		return board[r][c];
 	}
 	
-	public boolean list(String probe){
-		
+	public boolean list(String probe){		
 		return probe.equals("K") || probe.equals("Q") || probe.equals("R")
 								 || probe.equals("B") || probe.equals("P");
 	}
 	
-	public boolean legal(String probe){
-		
+	public boolean legal(String probe){		
 		return probe.equals("k") || probe.equals("q") || probe.equals("r") ||
 			   probe.equals("b") || probe.equals("p") || probe.equals(" ");
 	}
@@ -177,7 +173,6 @@ public class Director{
 	}
 	
 	public void drop(){
-
 		board[r2][c2] = board[r][c];
 		board[r][c] = " ";
 	}
@@ -255,7 +250,7 @@ public class Director{
 		}
 		
 		if(addToList("black")){
-			Message.output("draw");
+			output("draw");
 			voice("draw");
 			try {
 				new FileOutputStream("game.ser").close();
@@ -266,9 +261,9 @@ public class Director{
 			}
 			return true;
 		}
-		else if((a+b==2 & turn.equals("black"))||(a+b==3 & turn.equals("white")) & 
+		else if((a+b==2 & turn.equals("black")) || (a+b==3 & turn.equals("white")) & 
 				(board[0][0].equals("K")||board[0][1].equals("K")||board[0][2].equals("K"))){
-			Message.output("white");
+			output("white");
 			voice("mate");
 			try {
 				new FileOutputStream("game.ser").close();
@@ -279,9 +274,9 @@ public class Director{
 			}
 			return true;
 		}
-		else if((a+b==1 & turn.equals("white"))||(a+b==3 & turn.equals("black")) & 
+		else if((a+b==1 & turn.equals("white")) || (a+b==3 & turn.equals("black")) & 
 				(board[3][0].equals("k")||board[3][1].equals("k")||board[3][2].equals("k"))){
-			Message.output("black");
+			output("black");
 			voice("mate");
 			try {
 				new FileOutputStream("game.ser").close();
@@ -314,7 +309,6 @@ public class Director{
 			game.merge(hash, 1, (oldVal, newVal) -> oldVal + newVal);		
 		return(game.get(hash)==3);
 		}
-		else
 			return false;
 	}
 	
@@ -336,9 +330,24 @@ public class Director{
 		game.clear();
 	}
 
+	private static void output(String result){
+		
+		switch(result){
+		case "black":
+			Gui.output.setText("Comp wins!");			
+			break;
+		case "white":
+			Gui.output.setText("You win!!!");			
+			break;
+		case "draw":
+			Gui.output.setText("Draw by repetition");			
+			break;
+		}
+	}
+	
 	public void saveGame(){
 		
-		GameState state = new GameState(getBoard(), getMoves());
+		GameState state = new GameState(getBoard(), getMoves(), level);
 		
 	    try(FileOutputStream fos = new FileOutputStream("game.ser");
 	    		ObjectOutputStream oos = new ObjectOutputStream(fos)){
@@ -359,7 +368,7 @@ public class Director{
 	    	GameState state = (GameState) ois.readUnshared();
 			setBoard(state.getBoard());
 			setMoves(state.getMoves());
-	    	ois.close();		    	
+			Gui.setLevel(state.getLevel());
 	    }
 	    catch (IOException | ClassNotFoundException ex) {
 			ex.printStackTrace();

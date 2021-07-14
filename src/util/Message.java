@@ -1,7 +1,5 @@
 package util;
 
-import ui.Gui;
-
 public class Message {
 
 	public static String colName(int col){
@@ -49,23 +47,4 @@ public class Message {
 		return name;
 	}
 	
-	public static void showScore(int score){
-		
-		Gui.score.setText(score > 0 ? "+" + Integer.toString(score) : Integer.toString(score));	
-	}
-	
-	public static void output(String result){
-		
-		switch(result){
-		case "black":
-			Gui.output.setText("Comp wins!");			
-			break;
-		case "white":
-			Gui.output.setText("You win!!!");			
-			break;
-		case "draw":
-			Gui.output.setText("Draw by repetition");			
-			break;
-		}
-	}
 }

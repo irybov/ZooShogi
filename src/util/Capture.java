@@ -15,7 +15,6 @@ public class Capture {
 				||field[r2][c2].equals("K"))) {
 			return true;
 		}
-		else
 		return false;
 	}
 
@@ -30,7 +29,6 @@ public class Capture {
 				||piece.equals("B")||piece.equals("K"))) {
 			return true;
 		}
-		else
 		return false;
 	}
 
@@ -43,7 +41,6 @@ public class Capture {
 		else if(side.equals("black") & field[r2][c2].equals("K")) {
 			return true;
 		}
-		else
 		return false;
 	}
 
@@ -56,7 +53,6 @@ public class Capture {
 		else if((side.equals("black") & field[r2][c2].equals("k"))&(r2==3&(c2==0||c2==1||c2==2))) {
 			return true;
 		}
-		else
 		return false;
 	}
 	
