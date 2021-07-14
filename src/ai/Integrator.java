@@ -92,7 +92,7 @@ public class Integrator {
 			c2 = random.get(i).getC2();	
 		}
 		
-		if(score==Integer.MIN_VALUE+1) {
+		if(score==Integer.MIN_VALUE+2) {
 			score = 0;
 		}
 		Gui.score.setText(score > 0 ? "+" + Integer.toString(score) : Integer.toString(score));

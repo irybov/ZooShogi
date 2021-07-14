@@ -1855,7 +1855,7 @@ public class ArtIntel implements Runnable{
 		
 		int i = (int)(Math.random()*legal.size());
 		
-		legal.get(i).setValue(Integer.MIN_VALUE+1);
+		legal.get(i).setValue(Integer.MIN_VALUE+2);
 		moves.add(legal.get(i));
 	}
 
