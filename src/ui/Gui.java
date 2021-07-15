@@ -17,7 +17,7 @@ import util.Rook;
 
 public class Gui {
 	
-	Director plate = Director.getInstance();
+	Director director = Director.getInstance();
 	int click = 1;
 	boolean drop = false;
 	boolean warn = true;	
@@ -78,10 +78,10 @@ public class Gui {
 		
         menuBar.add(createFileMenu());
         menuBar.add(createAccountMenu());
-
+        menuBar.add(createOtherMenu());
         frame.setJMenuBar(menuBar);
 		
-		plate.initialize();
+		director.initialize();
 		
 		// fixed positions layout
 		frame.setResizable(false);
@@ -168,11 +168,11 @@ public class Gui {
 				volume = (JCheckBox) e.getSource();
 				if(volume.isSelected()){
 					mute = true;
-					plate.aiMute(true);
+					director.aiMute(true);
 				}
 				else{
 					mute = false;
-					plate.aiMute(false);
+					director.aiMute(false);
 				}
 				return;
 			}
@@ -204,8 +204,8 @@ public class Gui {
 				unlock();
 				output.setText(" ");
 				score.setText(" ");
-				plate.initialize();
-				plate.clearing();
+				director.initialize();
+				director.clearing();
 				updateGui();
 				return;
 			}
@@ -221,7 +221,7 @@ public class Gui {
 				javax.swing.SwingUtilities.invokeLater(new Runnable() {
 					public void run() {
 					try {
-						plate.compute();
+						director.compute();
 					}
 					catch (InterruptedException e) {
 						e.printStackTrace();
@@ -242,11 +242,11 @@ public class Gui {
 				check = (JCheckBox) e.getSource();
 				if(check.isSelected()){
 					warn = true;
-					plate.aiWarn(true);
+					director.aiWarn(true);
 				}
 				else{
 					warn = false;
-					plate.aiWarn(false);
+					director.aiWarn(false);
 				}
 				return;
 			}
@@ -264,7 +264,7 @@ public class Gui {
 					JToggleButton theButton = (JToggleButton) e.getSource();
 					for(int i=0; i<levelArray.length; i++){
 						if(theButton.equals(brain[i])){
-							plate.setLevel(i);
+							director.setLevel(i);
 							Gui.output.setText("Level " + Integer.toString(i)+ " selected");
 							return;
 						}
@@ -287,20 +287,20 @@ public class Gui {
 						for(int r=0;r<4;r++) {
 							for(int c=0;c<3;c++) {
 						if(theButton.equals(squares[r][c]) & click == 1 & 
-								plate.list(squares[r][c].getName())){
+								director.list(squares[r][c].getName())){
 							squares[r][c].setBackground(Color.YELLOW);
 							highlight(r, c);
-							plate.from(r, c, squares[r][c].getName());
+							director.from(r, c, squares[r][c].getName());
 							click = 2;
 							output.setText(Message.pieceName(squares[r][c].getName()) +" choosen");
 							drop = false;
 							return;
 							}
 						else if(theButton.equals(squares[r][c]) & click == 2 & 
-								plate.list(squares[r][c].getName())==false){
-							if(plate.to(r, c)){
+								director.list(squares[r][c].getName())==false){
+							if(director.to(r, c)){
 								if(drop & squares[r][c].getName().equals(" ")){
-									plate.drop();
+									director.drop();
 								}
 								else if(drop & !squares[r][c].getName().equals(" ")){
 									drop = false;
@@ -309,7 +309,7 @@ public class Gui {
 									return;
 								}
 								else{
-									plate.move();
+									director.move();
 								}
 								updateGui();
 								click = 1;
@@ -318,7 +318,7 @@ public class Gui {
 									javax.swing.SwingUtilities.invokeLater(new Runnable() {
 										public void run() {
 										try {
-											plate.compute();
+											director.compute();
 										}
 										catch (InterruptedException e) {
 											e.printStackTrace();
@@ -337,7 +337,7 @@ public class Gui {
 								}
 							}
 						else if(theButton.equals(squares[r][c]) & click == 2 & 
-								plate.list(squares[r][c].getName())){
+								director.list(squares[r][c].getName())){
 							squares[r][c].setBackground(Color.decode("#db9356"));
 							click = 1;
 							drop = false;
@@ -365,11 +365,11 @@ public class Gui {
 					public void actionPerformed(ActionEvent e) {
 						JButton theButton = (JButton) e.getSource();
 						for(int c=0;c<6;c++) {
-						if(theButton.equals(dropW[c]) & click==1 & plate.list(dropW[c].getName())){
+						if(theButton.equals(dropW[c]) & click==1 & director.list(dropW[c].getName())){
 							drop = true;
 							dropW[c].setBackground(Color.YELLOW);
 							highlight();
-							plate.from(3, c+3, dropW[c].getName());						
+							director.from(3, c+3, dropW[c].getName());						
 							click = 2;							
 							return;
 							}
@@ -409,20 +409,20 @@ public class Gui {
 		for(int r=0;r<4;r++) {
 			for(int c=0;c<3;c++) {
 				squares[r][c].setBackground(Color.decode("#db9356"));
-				squares[r][c].setName(plate.refresh(r,c));
+				squares[r][c].setName(director.refresh(r,c));
 				squares[r][c].setIcon(new ImageIcon(getClass().getResource
 									 (image(squares[r][c].getName()))));
 			}
 		}		
 		for(int c=0;c<6;c++) {
 			dropW[c].setBackground(Color.decode("#db9356"));
-			dropW[c].setName(plate.refresh(3,c+3));
+			dropW[c].setName(director.refresh(3,c+3));
 			dropW[c].setIcon(new ImageIcon(getClass().getResource
 							(imageSmall(dropW[c].getName()))));
 		}		
 		for(int c=0;c<6;c++) {
 			dropB[c].setBackground(Color.decode("#db9356"));
-			dropB[c].setName(plate.refresh(0,c+3));
+			dropB[c].setName(director.refresh(0,c+3));
 			dropB[c].setIcon(new ImageIcon(getClass().getResource
 							(imageSmall(dropB[c].getName()))));			
 		}
@@ -585,14 +585,14 @@ public class Gui {
 		if(squares[r][c].getName().equals("P")){
 			r2 = r-1;
 			c2 = c;
-			if((Pawn.move(r, c, r2, c2)&&plate.legal(squares[r2][c2].getName()))){
+			if((Pawn.move(r, c, r2, c2)&&director.legal(squares[r2][c2].getName()))){
 				squares[r2][c2].setBackground(Color.GREEN);				
 			}
 		}
 		else if(squares[r][c].getName().equals("R")){
 			for(r2=r-1; r2<r+2; r2++){
 				for(c2=c-1; c2<c+2; c2++){
-			if((Rook.move(r, c, r2, c2)&&plate.legal(squares[r2][c2].getName()))){
+			if((Rook.move(r, c, r2, c2)&&director.legal(squares[r2][c2].getName()))){
 				squares[r2][c2].setBackground(Color.GREEN);				
 			}
 				}
@@ -601,7 +601,7 @@ public class Gui {
 		else if(squares[r][c].getName().equals("K")){
 			for(r2=r-1; r2<r+2; r2++){
 				for(c2=c-1; c2<c+2; c2++){
-			if((King.move(r, c, r2, c2)&&plate.legal(squares[r2][c2].getName()))){
+			if((King.move(r, c, r2, c2)&&director.legal(squares[r2][c2].getName()))){
 				squares[r2][c2].setBackground(Color.GREEN);				
 			}
 				}
@@ -610,7 +610,7 @@ public class Gui {
 		else if(squares[r][c].getName().equals("B")){
 			for(r2=r-1; r2<r+2; r2++){
 				for(c2=c-1; c2<c+2; c2++){
-			if((Bishop.move(r, c, r2, c2)&&plate.legal(squares[r2][c2].getName()))){
+			if((Bishop.move(r, c, r2, c2)&&director.legal(squares[r2][c2].getName()))){
 				squares[r2][c2].setBackground(Color.GREEN);				
 			}
 				}
@@ -619,7 +619,7 @@ public class Gui {
 		else if(squares[r][c].getName().equals("Q")){
 			for(r2=r-1; r2<r+2; r2++){
 				for(c2=c-1; c2<c+2; c2++){
-			if((Queen.move(r, c, r2, c2, "white")&&plate.legal(squares[r2][c2].getName()))){
+			if((Queen.move(r, c, r2, c2, "white")&&director.legal(squares[r2][c2].getName()))){
 				squares[r2][c2].setBackground(Color.GREEN);				
 			}
 				}
@@ -703,12 +703,18 @@ public class Gui {
 		file.addSeparator();
 		file.add(exit);
 		
+		newgame2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {				
+				newgame.doClick();
+			}
+		});
+		
 		savegame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
 				 javax.swing.SwingUtilities.invokeLater(new Runnable() {
 						public void run() {
-							plate.saveGame();
+							director.saveGame();
 						}
 					});
 			}
@@ -719,7 +725,7 @@ public class Gui {
 				
 				 javax.swing.SwingUtilities.invokeLater(new Runnable() {
 						public void run() {
-							if(plate.loadGame()) {
+							if(director.loadGame()) {
 								Gui.doClick();
 								disable();
 							}
@@ -734,16 +740,8 @@ public class Gui {
 			}
 		});			
 		
-		newgame2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				newgame.doClick();
-			}
-		});
-		
 		exit.addActionListener(new ActionListener() {
-		   public void actionPerformed(ActionEvent e) {
-			   
+		   public void actionPerformed(ActionEvent e) {			   
 			   System.exit(0);
 		   }
 		});
@@ -755,33 +753,60 @@ public class Gui {
 		
         JMenu account = new JMenu("Account");
         JMenuItem create = new JMenuItem("Create");
-        JMenuItem load = new JMenuItem("Load");
+        JMenuItem select = new JMenuItem("Select");
         JMenuItem delete = new JMenuItem("Delete");
        
         account.add(create);
-        account.add(load);
+        account.add(select);
         account.addSeparator();
         account.add(delete);
 		
 		create.addActionListener(new ActionListener() {
 			   public void actionPerformed(ActionEvent e) {
 				   
+					 javax.swing.SwingUtilities.invokeLater(new Runnable() {
+							public void run() {
+								director.createPlayer("Admin", "cm2309");
+							}
+						});
+			   }
+			});
+		
+		select.addActionListener(new ActionListener() {
+			   public void actionPerformed(ActionEvent e) {
+				   
+					 javax.swing.SwingUtilities.invokeLater(new Runnable() {
+							public void run() {
+
+							}
+						});				   
 			   }
 			});
 		
 		delete.addActionListener(new ActionListener() {
 			   public void actionPerformed(ActionEvent e) {
 				   
-			   }
-			});
-		
-		load.addActionListener(new ActionListener() {
-			   public void actionPerformed(ActionEvent e) {
-				   
+					 javax.swing.SwingUtilities.invokeLater(new Runnable() {
+							public void run() {
+
+							}
+						});				   
 			   }
 			});
         		
         return account;
+	}
+	
+	JMenu createOtherMenu(){
+		
+        JMenu other = new JMenu("Other");
+        JMenuItem records = new JMenuItem("Records");
+        JMenuItem help = new JMenuItem("Help");
+       
+        other.add(records);
+        other.add(help);
+        
+        return other;
 	}
 	
 }

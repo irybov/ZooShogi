@@ -12,6 +12,7 @@ import ai.ArtIntel;
 import ai.Integrator;
 import ai.Node;
 import ai.Separator;
+import data.*;
 import util.Copier;
 import util.Pieces;
 import sound.Sound;
@@ -29,6 +30,32 @@ public class Director{
 	private Integrator integrator = new Integrator(sound);
 
 	private Map<String, Integer> game = new HashMap<>();
+
+	private Player player;
+	private ScoreSheet ss;
+	{
+		File file = new File("table.ser");
+		if(!file.exists()) {
+		try {
+			file.createNewFile();
+			ss = new ScoreSheet();
+		    try(FileOutputStream fos = new FileOutputStream("table.ser");
+		    		ObjectOutputStream oos = new ObjectOutputStream(fos)){
+		           oos.writeObject(ss);
+		    }			
+		}
+		catch (IOException ex) {
+			ex.printStackTrace();
+			}
+		}
+	    try(FileInputStream fis = new FileInputStream("table.ser");
+	    		ObjectInputStream ois = new ObjectInputStream(fis)){
+	    	ss = (ScoreSheet) ois.readObject();
+	    }
+	    catch (IOException | ClassNotFoundException ex) {
+			ex.printStackTrace();
+		}
+	}
 	
 	private int r, c, r2, c2;
 	private String piece;
@@ -258,19 +285,18 @@ public class Director{
 				(board[0][0].equals("K")||board[0][1].equals("K")||board[0][2].equals("K"))){
 			output("white");
 			voice("mate");
+			try {
+				new FileOutputStream("game.ser").close();
+			}
+		    catch (IOException ex) {
+				ex.printStackTrace();
+			}
 			return true;
 		}
 		else if((a+b==1 & turn.equals("white")) || (a+b==3 & turn.equals("black")) & 
 				(board[3][0].equals("k")||board[3][1].equals("k")||board[3][2].equals("k"))){
 			output("black");
 			voice("mate");
-			try {
-				new FileOutputStream("game.ser").close();
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 			return true;
 		}		
 		else
@@ -295,10 +321,10 @@ public class Director{
 			game.merge(hash, 1, (oldVal, newVal) -> oldVal + newVal);		
 		return(game.get(hash)==3);
 		}
-			return false;
+	return false;
 	}
 	
-	private void voice(String result){
+	private void voice(String result) {
 		
 		if(!mute){
 			switch(result){
@@ -310,13 +336,14 @@ public class Director{
 				break;
 			}
 		}
+		
 	}
 	
-	public void clearing(){		
+	public void clearing() {		
 		game.clear();
 	}
 
-	private static void output(String result){
+	private static void output(String result) {
 		
 		switch(result){
 		case "black":
@@ -329,9 +356,10 @@ public class Director{
 			Gui.output.setText("Draw by repetition");			
 			break;
 		}
+		
 	}
 	
-	public void saveGame(){
+	public void saveGame() {
 		
 		GameState state = new GameState(getBoard(), getMoves(), level);
 		
@@ -347,7 +375,7 @@ public class Director{
 	    
 	}
 	
-	public boolean loadGame(){
+	public boolean loadGame() {
 	
 	    try(FileInputStream fis = new FileInputStream("game.ser");
 	    		ObjectInputStream ois = new ObjectInputStream(fis)){
@@ -362,6 +390,35 @@ public class Director{
 		}
 	    return true;
 	    
+	}
+	
+	public void createPlayer(String name, String pass) {
+		
+		Player newPlayer = new Player(name, pass);
+		ss.create(newPlayer);
+	    try(FileOutputStream fos = new FileOutputStream("table.ser");
+	    		ObjectOutputStream oos = new ObjectOutputStream(fos)){
+	           oos.writeObject(ss);
+	    }
+	    catch (IOException ex) {
+			ex.printStackTrace();
+		}
+	    
+	}
+	
+	public void selectPlayer(String name, String pass) {
+		
+		player = ss.select(new Player(name, pass));
+	}
+	
+	public void deletePlayer(String name, String pass) {
+		
+		ss.delete(new Player(name, pass));
+	}
+	
+	private void updateScore() {
+		
+		ss.update(player, level*10);
 	}
 	
 }

@@ -35,8 +35,7 @@ public class ArtIntel implements Runnable{
 	}
 	
 	@Override
-	public void run(){
-		
+	public void run(){		
 		algorithmSelector();
 	}
 	
@@ -892,8 +891,7 @@ public class ArtIntel implements Runnable{
 	}
 
 	// minimax with capture and check extensions
-	private int minimaxEX(String turn, int depth,
-			int alpha, int beta, boolean node) {
+	private int minimaxEX(String turn, int depth, int alpha, int beta, boolean node) {
 		
 		if(turn.equals("white") && MoveList.repeat(board)){
 			return 0;
@@ -1649,6 +1647,7 @@ public class ArtIntel implements Runnable{
 
 	}
 	
+	// minimax with vintage forward pruning
 	private int forward(String turn, int depth) {
 		
 		if(turn.equals("white" )&& MoveList.repeat(board)){
@@ -1788,6 +1787,7 @@ public class ArtIntel implements Runnable{
 		}
 	}
 
+	// greedy algorithm
 	private void greedy() {
 		
 		List<Node> legal = new ArrayList<>();
@@ -1853,6 +1853,7 @@ public class ArtIntel implements Runnable{
 			}			
 		}
 	
+	// randomly moving algorithm
 	private void random() {
 		
 		List<Node> legal = new ArrayList<>();

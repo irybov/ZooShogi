@@ -29,19 +29,19 @@ public class Message {
 		
 		switch(piece){
 		case "P": case "p":
-			name = Pawn.getName();
+			name = Pieces.BPAWN.getName();
 			break;
 		case "R": case "r":
-			name = Rook.getName();
+			name = Pieces.ROOK.getName();
 			break;
 		case "B": case "b":
-			name = Bishop.getName();
+			name = Pieces.BISHOP.getName();
 			break;
 		case "K": case "k":
-			name = King.getName();
+			name = Pieces.KING.getName();
 			break;
 		case "Q": case "q":
-			name = Queen.getName();
+			name = Pieces.BQUEEN.getName();
 			break;
 		}
 		return name;
