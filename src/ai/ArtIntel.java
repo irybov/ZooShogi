@@ -16,8 +16,8 @@ import util.Rook;
 
 public class ArtIntel implements Runnable{
 	
-	private HashTabs hash = new HashTabs();
-	private List<Node> moves = new ArrayList<>();
+	private HashTabs hash;
+	private List<Node> moves;
 	
 	private Node root;
 	
@@ -44,14 +44,16 @@ public class ArtIntel implements Runnable{
 		
 		switch(level){
 		case 0:
-			random(board);
+			moves = new ArrayList<>();
+			random();
 			sendMovelist();			
 			break;
 		case 1:
-			expectimax(board, "black", 6);
+			expectimax("black", 6);
 			break;		
 		case 2:
-			greedy(board);
+			moves = new ArrayList<>();
+			greedy();
 			sendMovelist();
 			break;
 		case 3:
@@ -62,33 +64,36 @@ public class ArtIntel implements Runnable{
 			breadthMM(start, "black", 4);
 			break;
 		case 4:
-			forward(board, "black", 6);
+			moves = new ArrayList<>();
+			forward("black", 6);
 			sendMovelist();
 			break;
 		case 5:
-			minimax(board, "black", 6);
+			minimax("black", 6);
 			break;
 		case 6:
-			minimaxAB(board, "black", 8, Integer.MIN_VALUE+1, Integer.MAX_VALUE);
+			hash = new HashTabs();
+			minimaxAB("black", 8, Integer.MIN_VALUE+1, Integer.MAX_VALUE);
 			break;
 		case 7:
-			minimaxEX(board, "black", 6, Integer.MIN_VALUE+1, Integer.MAX_VALUE, false);
+			hash = new HashTabs();
+			minimaxEX("black", 6, Integer.MIN_VALUE+1, Integer.MAX_VALUE, false);
 			break;
 			}
 	}
 	
 
-	private List<Node> generateBlackMoves(String[][] field) {
+	private List<Node> generateBlackMoves(String[][] board) {
 		
 		List<Node> legal = new ArrayList<>();
 		
 		int r2, c2;
 
 		for(int i=3; i<9; i++) {
-			if(!field[0][i].equals(" ")){
+			if(!board[0][i].equals(" ")){
 				for(int r=0; r<4; r++){
 					for(int c=0; c<3; c++){
-						if(field[r][c].equals(" ")){
+						if(board[r][c].equals(" ")){
 							legal.add(new Node(0, i, r, c));
 						}
 					}
@@ -98,49 +103,49 @@ public class ArtIntel implements Runnable{
 			
 		for(int r=0; r<4; r++){
 			for(int c=0; c<3; c++){					
-				if(field[r][c].equals("p")){
+				if(board[r][c].equals("p")){
 					r2 = r+1;
 					c2 = c;
 					if((Pawn.move(r, c, r2, c2))&&
-					   (Capture.check(field, r2, c2, "black"))){
+					   (Capture.check(board, r2, c2, "black"))){
 						legal.add(new Node(r, c, r2, c2));
 					}
 				}				
-				else if(field[r][c].equals("r")){					
+				else if(board[r][c].equals("r")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
 						if((Rook.move(r, c, r2, c2))&&
-						   (Capture.check(field, r2, c2, "black"))){
+						   (Capture.check(board, r2, c2, "black"))){
 							legal.add(new Node(r, c, r2, c2));
 							}
 						}							
 					}
 				}				
-				else if(field[r][c].equals("k")){					
+				else if(board[r][c].equals("k")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
 						if((King.move(r, c, r2, c2))&&
-						   (Capture.check(field, r2, c2, "black"))){
+						   (Capture.check(board, r2, c2, "black"))){
 							legal.add(new Node(r, c, r2, c2));
 							}
 						}							
 					}
 				}				
-				else if(field[r][c].equals("b")){					
+				else if(board[r][c].equals("b")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
 						if((Bishop.move(r, c, r2, c2))&&
-						   (Capture.check(field, r2, c2, "black"))){
+						   (Capture.check(board, r2, c2, "black"))){
 							legal.add(new Node(r, c, r2, c2));
 							}
 						}							
 					}
 				}				
-				else if(field[r][c].equals("q")){					
+				else if(board[r][c].equals("q")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
 						if((Queen.move(r, c, r2, c2, "black"))&&
-						   (Capture.check(field, r2, c2, "black"))){
+						   (Capture.check(board, r2, c2, "black"))){
 							legal.add(new Node(r, c, r2, c2));
 							}
 						}							
@@ -152,17 +157,17 @@ public class ArtIntel implements Runnable{
 	}
 
 	
-	private List<Node> generateWhiteMoves(String[][] field) {
+	private List<Node> generateWhiteMoves(String[][] board) {
 		
 		List<Node> legal = new ArrayList<>();
 		
 		int r2, c2;
 
 		for(int i=3; i<9; i++) {
-			if(!field[3][i].equals(" ")){
+			if(!board[3][i].equals(" ")){
 				for(int r=0; r<4; r++){
 					for(int c=0; c<3; c++){
-						if(field[r][c].equals(" ")){
+						if(board[r][c].equals(" ")){
 							legal.add(new Node(3, i, r, c));
 						}
 					}
@@ -172,49 +177,49 @@ public class ArtIntel implements Runnable{
 			
 		for(int r=0; r<4; r++){
 			for(int c=0; c<3; c++){					
-				if(field[r][c].equals("P")){
+				if(board[r][c].equals("P")){
 					r2 = r-1;
 					c2 = c;
 					if((Pawn.move(r, c, r2, c2))&&
-					   (Capture.check(field, r2, c2, "white"))){
+					   (Capture.check(board, r2, c2, "white"))){
 						legal.add(new Node(r, c, r2, c2));
 					}
 				}
-				else if(field[r][c].equals("R")){					
+				else if(board[r][c].equals("R")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
 						if((Rook.move(r, c, r2, c2))&&
-						   (Capture.check(field, r2, c2, "white"))){
+						   (Capture.check(board, r2, c2, "white"))){
 							legal.add(new Node(r, c, r2, c2));
 							}
 						}							
 					}
 				}
-				else if(field[r][c].equals("K")){					
+				else if(board[r][c].equals("K")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
 						if((King.move(r, c, r2, c2))&&
-						   (Capture.check(field, r2, c2, "white"))){
+						   (Capture.check(board, r2, c2, "white"))){
 							legal.add(new Node(r, c, r2, c2));
 							}
 						}							
 					}
 				}				
-				else if(field[r][c].equals("B")){					
+				else if(board[r][c].equals("B")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
 						if((Bishop.move(r, c, r2, c2))&&
-						   (Capture.check(field, r2, c2, "white"))){
+						   (Capture.check(board, r2, c2, "white"))){
 							legal.add(new Node(r, c, r2, c2));
 							}
 						}							
 					}
 				}				
-				else if(field[r][c].equals("Q")){					
+				else if(board[r][c].equals("Q")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
 						if((Queen.move(r, c, r2, c2, "white"))&&
-						   (Capture.check(field, r2, c2, "white"))){
+						   (Capture.check(board, r2, c2, "white"))){
 							legal.add(new Node(r, c, r2, c2));
 							}
 						}							
@@ -225,52 +230,52 @@ public class ArtIntel implements Runnable{
 		return legal;
 	}
 
-	private boolean winPositionBlack(String[][] field, String turn)  {		
+	private boolean winPositionBlack(String[][] board, String turn)  {		
 		
 		int a = 0;
 		int b = 0;
 		
 		for(int r=0; r<4; r++){
 			for(int c=0; c<3; c++){
-				if(field[r][c].equals("K")){
+				if(board[r][c].equals("K")){
 					a = 2;
 				}
-				if(field[r][c].equals("k")){
+				if(board[r][c].equals("k")){
 					b = 1;
 				}
 			}
 		}		
 		return((a+b==1) || ((a+b==3 & turn.equals("black")) & 
-			   (field[3][0].equals("k")||field[3][1].equals("k")||field[3][2].equals("k"))));
+			   (board[3][0].equals("k")||board[3][1].equals("k")||board[3][2].equals("k"))));
 	}
 	
-	private boolean winPositionWhite(String[][] field, String turn)  {		
+	private boolean winPositionWhite(String[][] board, String turn)  {		
 		
 		int a = 0;
 		int b = 0;
 		
 		for(int r=0; r<4; r++){
 			for(int c=0; c<3; c++){
-				if(field[r][c].equals("K")){
+				if(board[r][c].equals("K")){
 					a = 2;
 				}
-				if(field[r][c].equals("k")){
+				if(board[r][c].equals("k")){
 					b = 1;
 				}
 			}
 		}		
 		return((a+b==2) || ((a+b==3 & turn.equals("white")) & 
-			   (field[0][0].equals("K")||field[0][1].equals("K")||field[0][2].equals("K"))));
+			   (board[0][0].equals("K")||board[0][1].equals("K")||board[0][2].equals("K"))));
 	}	
 	
-	private int evaluationMaterial(String[][] field, boolean exp) {
+	private int evaluationMaterial(String[][] board, boolean exp) {
 		
 		int score = 0;
 
 		for(int r=0; r<4; r++){
-			for(int c=0; c<field[r].length; c++){
-				if(!field[r][c].equals(" ")){
-					switch(field[r][c]){
+			for(int c=0; c<board[r].length; c++){
+				if(!board[r][c].equals(" ")){
+					switch(board[r][c]){
 						case "p":
 							score += exp ? Pawn.getValue()*10 : Pawn.getValue();
 							break;
@@ -302,114 +307,114 @@ public class ArtIntel implements Runnable{
 		return score;
 	}
 
-	private int evaluationPositional(String[][] field) {		
+	private int evaluationPositional(String[][] board) {		
 		
 		int score = 0;
 		int r,c,r2,c2;
 	
 		for(r=0; r<4; r++){
 			for(c=0; c<3; c++){					
-				if(field[r][c].equals("p")){
+				if(board[r][c].equals("p")){
 					r2 = r+1;
 					c2 = c;
 					if((Pawn.move(r, c, r2, c2))&&
-					   (Capture.check(field, r2, c2, "black"))){
-						score += (Capture.attack(field, r2, c2, "black"));
+					   (Capture.check(board, r2, c2, "black"))){
+						score += (Capture.attack(board, r2, c2, "black"));
 					}
 				}
 				
-				else if(field[r][c].equals("r")){					
+				else if(board[r][c].equals("r")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
 						if((Rook.move(r, c, r2, c2))&&
-						   (Capture.check(field, r2, c2, "black"))){
-							score += (Capture.attack(field, r2, c2, "black"));
+						   (Capture.check(board, r2, c2, "black"))){
+							score += (Capture.attack(board, r2, c2, "black"));
 							}
 						}							
 					}
 				}
 				
-				else if(field[r][c].equals("k")){					
+				else if(board[r][c].equals("k")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
 						if((King.move(r, c, r2, c2))&&
-						   (Capture.check(field, r2, c2, "black"))){
-							score += (Capture.attack(field, r2, c2, "black"));
+						   (Capture.check(board, r2, c2, "black"))){
+							score += (Capture.attack(board, r2, c2, "black"));
 							}
 						}							
 					}
 				}
 				
-				else if(field[r][c].equals("b")){					
+				else if(board[r][c].equals("b")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
 						if((Bishop.move(r, c, r2, c2))&&
-						   (Capture.check(field, r2, c2, "black"))){
-							score += (Capture.attack(field, r2, c2, "black"));
+						   (Capture.check(board, r2, c2, "black"))){
+							score += (Capture.attack(board, r2, c2, "black"));
 							}
 						}							
 					}
 				}
 				
-				else if(field[r][c].equals("q")){					
+				else if(board[r][c].equals("q")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
 						if((Queen.move(r, c, r2, c2, "black"))&&
-						   (Capture.check(field, r2, c2, "black"))){
-							score += (Capture.attack(field, r2, c2, "black"));
+						   (Capture.check(board, r2, c2, "black"))){
+							score += (Capture.attack(board, r2, c2, "black"));
 							}
 						}							
 					}
 				}
 	
-				else if(field[r][c].equals("P")){
+				else if(board[r][c].equals("P")){
 					r2 = r-1;
 					c2 = c;
 					if((Pawn.move(r, c, r2, c2))&&
-					   (Capture.check(field, r2, c2, "white"))){
-						score += (Capture.attack(field, r2, c2, "white"));
+					   (Capture.check(board, r2, c2, "white"))){
+						score += (Capture.attack(board, r2, c2, "white"));
 					}
 				}
 				
-				else if(field[r][c].equals("R")){				
+				else if(board[r][c].equals("R")){				
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
 						if((Rook.move(r, c, r2, c2))&&
-						   (Capture.check(field, r2, c2, "white"))){
-							score += (Capture.attack(field, r2, c2, "white"));
+						   (Capture.check(board, r2, c2, "white"))){
+							score += (Capture.attack(board, r2, c2, "white"));
 							}
 						}							
 					}
 				}
 				
-				else if(field[r][c].equals("K")){					
+				else if(board[r][c].equals("K")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
 						if((King.move(r, c, r2, c2))&&
-						   (Capture.check(field, r2, c2, "white"))){
-							score += (Capture.attack(field, r2, c2, "white"));
+						   (Capture.check(board, r2, c2, "white"))){
+							score += (Capture.attack(board, r2, c2, "white"));
 							}
 						}							
 					}
 				}
 				
-				else if(field[r][c].equals("B")){					
+				else if(board[r][c].equals("B")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
 						if((Bishop.move(r, c, r2, c2))&&
-						   (Capture.check(field, r2, c2, "white"))){
-							score += (Capture.attack(field, r2, c2, "white"));
+						   (Capture.check(board, r2, c2, "white"))){
+							score += (Capture.attack(board, r2, c2, "white"));
 							}
 						}							
 					}
 				}
 	
-				else if(field[r][c].equals("Q")){					
+				else if(board[r][c].equals("Q")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
 						if((Queen.move(r, c, r2, c2, "white"))&&
-						   (Capture.check(field, r2, c2, "white"))){
-							score += (Capture.attack(field, r2, c2, "black"));
+						   (Capture.check(board, r2, c2, "white"))){
+							score += (Capture.attack(board, r2, c2, "black"));
 							}
 						}							
 					}
@@ -419,60 +424,60 @@ public class ArtIntel implements Runnable{
 		return score;
 	}
 
-	private boolean check(String[][] field, String turn) {		
+	private boolean check(String[][] board, String turn) {		
 		
 			int r,c,r2,c2;
 			
 		if(turn.equals("black")){	
 			for(r=0; r<4; r++){
 				for(c=0; c<3; c++){					
-					if(field[r][c].equals("p")){
+					if(board[r][c].equals("p")){
 						r2 = r+1;
 						c2 = c;
 						if((Pawn.move(r, c, r2, c2))&&
-						   (field[r2][c2].equals("K"))){
+						   (board[r2][c2].equals("K"))){
 							return true;
 						}
 					}
 					
-					else if(field[r][c].equals("r")){						
+					else if(board[r][c].equals("r")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((Rook.move(r, c, r2, c2))&&
-								(field[r2][c2].equals("K"))){
+								(board[r2][c2].equals("K"))){
 								return true;
 								}
 							}							
 						}
 					}
 
-					else if(field[r][c].equals("k")){						
+					else if(board[r][c].equals("k")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((King.move(r, c, r2, c2))&&
-								(field[r2][c2].equals("K"))){
+								(board[r2][c2].equals("K"))){
 								return true;
 								}
 							}							
 						}
 					}
 					
-					else if(field[r][c].equals("b")){						
+					else if(board[r][c].equals("b")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((Bishop.move(r, c, r2, c2))&&
-								(field[r2][c2].equals("K"))){
+								(board[r2][c2].equals("K"))){
 								return true;
 								}
 							}							
 						}
 					}
 					
-					else if(field[r][c].equals("q")){						
+					else if(board[r][c].equals("q")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((Queen.move(r, c, r2, c2, "black"))&&
-								(field[r2][c2].equals("K"))){
+								(board[r2][c2].equals("K"))){
 								return true;
 								}
 							}							
@@ -485,53 +490,53 @@ public class ArtIntel implements Runnable{
 		else{
 			for(r=0; r<4; r++){
 				for(c=0; c<3; c++){					
-					if(field[r][c].equals("P")){
+					if(board[r][c].equals("P")){
 						r2 = r-1;
 						c2 = c;
 						if((Pawn.move(r, c, r2, c2))&&
-						   (field[r2][c2].equals("k"))){
+						   (board[r2][c2].equals("k"))){
 							return true;
 						}
 					}
 					
-					else if(field[r][c].equals("R")){						
+					else if(board[r][c].equals("R")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((Rook.move(r, c, r2, c2))&&
-								(field[r2][c2].equals("k"))){
+								(board[r2][c2].equals("k"))){
 								return true;
 								}
 							}							
 						}
 					}
 					
-					else if(field[r][c].equals("K")){						
+					else if(board[r][c].equals("K")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((King.move(r, c, r2, c2))&&
-								(field[r2][c2].equals("k"))){
+								(board[r2][c2].equals("k"))){
 								return true;
 								}
 							}							
 						}
 					}
 
-					else if(field[r][c].equals("B")){						
+					else if(board[r][c].equals("B")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((Bishop.move(r, c, r2, c2))&&
-								(field[r2][c2].equals("k"))){
+								(board[r2][c2].equals("k"))){
 								return true;
 								}
 							}							
 						}
 					}
 					
-					else if(field[r][c].equals("Q")){						
+					else if(board[r][c].equals("Q")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((Queen.move(r, c, r2, c2, "white"))&&
-								(field[r2][c2].equals("k"))){
+								(board[r2][c2].equals("k"))){
 								return true;
 								}
 							}							
@@ -543,60 +548,60 @@ public class ArtIntel implements Runnable{
 	return false;
 	}
 
-	private boolean unsafe(String[][] field, String turn) {		
+	private boolean unsafe(String[][] board, String turn) {		
 		
 			int r,c,r2,c2;
 		
 		if(turn.equals("white")){	
 			for(r=0; r<4; r++){
 				for(c=0; c<3; c++){					
-					if(field[r][c].equals("p")){
+					if(board[r][c].equals("p")){
 						r2 = r+1;
 						c2 = c;
 						if((Pawn.move(r, c, r2, c2))&&
-						   (field[r2][c2].equals("K"))){
+						   (board[r2][c2].equals("K"))){
 							return true;
 						}
 					}
 					
-					else if(field[r][c].equals("r")){						
+					else if(board[r][c].equals("r")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((Rook.move(r, c, r2, c2))&&
-								(field[r2][c2].equals("K"))){
+								(board[r2][c2].equals("K"))){
 								return true;
 								}
 							}							
 						}
 					}
 					
-					else if(field[r][c].equals("k")){						
+					else if(board[r][c].equals("k")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((King.move(r, c, r2, c2))&&
-								(field[r2][c2].equals("K"))){
+								(board[r2][c2].equals("K"))){
 								return true;
 								}
 							}							
 						}
 					}
 
-					else if(field[r][c].equals("b")){						
+					else if(board[r][c].equals("b")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((Bishop.move(r, c, r2, c2))&&
-								(field[r2][c2].equals("K"))){
+								(board[r2][c2].equals("K"))){
 								return true;
 								}
 							}							
 						}
 					}
 					
-					else if(field[r][c].equals("q")){						
+					else if(board[r][c].equals("q")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((Queen.move(r, c, r2, c2, "black"))&&
-								(field[r2][c2].equals("K"))){
+								(board[r2][c2].equals("K"))){
 								return true;
 								}
 							}							
@@ -609,53 +614,53 @@ public class ArtIntel implements Runnable{
 		else{
 			for(r=0; r<4; r++){
 				for(c=0; c<3; c++){					
-					if(field[r][c].equals("P")){
+					if(board[r][c].equals("P")){
 						r2 = r-1;
 						c2 = c;
 						if((Pawn.move(r, c, r2, c2))&&
-						   (field[r2][c2].equals("k"))){
+						   (board[r2][c2].equals("k"))){
 							return true;
 						}
 					}
 					
-					else if(field[r][c].equals("R")){						
+					else if(board[r][c].equals("R")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((Rook.move(r, c, r2, c2))&&
-								(field[r2][c2].equals("k"))){
+								(board[r2][c2].equals("k"))){
 								return true;
 								}
 							}							
 						}
 					}
 					
-					else if(field[r][c].equals("K")){						
+					else if(board[r][c].equals("K")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((King.move(r, c, r2, c2))&&
-								(field[r2][c2].equals("k"))){
+								(board[r2][c2].equals("k"))){
 								return true;
 								}
 							}							
 						}
 					}
 
-					else if(field[r][c].equals("B")){						
+					else if(board[r][c].equals("B")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((Bishop.move(r, c, r2, c2))&&
-								(field[r2][c2].equals("k"))){
+								(board[r2][c2].equals("k"))){
 								return true;
 								}
 							}							
 						}
 					}
 					
-					else if(field[r][c].equals("Q")){						
+					else if(board[r][c].equals("Q")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((Queen.move(r, c, r2, c2, "white"))&&
-								(field[r2][c2].equals("k"))){
+								(board[r2][c2].equals("k"))){
 								return true;
 								}
 							}							
@@ -720,20 +725,20 @@ public class ArtIntel implements Runnable{
 		return beta;
 	}
 
-	private List<Node> sortingMoveList(String[][] field, List<Node> legal,
+	private List<Node> sortingMoveList(String[][] board, List<Node> legal,
 			String turn, boolean prune) {
 		
 		List<Node> sorted = new ArrayList<>();
 		
 		int prev;
-			if(check(field, "white")){
+			if(check(board, "white")){
 				prev = -1000;
 			}
-			else if(check(field, "black")){
+			else if(check(board, "black")){
 				prev = 1000;
 			}
 			else{
-				prev = evaluationMaterial(field, false) + evaluationPositional(field);
+				prev = evaluationMaterial(board, false) + evaluationPositional(board);
 		}
 	
 	if(turn.equals("black")){	
@@ -749,57 +754,57 @@ public class ArtIntel implements Runnable{
 				int c3 = 9;
 												
 				r3 = 0;
-				if((field[r][c].equals("p")&(r!=0 & (c!=4||c!=7)))&(r2==3&(c2==0||c2==1||c2==2))){
+				if((board[r][c].equals("p")&(r!=0 & (c!=4||c!=7)))&(r2==3&(c2==0||c2==1||c2==2))){
 					prom = "p";
-					c3 = Capture.take(field, r2, c2);
-					temp = field[r2][c2];
-					field[r2][c2] = "q";
-					field[r][c] = " ";
+					c3 = Capture.take(board, r2, c2);
+					temp = board[r2][c2];
+					board[r2][c2] = "q";
+					board[r][c] = " ";
 				}
-				else if(field[r][c].equals("p") & (r==0 & (c==4||c==7))){
+				else if(board[r][c].equals("p") & (r==0 & (c==4||c==7))){
 					prom = " ";
-					temp = field[r2][c2];
-					field[r2][c2] = "p";
-					field[r][c] = " ";
+					temp = board[r2][c2];
+					board[r2][c2] = "p";
+					board[r][c] = " ";
 				}
 				else{
 					prom = " ";
-					c3 = Capture.take(field, r2, c2);
-					temp = field[r2][c2];
-					field[r2][c2] = field[r][c];
-					field[r][c] = " ";
+					c3 = Capture.take(board, r2, c2);
+					temp = board[r2][c2];
+					board[r2][c2] = board[r][c];
+					board[r][c] = " ";
 				}
 				
 				int value;				
 				if(temp.equals("K")){
 					value = 2000;	
 					}
-				else if((field[3][0].equals("k")||field[3][1].equals("k")||field[3][2].equals("k"))
-						&check(field, "white")==false){
+				else if((board[3][0].equals("k")||board[3][1].equals("k")||board[3][2].equals("k"))
+						&check(board, "white")==false){
 					value = 1000;
 				}				
-				else if(check(field, "white")){
+				else if(check(board, "white")){
 					value = -1000;
 				}
 				else{
 					if(prune)
-					value = evaluationMaterial(field, false) + evaluationPositional(field);
+					value = evaluationMaterial(board, false) + evaluationPositional(board);
 					else
-					value = evaluationMaterial(field, false);
+					value = evaluationMaterial(board, false);
 				}
 				
 				legal.get(i).setValue(value);
 				sorted.add(legal.get(i));
 				
-				if(prom.equals("p") & field[r2][c2].equals("q")){
-					field[r][c] = "p";
-					field[r2][c2] = temp;
-					Capture.undo(field, r3, c3);
+				if(prom.equals("p") & board[r2][c2].equals("q")){
+					board[r][c] = "p";
+					board[r2][c2] = temp;
+					Capture.undo(board, r3, c3);
 				}
 				else{
-					field[r][c] = field[r2][c2];
-					field[r2][c2] = temp;
-					Capture.undo(field, r3, c3);
+					board[r][c] = board[r2][c2];
+					board[r2][c2] = temp;
+					Capture.undo(board, r3, c3);
 				}			
 			}
 
@@ -823,57 +828,57 @@ public class ArtIntel implements Runnable{
 				int c3 = 9;
 		
 				r3 = 3;
-				if((field[r][c].equals("P")&(r!=3 & (c!=4||c!=7)))&(r2==0&(c2==0||c2==1||c2==2))){
+				if((board[r][c].equals("P")&(r!=3 & (c!=4||c!=7)))&(r2==0&(c2==0||c2==1||c2==2))){
 					prom = "P";
-					c3 = Capture.take(field, r2, c2);
-					temp = field[r2][c2];
-					field[r2][c2] = "Q";
-					field[r][c] = " ";
+					c3 = Capture.take(board, r2, c2);
+					temp = board[r2][c2];
+					board[r2][c2] = "Q";
+					board[r][c] = " ";
 				}
-				else if(field[r][c].equals("P") & (r==3 & (c==4||c==7))){
+				else if(board[r][c].equals("P") & (r==3 & (c==4||c==7))){
 					prom = " ";
-					temp = field[r2][c2];
-					field[r2][c2] = "P";
-					field[r][c] = " ";
+					temp = board[r2][c2];
+					board[r2][c2] = "P";
+					board[r][c] = " ";
 				}
 				else{
 					prom = " ";
-					c3 = Capture.take(field, r2, c2);
-					temp = field[r2][c2];
-					field[r2][c2] = field[r][c];
-					field[r][c] = " ";
+					c3 = Capture.take(board, r2, c2);
+					temp = board[r2][c2];
+					board[r2][c2] = board[r][c];
+					board[r][c] = " ";
 				}
 		
 				int value;				
 				if(temp.equals("k")){
 					value = -2000;	
 					}
-				else if((field[0][0].equals("K")||field[0][1].equals("K")||field[0][2].equals("K"))
-						&check(field, "black")==false){
+				else if((board[0][0].equals("K")||board[0][1].equals("K")||board[0][2].equals("K"))
+						&check(board, "black")==false){
 					value = -1000;
 				}				
-				else if(check(field, "black")){
+				else if(check(board, "black")){
 					value = 1000;
 				}
 				else{
 					if(prune)
-					value = evaluationMaterial(field, false) + evaluationPositional(field);
+					value = evaluationMaterial(board, false) + evaluationPositional(board);
 					else
-					value = evaluationMaterial(field, false);
+					value = evaluationMaterial(board, false);
 				}
 				
 				legal.get(i).setValue(value);
 				sorted.add(legal.get(i));
 				
-				if(prom.equals("P") & field[r2][c2].equals("Q")){
-					field[r][c] = "P";
-					field[r2][c2] = temp;
-					Capture.undo(field, r3, c3);
+				if(prom.equals("P") & board[r2][c2].equals("Q")){
+					board[r][c] = "P";
+					board[r2][c2] = temp;
+					Capture.undo(board, r3, c3);
 				}
 				else{
-					field[r][c] = field[r2][c2];
-					field[r2][c2] = temp;
-					Capture.undo(field, r3, c3);
+					board[r][c] = board[r2][c2];
+					board[r2][c2] = temp;
+					Capture.undo(board, r3, c3);
 				}
 			}			
 
@@ -887,27 +892,27 @@ public class ArtIntel implements Runnable{
 	}
 
 	// minimax with capture and check extensions
-	private int minimaxEX(String[][] field, String turn, int depth,
+	private int minimaxEX(String turn, int depth,
 			int alpha, int beta, boolean node) {
 		
-		if(turn.equals("white") && MoveList.repeat(field)){
+		if(turn.equals("white") && MoveList.repeat(board)){
 			return 0;
 		}
 		
-		if(hash.repeat(field, turn, depth)){
+		if(hash.repeat(board, turn, depth)){
 			return 0;
 		}
 		
-		hash.add(field, turn, depth);
+		hash.add(board, turn, depth);
 		
-		if(winPositionBlack(field, turn)){
+		if(winPositionBlack(board, turn)){
 			return 2000+(depth*10);	
 			}
-		if(winPositionWhite(field, turn)){
+		if(winPositionWhite(board, turn)){
 			return -(2000+(depth*10));	
 			}	
 		
-		if(check(field, turn) && depth < 6){
+		if(check(board, turn) && depth < 6){
 			if(turn.equals("white")){
 				return -(1000+(depth*10));
 			}
@@ -917,11 +922,11 @@ public class ArtIntel implements Runnable{
 		}
 	
 		if(node==false & depth<=1){
-			return evaluationMaterial(field, false);
+			return evaluationMaterial(board, false);
 			}
 		
 		if(depth == -3){
-			return  evaluationMaterial(field, false);
+			return  evaluationMaterial(board, false);
 			}
 		
 		List<Node> legal = new ArrayList<>();
@@ -931,12 +936,12 @@ public class ArtIntel implements Runnable{
 			legal.add(root);
 		}
 		else if(depth != 6 && turn.equals("black")){
-			start = generateBlackMoves(field);
-			legal.addAll(sortingMoveList(field, start, "black", false));			
+			start = generateBlackMoves(board);
+			legal.addAll(sortingMoveList(board, start, "black", false));			
 		}
 		else if(depth != 6 && turn.equals("white")){
-			start = generateWhiteMoves(field);
-			legal.addAll(sortingMoveList(field, start, "white", false));			
+			start = generateWhiteMoves(board);
+			legal.addAll(sortingMoveList(board, start, "white", false));			
 		}
 		
 		ArrayList<Integer> scores = new ArrayList<>();
@@ -956,39 +961,39 @@ public class ArtIntel implements Runnable{
 												
 				if(turn.equals("black")){
 					
-					if(field[r][c].equals("k")){
-						node = unsafe(field, "black");
+					if(board[r][c].equals("k")){
+						node = unsafe(board, "black");
 						}
 					
 					r3 = 0;
-					if((field[r][c].equals("p")&(r!=0 & (c!=4||c!=7)))&
+					if((board[r][c].equals("p")&(r!=0 & (c!=4||c!=7)))&
 										(r2==3&(c2==0||c2==1||c2==2))){
 						prom = "p";
-						c3 = Capture.take(field, r2, c2);
-						temp = field[r2][c2];
-						field[r2][c2] = "q";
-						field[r][c] = " ";
+						c3 = Capture.take(board, r2, c2);
+						temp = board[r2][c2];
+						board[r2][c2] = "q";
+						board[r][c] = " ";
 					}
-					else if(field[r][c].equals("p") & (r==0 & (c==4||c==7))){
+					else if(board[r][c].equals("p") & (r==0 & (c==4||c==7))){
 						prom = " ";
-						temp = field[r2][c2];
-						field[r2][c2] = "p";
-						field[r][c] = " ";
+						temp = board[r2][c2];
+						board[r2][c2] = "p";
+						board[r][c] = " ";
 					}
 					else{
 						prom = " ";
-						c3 = Capture.take(field, r2, c2);
-						temp = field[r2][c2];
-						field[r2][c2] = field[r][c];
-						field[r][c] = " ";
+						c3 = Capture.take(board, r2, c2);
+						temp = board[r2][c2];
+						board[r2][c2] = board[r][c];
+						board[r][c] = " ";
 					}
 					
 					if(node==false){
-						node = (Capture.extend(temp, "black")||Capture.prom(field, r2, c2, "black")
-							||check(field, "black"));
+						node = (Capture.extend(temp, "black")||Capture.prom(board, r2, c2, "black")
+							||check(board, "black"));
 						}
 			
-					int value = minimaxEX(field, "white", depth-1, alpha, beta, node);
+					int value = minimaxEX("white", depth-1, alpha, beta, node);
 					if(value > alpha){
 						alpha = value;
 						scores.add(value);
@@ -1001,63 +1006,63 @@ public class ArtIntel implements Runnable{
 				}				
 				else{
 					
-					if(field[r][c].equals("K")){
-						node = unsafe(field, "white");
+					if(board[r][c].equals("K")){
+						node = unsafe(board, "white");
 						}
 					
 					r3 = 3;
-					if((field[r][c].equals("P")&(r!=3 & (c!=4||c!=7)))&
+					if((board[r][c].equals("P")&(r!=3 & (c!=4||c!=7)))&
 										(r2==0&(c2==0||c2==1||c2==2))){
 						prom = "P";
-						c3 = Capture.take(field, r2, c2);
-						temp = field[r2][c2];
-						field[r2][c2] = "Q";
-						field[r][c] = " ";
+						c3 = Capture.take(board, r2, c2);
+						temp = board[r2][c2];
+						board[r2][c2] = "Q";
+						board[r][c] = " ";
 					}
-					else if(field[r][c].equals("P") & (r==3 & (c==4||c==7))){
+					else if(board[r][c].equals("P") & (r==3 & (c==4||c==7))){
 						prom = " ";
-						temp = field[r2][c2];
-						field[r2][c2] = "P";
-						field[r][c] = " ";
+						temp = board[r2][c2];
+						board[r2][c2] = "P";
+						board[r][c] = " ";
 					}
 					else{
 						prom = " ";
-						c3 = Capture.take(field, r2, c2);
-						temp = field[r2][c2];
-						field[r2][c2] = field[r][c];
-						field[r][c] = " ";
+						c3 = Capture.take(board, r2, c2);
+						temp = board[r2][c2];
+						board[r2][c2] = board[r][c];
+						board[r][c] = " ";
 					}
 					
 					if(node==false){
-					node = (Capture.extend(temp, "white")||Capture.prom(field, r2, c2, "white")
-							||check(field, "white"));
+					node = (Capture.extend(temp, "white")||Capture.prom(board, r2, c2, "white")
+							||check(board, "white"));
 					}
 						
-					int value = minimaxEX(field, "black", depth-1, alpha, beta, node);
+					int value = minimaxEX("black", depth-1, alpha, beta, node);
 					if(value < beta){
 						beta = value;
 						scores.add(value);
 						}
 				}
 				
-				if(prom.equals("p") & field[r2][c2].equals("q")){
-					field[r][c] = "p";
-					field[r2][c2] = temp;
-					Capture.undo(field, r3, c3);
+				if(prom.equals("p") & board[r2][c2].equals("q")){
+					board[r][c] = "p";
+					board[r2][c2] = temp;
+					Capture.undo(board, r3, c3);
 				}
-				else if(prom.equals("P") & field[r2][c2].equals("Q")){
-					field[r][c] = "P";
-					field[r2][c2] = temp;
-					Capture.undo(field, r3, c3);
+				else if(prom.equals("P") & board[r2][c2].equals("Q")){
+					board[r][c] = "P";
+					board[r2][c2] = temp;
+					Capture.undo(board, r3, c3);
 				}
 /*				else if((r==0 || r==3) & (c>2 & c<9)){
 					field[r][c] = temp;
 					field[r2][c2] = " ";
 				}
 */				else{
-					field[r][c] = field[r2][c2];
-					field[r2][c2] = temp;
-					Capture.undo(field, r3, c3);
+					board[r][c] = board[r2][c2];
+					board[r2][c2] = temp;
+					Capture.undo(board, r3, c3);
 				}
 				if(alpha >= beta){
 					break;
@@ -1073,26 +1078,26 @@ public class ArtIntel implements Runnable{
 	}
 
 	// minimax algorithm with alpha-beta pruning
-	private int minimaxAB(String[][] field, String turn, int depth, int alpha, int beta) {
+	private int minimaxAB(String turn, int depth, int alpha, int beta) {
 		
-		if(turn.equals("white") && MoveList.repeat(field)){
+		if(turn.equals("white") && MoveList.repeat(board)){
 			return 0;
 		}
 		
-		if(hash.repeat(field, turn, depth)){
+		if(hash.repeat(board, turn, depth)){
 			return 0;
 		}
 		
-		hash.add(field, turn, depth);
+		hash.add(board, turn, depth);
 		
-		if(winPositionBlack(field, turn)){
+		if(winPositionBlack(board, turn)){
 			return 2000+(depth*10);	
 			}
-		if(winPositionWhite(field, turn)){
+		if(winPositionWhite(board, turn)){
 			return -(2000+(depth*10));	
 			}	
 		
-		if(check(field, turn) && depth < 8){
+		if(check(board, turn) && depth < 8){
 			if(turn.equals("white")){
 				return -(1000+(depth*10));
 			}
@@ -1102,7 +1107,7 @@ public class ArtIntel implements Runnable{
 		}
 	
 		if(depth == 1){
-			return  evaluationMaterial(field, false);
+			return  evaluationMaterial(board, false);
 			}
 
 		List<Node> legal = new ArrayList<>();
@@ -1112,12 +1117,12 @@ public class ArtIntel implements Runnable{
 			legal.add(root);
 		}
 		else if(depth != 8 && turn.equals("black")){
-			start = generateBlackMoves(field);
-			legal.addAll(sortingMoveList(field, start, "black", false));			
+			start = generateBlackMoves(board);
+			legal.addAll(sortingMoveList(board, start, "black", false));			
 		}
 		else if(depth != 8 && turn.equals("white")){
-			start = generateWhiteMoves(field);
-			legal.addAll(sortingMoveList(field, start, "white", false));			
+			start = generateWhiteMoves(board);
+			legal.addAll(sortingMoveList(board, start, "white", false));			
 		}
 		
 		ArrayList<Integer> scores = new ArrayList<>();
@@ -1135,29 +1140,29 @@ public class ArtIntel implements Runnable{
 												
 				if(turn=="black"){					
 					r3 = 0;
-					if((field[r][c].equals("p")&(r!=0 & (c!=4||c!=7)))&
+					if((board[r][c].equals("p")&(r!=0 & (c!=4||c!=7)))&
 										(r2==3&(c2==0||c2==1||c2==2))){
 						prom = "p";
-						c3 = Capture.take(field, r2, c2);
-						temp = field[r2][c2];
-						field[r2][c2] = "q";
-						field[r][c] = " ";
+						c3 = Capture.take(board, r2, c2);
+						temp = board[r2][c2];
+						board[r2][c2] = "q";
+						board[r][c] = " ";
 					}
-					else if(field[r][c].equals("p") & (r==0 & (c==4||c==7))){
+					else if(board[r][c].equals("p") & (r==0 & (c==4||c==7))){
 						prom = " ";
-						temp = field[r2][c2];
-						field[r2][c2] = "p";
-						field[r][c] = " ";
+						temp = board[r2][c2];
+						board[r2][c2] = "p";
+						board[r][c] = " ";
 					}
 					else{
 						prom = " ";
-						c3 = Capture.take(field, r2, c2);
-						temp = field[r2][c2];
-						field[r2][c2] = field[r][c];
-						field[r][c] = " ";
+						c3 = Capture.take(board, r2, c2);
+						temp = board[r2][c2];
+						board[r2][c2] = board[r][c];
+						board[r][c] = " ";
 					}
 	
-					int value = minimaxAB(field, "white", depth-1, alpha, beta);
+					int value = minimaxAB("white", depth-1, alpha, beta);
 					if(value > alpha){
 						alpha = value;
 						scores.add(value);
@@ -1170,53 +1175,53 @@ public class ArtIntel implements Runnable{
 				}				
 				else{				
 					r3 = 3;
-					if((field[r][c].equals("P")&(r!=3 & (c!=4||c!=7)))&
+					if((board[r][c].equals("P")&(r!=3 & (c!=4||c!=7)))&
 										(r2==0&(c2==0||c2==1||c2==2))){
 						prom = "P";
-						c3 = Capture.take(field, r2, c2);
-						temp = field[r2][c2];
-						field[r2][c2] = "Q";
-						field[r][c] = " ";
+						c3 = Capture.take(board, r2, c2);
+						temp = board[r2][c2];
+						board[r2][c2] = "Q";
+						board[r][c] = " ";
 					}
-					else if(field[r][c].equals("P") & (r==3 & (c==4||c==7))){
+					else if(board[r][c].equals("P") & (r==3 & (c==4||c==7))){
 						prom = " ";
-						temp = field[r2][c2];
-						field[r2][c2] = "P";
-						field[r][c] = " ";
+						temp = board[r2][c2];
+						board[r2][c2] = "P";
+						board[r][c] = " ";
 					}
 					else{
 						prom = " ";
-						c3 = Capture.take(field, r2, c2);
-						temp = field[r2][c2];
-						field[r2][c2] = field[r][c];
-						field[r][c] = " ";
+						c3 = Capture.take(board, r2, c2);
+						temp = board[r2][c2];
+						board[r2][c2] = board[r][c];
+						board[r][c] = " ";
 					}
 				
-					int value = minimaxAB(field, "black", depth-1, alpha, beta);
+					int value = minimaxAB("black", depth-1, alpha, beta);
 					if(value < beta){
 						beta = value;
 						scores.add(value);
 						}
 				}
 				
-				if(prom.equals("p") & field[r2][c2].equals("q")){
-					field[r][c] = "p";
-					field[r2][c2] = temp;
-					Capture.undo(field, r3, c3);
+				if(prom.equals("p") & board[r2][c2].equals("q")){
+					board[r][c] = "p";
+					board[r2][c2] = temp;
+					Capture.undo(board, r3, c3);
 				}
-				else if(prom.equals("P") & field[r2][c2].equals("Q")){
-					field[r][c] = "P";
-					field[r2][c2] = temp;
-					Capture.undo(field, r3, c3);
+				else if(prom.equals("P") & board[r2][c2].equals("Q")){
+					board[r][c] = "P";
+					board[r2][c2] = temp;
+					Capture.undo(board, r3, c3);
 				}
 /*				else if((r==0 || r==3) & (c>2 & c<9)){
 					field[r][c] = temp;
 					field[r2][c2] = " ";
 				}
 */				else{
-					field[r][c] = field[r2][c2];
-					field[r2][c2] = temp;
-					Capture.undo(field, r3, c3);
+					board[r][c] = board[r2][c2];
+					board[r2][c2] = temp;
+					Capture.undo(board, r3, c3);
 				}
 				if(alpha >= beta){
 					break;
@@ -1232,20 +1237,20 @@ public class ArtIntel implements Runnable{
 	}
 	
 	// basic minimax algorithm
-	private int minimax(String[][] field, String turn, int depth) {
+	private int minimax(String turn, int depth) {
 		
-		if(turn.equals("white") && MoveList.repeat(field)){
+		if(turn.equals("white") && MoveList.repeat(board)){
 			return 0;
 		}
 		
-		if(winPositionBlack(field, turn)){
+		if(winPositionBlack(board, turn)){
 			return 2000+(depth*100);
 			}
-		if(winPositionWhite(field, turn)){
+		if(winPositionWhite(board, turn)){
 			return -(2000+(depth*100));
 			}
 		
-		if(check(field, turn) && depth < 6){
+		if(check(board, turn) && depth < 6){
 			if(turn.equals("white")){
 				return -(1000+(depth*100));
 			}
@@ -1255,7 +1260,7 @@ public class ArtIntel implements Runnable{
 		}
 
 		if(depth == 1){
-			return evaluationMaterial(field, false);
+			return evaluationMaterial(board, false);
 			}
 		
 		List<Node> legal = new ArrayList<>();
@@ -1264,10 +1269,10 @@ public class ArtIntel implements Runnable{
 			legal.add(root);
 		}
 		else if(depth != 6 && turn=="black"){
-		legal = generateBlackMoves(field);
+		legal = generateBlackMoves(board);
 		}
 		else if(depth != 6 && turn=="white"){
-		legal = generateWhiteMoves(field);
+		legal = generateWhiteMoves(board);
 		}
 				
 		List<Integer> scores = new ArrayList<>();
@@ -1285,29 +1290,29 @@ public class ArtIntel implements Runnable{
 												
 				if(turn.equals("black")){
 					r3 = 0;
-					if((field[r][c].equals("p")&(r!=0 & (c!=4||c!=7)))&
+					if((board[r][c].equals("p")&(r!=0 & (c!=4||c!=7)))&
 										(r2==3&(c2==0||c2==1||c2==2))){
 						prom = "p";
-						c3 = Capture.take(field, r2, c2);
-						temp = field[r2][c2];
-						field[r2][c2] = "q";
-						field[r][c] = " ";	
+						c3 = Capture.take(board, r2, c2);
+						temp = board[r2][c2];
+						board[r2][c2] = "q";
+						board[r][c] = " ";	
 					}
 					else if(r==0 & (c>2 & c<9)){
 						prom = " ";
-						temp = field[r][c];
-						field[r2][c2] = field[r][c];
-						field[r][c] = " ";
+						temp = board[r][c];
+						board[r2][c2] = board[r][c];
+						board[r][c] = " ";
 					}
 					else{
 						prom = " ";
-						c3 = Capture.take(field, r2, c2);
-						temp = field[r2][c2];
-						field[r2][c2] = field[r][c];
-						field[r][c] = " ";	
+						c3 = Capture.take(board, r2, c2);
+						temp = board[r2][c2];
+						board[r2][c2] = board[r][c];
+						board[r][c] = " ";	
 					}
 					
-					int value = minimax(field, "white", depth-1);
+					int value = minimax("white", depth-1);
 						scores.add(value);
 					if(depth == 6){
 						root.setValue(value);
@@ -1316,50 +1321,50 @@ public class ArtIntel implements Runnable{
 				}				
 				else{
 					r3 = 3;
-					if((field[r][c].equals("P")&(r!=3 & (c!=4||c!=7)))&
+					if((board[r][c].equals("P")&(r!=3 & (c!=4||c!=7)))&
 										(r2==0&(c2==0||c2==1||c2==2))){
 						prom = "P";
-						c3 = Capture.take(field, r2, c2);
-						temp = field[r2][c2];
-						field[r2][c2] = "Q";
-						field[r][c] = " ";	
+						c3 = Capture.take(board, r2, c2);
+						temp = board[r2][c2];
+						board[r2][c2] = "Q";
+						board[r][c] = " ";	
 					}
 					else if(r==3 & (c>2 & c<9)){
 						prom = " ";
-						temp = field[r][c];
-						field[r2][c2] = field[r][c];
-						field[r][c] = " ";
+						temp = board[r][c];
+						board[r2][c2] = board[r][c];
+						board[r][c] = " ";
 					}
 					else{
 						prom = " ";
-						c3 = Capture.take(field, r2, c2);
-						temp = field[r2][c2];
-						field[r2][c2] = field[r][c];
-						field[r][c] = " ";	
+						c3 = Capture.take(board, r2, c2);
+						temp = board[r2][c2];
+						board[r2][c2] = board[r][c];
+						board[r][c] = " ";	
 					}
 					
-					int value = minimax(field, "black", depth-1);
+					int value = minimax("black", depth-1);
 						scores.add(value);	
 				}
 				
-				if(prom.equals("p") & field[r2][c2].equals("q")){
-					field[r][c] = "p";
-					field[r2][c2] = temp;
-					Capture.undo(field, r3, c3);
+				if(prom.equals("p") & board[r2][c2].equals("q")){
+					board[r][c] = "p";
+					board[r2][c2] = temp;
+					Capture.undo(board, r3, c3);
 				}
-				else if(prom.equals("P") & field[r2][c2].equals("Q")){
-					field[r][c] = "P";
-					field[r2][c2] = temp;
-					Capture.undo(field, r3, c3);
+				else if(prom.equals("P") & board[r2][c2].equals("Q")){
+					board[r][c] = "P";
+					board[r2][c2] = temp;
+					Capture.undo(board, r3, c3);
 				}
 				else if((r==0 || r==3) & (c>2 & c<9)){
-					field[r][c] = temp;
-					field[r2][c2] = " ";
+					board[r][c] = temp;
+					board[r2][c2] = " ";
 				}
 				else{
-					field[r][c] = field[r2][c2];
-					field[r2][c2] = temp;
-					Capture.undo(field, r3, c3);
+					board[r][c] = board[r2][c2];
+					board[r2][c2] = temp;
+					Capture.undo(board, r3, c3);
 				}
 			}
 		
@@ -1372,20 +1377,20 @@ public class ArtIntel implements Runnable{
 	}
 
 	// expectimax (a.k.a. poker) algorithm
-	private int expectimax(String[][] field, String turn, int depth) {
+	private int expectimax(String turn, int depth) {
 		
-		if(turn.equals("white") && MoveList.repeat(field)){
+		if(turn.equals("white") && MoveList.repeat(board)){
 			return 0;
 		}
 		
-		if(winPositionBlack(field, turn)){
+		if(winPositionBlack(board, turn)){
 			return 100/(depth);
 			}
-		if(winPositionWhite(field, turn)){
+		if(winPositionWhite(board, turn)){
 			return -(2000*depth);
 			}
 		
-		if(check(field, turn) && depth < 6){
+		if(check(board, turn) && depth < 6){
 			if(turn.equals("white")){
 				return -(2000*depth);
 			}
@@ -1395,7 +1400,7 @@ public class ArtIntel implements Runnable{
 		}
 		
 		if(depth == 1){
-			return evaluationMaterial(field, true)/depth;
+			return evaluationMaterial(board, true)/depth;
 			}
 		
 		List<Node> legal = new ArrayList<>();
@@ -1404,10 +1409,10 @@ public class ArtIntel implements Runnable{
 			legal.add(root);
 		}
 		else if(depth != 6 && turn.equals("black")){
-		legal = generateBlackMoves(field);
+		legal = generateBlackMoves(board);
 		}
 		else if(depth != 6 && turn.equals("white")){
-		legal = generateWhiteMoves(field);
+		legal = generateWhiteMoves(board);
 		}
 		
 		List<Integer> scores = new ArrayList<>();
@@ -1425,29 +1430,29 @@ public class ArtIntel implements Runnable{
 												
 				if(turn.equals("black")){
 					r3 = 0;
-					if((field[r][c].equals("p")&(r!=0 & (c!=4||c!=7)))&
+					if((board[r][c].equals("p")&(r!=0 & (c!=4||c!=7)))&
 										(r2==3&(c2==0||c2==1||c2==2))){
 						prom = "p";
-						c3 = Capture.take(field, r2, c2);
-						temp = field[r2][c2];
-						field[r2][c2] = "q";
-						field[r][c] = " ";	
+						c3 = Capture.take(board, r2, c2);
+						temp = board[r2][c2];
+						board[r2][c2] = "q";
+						board[r][c] = " ";	
 					}
-					else if(field[r][c].equals("p") & (r==0 & (c==4||c==7))){
+					else if(board[r][c].equals("p") & (r==0 & (c==4||c==7))){
 						prom = " ";
-						temp = field[r2][c2];
-						field[r2][c2] = "p";
-						field[r][c] = " ";
+						temp = board[r2][c2];
+						board[r2][c2] = "p";
+						board[r][c] = " ";
 					}
 					else{
 						prom = " ";
-						c3 = Capture.take(field, r2, c2);
-						temp = field[r2][c2];
-						field[r2][c2] = field[r][c];
-						field[r][c] = " ";	
+						c3 = Capture.take(board, r2, c2);
+						temp = board[r2][c2];
+						board[r2][c2] = board[r][c];
+						board[r][c] = " ";	
 					}
 					
-					int value = expectimax(field, "white", depth-1);
+					int value = expectimax("white", depth-1);
 						scores.add(value);
 					if(depth == 6){
 						root.setValue(value);
@@ -1456,50 +1461,50 @@ public class ArtIntel implements Runnable{
 				}				
 				else{
 					r3 = 3;
-					if((field[r][c].equals("P")&(r!=3 & (c!=4||c!=7)))&
+					if((board[r][c].equals("P")&(r!=3 & (c!=4||c!=7)))&
 										(r2==0&(c2==0||c2==1||c2==2))){
 						prom = "P";
-						c3 = Capture.take(field, r2, c2);
-						temp = field[r2][c2];
-						field[r2][c2] = "Q";
-						field[r][c] = " ";	
+						c3 = Capture.take(board, r2, c2);
+						temp = board[r2][c2];
+						board[r2][c2] = "Q";
+						board[r][c] = " ";	
 					}
-					else if(field[r][c].equals("P") & (r==3 & (c==4||c==7))){
+					else if(board[r][c].equals("P") & (r==3 & (c==4||c==7))){
 						prom = " ";
-						temp = field[r2][c2];
-						field[r2][c2] = "P";
-						field[r][c] = " ";
+						temp = board[r2][c2];
+						board[r2][c2] = "P";
+						board[r][c] = " ";
 					}
 					else{
 						prom = " ";
-						c3 = Capture.take(field, r2, c2);
-						temp = field[r2][c2];
-						field[r2][c2] = field[r][c];
-						field[r][c] = " ";	
+						c3 = Capture.take(board, r2, c2);
+						temp = board[r2][c2];
+						board[r2][c2] = board[r][c];
+						board[r][c] = " ";	
 					}
 					
-					int value = expectimax(field, "black", depth-1);
+					int value = expectimax("black", depth-1);
 						scores.add(value);	
 				}
 				
-				if(prom.equals("p") & field[r2][c2].equals("q")){
-					field[r][c] = "p";
-					field[r2][c2] = temp;
-					Capture.undo(field, r3, c3);
+				if(prom.equals("p") & board[r2][c2].equals("q")){
+					board[r][c] = "p";
+					board[r2][c2] = temp;
+					Capture.undo(board, r3, c3);
 				}
-				else if(prom.equals("P") & field[r2][c2].equals("Q")){
-					field[r][c] = "P";
-					field[r2][c2] = temp;
-					Capture.undo(field, r3, c3);
+				else if(prom.equals("P") & board[r2][c2].equals("Q")){
+					board[r][c] = "P";
+					board[r2][c2] = temp;
+					Capture.undo(board, r3, c3);
 				}
 				else if((r==0 || r==3) & (c>2 & c<9)){
-					field[r][c] = temp;
-					field[r2][c2] = " ";
+					board[r][c] = temp;
+					board[r2][c2] = " ";
 				}
 				else{
-					field[r][c] = field[r2][c2];
-					field[r2][c2] = temp;
-					Capture.undo(field, r3, c3);
+					board[r][c] = board[r2][c2];
+					board[r2][c2] = temp;
+					Capture.undo(board, r3, c3);
 				}
 			}
 		
@@ -1518,8 +1523,8 @@ public class ArtIntel implements Runnable{
 		List<Integer> scores = new ArrayList<>();
 
 		if(depth > 1){
-		for(String[][] field: plate.keySet()){
-			List<Node> legal = plate.get(field);
+		for(String[][] board: plate.keySet()){
+			List<Node> legal = plate.get(board);
 			
 		for(int i=0; i<legal.size(); i++){	
 				int r = legal.get(i).getR();
@@ -1533,93 +1538,93 @@ public class ArtIntel implements Runnable{
 				
 				if(turn.equals("black")){
 					r3 = 0;
-					if((field[r][c].equals("p")&(r!=0 & (c!=4||c!=7)))&
+					if((board[r][c].equals("p")&(r!=0 & (c!=4||c!=7)))&
 										(r2==3&(c2==0||c2==1||c2==2))){
 						prom = "p";
-						c3 = Capture.take(field, r2, c2);
-						temp = field[r2][c2];
-						field[r2][c2] = "q";
-						field[r][c] = " ";	
+						c3 = Capture.take(board, r2, c2);
+						temp = board[r2][c2];
+						board[r2][c2] = "q";
+						board[r][c] = " ";	
 					}
 					else if(r==0 & (c>2 & c<9)){
 						prom = " ";
-						temp = field[r][c];
-						field[r2][c2] = field[r][c];
-						field[r][c] = " ";
+						temp = board[r][c];
+						board[r2][c2] = board[r][c];
+						board[r][c] = " ";
 					}
 					else{
 						prom = " ";
-						c3 = Capture.take(field, r2, c2);
-						temp = field[r2][c2];
-						field[r2][c2] = field[r][c];
-						field[r][c] = " ";	
+						c3 = Capture.take(board, r2, c2);
+						temp = board[r2][c2];
+						board[r2][c2] = board[r][c];
+						board[r][c] = " ";	
 					}
-					nodes.putIfAbsent(Copier.deepCopy(field), generateWhiteMoves(field));
+					nodes.putIfAbsent(Copier.deepCopy(board), generateWhiteMoves(board));
 					
 					if(temp.equals("K")){
 						scores.add(2000+(depth*100));
 					}
-					else if(unsafe(field, turn)){
+					else if(unsafe(board, turn)){
 						scores.add(-(1000+(depth*100)));
 					}
 					else{
-						scores.add(evaluationMaterial(field, false));
+						scores.add(evaluationMaterial(board, false));
 					}
 				}				
 				else{
 					r3 = 3;
-					if((field[r][c].equals("P")&(r!=3 & (c!=4||c!=7)))&
+					if((board[r][c].equals("P")&(r!=3 & (c!=4||c!=7)))&
 										(r2==0&(c2==0||c2==1||c2==2))){
 						prom = "P";
-						c3 = Capture.take(field, r2, c2);
-						temp = field[r2][c2];
-						field[r2][c2] = "Q";
-						field[r][c] = " ";	
+						c3 = Capture.take(board, r2, c2);
+						temp = board[r2][c2];
+						board[r2][c2] = "Q";
+						board[r][c] = " ";	
 					}
 					else if(r==3 & (c>2 & c<9)){
 						prom = " ";
-						temp = field[r][c];
-						field[r2][c2] = field[r][c];
-						field[r][c] = " ";
+						temp = board[r][c];
+						board[r2][c2] = board[r][c];
+						board[r][c] = " ";
 					}
 					else{
 						prom = " ";
-						c3 = Capture.take(field, r2, c2);
-						temp = field[r2][c2];
-						field[r2][c2] = field[r][c];
-						field[r][c] = " ";	
+						c3 = Capture.take(board, r2, c2);
+						temp = board[r2][c2];
+						board[r2][c2] = board[r][c];
+						board[r][c] = " ";	
 					}
-					nodes.putIfAbsent(Copier.deepCopy(field), generateBlackMoves(field));
+					nodes.putIfAbsent(Copier.deepCopy(board), generateBlackMoves(board));
 					
 					if(temp.equals("k")){
 						scores.add(-(2000+(depth*100)));
 					}
-					else if(unsafe(field, turn)){
+					else if(unsafe(board, turn)){
 						scores.add(1000+(depth*100));
 					}
 					else{
-						scores.add(evaluationMaterial(field, false));
+						scores.add(evaluationMaterial(board, false));
 					}
 				}
 				
-				if(prom.equals("p") & field[r2][c2].equals("q")){
-					field[r][c] = "p";
-					field[r2][c2] = temp;
-					Capture.undo(field, r3, c3);
+				if(prom.equals("p") & board[r2][c2].equals("q")){
+					board[r][c] = "p";
+					board[r2][c2] = temp;
+					Capture.undo(board, r3, c3);
 				}
-				else if(prom.equals("P") & field[r2][c2].equals("Q")){
-					field[r][c] = "P";
-					field[r2][c2] = temp;
-					Capture.undo(field, r3, c3);
+				else if(prom.equals("P") & board[r2][c2].equals("Q")){
+					board[r][c] = "P";
+					board[r2][c2] = temp;
+					Capture.undo(board, r3, c3);
 				}
 				else if((r==0 || r==3) & (c>2 & c<9)){
-					field[r][c] = temp;
-					field[r2][c2] = " ";
+					board[r][c] = temp;
+					board[r2][c2] = " ";
 				}
 				else{
-					field[r][c] = field[r2][c2];
-					field[r2][c2] = temp;
-					Capture.undo(field, r3, c3);
+					board[r][c] = board[r2][c2];
+					board[r2][c2] = temp;
+					Capture.undo(board, r3, c3);
 					}
 				}
 			}
@@ -1644,20 +1649,20 @@ public class ArtIntel implements Runnable{
 
 	}
 	
-	private int forward(String[][] field, String turn, int depth) {
+	private int forward(String turn, int depth) {
 		
-		if(turn.equals("white" )&& MoveList.repeat(field)){
+		if(turn.equals("white" )&& MoveList.repeat(board)){
 			return 0;
 		}
 		
-		if(winPositionBlack(field, turn)){
+		if(winPositionBlack(board, turn)){
 			return 2000+(depth*100);
 			}
-		if(winPositionWhite(field, turn)){
+		if(winPositionWhite(board, turn)){
 			return -(2000+(depth*100));
 			}
 		
-		if(check(field, turn) && depth < 6){
+		if(check(board, turn) && depth < 6){
 			if(turn.equals("white")){
 				return -(1000+(depth*100));
 			}
@@ -1667,19 +1672,19 @@ public class ArtIntel implements Runnable{
 		}
 	
 		if(depth == 1){
-			return evaluationMaterial(field, false) + evaluationPositional(field);
+			return evaluationMaterial(board, false) + evaluationPositional(board);
 			}
 		
 		List<Node> legal = new ArrayList<>();
 		List<Node> start = new ArrayList<>();
 	
 		if(turn.equals("black")){
-			start = generateBlackMoves(field);
-			legal.addAll(sortingMoveList(field, start, "black", true));			
+			start = generateBlackMoves(board);
+			legal.addAll(sortingMoveList(board, start, "black", true));			
 		}
 		else if(turn.equals("white")){
-			start = generateWhiteMoves(field);
-			legal.addAll(sortingMoveList(field, start, "white", true));			
+			start = generateWhiteMoves(board);
+			legal.addAll(sortingMoveList(board, start, "white", true));			
 		}
 				
 		ArrayList<Integer> scores = new ArrayList<>();
@@ -1697,29 +1702,29 @@ public class ArtIntel implements Runnable{
 												
 				if(turn.equals("black")){
 					r3 = 0;
-					if((field[r][c].equals("p")&(r!=0 & (c!=4||c!=7)))&
+					if((board[r][c].equals("p")&(r!=0 & (c!=4||c!=7)))&
 										(r2==3&(c2==0||c2==1||c2==2))){
 						prom = "p";
-						c3 = Capture.take(field, r2, c2);
-						temp = field[r2][c2];
-						field[r2][c2] = "q";
-						field[r][c] = " ";	
+						c3 = Capture.take(board, r2, c2);
+						temp = board[r2][c2];
+						board[r2][c2] = "q";
+						board[r][c] = " ";	
 					}
 					else if(r==0 & (c>2 & c<9)){
 						prom = " ";
-						temp = field[r][c];
-						field[r2][c2] = field[r][c];
-						field[r][c] = " ";
+						temp = board[r][c];
+						board[r2][c2] = board[r][c];
+						board[r][c] = " ";
 					}
 					else{
 						prom = " ";
-						c3 = Capture.take(field, r2, c2);
-						temp = field[r2][c2];
-						field[r2][c2] = field[r][c];
-						field[r][c] = " ";	
+						c3 = Capture.take(board, r2, c2);
+						temp = board[r2][c2];
+						board[r2][c2] = board[r][c];
+						board[r][c] = " ";	
 					}
 					
-					int value = forward(field, "white", depth-1);
+					int value = forward("white", depth-1);
 						scores.add(value);
 					if(depth == 6){
 						legal.get(i).setValue(value);
@@ -1728,50 +1733,50 @@ public class ArtIntel implements Runnable{
 				}				
 				else{
 					r3 = 3;
-					if((field[r][c].equals("P")&(r!=3 & (c!=4||c!=7)))&
+					if((board[r][c].equals("P")&(r!=3 & (c!=4||c!=7)))&
 										(r2==0&(c2==0||c2==1||c2==2))){
 						prom = "P";
-						c3 = Capture.take(field, r2, c2);
-						temp = field[r2][c2];
-						field[r2][c2] = "Q";
-						field[r][c] = " ";	
+						c3 = Capture.take(board, r2, c2);
+						temp = board[r2][c2];
+						board[r2][c2] = "Q";
+						board[r][c] = " ";	
 					}
 					else if(r==3 & (c>2 & c<9)){
 						prom = " ";
-						temp = field[r][c];
-						field[r2][c2] = field[r][c];
-						field[r][c] = " ";
+						temp = board[r][c];
+						board[r2][c2] = board[r][c];
+						board[r][c] = " ";
 					}
 					else{
 						prom = " ";
-						c3 = Capture.take(field, r2, c2);
-						temp = field[r2][c2];
-						field[r2][c2] = field[r][c];
-						field[r][c] = " ";	
+						c3 = Capture.take(board, r2, c2);
+						temp = board[r2][c2];
+						board[r2][c2] = board[r][c];
+						board[r][c] = " ";	
 					}
 					
-					int value = forward(field, "black", depth-1);
+					int value = forward("black", depth-1);
 						scores.add(value);	
 				}
 				
-				if(prom.equals("p") & field[r2][c2].equals("q")){
-					field[r][c] = "p";
-					field[r2][c2] = temp;
-					Capture.undo(field, r3, c3);
+				if(prom.equals("p") & board[r2][c2].equals("q")){
+					board[r][c] = "p";
+					board[r2][c2] = temp;
+					Capture.undo(board, r3, c3);
 				}
-				else if(prom.equals("P") & field[r2][c2].equals("Q")){
-					field[r][c] = "P";
-					field[r2][c2] = temp;
-					Capture.undo(field, r3, c3);
+				else if(prom.equals("P") & board[r2][c2].equals("Q")){
+					board[r][c] = "P";
+					board[r2][c2] = temp;
+					Capture.undo(board, r3, c3);
 				}
 				else if((r==0 || r==3) & (c>2 & c<9)){
-					field[r][c] = temp;
-					field[r2][c2] = " ";
+					board[r][c] = temp;
+					board[r2][c2] = " ";
 				}
 				else{
-					field[r][c] = field[r2][c2];
-					field[r2][c2] = temp;
-					Capture.undo(field, r3, c3);
+					board[r][c] = board[r2][c2];
+					board[r2][c2] = temp;
+					Capture.undo(board, r3, c3);
 				}
 			}
 		
@@ -1783,10 +1788,10 @@ public class ArtIntel implements Runnable{
 		}
 	}
 
-	private void greedy(String[][] field) {
+	private void greedy() {
 		
 		List<Node> legal = new ArrayList<>();
-		legal = generateBlackMoves(field);
+		legal = generateBlackMoves(board);
 		
 		int score;
 		String temp;
@@ -1801,57 +1806,57 @@ public class ArtIntel implements Runnable{
 				int r3 = 0;
 				int c3 = 9;
 	
-					if((field[r][c].equals("p")&(r!=0 & (c!=4||c!=7)))&
+					if((board[r][c].equals("p")&(r!=0 & (c!=4||c!=7)))&
 										(r2==3&(c2==0||c2==1||c2==2))){
 						prom = "p";
-						c3 = Capture.take(field, r2, c2);
-						temp = field[r2][c2];
-						field[r2][c2] = "q";
-						field[r][c] = " ";	
+						c3 = Capture.take(board, r2, c2);
+						temp = board[r2][c2];
+						board[r2][c2] = "q";
+						board[r][c] = " ";	
 					}
-					else if(field[r][c].equals("p") & (r==0 & (c==4||c==7))){
+					else if(board[r][c].equals("p") & (r==0 & (c==4||c==7))){
 						prom = " ";
-						temp = field[r2][c2];
-						field[r2][c2] = "p";
-						field[r][c] = " ";
+						temp = board[r2][c2];
+						board[r2][c2] = "p";
+						board[r][c] = " ";
 					}
 					else{
 						prom = " ";
-						c3 = Capture.take(field, r2, c2);
-						temp = field[r2][c2];
-						field[r2][c2] = field[r][c];
-						field[r][c] = " ";	
+						c3 = Capture.take(board, r2, c2);
+						temp = board[r2][c2];
+						board[r2][c2] = board[r][c];
+						board[r][c] = " ";	
 					}
 				
 				if(temp.equals("K")){
 					score = 1000;
 				}
-				else if(check(field, "white")){
+				else if(check(board, "white")){
 					score = -1000;
 				}
 				else{
-					score = evaluationMaterial(field, false);
+					score = evaluationMaterial(board, false);
 				}
 				legal.get(i).setValue(score);
 				moves.add(legal.get(i));
 				
-				if(prom.equals("p") & field[r2][c2].equals("q")){
-					field[r][c] = "p";
-					field[r2][c2] = temp;
-					Capture.undo(field, r3, c3);
+				if(prom.equals("p") & board[r2][c2].equals("q")){
+					board[r][c] = "p";
+					board[r2][c2] = temp;
+					Capture.undo(board, r3, c3);
 				}
 				else{
-					field[r][c] = field[r2][c2];
-					field[r2][c2] = temp;
-					Capture.undo(field, r3, c3);
+					board[r][c] = board[r2][c2];
+					board[r2][c2] = temp;
+					Capture.undo(board, r3, c3);
 				}
 			}			
 		}
-
-	private void random(String[][] field) {
+	
+	private void random() {
 		
 		List<Node> legal = new ArrayList<>();
-		legal = generateBlackMoves(field);
+		legal = generateBlackMoves(board);
 		
 		int i = (int)(Math.random()*legal.size());
 		
@@ -1862,7 +1867,7 @@ public class ArtIntel implements Runnable{
 	private void sendMovelist(){
 		
 		if(moves.isEmpty()){
-			random(board);
+			random();
 		}
 		Integrator.mergeMoves(moves);
 	}

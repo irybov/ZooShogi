@@ -252,26 +252,12 @@ public class Director{
 		if(addToList("black")){
 			output("draw");
 			voice("draw");
-			try {
-				new FileOutputStream("game.ser").close();
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 			return true;
 		}
 		else if((a+b==2 & turn.equals("black")) || (a+b==3 & turn.equals("white")) & 
 				(board[0][0].equals("K")||board[0][1].equals("K")||board[0][2].equals("K"))){
 			output("white");
 			voice("mate");
-			try {
-				new FileOutputStream("game.ser").close();
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 			return true;
 		}
 		else if((a+b==1 & turn.equals("white")) || (a+b==3 & turn.equals("black")) & 
