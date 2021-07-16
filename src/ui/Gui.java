@@ -5,8 +5,14 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.event.*;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+
+import java.util.List;
 
 import control.Director;
+import data.Player;
 import sound.Sound;
 import util.Bishop;
 import util.King;
@@ -365,7 +371,7 @@ public class Gui {
 					public void actionPerformed(ActionEvent e) {
 						JButton theButton = (JButton) e.getSource();
 						for(int c=0;c<6;c++) {
-						if(theButton.equals(dropW[c]) & click==1 & director.list(dropW[c].getName())){
+						if(theButton.equals(dropW[c])&click==1&director.list(dropW[c].getName())){
 							drop = true;
 							dropW[c].setBackground(Color.YELLOW);
 							highlight();
@@ -733,7 +739,7 @@ public class Gui {
 								JOptionPane.showMessageDialog(loadgame,
 										"No game to load found",
 											"Fail",
-												JOptionPane.DEFAULT_OPTION);
+												JOptionPane.ERROR_MESSAGE);
 							}
 						}
 					});
@@ -805,6 +811,61 @@ public class Gui {
        
         other.add(records);
         other.add(help);
+        
+        records.addActionListener(new ActionListener() {
+			   public void actionPerformed(ActionEvent e) {
+				   
+//					 javax.swing.SwingUtilities.invokeLater(new Runnable() {
+//							public void run() {
+				   
+						List<Player> players = director.getList();
+						// Create a couple of columns 								
+						String[] columns = {"Name", "Score"};
+							
+						DefaultTableModel model = new DefaultTableModel(columns, players.size()); 
+						JTable table = new JTable(model);
+/*						
+					    DefaultTableCellRenderer centerRend = new DefaultTableCellRenderer();
+					    centerRend.setHorizontalAlignment(JLabel.CENTER);
+					    table.setDefaultRenderer(String.class, centerRend);
+*/					    
+					    DefaultTableCellRenderer renderer = (DefaultTableCellRenderer)
+					    		table.getDefaultRenderer(String.class);
+					    renderer.setHorizontalAlignment(SwingConstants.CENTER);
+
+							for(Player player: players) {
+								// Append a row 
+								model.addRow(new Object[]{player.getName(), player.getScore()});									
+								}
+							table.setRowHeight(table.getRowHeight() + 20);
+							table.setFont(new Font("Dialog", Font.PLAIN, 20));
+							JTableHeader th = table.getTableHeader();
+							th.setFont(new Font("Dialog", Font.PLAIN, 25));
+						    JFrame popup = new JFrame("Scoresheet");
+//						    popup.setPreferredSize(new Dimension(400,250));
+						    popup.setResizable(false);
+						    //Add in whatever components you want
+						    popup.add(new JScrollPane(table));
+						    
+						    popup.pack();
+//						    popup.setLayout(null);
+						    popup.setLocationRelativeTo(null);
+						    popup.setVisible(true);
+//							}
+//						});
+			   }
+			});
+		
+        help.addActionListener(new ActionListener() {
+			   public void actionPerformed(ActionEvent e) {
+				   
+					 javax.swing.SwingUtilities.invokeLater(new Runnable() {
+							public void run() {
+
+							}
+						});				   
+			   }
+			});
         
         return other;
 	}

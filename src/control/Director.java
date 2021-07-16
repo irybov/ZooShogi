@@ -421,4 +421,8 @@ public class Director{
 		ss.update(player, level*10);
 	}
 	
+	public List<Player> getList() {		
+		return ss.getList();
+	}
+	
 }
