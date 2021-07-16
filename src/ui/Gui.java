@@ -49,6 +49,7 @@ public class Gui {
 	// dialog windows
 	public static JLabel output = new JLabel(" ");
 	public static JLabel score = new JLabel(" ");
+	public static JLabel profile = new JLabel(" ");
 	
 	// components labels
 	static JLabel showO = new JLabel("Output:");
@@ -107,6 +108,7 @@ public class Gui {
 		frame.add(white);
 		frame.add(black);
 		
+		frame.add(profile);
 //		frame.add(sound);
 //		sound.setBounds(100, 500, 300, 100);
 		
@@ -157,6 +159,10 @@ public class Gui {
 		black.setFont(new Font("Dialog", Font.PLAIN, 25));
 		black.setHorizontalAlignment(JLabel.CENTER);
 		black.setBounds(100,50,300,50);
+		
+		profile.setFont(new Font("Dialog", Font.PLAIN, 25));
+		profile.setHorizontalAlignment(JLabel.CENTER);
+		profile.setBounds(1200,225,300,50);
 
 		cols.add(colA);
 		cols.add(colB);
@@ -203,7 +209,7 @@ public class Gui {
 //		sound.add(boost);
 
 		newgame.setFont(new Font("Dialog", Font.PLAIN, 25));
-		newgame.setBounds(1200,250,300,50);
+		newgame.setBounds(1200,300,300,50);
 		newgame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				newgame = (JButton) e.getSource();
@@ -242,7 +248,7 @@ public class Gui {
 		
 		check.setFont(new Font("Dialog", Font.PLAIN, 25));
 		check.setHorizontalAlignment(JCheckBox.CENTER);
-		check.setBounds(1250,350,200,50);
+		check.setBounds(1250,375,200,50);
 		check.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				check = (JCheckBox) e.getSource();
@@ -772,6 +778,14 @@ public class Gui {
 				   
 					 javax.swing.SwingUtilities.invokeLater(new Runnable() {
 							public void run() {
+								
+								String name, pass;
+
+								JOptionPane.showInputDialog(select,
+										"Enter your name:",
+											"",
+												JOptionPane.NO_OPTION);
+								
 								director.createPlayer("Admin", "cm2309");
 							}
 						});
@@ -783,7 +797,16 @@ public class Gui {
 				   
 					 javax.swing.SwingUtilities.invokeLater(new Runnable() {
 							public void run() {
-
+								
+								String name, pass;
+								
+								JOptionPane.showInputDialog(select,
+										"Enter your name:",
+											"",
+												JOptionPane.NO_OPTION);
+								
+								String current = director.selectPlayer("Admin", "cm2309");
+								profile.setText("Player: " + current);
 							}
 						});				   
 			   }
@@ -795,6 +818,17 @@ public class Gui {
 					 javax.swing.SwingUtilities.invokeLater(new Runnable() {
 							public void run() {
 
+							int result = JOptionPane.showConfirmDialog(delete,
+										"Do you want to delete your stats?",
+											"Profile erasing",
+												JOptionPane.YES_NO_OPTION, 
+												JOptionPane.WARNING_MESSAGE);
+					            if (result == JOptionPane.YES_OPTION) {
+					            	director.deletePlayer();
+					            }
+//					            else if (result == JOptionPane.NO_OPTION) {
+//					            	
+//					            }
 							}
 						});				   
 			   }
@@ -815,8 +849,8 @@ public class Gui {
         records.addActionListener(new ActionListener() {
 			   public void actionPerformed(ActionEvent e) {
 				   
-//					 javax.swing.SwingUtilities.invokeLater(new Runnable() {
-//							public void run() {
+					 javax.swing.SwingUtilities.invokeLater(new Runnable() {
+							public void run() {
 				   
 						List<Player> players = director.getList();
 						// Create a couple of columns 								
@@ -835,24 +869,25 @@ public class Gui {
 
 							for(Player player: players) {
 								// Append a row 
-								model.addRow(new Object[]{player.getName(), player.getScore()});									
+								model.addRow(new Object[]{player.getName(),
+										Integer.toString(player.getScore())});									
 								}
-							table.setRowHeight(table.getRowHeight() + 20);
-							table.setFont(new Font("Dialog", Font.PLAIN, 20));
-							JTableHeader th = table.getTableHeader();
-							th.setFont(new Font("Dialog", Font.PLAIN, 25));
-						    JFrame popup = new JFrame("Scoresheet");
-//						    popup.setPreferredSize(new Dimension(400,250));
-						    popup.setResizable(false);
-						    //Add in whatever components you want
-						    popup.add(new JScrollPane(table));
-						    
-						    popup.pack();
-//						    popup.setLayout(null);
-						    popup.setLocationRelativeTo(null);
-						    popup.setVisible(true);
-//							}
-//						});
+								table.setRowHeight(table.getRowHeight() + 20);
+								table.setFont(new Font("Dialog", Font.PLAIN, 20));
+								JTableHeader th = table.getTableHeader();
+								th.setFont(new Font("Dialog", Font.PLAIN, 25));
+							    JFrame popup = new JFrame("Scoresheet");
+	//						    popup.setPreferredSize(new Dimension(400,250));
+							    popup.setResizable(false);
+							    //Add in whatever components you want
+							    popup.add(new JScrollPane(table));
+							    
+							    popup.pack();
+	//						    popup.setLayout(null);
+							    popup.setLocationRelativeTo(null);
+							    popup.setVisible(true);
+							}
+						});
 			   }
 			});
 		

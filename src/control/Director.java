@@ -285,12 +285,6 @@ public class Director{
 				(board[0][0].equals("K")||board[0][1].equals("K")||board[0][2].equals("K"))){
 			output("white");
 			voice("mate");
-			try {
-				new FileOutputStream("game.ser").close();
-			}
-		    catch (IOException ex) {
-				ex.printStackTrace();
-			}
 			return true;
 		}
 		else if((a+b==1 & turn.equals("white")) || (a+b==3 & turn.equals("black")) & 
@@ -343,14 +337,21 @@ public class Director{
 		game.clear();
 	}
 
-	private static void output(String result) {
+	private void output(String result) {
 		
 		switch(result){
 		case "black":
 			Gui.output.setText("Comp wins!");			
 			break;
 		case "white":
-			Gui.output.setText("You win!!!");			
+			Gui.output.setText("You win!!!");
+			try {
+				new FileOutputStream("game.ser").close();
+			}
+		    catch (IOException ex) {
+				ex.printStackTrace();
+			}
+			updateScore();
 			break;
 		case "draw":
 			Gui.output.setText("Draw by repetition");			
@@ -406,19 +407,36 @@ public class Director{
 	    
 	}
 	
-	public void selectPlayer(String name, String pass) {
+	public String selectPlayer(String name, String pass) {
 		
-		player = ss.select(new Player(name, pass));
+		player = ss.select(name, pass);
+		System.out.println(player);
+		return player.getName();
 	}
 	
-	public void deletePlayer(String name, String pass) {
+	public void deletePlayer() {
 		
-		ss.delete(new Player(name, pass));
+		ss.delete(player);
+		try(FileOutputStream fos = new FileOutputStream("table.ser");
+				ObjectOutputStream oos = new ObjectOutputStream(fos)){
+		        oos.writeObject(ss);
+		}			
+		catch (IOException ex) {
+			ex.printStackTrace();
+		}
 	}
 	
 	private void updateScore() {
 		
 		ss.update(player, level*10);
+		try(FileOutputStream fos = new FileOutputStream("table.ser");
+				ObjectOutputStream oos = new ObjectOutputStream(fos)){
+		        oos.writeObject(ss);
+		}			
+		catch (IOException ex) {
+			ex.printStackTrace();
+		}
+		System.out.println(player.getScore());
 	}
 	
 	public List<Player> getList() {		
