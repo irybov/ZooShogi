@@ -9,6 +9,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import control.Director;
@@ -200,7 +202,7 @@ public class Gui {
 		boost.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				boost = (JSlider) e.getSource();
-				Gui.output.setText(boost.getValue()>0?"Gain +"+(float)boost.getValue():
+				output.setText(boost.getValue()>0?"Gain +"+(float)boost.getValue():
 													  "Gain "+(float)boost.getValue());
 				Sound.setVol((float)boost.getValue());
 			}
@@ -277,7 +279,7 @@ public class Gui {
 					for(int i=0; i<levelArray.length; i++){
 						if(theButton.equals(brain[i])){
 							director.setLevel(i);
-							Gui.output.setText("Level " + Integer.toString(i)+ " selected");
+							output.setText("Level " + Integer.toString(i)+ " selected");
 							return;
 						}
 					}
@@ -727,6 +729,10 @@ public class Gui {
 				 javax.swing.SwingUtilities.invokeLater(new Runnable() {
 						public void run() {
 							director.saveGame();
+							JOptionPane.showMessageDialog(loadgame,
+									"Position saved",
+										"Success!",
+											JOptionPane.INFORMATION_MESSAGE);
 						}
 					});
 			}
@@ -740,10 +746,14 @@ public class Gui {
 							if(director.loadGame()) {
 								Gui.doClick();
 								disable();
+								JOptionPane.showMessageDialog(loadgame,
+										"Last game loaded",
+											"Success!",
+												JOptionPane.INFORMATION_MESSAGE);
 							}
 							else {
 								JOptionPane.showMessageDialog(loadgame,
-										"No game to load found",
+										"No saved game found",
 											"Fail",
 												JOptionPane.ERROR_MESSAGE);
 							}
@@ -854,7 +864,7 @@ public class Gui {
 				   
 						List<Player> players = director.getList();
 						// Create a couple of columns 								
-						String[] columns = {"Name", "Score"};
+						String[] columns = {"Name", "Joined", "Score"};
 							
 						DefaultTableModel model = new DefaultTableModel(columns, players.size()); 
 						JTable table = new JTable(model);
@@ -864,26 +874,25 @@ public class Gui {
 					    table.setDefaultRenderer(String.class, centerRend);
 */					    
 					    DefaultTableCellRenderer renderer = (DefaultTableCellRenderer)
-					    		table.getDefaultRenderer(String.class);
+					    table.getDefaultRenderer(String.class);
 					    renderer.setHorizontalAlignment(SwingConstants.CENTER);
+					    
+					    Collections.sort(players, Collections.reverseOrder());
 
 							for(Player player: players) {
 								// Append a row 
-								model.addRow(new Object[]{player.getName(),
-										Integer.toString(player.getScore())});									
+								model.addRow(new Object[]{player.getName(), player.getDate(),
+											Integer.toString(player.getScore())});
 								}
 								table.setRowHeight(table.getRowHeight() + 20);
 								table.setFont(new Font("Dialog", Font.PLAIN, 20));
 								JTableHeader th = table.getTableHeader();
 								th.setFont(new Font("Dialog", Font.PLAIN, 25));
 							    JFrame popup = new JFrame("Scoresheet");
-	//						    popup.setPreferredSize(new Dimension(400,250));
 							    popup.setResizable(false);
 							    //Add in whatever components you want
-							    popup.add(new JScrollPane(table));
-							    
+							    popup.add(new JScrollPane(table));							    
 							    popup.pack();
-	//						    popup.setLayout(null);
 							    popup.setLocationRelativeTo(null);
 							    popup.setVisible(true);
 							}

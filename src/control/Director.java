@@ -329,8 +329,7 @@ public class Director{
 				sound.voice("mate");				
 				break;
 			}
-		}
-		
+		}		
 	}
 	
 	public void clearing() {		
@@ -344,7 +343,7 @@ public class Director{
 			Gui.output.setText("Comp wins!");			
 			break;
 		case "white":
-			Gui.output.setText("You win!!!");
+			Gui.output.setText("You win and get +" + level*10 + " points!");
 			try {
 				new FileOutputStream("game.ser").close();
 			}
@@ -356,8 +355,7 @@ public class Director{
 		case "draw":
 			Gui.output.setText("Draw by repetition");			
 			break;
-		}
-		
+		}		
 	}
 	
 	public void saveGame() {
@@ -372,8 +370,7 @@ public class Director{
 	    }
 	    catch (IOException ex) {
 			ex.printStackTrace();
-		}
-	    
+		}	    
 	}
 	
 	public boolean loadGame() {
@@ -389,8 +386,7 @@ public class Director{
 			ex.printStackTrace();
 			return false;
 		}
-	    return true;
-	    
+	    return true;	    
 	}
 	
 	public void createPlayer(String name, String pass) {
@@ -403,26 +399,25 @@ public class Director{
 	    }
 	    catch (IOException ex) {
 			ex.printStackTrace();
-		}
-	    
+		}	    
 	}
 	
 	public String selectPlayer(String name, String pass) {
 		
 		player = ss.select(name, pass);
-		System.out.println(player);
 		return player.getName();
 	}
 	
 	public void deletePlayer() {
 		
-		ss.delete(player);
+		if(ss.delete(player)) {
 		try(FileOutputStream fos = new FileOutputStream("table.ser");
 				ObjectOutputStream oos = new ObjectOutputStream(fos)){
 		        oos.writeObject(ss);
 		}			
 		catch (IOException ex) {
 			ex.printStackTrace();
+		}
 		}
 	}
 	
@@ -436,7 +431,6 @@ public class Director{
 		catch (IOException ex) {
 			ex.printStackTrace();
 		}
-		System.out.println(player.getScore());
 	}
 	
 	public List<Player> getList() {		
