@@ -789,14 +789,22 @@ public class Gui {
 					 javax.swing.SwingUtilities.invokeLater(new Runnable() {
 							public void run() {
 								
-								String name, pass;
-
-								JOptionPane.showInputDialog(select,
-										"Enter your name:",
-											"",
-												JOptionPane.NO_OPTION);
+//								List<Player> players = director.getList();
 								
-								director.createPlayer("Admin", "cm2309");
+								Login login = new Login();								
+								login.setResizable(false);							    
+								login.pack();
+								login.setLocationRelativeTo(null);
+								login.setVisible(true);								
+								String name = login.getUsername();
+								String pass = login.getPassword();
+//								for(Player player: players) {	
+//									if(!player.getName().equalsIgnoreCase(name)){
+										if(director.createPlayer(name, pass)) {
+										profile.setText("Player: " + name);
+										}
+//									}
+//								}
 							}
 						});
 			   }
@@ -807,16 +815,23 @@ public class Gui {
 				   
 					 javax.swing.SwingUtilities.invokeLater(new Runnable() {
 							public void run() {
+																
+//								List<Player> players = director.getList();
 								
-								String name, pass;
-								
-								JOptionPane.showInputDialog(select,
-										"Enter your name:",
-											"",
-												JOptionPane.NO_OPTION);
-								
-								String current = director.selectPlayer("Admin", "cm2309");
-								profile.setText("Player: " + current);
+								Login login = new Login();								
+								login.setResizable(false);							    
+								login.pack();
+								login.setLocationRelativeTo(null);
+								login.setVisible(true);								
+								String name = login.getUsername();
+								String pass = login.getPassword();
+//								for(Player player: players) {	
+//									if(player.getName().equalsIgnoreCase(name)){
+										if(director.selectPlayer(name, pass)) {
+										profile.setText("Player: " + name);
+										}
+//									}
+//								}
 							}
 						});				   
 			   }
@@ -866,7 +881,14 @@ public class Gui {
 						// Create a couple of columns 								
 						String[] columns = {"Name", "Joined", "Score"};
 							
-						DefaultTableModel model = new DefaultTableModel(columns, players.size()); 
+						DefaultTableModel model = new DefaultTableModel(columns, players.size()) {
+
+						    @Override
+						    public boolean isCellEditable(int row, int column) {
+						       //all cells false
+						       return false;
+						    }
+						};
 						JTable table = new JTable(model);
 /*						
 					    DefaultTableCellRenderer centerRend = new DefaultTableCellRenderer();

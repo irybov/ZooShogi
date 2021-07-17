@@ -389,23 +389,26 @@ public class Director{
 	    return true;	    
 	}
 	
-	public void createPlayer(String name, String pass) {
+	public boolean createPlayer(String name, String pass) {
 		
 		Player newPlayer = new Player(name, pass);
-		ss.create(newPlayer);
+		if(ss.create(newPlayer)) {
 	    try(FileOutputStream fos = new FileOutputStream("table.ser");
 	    		ObjectOutputStream oos = new ObjectOutputStream(fos)){
 	           oos.writeObject(ss);
 	    }
 	    catch (IOException ex) {
 			ex.printStackTrace();
-		}	    
+		}
+	    return true;
+		}
+		return false;
 	}
 	
-	public String selectPlayer(String name, String pass) {
+	public boolean selectPlayer(String name, String pass) {
 		
 		player = ss.select(name, pass);
-		return player.getName();
+		return true;
 	}
 	
 	public void deletePlayer() {
