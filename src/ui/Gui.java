@@ -51,7 +51,7 @@ public class Gui {
 	// dialog windows
 	public static JLabel output = new JLabel(" ");
 	public static JLabel score = new JLabel(" ");
-	public static JLabel profile = new JLabel(" ");
+	static JLabel profile = new JLabel(" ");
 	
 	// components labels
 	static JLabel showO = new JLabel("Output:");
@@ -784,56 +784,35 @@ public class Gui {
         account.add(delete);
 		
 		create.addActionListener(new ActionListener() {
-			   public void actionPerformed(ActionEvent e) {
-				   
-					 javax.swing.SwingUtilities.invokeLater(new Runnable() {
-							public void run() {
-								
-//								List<Player> players = director.getList();
-								
-								Login login = new Login();								
-								login.setResizable(false);							    
-								login.pack();
-								login.setLocationRelativeTo(null);
-								login.setVisible(true);								
-								String name = login.getUsername();
-								String pass = login.getPassword();
-//								for(Player player: players) {	
-//									if(!player.getName().equalsIgnoreCase(name)){
-										if(director.createPlayer(name, pass)) {
-										profile.setText("Player: " + name);
-										}
-//									}
-//								}
-							}
-						});
+			   public void actionPerformed(ActionEvent e) {				   							
+								new Login();								
 			   }
 			});
 		
 		select.addActionListener(new ActionListener() {
 			   public void actionPerformed(ActionEvent e) {
 				   
-					 javax.swing.SwingUtilities.invokeLater(new Runnable() {
-							public void run() {
+//					 javax.swing.SwingUtilities.invokeLater(new Runnable() {
+//							public void run() {
 																
 //								List<Player> players = director.getList();
 								
-								Login login = new Login();								
-								login.setResizable(false);							    
-								login.pack();
-								login.setLocationRelativeTo(null);
-								login.setVisible(true);								
-								String name = login.getUsername();
-								String pass = login.getPassword();
+								new Login();								
+//								login.setResizable(false);							    
+//								login.pack();
+//								login.setLocationRelativeTo(null);
+//								login.setVisible(true);								
+//								String name = login.getUsername();
+//								String pass = login.getPassword();
 //								for(Player player: players) {	
 //									if(player.getName().equalsIgnoreCase(name)){
-										if(director.selectPlayer(name, pass)) {
-										profile.setText("Player: " + name);
-										}
+//										if(director.selectPlayer(name, pass)) {
+//										profile.setText("Player: " + name);
+//										}
 //									}
 //								}
-							}
-						});				   
+//							}
+//						});				   
 			   }
 			});
 		
@@ -873,63 +852,14 @@ public class Gui {
         
         records.addActionListener(new ActionListener() {
 			   public void actionPerformed(ActionEvent e) {
-				   
-					 javax.swing.SwingUtilities.invokeLater(new Runnable() {
-							public void run() {
-				   
-						List<Player> players = director.getList();
-						// Create a couple of columns 								
-						String[] columns = {"Name", "Joined", "Score"};
-							
-						DefaultTableModel model = new DefaultTableModel(columns, players.size()) {
-
-						    @Override
-						    public boolean isCellEditable(int row, int column) {
-						       //all cells false
-						       return false;
-						    }
-						};
-						JTable table = new JTable(model);
-/*						
-					    DefaultTableCellRenderer centerRend = new DefaultTableCellRenderer();
-					    centerRend.setHorizontalAlignment(JLabel.CENTER);
-					    table.setDefaultRenderer(String.class, centerRend);
-*/					    
-					    DefaultTableCellRenderer renderer = (DefaultTableCellRenderer)
-					    table.getDefaultRenderer(String.class);
-					    renderer.setHorizontalAlignment(SwingConstants.CENTER);
-					    
-					    Collections.sort(players, Collections.reverseOrder());
-
-							for(Player player: players) {
-								// Append a row 
-								model.addRow(new Object[]{player.getName(), player.getDate(),
-											Integer.toString(player.getScore())});
-								}
-								table.setRowHeight(table.getRowHeight() + 20);
-								table.setFont(new Font("Dialog", Font.PLAIN, 20));
-								JTableHeader th = table.getTableHeader();
-								th.setFont(new Font("Dialog", Font.PLAIN, 25));
-							    JFrame popup = new JFrame("Scoresheet");
-							    popup.setResizable(false);
-							    //Add in whatever components you want
-							    popup.add(new JScrollPane(table));							    
-							    popup.pack();
-							    popup.setLocationRelativeTo(null);
-							    popup.setVisible(true);
-							}
-						});
+								new Table();
 			   }
 			});
 		
         help.addActionListener(new ActionListener() {
 			   public void actionPerformed(ActionEvent e) {
 				   
-					 javax.swing.SwingUtilities.invokeLater(new Runnable() {
-							public void run() {
-
-							}
-						});				   
+		   
 			   }
 			});
         

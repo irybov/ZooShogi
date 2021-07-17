@@ -399,8 +399,9 @@ public class Director{
 	    }
 	    catch (IOException ex) {
 			ex.printStackTrace();
-		}
-	    return true;
+			}
+	    	player = newPlayer;
+	    	return true;
 		}
 		return false;
 	}
@@ -420,7 +421,7 @@ public class Director{
 		}			
 		catch (IOException ex) {
 			ex.printStackTrace();
-		}
+			}
 		}
 	}
 	
