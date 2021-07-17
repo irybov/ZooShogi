@@ -15,7 +15,7 @@ public class Login extends JFrame {
     private JLabel lbPassword;
     private JButton btnLogin;
     private JButton btnCancel;
-//    private boolean succeeded;
+//  private boolean succeeded;
     
 	private Director director = Director.getInstance();
     
@@ -61,7 +61,6 @@ public class Login extends JFrame {
                             "Hi " + getUsername() + ", welcome!",
                             "Login",
                             JOptionPane.INFORMATION_MESSAGE);
-//                    succeeded = true;
                     dispose();
                 } else {
                     JOptionPane.showMessageDialog(Login.this,
@@ -71,7 +70,6 @@ public class Login extends JFrame {
                     // reset username and password
                     tfUsername.setText("");
                     pfPassword.setText("");
- //                   succeeded = false;
                 }
             }
         });
@@ -99,7 +97,7 @@ public class Login extends JFrame {
     public boolean authenticate(String name, String pass) {
         // input username and password
 		if(director.createPlayer(name, pass)) {
-			Gui.profile.setText("Player: " + name);    	
+			Gui.profile.setText("Player: " + name);
             return true;
         }
         return false;
@@ -112,9 +110,5 @@ public class Login extends JFrame {
     public String getPassword() {
         return String.valueOf(pfPassword.getPassword());
     }
-/*
-    public boolean isSucceeded() {
-        return succeeded;
-    }
-*/
+
 }

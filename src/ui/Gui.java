@@ -51,7 +51,7 @@ public class Gui {
 	// dialog windows
 	public static JLabel output = new JLabel(" ");
 	public static JLabel score = new JLabel(" ");
-	static JLabel profile = new JLabel(" ");
+	static JLabel profile = new JLabel("Player: ");
 	
 	// components labels
 	static JLabel showO = new JLabel("Output:");
@@ -791,28 +791,7 @@ public class Gui {
 		
 		select.addActionListener(new ActionListener() {
 			   public void actionPerformed(ActionEvent e) {
-				   
-//					 javax.swing.SwingUtilities.invokeLater(new Runnable() {
-//							public void run() {
-																
-//								List<Player> players = director.getList();
-								
-								new Login();								
-//								login.setResizable(false);							    
-//								login.pack();
-//								login.setLocationRelativeTo(null);
-//								login.setVisible(true);								
-//								String name = login.getUsername();
-//								String pass = login.getPassword();
-//								for(Player player: players) {	
-//									if(player.getName().equalsIgnoreCase(name)){
-//										if(director.selectPlayer(name, pass)) {
-//										profile.setText("Player: " + name);
-//										}
-//									}
-//								}
-//							}
-//						});				   
+				   new Users();				   
 			   }
 			});
 		
@@ -829,6 +808,7 @@ public class Gui {
 												JOptionPane.WARNING_MESSAGE);
 					            if (result == JOptionPane.YES_OPTION) {
 					            	director.deletePlayer();
+					            	profile.setText("Player: ");
 					            }
 //					            else if (result == JOptionPane.NO_OPTION) {
 //					            	

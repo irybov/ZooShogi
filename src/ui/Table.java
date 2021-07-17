@@ -1,12 +1,12 @@
 package ui;
 
 import java.awt.*;
-import java.awt.event.*;
+// import java.awt.event.*;
 import java.util.Collections;
 import java.util.List;
 
 import javax.swing.*;
-import javax.swing.border.*;
+// import javax.swing.border.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
@@ -14,7 +14,7 @@ import javax.swing.table.JTableHeader;
 import control.Director;
 import data.Player;
 
-public class Table extends JTable {
+public class Table {
 	
 	// Create a couple of columns 								
 	private Director director = Director.getInstance();

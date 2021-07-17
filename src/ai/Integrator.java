@@ -28,11 +28,11 @@ public class Integrator {
 		this.mute = mute;		
 	}
 	
-	private Sound sound;
-	public Integrator(Sound sound) {
+	private Sound sound = Sound.getInstance();
+/*	public Integrator(Sound sound) {
 		this.sound = sound;
 	}
-
+*/
 	// merges results from different threads
 	public static synchronized void mergeMoves(List<Node> input){		
 		moves.addAll(input);

@@ -27,7 +27,7 @@ public class Director{
 	}
 	
 	private Sound sound = Sound.getInstance();
-	private Integrator integrator = new Integrator(sound);
+	private Integrator integrator = new Integrator();
 
 	private Map<String, Integer> game = new HashMap<>();
 
@@ -68,8 +68,8 @@ public class Director{
 		this.mute = mute;		
 		integrator.setMute(mute);
 	}
-	public void aiWarn(boolean c){	
-		integrator.setWarn(c);
+	public void aiWarn(boolean warn){	
+		integrator.setWarn(warn);
 	}
 	
 	public void setLevel(int level){
@@ -408,8 +408,17 @@ public class Director{
 	
 	public boolean selectPlayer(String name, String pass) {
 		
-		player = ss.select(name, pass);
-		return true;
+		if(ss.select(name, pass)) {
+			List<Player> players = getList();
+			for(Player current: players) {
+				if(players.contains(current)) {
+					player = current;
+					break;
+				}
+			}
+			return true;
+		}
+		return false;
 	}
 	
 	public void deletePlayer() {

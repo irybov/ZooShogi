@@ -21,13 +21,13 @@ public class ScoreSheet implements Serializable {
 		return false;
 	}
 	
-	public Player select(String name, String pass) {
+	public boolean select(String name, String pass) {
 
 		for(Player player: players) {	
 			if(player.getName().equalsIgnoreCase(name) & player.getPass().equals(pass))
-			return player;
+			return true;
 		}
-		return null;
+		return false;
 	}
 	
 	public boolean delete(Player player) {
