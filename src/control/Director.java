@@ -411,7 +411,7 @@ public class Director{
 		if(ss.select(name, pass)) {
 			List<Player> players = getList();
 			for(Player current: players) {
-				if(players.contains(current)) {
+				if(current.getName().equalsIgnoreCase(name) & current.getPass().equals(pass)) {
 					player = current;
 					break;
 				}

@@ -30,7 +30,8 @@ public class Table {
 		       //all cells false
 		       return false;
 		    }
-		};		
+		};
+		model.setRowCount(0);
 		JTable table = new JTable(model);
 		
 	    DefaultTableCellRenderer renderer = (DefaultTableCellRenderer)
