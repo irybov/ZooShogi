@@ -340,20 +340,27 @@ public class Director{
 		
 		switch(result){
 		case "black":
-			Gui.output.setText("Comp wins!");			
+			Gui.output.setText("Comp wins! You gain no points.");			
 			break;
 		case "white":
-			Gui.output.setText("You win and get +" + level*10 + " points!");
+			Gui.output.setText("You win and gain +" + level*10 + " points!");
 			try {
 				new FileOutputStream("game.ser").close();
 			}
 		    catch (IOException ex) {
 				ex.printStackTrace();
 			}
-			updateScore();
+			updateScore(10);
 			break;
 		case "draw":
-			Gui.output.setText("Draw by repetition");			
+			Gui.output.setText("Draw. You gain +" + level*5 + " points!");
+			try {
+				new FileOutputStream("game.ser").close();
+			}
+		    catch (IOException ex) {
+				ex.printStackTrace();
+			}
+			updateScore(5);
 			break;
 		}		
 	}
@@ -391,52 +398,58 @@ public class Director{
 	
 	public boolean createPlayer(String name, String pass) {
 		
+		List<Player> players = ss.getList();
 		Player newPlayer = new Player(name, pass);
-		if(ss.create(newPlayer)) {
-	    try(FileOutputStream fos = new FileOutputStream("table.ser");
-	    		ObjectOutputStream oos = new ObjectOutputStream(fos)){
-	           oos.writeObject(ss);
-	    }
-	    catch (IOException ex) {
-			ex.printStackTrace();
+		for(Player current: players) {
+			if(current.getName().equalsIgnoreCase(name)) {
+				return false;
 			}
+		}		
+			players.add(newPlayer);
 	    	player = newPlayer;
-	    	return true;
-		}
-		return false;
+		    try(FileOutputStream fos = new FileOutputStream("table.ser");
+		    		ObjectOutputStream oos = new ObjectOutputStream(fos)){
+		           oos.writeObject(ss);
+		    }
+		    catch (IOException ex) {
+				ex.printStackTrace();
+			}
+	    return true;
 	}
 	
 	public boolean selectPlayer(String name, String pass) {
-		
-		if(ss.select(name, pass)) {
-			List<Player> players = getList();
+
+		List<Player> players = ss.getList();
 			for(Player current: players) {
 				if(current.getName().equalsIgnoreCase(name) & current.getPass().equals(pass)) {
 					player = current;
-					break;
+					return true;
 				}
 			}
-			return true;
-		}
 		return false;
 	}
 	
 	public void deletePlayer() {
 		
-		if(ss.delete(player)) {
+		List<Player> players = ss.getList();
+		if(players.contains(player)) {
+			players.remove(player);
+		}
 		try(FileOutputStream fos = new FileOutputStream("table.ser");
 				ObjectOutputStream oos = new ObjectOutputStream(fos)){
 		        oos.writeObject(ss);
 		}			
 		catch (IOException ex) {
 			ex.printStackTrace();
-			}
 		}
 	}
 	
-	private void updateScore() {
+	private void updateScore(int scale) {
 		
-		ss.update(player, level*10);
+		List<Player> players = ss.getList();
+		if(players.contains(player)) {
+		player.setScore(player.getScore() + level*scale);	
+		}
 		try(FileOutputStream fos = new FileOutputStream("table.ser");
 				ObjectOutputStream oos = new ObjectOutputStream(fos)){
 		        oos.writeObject(ss);

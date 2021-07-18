@@ -33,6 +33,7 @@ public class ZooShogi {
 		about.setFont(new Font("Dialog", Font.PLAIN, 25));
 		launchScreen.add(content);
 		launchScreen.setLocationRelativeTo(null);
+		launchScreen.setResizable(false);
 		//allow the frame to be closed
 		launchScreen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		launchScreen.setVisible(true);

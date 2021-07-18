@@ -11,39 +11,4 @@ public class ScoreSheet implements Serializable {
 	public List<Player> getList() {
 		return players;
 	}
-
-	public boolean create(Player player) {
-
-		if(!players.contains(player)) {
-			players.add(player);
-			return true;
-		}
-		return false;
-	}
-	
-	public boolean select(String name, String pass) {
-
-		for(Player player: players) {	
-			if(player.getName().equalsIgnoreCase(name) & player.getPass().equals(pass))
-			return true;
-		}
-		return false;
-	}
-	
-	public boolean delete(Player player) {
-
-		if(players.contains(player)) {
-			players.remove(player);
-			return true;
-		}
-		return false;
-	}
-	
-	public void update(Player player, int score) {
-		
-		if(players.contains(player)) {
-		player.setScore(player.getScore() + score);
-		}		
-	}
-	
 }

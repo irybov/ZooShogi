@@ -35,6 +35,7 @@ public class Users extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 // Диалоговое окно ввода данных : родитель, сообщение в виде
                 // массива строк, тип диалогового окна (иконки)
+            	if(data.length > 0) {
                 password = JOptionPane.showInputDialog(select, "Please enter your pasword: ",
                 									"Authorization", 
                                                 JOptionPane.DEFAULT_OPTION); 
@@ -44,9 +45,10 @@ public class Users extends JFrame {
             	}
             	else {
                     JOptionPane.showMessageDialog(select,
-                            "Wrong username or password!",
+                            "Wrong password!",
                             "Fail",
                             JOptionPane.ERROR_MESSAGE);
+            		}
             	}
             }
         });
