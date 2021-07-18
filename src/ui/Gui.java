@@ -673,8 +673,7 @@ public class Gui {
 		push.setEnabled(true);
 		for(int i=0; i<levelArray.length; i++){
 			brain[i].setEnabled(true);
-		}
-		
+		}		
 	}
 	
 	public static void doClick(){
@@ -699,8 +698,7 @@ public class Gui {
 		push.setEnabled(false);
 		for(int i=0; i<levelArray.length; i++){
 			brain[i].setEnabled(false);
-		}
-		
+		}		
 	}
 	
 	JMenu createFileMenu(){
@@ -810,9 +808,6 @@ public class Gui {
 					            	director.deletePlayer();
 					            	profile.setText("Player: ");
 					            }
-//					            else if (result == JOptionPane.NO_OPTION) {
-//					            	
-//					            }
 							}
 						});				   
 			   }
@@ -839,7 +834,12 @@ public class Gui {
         help.addActionListener(new ActionListener() {
 			   public void actionPerformed(ActionEvent e) {
 				   
-		   
+					JOptionPane.showMessageDialog(help,
+							"Press MOVE to make computer start the game\n" +
+							"For the rules of the game watch on Youtube:\n" +
+							"How to play Dobutsu Shogi (Catch the Lion)",
+								"About",
+									JOptionPane.DEFAULT_OPTION);		   
 			   }
 			});
         

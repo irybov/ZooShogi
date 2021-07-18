@@ -15,7 +15,6 @@ public class Login extends JFrame {
     private JLabel lbPassword;
     private JButton btnLogin;
     private JButton btnCancel;
-//  private boolean succeeded;
     
 	private Director director = Director.getInstance();
     

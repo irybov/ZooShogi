@@ -434,13 +434,14 @@ public class Director{
 		List<Player> players = ss.getList();
 		if(players.contains(player)) {
 			players.remove(player);
-		}
 		try(FileOutputStream fos = new FileOutputStream("table.ser");
 				ObjectOutputStream oos = new ObjectOutputStream(fos)){
 		        oos.writeObject(ss);
 		}			
 		catch (IOException ex) {
 			ex.printStackTrace();
+		}
+		Gui.output.setText("User profile deleted");
 		}
 	}
 	
@@ -448,14 +449,14 @@ public class Director{
 		
 		List<Player> players = ss.getList();
 		if(players.contains(player)) {
-		player.setScore(player.getScore() + level*scale);	
-		}
+		player.setScore(player.getScore() + level*scale);
 		try(FileOutputStream fos = new FileOutputStream("table.ser");
 				ObjectOutputStream oos = new ObjectOutputStream(fos)){
 		        oos.writeObject(ss);
 		}			
 		catch (IOException ex) {
 			ex.printStackTrace();
+		}
 		}
 	}
 	
