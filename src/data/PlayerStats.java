@@ -22,6 +22,8 @@ public class PlayerStats implements Externalizable, Comparable<PlayerStats> {
 		this.pass = pass;
 	}
 	
+	public PlayerStats() {}
+	
 	public void setScore(Integer score) {
 		this.score = score;
 	}
