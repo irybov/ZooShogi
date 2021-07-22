@@ -1,30 +1,28 @@
 package data;
 
-import java.io.Serializable;
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
 
-public class Player implements Serializable, Comparable<Player> {
+public class PlayerStats implements Externalizable, Comparable<PlayerStats> {
 
-	private final String name;
-	private final String pass;
+	private String name;
+	private String pass;
 	private Integer score = 0;
-	private final Date date = new Date();
+	private Date date = new Date();
 		
-	public Player(String name, String pass) {
+	public PlayerStats(String name, String pass) {
 		this.name = name;
 		this.pass = pass;
 	}
-/*	
-	public void setName(String name) {
-		this.name = name;
-	}
-	public void setPass(String pass) {
-		this.pass = pass;
-	}
-*/	public void setScore(Integer score) {
+	
+	public void setScore(Integer score) {
 		this.score = score;
 	}
 	public String getName() {
@@ -54,7 +52,7 @@ public class Player implements Serializable, Comparable<Player> {
 	}
 	
 	@Override
-	public int compareTo(Player another) {
+	public int compareTo(PlayerStats another) {
 		return score.compareTo(another.score);
 	}	
 	@Override
@@ -79,7 +77,7 @@ public class Player implements Serializable, Comparable<Player> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Player other = (Player) obj;
+		PlayerStats other = (PlayerStats) obj;
 /*		if (date == null) {
 			if (other.date != null)
 				return false;
@@ -96,6 +94,29 @@ public class Player implements Serializable, Comparable<Player> {
 		} else if (!pass.equals(other.pass))
 			return false;
 		return true;
+	}
+	
+	@Override
+	public void writeExternal(ObjectOutput out) throws IOException {
+
+	       out.writeObject(this.getName());
+	       out.writeObject(this.encryptString(this.getPass()));
+	       out.writeObject(this.getScore());
+	       out.writeObject(this.getDate());		
+	}
+	private Object encryptString(String pass2) {
+		return Base64.getEncoder().encodeToString(pass.getBytes());
+	}
+	@Override
+	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+
+	       name = (String) in.readObject();
+	       pass = this.decryptString((String) in.readObject());
+	       score = (Integer) in.readObject();
+	       date = (Date) in.readObject();
+	}
+	private String decryptString(String readObject) {
+		return new String(Base64.getDecoder().decode(pass));
 	}
 	
 }

@@ -26,20 +26,20 @@ public class Director{
 		return INSTANCE;
 	}
 	
-	private Sound sound = Sound.getInstance();
-	private Integrator integrator = new Integrator();
+	private final Sound sound = Sound.getInstance();
+	private final Integrator integrator = new Integrator();
 
 	private Map<String, Integer> game = new HashMap<>();
 
-	private Player player;
+	private PlayerStats player;
 	private ScoreSheet ss;
 	{
-		File file = new File("table.ser");
+		File file = new File("table.bin");
 		if(!file.exists()) {
 		try {
 			file.createNewFile();
 			ss = new ScoreSheet();
-		    try(FileOutputStream fos = new FileOutputStream("table.ser");
+		    try(FileOutputStream fos = new FileOutputStream("table.bin");
 		    		ObjectOutputStream oos = new ObjectOutputStream(fos)){
 		           oos.writeObject(ss);
 		    }			
@@ -48,7 +48,7 @@ public class Director{
 			ex.printStackTrace();
 			}
 		}
-	    try(FileInputStream fis = new FileInputStream("table.ser");
+	    try(FileInputStream fis = new FileInputStream("table.bin");
 	    		ObjectInputStream ois = new ObjectInputStream(fis)){
 	    	ss = (ScoreSheet) ois.readObject();
 	    }
@@ -345,7 +345,7 @@ public class Director{
 		case "white":
 			Gui.output.setText("You win and gain +" + level*10 + " points!");
 			try {
-				new FileOutputStream("game.ser").close();
+				new FileOutputStream("game.bin").close();
 			}
 		    catch (IOException ex) {
 				ex.printStackTrace();
@@ -355,7 +355,7 @@ public class Director{
 		case "draw":
 			Gui.output.setText("Draw. You gain +" + level*5 + " points!");
 			try {
-				new FileOutputStream("game.ser").close();
+				new FileOutputStream("game.bin").close();
 			}
 		    catch (IOException ex) {
 				ex.printStackTrace();
@@ -369,7 +369,7 @@ public class Director{
 		
 		GameState state = new GameState(getBoard(), getMoves(), level);
 		
-	    try(FileOutputStream fos = new FileOutputStream("game.ser");
+	    try(FileOutputStream fos = new FileOutputStream("game.bin");
 	    		ObjectOutputStream oos = new ObjectOutputStream(fos)){
 	           oos.writeUnshared(state);
 	           oos.flush();
@@ -382,7 +382,7 @@ public class Director{
 	
 	public boolean loadGame() {
 	
-	    try(FileInputStream fis = new FileInputStream("game.ser");
+	    try(FileInputStream fis = new FileInputStream("game.bin");
 	    		ObjectInputStream ois = new ObjectInputStream(fis)){
 	    	GameState state = (GameState) ois.readUnshared();
 			setBoard(state.getBoard());
@@ -398,16 +398,16 @@ public class Director{
 	
 	public boolean createPlayer(String name, String pass) {
 		
-		List<Player> players = ss.getList();
-		Player newPlayer = new Player(name, pass);
-		for(Player current: players) {
+		List<PlayerStats> players = ss.getList();
+		PlayerStats newPlayer = new PlayerStats(name, pass);
+		for(PlayerStats current: players) {
 			if(current.getName().equalsIgnoreCase(name)) {
 				return false;
 			}
 		}		
 			players.add(newPlayer);
 	    	player = newPlayer;
-		    try(FileOutputStream fos = new FileOutputStream("table.ser");
+		    try(FileOutputStream fos = new FileOutputStream("table.bin");
 		    		ObjectOutputStream oos = new ObjectOutputStream(fos)){
 		           oos.writeObject(ss);
 		    }
@@ -419,8 +419,8 @@ public class Director{
 	
 	public boolean selectPlayer(String name, String pass) {
 
-		List<Player> players = ss.getList();
-			for(Player current: players) {
+		List<PlayerStats> players = ss.getList();
+			for(PlayerStats current: players) {
 				if(current.getName().equalsIgnoreCase(name) & current.getPass().equals(pass)) {
 					player = current;
 					return true;
@@ -431,10 +431,10 @@ public class Director{
 	
 	public void deletePlayer() {
 		
-		List<Player> players = ss.getList();
+		List<PlayerStats> players = ss.getList();
 		if(players.contains(player)) {
 			players.remove(player);
-		try(FileOutputStream fos = new FileOutputStream("table.ser");
+		try(FileOutputStream fos = new FileOutputStream("table.bin");
 				ObjectOutputStream oos = new ObjectOutputStream(fos)){
 		        oos.writeObject(ss);
 		}			
@@ -447,10 +447,10 @@ public class Director{
 	
 	private void updateScore(int scale) {
 		
-		List<Player> players = ss.getList();
+		List<PlayerStats> players = ss.getList();
 		if(players.contains(player)) {
-		player.setScore(player.getScore() + level*scale);
-		try(FileOutputStream fos = new FileOutputStream("table.ser");
+			player.setScore(player.getScore() + level*scale);
+		try(FileOutputStream fos = new FileOutputStream("table.bin");
 				ObjectOutputStream oos = new ObjectOutputStream(fos)){
 		        oos.writeObject(ss);
 		}			
@@ -460,7 +460,7 @@ public class Director{
 		}
 	}
 	
-	public List<Player> getList() {		
+	public List<PlayerStats> getList() {		
 		return ss.getList();
 	}
 	

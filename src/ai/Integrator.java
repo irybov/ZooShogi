@@ -29,10 +29,7 @@ public class Integrator {
 	}
 	
 	private Sound sound = Sound.getInstance();
-/*	public Integrator(Sound sound) {
-		this.sound = sound;
-	}
-*/
+
 	// merges results from different threads
 	public static synchronized void mergeMoves(List<Node> input){		
 		moves.addAll(input);
@@ -48,12 +45,6 @@ public class Integrator {
 		return best(moves, field);
 	}
 	
-/*	// sends data to move selector
-	public String[][] activateAB(String[][] field){
-		
-		return bestAB(moves, field);
-	}
-*/
 	// selects best move
 	private String[][] best(List<Node> spots, String[][] field) {
 		
@@ -132,64 +123,7 @@ public class Integrator {
 		
 		return field;
 	}
-	
-/*	// selects best move
-	private String[][] bestAB(List<Node> spots, String[][] field) {
 		
-		int score = Integer.MIN_VALUE+1;
-		int r = -1;
-		int c = -1;
-		int r2 = -1;
-		int c2 = -1;
-
-		for(int i=0; i<spots.size(); i++) {
-			if(score<spots.get(i).getValue()){
-				score = spots.get(i).getValue();				
-				r = spots.get(i).getR();
-				c = spots.get(i).getC();
-				r2 = spots.get(i).getR2();
-				c2 = spots.get(i).getC2();
-			}
-		}
-
-		Gui.score.setText(score > 0 ? "+" + Integer.toString(score) : Integer.toString(score));
-
-		String spot = field[r2][c2];
-		String pieceName = Message.pieceName(field[r][c]);
-
-	if(field[r][c]=="p" & (r2==3 & (c2==0||c2==1||c2==2))){
-		if(r==0 & (c==4||c==7)){
-			field[r2][c2] = "p";
-			field[r][c] = " ";
-		}	
-		else{
-			Capture.take(field, r2, c2);
-			field[r2][c2] = "q";
-			field[r][c] = " ";
-			}
-	}
-	else{
-		Capture.take(field, r2, c2);
-		field[r2][c2] = field[r][c];
-		field[r][c] = " ";
-	}
-	
-	String col = Message.colName(c);
-	String col2 = Message.colName(c2);
-	
-	output(pieceName,c,col,r,spot,col2,r2);
-	if(!mute){
-	if(warn & check(field)){
-		sound.voice("check");
-		}
-	}	
-	
-		moves.clear();
-		MoveList.add(field);
-		
-		return field;
-	}
-*/	
 	private void output(String name, int c, String col, int r, String spot, String col2, int r2){
 		
 		Gui.output.setText(name+" "+(c>2?"drops":"from "+col+(r+1))+

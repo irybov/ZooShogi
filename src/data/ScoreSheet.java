@@ -6,9 +6,10 @@ import java.util.List;
 
 public class ScoreSheet implements Serializable {
 	
-	private List<Player> players = new ArrayList<>();
+	private List<PlayerStats> players = new ArrayList<>();
 	
-	public List<Player> getList() {
+	public List<PlayerStats> getList() {
 		return players;
 	}
+	
 }

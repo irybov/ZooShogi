@@ -8,7 +8,6 @@ import ui.Gui;
 public class ZooShogi {
 
 	public static void main(String[] args) {
-
 		setup();
 	}
 

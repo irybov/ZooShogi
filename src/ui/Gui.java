@@ -14,7 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 import control.Director;
-import data.Player;
+import data.PlayerStats;
 import sound.Sound;
 import util.Bishop;
 import util.King;
@@ -25,7 +25,7 @@ import util.Rook;
 
 public class Gui {
 	
-	Director director = Director.getInstance();
+	final Director director = Director.getInstance();
 	int click = 1;
 	boolean drop = false;
 	boolean warn = true;	

@@ -1,14 +1,13 @@
 package data;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.Map;
 
 public class GameState implements Serializable {
 	
-	private String[][] board;
-	private Map<String, Integer> moves = new HashMap<>();
-	private int level;
+	private final String[][] board;
+	private final Map<String, Integer> moves;
+	private final int level;
 	
 	public GameState(String[][] board, Map<String, Integer> moves, int level) {
 		this.board = board;
