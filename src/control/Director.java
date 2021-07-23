@@ -20,7 +20,7 @@ import ui.Gui;
 
 public class Director{
 	
-	private static final Director INSTANCE = new Director();
+	private static Director INSTANCE = new Director();
 	
 	public static Director getInstance(){
 		return INSTANCE;
@@ -48,13 +48,15 @@ public class Director{
 			ex.printStackTrace();
 			}
 		}
+//		else {
 	    try(FileInputStream fis = new FileInputStream("table.bin");
 	    		ObjectInputStream ois = new ObjectInputStream(fis)){
 	    	ss = (ScoreSheet) ois.readObject();
 	    }
 	    catch (IOException | ClassNotFoundException ex) {
 			ex.printStackTrace();
-		}
+			}
+//		}
 	}
 	
 	private int r, c, r2, c2;

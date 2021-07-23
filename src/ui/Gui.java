@@ -25,7 +25,7 @@ import util.Rook;
 
 public class Gui {
 	
-	final Director director = Director.getInstance();
+	private Director director = Director.getInstance();
 	int click = 1;
 	boolean drop = false;
 	boolean warn = true;	

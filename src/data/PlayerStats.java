@@ -15,7 +15,8 @@ public class PlayerStats implements Externalizable, Comparable<PlayerStats> {
 	private String name;
 	private String pass;
 	private Integer score = 0;
-	private Date date = new Date();
+//	private Date date = new Date();
+	private String regDate = setDate();
 		
 	public PlayerStats(String name, String pass) {
 		this.name = name;
@@ -36,21 +37,16 @@ public class PlayerStats implements Externalizable, Comparable<PlayerStats> {
 	public Integer getScore() {
 		return score;
 	}
-	public String getDate() {
+	private String setDate() {
 		
-        // Create an instance of SimpleDateFormat used for formatting
-        // the string representation of date (day/month/year)
         String pattern = "dd/MM/yyyy";
         DateFormat df = new SimpleDateFormat(pattern);
-
-        // Get the date today using Calendar object.
         Date today = Calendar.getInstance().getTime();
-
-        // Using DateFormat format method we can create a string
-        // representation of a date with the defined format.
-        String reportDate = df.format(today);
-        
-		return reportDate;
+//      String reportDate = df.format(today);        
+		return df.format(today);
+	}
+	public String getRegDate() {
+		return regDate;
 	}
 	
 	@Override
@@ -59,14 +55,13 @@ public class PlayerStats implements Externalizable, Comparable<PlayerStats> {
 	}	
 	@Override
 	public String toString() {
-		return "Player [name=" + name + ", date=" + date + ", score=" + score + "]";
+		return "Player [name=" + name + ", regDate=" + regDate + ", score=" + score + "]";
 	}
 	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-//		result = prime * result + ((date == null) ? 0 : date.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((pass == null) ? 0 : pass.hashCode());
 		return result;
@@ -80,12 +75,7 @@ public class PlayerStats implements Externalizable, Comparable<PlayerStats> {
 		if (getClass() != obj.getClass())
 			return false;
 		PlayerStats other = (PlayerStats) obj;
-/*		if (date == null) {
-			if (other.date != null)
-				return false;
-		} else if (!date.equals(other.date))
-			return false;
-*/		if (name == null) {
+		if (name == null) {
 			if (other.name != null)
 				return false;
 		} else if (!name.equals(other.name))
@@ -104,21 +94,21 @@ public class PlayerStats implements Externalizable, Comparable<PlayerStats> {
 	       out.writeObject(this.getName());
 	       out.writeObject(this.encryptString(this.getPass()));
 	       out.writeObject(this.getScore());
-	       out.writeObject(this.getDate());		
+	       out.writeObject(this.getRegDate());
 	}
 	private Object encryptString(String pass2) {
-		return Base64.getEncoder().encodeToString(pass.getBytes());
+		return Base64.getEncoder().encodeToString(pass2.getBytes());
 	}
 	@Override
 	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
 
 	       name = (String) in.readObject();
-	       pass = this.decryptString((String) in.readObject());
+	       pass = (String) this.decryptString((String) in.readObject());
 	       score = (Integer) in.readObject();
-	       date = (Date) in.readObject();
+	       regDate = (String) in.readObject();
 	}
-	private String decryptString(String readObject) {
-		return new String(Base64.getDecoder().decode(pass));
+	private String decryptString(String pass2) {
+		return new String(Base64.getDecoder().decode(pass2));
 	}
 	
 }
