@@ -10,12 +10,12 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import control.Director;
-import data.PlayerStats;
+import data.Player;
 
 public class Users extends JFrame {
 	
 	private Director director = Director.getInstance();
-	private List<PlayerStats> players = director.getList();
+	private List<Player> players = director.getList();
 	private String username;
 	private String password;
 	private JLabel label = new JLabel(" ");

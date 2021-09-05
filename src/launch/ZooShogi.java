@@ -65,7 +65,7 @@ public class ZooShogi {
 				JOptionPane.showMessageDialog(launchScreen,
 					"Zoo Shogi by Ivan Ryabov\n" +
 					"This program is free for private use only\n" +
-					"E-mail: johnhard@mail.ru",
+					"E-mail: v_cho@list.ru",
 						"About",
 							JOptionPane.DEFAULT_OPTION);
 			}

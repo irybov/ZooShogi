@@ -5,16 +5,9 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.event.*;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
+import control.Clocks;
 import control.Director;
-import data.PlayerStats;
 import sound.Sound;
 import util.Bishop;
 import util.King;
@@ -26,11 +19,13 @@ import util.Rook;
 public class Gui {
 	
 	private Director director = Director.getInstance();
-	int click = 1;
-	boolean drop = false;
-	boolean warn = true;	
+	private int click = 1;
+	private boolean drop = false;
+	private boolean warn = true;	
 	boolean mute = false;
-	
+
+	private Clocks clocks = Clocks.getInstance();
+
 	//The Frame that's displayed. (Contains the Panels)
 	static JFrame frame = new JFrame();
 	
@@ -51,11 +46,13 @@ public class Gui {
 	// dialog windows
 	public static JLabel output = new JLabel(" ");
 	public static JLabel score = new JLabel(" ");
-	static JLabel profile = new JLabel("Player: ");
+	static JLabel profile = new JLabel("Player");
+
+	public static JLabel clockB = new JLabel("00:00");
+	public static JLabel clockW = new JLabel("00:00");
 	
 	// components labels
-	static JLabel showO = new JLabel("Output:");
-	static JLabel showS = new JLabel("Score:");
+	static JLabel show = new JLabel("Score:");
 	static JLabel colA = new JLabel("A");
 	static JLabel colB = new JLabel("B");
 	static JLabel colC = new JLabel("C");
@@ -65,6 +62,8 @@ public class Gui {
 	static JLabel row4 = new JLabel("4");
 	static JLabel white = new JLabel("White's hand");
 	static JLabel black = new JLabel("Black's hand");
+	
+	static JLabel comp = new JLabel("Computer");
 	
 	// service buttons
 	static JCheckBox volume = new JCheckBox("Mute volume", false);
@@ -84,6 +83,12 @@ public class Gui {
     static JMenuBar menuBar = new JMenuBar();
     
 	public Gui() {
+		
+		new Thread(new Runnable() {
+			public void run() {
+				clocks.setClock();
+			}
+		}).start();
 		
         menuBar.add(createFileMenu());
         menuBar.add(createAccountMenu());
@@ -105,35 +110,34 @@ public class Gui {
 		frame.add(output);
 		frame.add(behave);
 		frame.add(score);
-		frame.add(showO);
-		frame.add(showS);		
+		frame.add(show);		
 		frame.add(white);
-		frame.add(black);
-		
+		frame.add(black);		
 		frame.add(profile);
+		
+		frame.add(clockB);
+		frame.add(clockW);
 //		frame.add(sound);
 //		sound.setBounds(100, 500, 300, 100);
+		frame.add(comp);
 		
 		board.setBounds(500,100,600,800);
 		handB.setBounds(100,100,300,200);
-		handW.setBounds(1200,700,300,200);		
+		handW.setBounds(1200,700,300,200);
 		cols.setBounds(500,50,600,50);
 		rows.setBounds(450,100,50,800);		
 		output.setFont(new Font("Dialog", Font.PLAIN, 25));
 		output.setHorizontalAlignment(JLabel.CENTER);
-		output.setBounds(50,450,400,50);
+		output.setBounds(50,475,400,50);
 		behave.setFont(new Font("Dialog", Font.PLAIN, 25));
 		behave.setHorizontalAlignment(JLabel.CENTER);
 		behave.setBounds(1200,450,300,50);
 		score.setFont(new Font("Dialog", Font.PLAIN, 50));
 		score.setHorizontalAlignment(JLabel.CENTER);
 		score.setBounds(100,750,300,100);
-		showO.setFont(new Font("Dialog", Font.PLAIN, 50));
-		showO.setHorizontalAlignment(JLabel.CENTER);
-		showO.setBounds(100,350,300,50);
-		showS.setFont(new Font("Dialog", Font.PLAIN, 50));
-		showS.setHorizontalAlignment(JLabel.CENTER);
-		showS.setBounds(100,700,300,50);
+		show.setFont(new Font("Dialog", Font.PLAIN, 50));
+		show.setHorizontalAlignment(JLabel.CENTER);
+		show.setBounds(100,700,300,50);
 		colA.setFont(new Font("Dialog", Font.PLAIN, 25));
 		colA.setHorizontalAlignment(JLabel.CENTER);
 //		colA.setBounds(500,50,200,50);
@@ -160,12 +164,10 @@ public class Gui {
 		white.setBounds(1200,650,300,50);
 		black.setFont(new Font("Dialog", Font.PLAIN, 25));
 		black.setHorizontalAlignment(JLabel.CENTER);
-		black.setBounds(100,50,300,50);
-		
+		black.setBounds(100,50,300,50);		
 		profile.setFont(new Font("Dialog", Font.PLAIN, 25));
 		profile.setHorizontalAlignment(JLabel.CENTER);
 		profile.setBounds(1200,225,300,50);
-
 		cols.add(colA);
 		cols.add(colB);
 		cols.add(colC);
@@ -173,6 +175,21 @@ public class Gui {
 		rows.add(row2);
 		rows.add(row3);
 		rows.add(row4);
+		
+		clockB.setBounds(1200,100,300,50);
+		clockB.setFont(new Font("Dialog", Font.PLAIN, 50));
+		clockB.setHorizontalAlignment(JLabel.CENTER);
+		clockB.setOpaque(true);
+		clockB.setBackground(Color.BLACK);
+		clockB.setForeground(Color.WHITE);
+		clockW.setBounds(1200,175,300,50);
+		clockW.setFont(new Font("Dialog", Font.PLAIN, 50));
+		clockW.setHorizontalAlignment(JLabel.CENTER);
+		clockW.setOpaque(true);
+		clockW.setBackground(Color.WHITE);
+		comp.setFont(new Font("Dialog", Font.PLAIN, 25));
+		comp.setHorizontalAlignment(JLabel.CENTER);
+		comp.setBounds(1200,50,300,50);	
 		
 		volume.setFont(new Font("Dialog", Font.PLAIN, 20));
 		volume.setHorizontalAlignment(JCheckBox.CENTER);
@@ -220,6 +237,9 @@ public class Gui {
 				score.setText(" ");
 				director.initialize();
 				director.clearing();
+				
+				clocks.reset();
+				
 				updateGui();
 				return;
 			}
@@ -227,11 +247,12 @@ public class Gui {
 		frame.add(newgame);
 		
 		push.setFont(new Font("Dialog", Font.PLAIN, 50));
-		push.setBounds(1200,100,300,100);
+		push.setBounds(100,350,300,100);		
 		push.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				push = (JButton) e.getSource();
 				push.setEnabled(false);
+				
 				javax.swing.SwingUtilities.invokeLater(new Runnable() {
 					public void run() {
 					try {
@@ -242,7 +263,6 @@ public class Gui {
 						}
 					}
 				});
-				updateGui();
 				return;
 			}
 		});
@@ -306,7 +326,8 @@ public class Gui {
 							highlight(r, c);
 							director.from(r, c, squares[r][c].getName());
 							click = 2;
-							output.setText(Message.pieceName(squares[r][c].getName()) +" choosen");
+							output.setText(Message.pieceName(squares[r][c].getName())
+																		+" choosen");
 							drop = false;
 							return;
 							}
@@ -329,6 +350,7 @@ public class Gui {
 								click = 1;
 								disable();
 								drop = false;
+								
 									javax.swing.SwingUtilities.invokeLater(new Runnable() {
 										public void run() {
 										try {
@@ -692,7 +714,7 @@ public class Gui {
 	public static void setLevel(int i) {
 		brain[i].doClick();
 	}
-	
+
 	private void disable() {
 		
 		push.setEnabled(false);
@@ -796,8 +818,8 @@ public class Gui {
 		delete.addActionListener(new ActionListener() {
 			   public void actionPerformed(ActionEvent e) {
 				   
-					 javax.swing.SwingUtilities.invokeLater(new Runnable() {
-							public void run() {
+//					 javax.swing.SwingUtilities.invokeLater(new Runnable() {
+//							public void run() {
 
 							int result = JOptionPane.showConfirmDialog(delete,
 										"Do you want to delete your stats?",
@@ -806,10 +828,10 @@ public class Gui {
 												JOptionPane.WARNING_MESSAGE);
 					            if (result == JOptionPane.YES_OPTION) {
 					            	director.deletePlayer();
-					            	profile.setText("Player: ");
+					            	profile.setText("Player");
 					            }
-							}
-						});				   
+//							}
+//						});				   
 			   }
 			});
         		
@@ -836,7 +858,7 @@ public class Gui {
 				   
 					JOptionPane.showMessageDialog(help,
 							"Press MOVE to make computer start the game\n" +
-							"For the rules of the game watch on Youtube:\n" +
+							"For the rules of game watch on Youtube:\n" +
 							"How to play Dobutsu Shogi (Catch the Lion)",
 								"About",
 									JOptionPane.DEFAULT_OPTION);		   

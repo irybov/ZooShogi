@@ -28,10 +28,12 @@ public class Director{
 	
 	private final Sound sound = Sound.getInstance();
 	private final Integrator integrator = new Integrator();
+	
+	private Clocks clocks = Clocks.getInstance();
 
 	private Map<String, Integer> game = new HashMap<>();
 
-	private PlayerStats player;
+	private Player player;
 	private ScoreSheet ss;
 	{
 		File file = new File("table.bin");
@@ -46,17 +48,16 @@ public class Director{
 		}
 		catch (IOException ex) {
 			ex.printStackTrace();
-			}
 		}
-//		else {
+			}
+		
 	    try(FileInputStream fis = new FileInputStream("table.bin");
 	    		ObjectInputStream ois = new ObjectInputStream(fis)){
 	    	ss = (ScoreSheet) ois.readObject();
 	    }
 	    catch (IOException | ClassNotFoundException ex) {
 			ex.printStackTrace();
-			}
-//		}
+		}
 	}
 	
 	private int r, c, r2, c2;
@@ -193,11 +194,11 @@ public class Director{
 		}
 			
 		if(board[r][c].equals("P") & r2==0){
-			board[r2][c2] = "Q";
-			}
+		board[r2][c2] = "Q";
+		}
 		else{
 			board[r2][c2] = board[r][c];
-			}
+		}
 		board[r][c] = " ";
 	}
 	
@@ -207,18 +208,21 @@ public class Director{
 	}
 	
 	public void compute() throws InterruptedException{
+		
+		clocks.setTurn("black");
 
 		if(endGame("black")){
 			game.clear();
 			Gui.lock();
+			clocks.setTurn(" ");
 			return;
 		}
+		
 		switch(level){
 		case 0:
 		case 2:
 		case 4:	
-			ArtIntel t0 = new ArtIntel(level, board);
-			t0.run();
+			new ArtIntel(level, board).run();
 			break;
 		case 1:
 		case 3:
@@ -228,38 +232,25 @@ public class Director{
 			int cores = Runtime.getRuntime().availableProcessors();
 			List<Node> nodes = Separator.generateNodes(board);
 			ExecutorService es = Executors.newFixedThreadPool(cores);
-			for(int i = 0; i <nodes.size(); i++){
-				es.submit(new ArtIntel(nodes.get(i), Copier.deepCopy(board), level));
+			for(Node node: nodes){
+				es.submit(new ArtIntel(node, Copier.deepCopy(board), level));
 			}
 			es.shutdown();			
 			es.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
-/*			
-			ArtIntel t1 = new ArtIntel('1', level);
-			ArtIntel t2 = new ArtIntel('2', level);
-			
-			t1.setBoard(deepCopy(board));
-			t2.setBoard(deepCopy(board));
-			
-			Separator.generateNodes(board);
-
-			t1.start();
-			t2.start();						
-			t1.join();
-			t2.join();
-			
-			integrator.activate(board);				
-			Separator.clearLists();			
-*/			break;
+			break;
 		}
 		integrator.activate(board);	
-		
-		Gui.doClick();		
+
+		Gui.doClick();
 		
 		if(endGame("white")){
 			game.clear();
 			Gui.lock();
+			clocks.setTurn(" ");
 			return;
 		}
+		
+		clocks.setTurn("white");
 	}
 	
 	private boolean endGame(String turn)  {
@@ -342,7 +333,7 @@ public class Director{
 		
 		switch(result){
 		case "black":
-			Gui.output.setText("Comp wins! You gain no points.");			
+			Gui.output.setText("Comp wins! You gain no points...");			
 			break;
 		case "white":
 			Gui.output.setText("You win and gain +" + level*10 + " points!");
@@ -400,9 +391,9 @@ public class Director{
 	
 	public boolean createPlayer(String name, String pass) {
 		
-		List<PlayerStats> players = ss.getList();
-		PlayerStats newPlayer = new PlayerStats(name, pass);
-		for(PlayerStats current: players) {
+		List<Player> players = ss.getList();
+		Player newPlayer = new Player(name, pass);
+		for(Player current: players) {
 			if(current.getName().equalsIgnoreCase(name)) {
 				return false;
 			}
@@ -421,8 +412,8 @@ public class Director{
 	
 	public boolean selectPlayer(String name, String pass) {
 
-		List<PlayerStats> players = ss.getList();
-			for(PlayerStats current: players) {
+		List<Player> players = ss.getList();
+			for(Player current: players) {
 				if(current.getName().equalsIgnoreCase(name) & current.getPass().equals(pass)) {
 					player = current;
 					return true;
@@ -433,7 +424,7 @@ public class Director{
 	
 	public void deletePlayer() {
 		
-		List<PlayerStats> players = ss.getList();
+		List<Player> players = ss.getList();
 		if(players.contains(player)) {
 			players.remove(player);
 		try(FileOutputStream fos = new FileOutputStream("table.bin");
@@ -449,7 +440,7 @@ public class Director{
 	
 	private void updateScore(int scale) {
 		
-		List<PlayerStats> players = ss.getList();
+		List<Player> players = ss.getList();
 		if(players.contains(player)) {
 			player.setScore(player.getScore() + level*scale);
 		try(FileOutputStream fos = new FileOutputStream("table.bin");
@@ -462,7 +453,7 @@ public class Director{
 		}
 	}
 	
-	public List<PlayerStats> getList() {		
+	public List<Player> getList() {		
 		return ss.getList();
 	}
 	

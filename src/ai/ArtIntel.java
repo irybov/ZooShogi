@@ -3,6 +3,7 @@ package ai;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Collections;
 import java.util.HashMap;
 
@@ -1859,7 +1860,7 @@ public class ArtIntel implements Runnable{
 		List<Node> legal = new ArrayList<>();
 		legal = generateBlackMoves(board);
 		
-		int i = (int)(Math.random()*legal.size());
+		int i = new Random().nextInt(legal.size());
 		
 		legal.get(i).setValue(Integer.MIN_VALUE+2);
 		moves.add(legal.get(i));

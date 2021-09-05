@@ -7,18 +7,7 @@ import util.Capture;
 import util.Pieces;
 
 public class Separator {
-/*	
-	private static List<Node> head = new ArrayList<>();
-	private static List<Node> tail = new ArrayList<>();
 
-	public static List<Node> getHead() {
-		return head;
-	}
-
-	public static List<Node> getTail() {
-		return tail;
-	}
-*/
 	public static List<Node> generateNodes(String[][] field) {
 		
 		List<Node> legal = new ArrayList<>();
@@ -89,26 +78,7 @@ public class Separator {
 				}
 			}
 		}
-//		separateMoveList(legal);
 		return legal;
 	}
-/*
-	private static void separateMoveList(List<Node> legal){
 
-		if(legal.size() % 2 == 0){
-			head.addAll(legal.subList(0, legal.size()/2));			
-			tail.addAll(legal.subList(legal.size()/2, legal.size()));
-		}
-		else{
-			head.addAll(legal.subList(0, (legal.size()/2)-1));			
-			tail.addAll(legal.subList((legal.size()/2)-1, legal.size()));
-		}
-	}
-	
-	public static void clearLists(){
-		
-		head.clear();
-		tail.clear();
-	}
-*/	
 }

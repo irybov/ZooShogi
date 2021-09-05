@@ -9,9 +9,9 @@ import java.util.List;
 
 public class ScoreSheet implements Externalizable {
 	
-	private List<PlayerStats> players = new ArrayList<>();
+	private List<Player> players = new ArrayList<>();
 	
-	public List<PlayerStats> getList() {
+	public List<Player> getList() {
 		return players;
 	}
 	
@@ -24,7 +24,7 @@ public class ScoreSheet implements Externalizable {
 
 	@Override
 	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-	       players = (List<PlayerStats>) in.readObject();
+	       players = (List<Player>) in.readObject();
 	}
 	
 }

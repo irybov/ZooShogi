@@ -12,13 +12,13 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
 import control.Director;
-import data.PlayerStats;
+import data.Player;
 
 public class Table {
 	
 	// Create a couple of columns 								
 	private Director director = Director.getInstance();
-	private List<PlayerStats> players = director.getList();
+	private List<Player> players = director.getList();
 	private final String[] columns = {"Name", "Joined", "Score"};
 	
 	public Table() {
@@ -40,9 +40,9 @@ public class Table {
 	    
 	    Collections.sort(players, Collections.reverseOrder());
 
-			for(PlayerStats player: players) {
+			for(Player player: players) {
 				// Append a row 
-				model.addRow(new Object[]{player.getName(), player.getRegDate(),
+				model.addRow(new Object[]{player.getName(), player.getDate(),
 						Integer.toString(player.getScore())});
 				}
 				table.setRowHeight(table.getRowHeight() + 20);

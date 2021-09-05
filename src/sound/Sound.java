@@ -2,6 +2,8 @@ package sound;
 
 import javax.sound.sampled.*;
 
+import control.Clocks;
+
 public class Sound {
 	
 	private static final Sound INSTANCE = new Sound();
@@ -9,6 +11,8 @@ public class Sound {
 	public static Sound getInstance(){
 		return INSTANCE;
 	}
+	
+	private Clocks clocks = Clocks.getInstance();
 	
 	static FloatControl volume;
 	static float gain;	
@@ -33,6 +37,8 @@ public class Sound {
 	}
 
 	private String bank(String action) throws InterruptedException{
+		
+		clocks.setTurn(" ");
 		
 		String beep = " ";
 		

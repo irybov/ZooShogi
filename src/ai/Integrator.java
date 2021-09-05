@@ -3,6 +3,7 @@ package ai;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import sound.Sound;
 import ui.Gui;
@@ -75,7 +76,7 @@ public class Integrator {
 			c2 = random.get(0).getC2();	
 		}
 		else{
-			int i = (int)(Math.random()*random.size());
+			int i = new Random().nextInt(random.size());
 			
 			r = random.get(i).getR();
 			c = random.get(i).getC();

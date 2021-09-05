@@ -96,7 +96,7 @@ public class Login extends JFrame {
     public boolean authenticate(String name, String pass) {
         // input username and password
 		if(director.createPlayer(name, pass)) {
-			Gui.profile.setText("Player: " + name);
+			Gui.profile.setText(name);
             return true;
         }
         return false;
