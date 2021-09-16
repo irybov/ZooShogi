@@ -672,40 +672,28 @@ public class ArtIntel implements Runnable{
 	return false;
 	}
 	
-	private int max(List<Integer> scores) {	
-
-		int max = Integer.MIN_VALUE+1;
-		for(int i=0; i<scores.size();i++){
-			if (scores.get(i)>max){
-				max = scores.get(i);
-			}
-		}	
-	return max;	
+	private int max(List<Integer> scores) {
+		
+		return scores.stream().reduce(Integer.MIN_VALUE+1, Integer::max);
 	}	
 	
 	private int min(List<Integer> scores) {
-			
-		int min = Integer.MAX_VALUE;
-		for (int i=0; i<scores.size();i++){
-			if (scores.get(i)<min){
-				min = scores.get(i);
-			}
-		}	
-	return min;
+		
+		return scores.stream().reduce(Integer.MAX_VALUE, Integer::min);
 	}
 	
 	private int exp(List<Integer> scores) {
 		
 		return scores.stream().reduce(0, Integer::sum) / scores.size();	
-		}
+	}
 	
 	private int alpha(List<Integer> scores, int alpha, int beta) {
 		
-		for(int i=0; i<scores.size();i++){
-			if (scores.get(i)>alpha){
+		for(int i=0; i<scores.size(); i++){
+			if (scores.get(i) > alpha){
 				alpha = scores.get(i);
 			}
-			if(alpha>=beta){
+			if(alpha >= beta){
 				break;
 				}
 		}
@@ -714,11 +702,11 @@ public class ArtIntel implements Runnable{
 	
 	private int beta(List<Integer> scores, int alpha, int beta) {
 		
-		for(int i=0; i<scores.size();i++){
-			if (scores.get(i)<beta){
+		for(int i=0; i<scores.size(); i++){
+			if (scores.get(i) < beta){
 				beta = scores.get(i);
 			}
-			if(alpha>=beta){
+			if(alpha >= beta){
 				break;
 				}
 		}

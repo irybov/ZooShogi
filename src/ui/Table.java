@@ -1,12 +1,10 @@
 package ui;
 
 import java.awt.*;
-// import java.awt.event.*;
 import java.util.Collections;
 import java.util.List;
 
 import javax.swing.*;
-// import javax.swing.border.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;

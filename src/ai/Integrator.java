@@ -57,7 +57,7 @@ public class Integrator {
 
 		ArrayList<Node> random = new ArrayList<>();
 		for(int i=0; i<spots.size(); i++) {
-			if(score<=spots.get(i).getValue()){
+			if(score <= spots.get(i).getValue()){
 				score = spots.get(i).getValue();				
 				random.add(spots.get(i));
 			}
@@ -101,7 +101,7 @@ public class Integrator {
 			Capture.take(field, r2, c2);
 			field[r2][c2] = "q";
 			field[r][c] = " ";
-			}
+		}
 	}
 	else{
 		Capture.take(field, r2, c2);

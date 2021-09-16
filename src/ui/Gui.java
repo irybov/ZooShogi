@@ -843,9 +843,11 @@ public class Gui {
         JMenu other = new JMenu("Other");
         JMenuItem records = new JMenuItem("Records");
         JMenuItem help = new JMenuItem("Help");
+        JMenuItem engine = new JMenuItem("Engine");
        
         other.add(records);
         other.add(help);
+        other.add(engine);
         
         records.addActionListener(new ActionListener() {
 			   public void actionPerformed(ActionEvent e) {
@@ -862,6 +864,17 @@ public class Gui {
 							"How to play Dobutsu Shogi (Catch the Lion)",
 								"About",
 									JOptionPane.DEFAULT_OPTION);		   
+			   }
+			});
+        
+        engine.addActionListener(new ActionListener() {
+			   public void actionPerformed(ActionEvent e) {
+				   
+					 javax.swing.SwingUtilities.invokeLater(new Runnable() {
+							public void run() {
+								new Chooser();
+							}
+						});								
 			   }
 			});
         
