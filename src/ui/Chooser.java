@@ -2,9 +2,14 @@ package ui;
 
 import javax.swing.*;
 
+//import control.Director;
+import control.Driver;
 import control.Filter;
 
 public class Chooser {
+	
+//	private Director director = Director.getInstance();
+	Driver driver = new Driver();
 
 	JFileChooser input;
 	
@@ -24,6 +29,9 @@ public class Chooser {
 				int result = input.showOpenDialog(null);
 				if(result == JFileChooser.APPROVE_OPTION) {
 					Gui.output.setText("Selected file is: " + input.getSelectedFile().getName());
+//					director.setBoard(driver.input());
+//					driver.output(director.getBoard());
+					Gui.doClick();
 					frame.setVisible(false);
 				}
 				else if (result == JFileChooser.CANCEL_OPTION) {
