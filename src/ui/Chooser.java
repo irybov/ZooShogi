@@ -1,21 +1,26 @@
 package ui;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.jar.JarFile;
+
 import javax.swing.*;
 
-//import control.Director;
+import control.Director;
 import control.Driver;
 import control.Filter;
 
 public class Chooser {
 	
-//	private Director director = Director.getInstance();
+	private Director director = Director.getInstance();
 	Driver driver = new Driver();
 
 	JFileChooser input;
 	
 	public Chooser(){
 		
-		input = new JFileChooser();
+		File curDir = new File(System.getProperty("user.dir"));
+		input = new JFileChooser(curDir);
 		input.setFileFilter(new Filter());
 		
 		JFrame frame = new JFrame("Explorer");
@@ -28,14 +33,41 @@ public class Chooser {
 				
 				int result = input.showOpenDialog(null);
 				if(result == JFileChooser.APPROVE_OPTION) {
-					Gui.output.setText("Selected file is: " + input.getSelectedFile().getName());
-//					director.setBoard(driver.input());
-//					driver.output(director.getBoard());
-					Gui.doClick();
+					
+					String name = input.getSelectedFile().getName();
+					Gui.output.setText(name + " has been loaded");
+					
+					if(director.checkClient()) {
+					director.disconnect();
+					}
+					if(director.getServer() == null) {
+					director.establish();
+					}
+					
+					JarFile jarfile = null;
+					if(name.endsWith(".jar")) {
+						try {
+							jarfile = new JarFile(input.getSelectedFile());
+								Runtime.getRuntime().exec("java " + "-jar " + name + " " + 
+								jarfile.getManifest().getMainAttributes().getValue("Main-Class"));
+						}
+						catch (IOException exc) {
+							exc.printStackTrace();
+						}
+					}
+					else {
+						try {
+							Runtime.getRuntime().exec(name);
+						}
+						catch (IOException exc) {
+							exc.printStackTrace();
+						}
+					}
 					frame.setVisible(false);
 				}
+				
 				else if (result == JFileChooser.CANCEL_OPTION) {
-					Gui.output.setText("No file selected");
+					Gui.output.setText("No engine selected");
 					frame.setVisible(false);
 				}
 	}

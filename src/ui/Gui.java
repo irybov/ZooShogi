@@ -729,7 +729,7 @@ public class Gui {
         JMenuItem newgame2 = new JMenuItem("New game");
         JMenuItem savegame = new JMenuItem("Save game");
         JMenuItem loadgame = new JMenuItem("Load game");
-		JMenuItem exit = new JMenuItem("Quit");
+		JMenuItem exit = new JMenuItem("Exit");
 
 		file.add(newgame2);
 		file.add(savegame);
@@ -817,9 +817,6 @@ public class Gui {
 		
 		delete.addActionListener(new ActionListener() {
 			   public void actionPerformed(ActionEvent e) {
-				   
-//					 javax.swing.SwingUtilities.invokeLater(new Runnable() {
-//							public void run() {
 
 							int result = JOptionPane.showConfirmDialog(delete,
 										"Do you want to delete your stats?",
@@ -829,9 +826,7 @@ public class Gui {
 					            if (result == JOptionPane.YES_OPTION) {
 					            	director.deletePlayer();
 					            	profile.setText("Player");
-					            }
-//							}
-//						});				   
+					            }				   
 			   }
 			});
         		
@@ -874,7 +869,7 @@ public class Gui {
 							public void run() {
 								new Chooser();
 							}
-						});								
+						});
 			   }
 			});
         

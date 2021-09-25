@@ -218,29 +218,34 @@ public class Director{
 			return;
 		}
 		
-		switch(level){
-		case 0:
-		case 2:
-		case 4:	
-			new ArtIntel(level, board).run();
-			break;
-		case 1:
-		case 3:
-		case 5:
-		case 6:
-		case 7:
-			int cores = Runtime.getRuntime().availableProcessors();
-			List<Node> nodes = Separator.generateNodes(board);
-			ExecutorService es = Executors.newFixedThreadPool(cores);
-			for(Node node: nodes){
-				es.submit(new ArtIntel(node, Copier.deepCopy(board), level));
+		if(!client) {	
+			switch(level){
+			case 0:
+			case 2:
+			case 4:	
+				new ArtIntel(level, board).run();
+				break;
+			case 1:
+			case 3:
+			case 5:
+			case 6:
+			case 7:
+				int cores = Runtime.getRuntime().availableProcessors();
+				List<Node> nodes = Separator.generateNodes(board);
+				ExecutorService es = Executors.newFixedThreadPool(cores);
+				for(Node node: nodes){
+					es.submit(new ArtIntel(node, Copier.deepCopy(board), level));
+				}
+				es.shutdown();			
+				es.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
+				break;
 			}
-			es.shutdown();			
-			es.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
-			break;
+			integrator.activate(board);
 		}
-		integrator.activate(board);	
-
+		else {
+			send();
+			setBoard(receive());
+		}
 		Gui.doClick();
 		
 		if(endGame("white")){
@@ -455,6 +460,52 @@ public class Director{
 	
 	public List<Player> getList() {		
 		return ss.getList();
+	}
+	
+	private InternalServer server;
+	private Driver driver;
+	private boolean client = false;
+		
+	public InternalServer getServer() {
+		return this.server;
+	}
+	public boolean checkClient() {
+		return client;
+	}	
+
+	public void activate(boolean client) {
+		this.client = client;
+	}
+	
+	public void establish() {
+		driver = Driver.getInstance();
+		server = InternalServer.getInstance();
+		server.start();
+		client = true;
+	}
+	
+	public void shutdown() {
+		server.setLine("stop");
+		client = false;
+	}
+	
+	public void disconnect() {
+		if(server != null) {
+		server.setLine("quit");
+		}
+		client = false;
+	}
+	
+	public void send() {
+		String line = null;		
+		line = driver.output(getBoard());
+		server.setLine(line);
+	}
+	
+	public String[][] receive() {
+		String reply = null;
+		reply = server.getAnswer();
+		return driver.input(reply);
 	}
 	
 }
