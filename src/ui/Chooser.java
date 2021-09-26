@@ -7,20 +7,17 @@ import java.util.jar.JarFile;
 import javax.swing.*;
 
 import control.Director;
-import control.Driver;
 import control.Filter;
 
 public class Chooser {
 	
 	private Director director = Director.getInstance();
-	Driver driver = new Driver();
 
 	JFileChooser input;
 	
 	public Chooser(){
 		
-		File curDir = new File(System.getProperty("user.dir"));
-		input = new JFileChooser(curDir);
+		input = new JFileChooser(new File(System.getProperty("user.dir")));
 		input.setFileFilter(new Filter());
 		
 		JFrame frame = new JFrame("Explorer");
@@ -38,17 +35,21 @@ public class Chooser {
 					Gui.output.setText(name + " has been loaded");
 					
 					if(director.checkClient()) {
-					director.disconnect();
+						director.disconnect();
 					}
 					if(director.getServer() == null) {
-					director.establish();
+						director.establish();
+					}
+					else {
+						director.activate(true);
 					}
 					
 					JarFile jarfile = null;
+					File file = null;
 					if(name.endsWith(".jar")) {
 						try {
-							jarfile = new JarFile(input.getSelectedFile());
-								Runtime.getRuntime().exec("java " + "-jar " + name + " " + 
+							jarfile = new JarFile(input.getSelectedFile().getAbsolutePath());
+								Runtime.getRuntime().exec("javaw " + "-jar " + name + " " + 
 								jarfile.getManifest().getMainAttributes().getValue("Main-Class"));
 						}
 						catch (IOException exc) {
@@ -57,12 +58,15 @@ public class Chooser {
 					}
 					else {
 						try {
-							Runtime.getRuntime().exec(name);
+							file = new File(input.getSelectedFile().getAbsolutePath());
+							String fileName = file.getName();
+							Runtime.getRuntime().exec(fileName);
 						}
 						catch (IOException exc) {
 							exc.printStackTrace();
 						}
 					}
+					director.setLevel(0);
 					frame.setVisible(false);
 				}
 				

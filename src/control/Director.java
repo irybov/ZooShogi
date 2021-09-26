@@ -218,7 +218,11 @@ public class Director{
 			return;
 		}
 		
-		if(!client) {	
+		if(client) {
+			send();
+			setBoard(receive());
+		}
+		else {
 			switch(level){
 			case 0:
 			case 2:
@@ -242,10 +246,7 @@ public class Director{
 			}
 			integrator.activate(board);
 		}
-		else {
-			send();
-			setBoard(receive());
-		}
+
 		Gui.doClick();
 		
 		if(endGame("white")){
@@ -485,7 +486,9 @@ public class Director{
 	}
 	
 	public void shutdown() {
+		if(server != null) {
 		server.setLine("stop");
+		}
 		client = false;
 	}
 	

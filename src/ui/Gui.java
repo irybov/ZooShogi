@@ -251,7 +251,7 @@ public class Gui {
 		push.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				push = (JButton) e.getSource();
-				push.setEnabled(false);
+				disable();
 				
 				javax.swing.SwingUtilities.invokeLater(new Runnable() {
 					public void run() {
@@ -300,6 +300,9 @@ public class Gui {
 						if(theButton.equals(brain[i])){
 							director.setLevel(i);
 							output.setText("Level " + Integer.toString(i)+ " selected");
+							if(director.checkClient()) {
+							director.activate(false);
+							}
 							return;
 						}
 					}
@@ -433,6 +436,7 @@ public class Gui {
 		}
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		brain[0].doClick();
 		updateGui();
 		frame.setVisible(true);
 		//Redraw the graphics to show the squares
@@ -842,6 +846,7 @@ public class Gui {
        
         other.add(records);
         other.add(help);
+        other.addSeparator();        
         other.add(engine);
         
         records.addActionListener(new ActionListener() {
@@ -865,11 +870,11 @@ public class Gui {
         engine.addActionListener(new ActionListener() {
 			   public void actionPerformed(ActionEvent e) {
 				   
-					 javax.swing.SwingUtilities.invokeLater(new Runnable() {
-							public void run() {
+//					 javax.swing.SwingUtilities.invokeLater(new Runnable() {
+//							public void run() {
 								new Chooser();
-							}
-						});
+//							}
+//						});
 			   }
 			});
         

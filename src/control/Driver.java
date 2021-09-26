@@ -14,7 +14,6 @@ public class Driver {
 	private static Driver INSTANCE = new Driver();
 	
 	public static Driver getInstance(){
-		System.out.println("Driver loaded");
 		return INSTANCE;
 	}
 

@@ -21,9 +21,10 @@ public class InternalServer extends Thread{
 	
 	private String line = null;
 	private String reply = null;		
-	private BlockingQueue<String> bq = null;
+	private BlockingQueue<String> bq = new ArrayBlockingQueue<>(1, true);
 		
 	public void setLine(String line) {
+		reply = null;
 		this.line = line;
 			try {
 				bq.put(line);
@@ -33,7 +34,13 @@ public class InternalServer extends Thread{
 			}
 	}
 	public String getAnswer() {
-		return this.reply;
+		line = null;		
+		try {
+			reply = bq.take();
+		} catch (InterruptedException exc) {
+			exc.printStackTrace();
+		}
+		return reply;
 	}
 
 	public void run() {
@@ -70,7 +77,7 @@ public class InternalServer extends Thread{
 	
 	private void operate(Socket socket) {
 
-		System.out.println("Connected");
+		System.out.println("Client connected");
 		
 		InputStream sin = null;
 		OutputStream sout = null;
@@ -82,11 +89,8 @@ public class InternalServer extends Thread{
 			sout = socket.getOutputStream();
 			dis = new DataInputStream (sin);
 			dos = new DataOutputStream(sout);
-			
-			bq = new ArrayBlockingQueue<>(1);
 						
 			while(true) {
-				line = null;
 				line = bq.take();
 			    if(line.equals("stop")) {
 			    	break;
@@ -98,6 +102,7 @@ public class InternalServer extends Thread{
 			    	continue;
 			    }
 			    reply = dis.readUTF();
+				bq.put(reply);			    
 				System.out.println("Received by server");
 			}		
 		}
