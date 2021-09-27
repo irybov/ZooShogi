@@ -93,13 +93,16 @@ public class InternalServer extends Thread{
 			while(true) {
 				line = bq.take();
 			    if(line.equals("stop")) {
+					dos.writeUTF("quit");
+					dos.flush();
 			    	break;
 			    }				
 				dos.writeUTF(line);
 				dos.flush();
 				System.out.println("Sended from server");
 			    if(line.equals("quit")) {
-			    	continue;
+					line = null;			    	
+			    	break;
 			    }
 			    reply = dis.readUTF();
 				bq.put(reply);			    

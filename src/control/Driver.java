@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import data.Board;
+import ui.Gui;
 
 public class Driver {
 	
@@ -34,6 +35,9 @@ public class Driver {
 			exc.printStackTrace();
 		}
 		System.out.println("Received by server driver: " + board.getBoard());
+		Gui.output.setText(board.getMessage());
+		int score = board.getScore();
+		Gui.score.setText(score > 0 ? "+" + Integer.toString(score) : Integer.toString(score));		
 		return board.getBoard();
 	}
 	

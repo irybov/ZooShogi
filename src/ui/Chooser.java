@@ -66,7 +66,6 @@ public class Chooser {
 							exc.printStackTrace();
 						}
 					}
-					director.setLevel(0);
 					frame.setVisible(false);
 				}
 				

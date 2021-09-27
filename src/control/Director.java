@@ -479,10 +479,11 @@ public class Director{
 	}
 	
 	public void establish() {
+		setLevel(0);		
+		client = true;
 		driver = Driver.getInstance();
 		server = InternalServer.getInstance();
 		server.start();
-		client = true;
 	}
 	
 	public void shutdown() {

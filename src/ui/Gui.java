@@ -870,11 +870,11 @@ public class Gui {
         engine.addActionListener(new ActionListener() {
 			   public void actionPerformed(ActionEvent e) {
 				   
-//					 javax.swing.SwingUtilities.invokeLater(new Runnable() {
-//							public void run() {
+					 javax.swing.SwingUtilities.invokeLater(new Runnable() {
+							public void run() {
 								new Chooser();
-//							}
-//						});
+							}
+						});
 			   }
 			});
         

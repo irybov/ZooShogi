@@ -1,6 +1,7 @@
 C:\workspace\ZooShogi\src\control\Clocks.java
 C:\workspace\ZooShogi\src\launch\ZooShogi.java
 C:\workspace\ZooShogi\src\ai\ArtIntel.java
+C:\workspace\ZooShogi\src\control\Driver.java
 C:\workspace\ZooShogi\src\ui\Table.java
 C:\workspace\ZooShogi\src\util\King.java
 C:\workspace\ZooShogi\src\util\Pieces.java
@@ -13,6 +14,7 @@ C:\workspace\ZooShogi\src\util\Copier.java
 C:\workspace\ZooShogi\src\util\Message.java
 C:\workspace\ZooShogi\src\sound\package-info.java
 C:\workspace\ZooShogi\src\util\Capture.java
+C:\workspace\ZooShogi\src\control\InternalServer.java
 C:\workspace\ZooShogi\src\ui\Login.java
 C:\workspace\ZooShogi\src\data\Player.java
 C:\workspace\ZooShogi\src\ui\Users.java
@@ -28,6 +30,9 @@ C:\workspace\ZooShogi\src\ai\Node.java
 C:\workspace\ZooShogi\src\ai\HashTabs.java
 C:\workspace\ZooShogi\src\ai\Integrator.java
 C:\workspace\ZooShogi\src\ai\MoveList.java
+C:\workspace\ZooShogi\src\control\Filter.java
+C:\workspace\ZooShogi\src\ui\Chooser.java
 C:\workspace\ZooShogi\src\util\Queen.java
 C:\workspace\ZooShogi\src\sound\Sound.java
 C:\workspace\ZooShogi\src\util\Bishop.java
+C:\workspace\ZooShogi\src\data\Board.java

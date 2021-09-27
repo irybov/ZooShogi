@@ -3,7 +3,7 @@ package data;
 public class Board {
 
 	private String[][] board;
-	private String score;
+	private int score;
 	private String message;
 
 	public Board() {}
@@ -12,12 +12,12 @@ public class Board {
 		this.board = board;
 	}
 	
-	public Board(String[][] board, String score) {
+	public Board(String[][] board, int score) {
 		this.board = board;
 		this.score = score;
 	}
 	
-	public Board(String[][] board, String score, String message) {
+	public Board(String[][] board, int score, String message) {
 		this.board = board;
 		this.score = score;
 		this.message = message;
@@ -26,7 +26,7 @@ public class Board {
 	public String[][] getBoard() {
 		return this.board;
 	}
-	public String getScore() {
+	public int getScore() {
 		return this.score;
 	}
 	public String getMessage() {
