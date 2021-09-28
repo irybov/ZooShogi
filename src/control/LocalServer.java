@@ -10,18 +10,26 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-public class InternalServer extends Thread{
+public class LocalServer extends Thread{
 	
-	private static InternalServer INSTANCE = new InternalServer();
+	private static LocalServer INSTANCE = new LocalServer();
 	
-	public static InternalServer getInstance(){
+	public static LocalServer getInstance(){
 		return INSTANCE;
 	}
 	
 	private String line = null;
 	private String reply = null;		
 	private BlockingQueue<String> bq = new ArrayBlockingQueue<>(1, true);
+	
+	private AtomicBoolean active = new AtomicBoolean(true);
+	
+	public void shutdown() {
+		System.out.println("Server is down");		
+		active.set(false);
+	}
 		
 	public void setLine(String line) {
 		reply = null;
@@ -53,7 +61,7 @@ public class InternalServer extends Thread{
 				server = new ServerSocket(1980, 1, ia);
 				System.out.println("Server established");
 				
-				while(true) {
+				while(active.get()) {
 					Socket socket = server.accept();
 					operate(socket);
 				}
@@ -94,15 +102,16 @@ public class InternalServer extends Thread{
 				line = bq.take();				
 				dos.writeUTF(line);
 				dos.flush();
-				System.out.println("Sended from server" + line);
+				System.out.println("Sended from server: " + line);
 			    if(line.equals("quit")) {
+					System.out.println("Client disconnected from server");			    	
 					line = null;
 					socket.close();
 			    	break;
 			    }
 			    reply = dis.readUTF();
 				bq.put(reply);			    
-				System.out.println("Received by server" + reply);
+				System.out.println("Received by server: " + reply);
 			}		
 		}
 		catch(Exception exc) {

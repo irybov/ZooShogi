@@ -43,13 +43,13 @@ public class Chooser {
 					else {
 						director.activate();
 					}
-/*					
+					
 					JarFile jarfile = null;
 					File file = null;
 					if(name.endsWith(".jar")) {
 						try {
 							jarfile = new JarFile(input.getSelectedFile().getAbsolutePath());
-								Runtime.getRuntime().exec("javaw " + "-jar " + name + " " + 
+								Runtime.getRuntime().exec("javaw "+"-jar "+jarfile.getName()+" "+
 								jarfile.getManifest().getMainAttributes().getValue("Main-Class"));
 						}
 						catch (IOException exc) {
@@ -66,7 +66,7 @@ public class Chooser {
 							exc.printStackTrace();
 						}
 					}
-*/					frame.setVisible(false);
+					frame.setVisible(false);
 				}
 				
 				else if (result == JFileChooser.CANCEL_OPTION) {

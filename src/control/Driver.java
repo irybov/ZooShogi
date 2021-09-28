@@ -34,7 +34,6 @@ public class Driver {
 		catch (IOException exc) {
 			exc.printStackTrace();
 		}
-		System.out.println("Received by driver: " + board.getBoard());
 		Gui.output.setText(board.getMessage());
 		int score = board.getScore();
 		Gui.score.setText(score > 0 ? "+" + Integer.toString(score) : Integer.toString(score));		
@@ -59,7 +58,6 @@ public class Driver {
 		catch (IOException exc) {
 			exc.printStackTrace();
 		}
-		System.out.println("Sended by driver: " + reply);
 		return reply;
 	}
 	

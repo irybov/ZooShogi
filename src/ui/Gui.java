@@ -843,11 +843,13 @@ public class Gui {
         JMenuItem records = new JMenuItem("Records");
         JMenuItem help = new JMenuItem("Help");
         JMenuItem engine = new JMenuItem("Engine");
+        JMenuItem server = new JMenuItem("Server");
        
         other.add(records);
         other.add(help);
         other.addSeparator();        
         other.add(engine);
+        other.add(server);
         
         records.addActionListener(new ActionListener() {
 			   public void actionPerformed(ActionEvent e) {
@@ -875,6 +877,20 @@ public class Gui {
 								new Chooser();
 							}
 						});
+			   }
+			});
+        
+		server.addActionListener(new ActionListener() {
+			   public void actionPerformed(ActionEvent e) {
+
+							int result = JOptionPane.showConfirmDialog(server,
+										"Do you want to stop server?",
+											"Server shutdown",
+												JOptionPane.YES_NO_OPTION, 
+												JOptionPane.WARNING_MESSAGE);
+					            if (result == JOptionPane.YES_OPTION) {
+					            	director.shutdown();
+					            }				   
 			   }
 			});
         

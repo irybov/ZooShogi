@@ -463,11 +463,11 @@ public class Director{
 		return ss.getList();
 	}
 	
-	private InternalServer server;
+	private LocalServer server;
 	private Driver driver;
 	private boolean client = false;
 		
-	public InternalServer getServer() {
+	public LocalServer getServer() {
 		return this.server;
 	}
 	public boolean checkClient() {
@@ -482,15 +482,25 @@ public class Director{
 		setLevel(0);		
 		client = true;
 		driver = Driver.getInstance();
-		server = InternalServer.getInstance();
+		server = LocalServer.getInstance();
 		server.start();
 	}
 	
 	public void disconnect() {
 		if(server != null) {
-		server.setLine("quit");
+			server.setLine("quit");
 		}
 		client = false;
+	}
+	
+	public void shutdown() {
+		if(client) {
+			server.setLine("quit");
+			client = false;			
+		}
+		if(server != null) {
+		server.shutdown();
+		}
 	}
 	
 	public void send() {
