@@ -32,7 +32,7 @@ public class Chooser {
 				if(result == JFileChooser.APPROVE_OPTION) {
 					
 					String name = input.getSelectedFile().getName();
-					Gui.output.setText(name + " has been loaded");
+					Gui.output.setText(name + " engine loaded");
 					
 					if(director.checkClient()) {
 						director.disconnect();
@@ -41,9 +41,9 @@ public class Chooser {
 						director.establish();
 					}
 					else {
-						director.activate(true);
+						director.activate();
 					}
-					
+/*					
 					JarFile jarfile = null;
 					File file = null;
 					if(name.endsWith(".jar")) {
@@ -66,7 +66,7 @@ public class Chooser {
 							exc.printStackTrace();
 						}
 					}
-					frame.setVisible(false);
+*/					frame.setVisible(false);
 				}
 				
 				else if (result == JFileChooser.CANCEL_OPTION) {

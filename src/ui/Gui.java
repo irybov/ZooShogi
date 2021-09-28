@@ -301,7 +301,7 @@ public class Gui {
 							director.setLevel(i);
 							output.setText("Level " + Integer.toString(i)+ " selected");
 							if(director.checkClient()) {
-							director.activate(false);
+							director.disconnect();
 							}
 							return;
 						}

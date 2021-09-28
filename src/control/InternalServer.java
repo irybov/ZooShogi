@@ -91,27 +91,22 @@ public class InternalServer extends Thread{
 			dos = new DataOutputStream(sout);
 						
 			while(true) {
-				line = bq.take();
-			    if(line.equals("stop")) {
-					dos.writeUTF("quit");
-					dos.flush();
-			    	break;
-			    }				
+				line = bq.take();				
 				dos.writeUTF(line);
 				dos.flush();
-				System.out.println("Sended from server");
+				System.out.println("Sended from server" + line);
 			    if(line.equals("quit")) {
-					line = null;			    	
+					line = null;
+					socket.close();
 			    	break;
 			    }
 			    reply = dis.readUTF();
 				bq.put(reply);			    
-				System.out.println("Received by server");
+				System.out.println("Received by server" + reply);
 			}		
 		}
 		catch(Exception exc) {
 			exc.printStackTrace();
-			setLine("stop");
 		}
 	}
 	

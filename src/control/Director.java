@@ -474,8 +474,8 @@ public class Director{
 		return client;
 	}	
 
-	public void activate(boolean client) {
-		this.client = client;
+	public void activate() {
+		client = true;
 	}
 	
 	public void establish() {
@@ -484,13 +484,6 @@ public class Director{
 		driver = Driver.getInstance();
 		server = InternalServer.getInstance();
 		server.start();
-	}
-	
-	public void shutdown() {
-		if(server != null) {
-		server.setLine("stop");
-		}
-		client = false;
 	}
 	
 	public void disconnect() {
