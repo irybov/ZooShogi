@@ -21,7 +21,7 @@ public class LocalServer extends Thread{
 	}
 	
 	private String line = null;
-	private String reply = null;		
+	private String reply = null;
 	private BlockingQueue<String> bq = new ArrayBlockingQueue<>(1, true);
 	
 	private AtomicBoolean active = new AtomicBoolean(true);
