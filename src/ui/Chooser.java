@@ -32,7 +32,6 @@ public class Chooser {
 				if(result == JFileChooser.APPROVE_OPTION) {
 					
 					String name = input.getSelectedFile().getName();
-					Gui.output.setText(name + " engine loaded");
 					
 					if(director.checkClient()) {
 						director.disconnect();
@@ -59,13 +58,13 @@ public class Chooser {
 					else {
 						try {
 							file = new File(input.getSelectedFile().getAbsolutePath());
-							String fileName = file.getName();
-							Runtime.getRuntime().exec(fileName);
+							Runtime.getRuntime().exec(file.getName());
 						}
 						catch (IOException exc) {
 							exc.printStackTrace();
 						}
 					}
+					Gui.output.setText(name + " engine loaded");
 					frame.setVisible(false);
 				}
 				

@@ -889,7 +889,9 @@ public class Gui {
 												JOptionPane.YES_NO_OPTION, 
 												JOptionPane.WARNING_MESSAGE);
 					            if (result == JOptionPane.YES_OPTION) {
-					            	director.shutdown();
+									if(director.getServer() != null) {
+										director.shutdown();
+									}
 					            }				   
 			   }
 			});
