@@ -14,12 +14,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class LocalServer extends Thread{
 	
-	private static LocalServer INSTANCE = new LocalServer();
-	
-	public static LocalServer getInstance(){
-		return INSTANCE;
-	}
-	
 	private String line = null;
 	private String reply = null;
 	private BlockingQueue<String> bq = new ArrayBlockingQueue<>(1, true);

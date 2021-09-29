@@ -481,8 +481,10 @@ public class Director{
 	public void establish() {
 		setLevel(0);		
 		client = true;
-		driver = Driver.getInstance();
-		server = LocalServer.getInstance();
+		if(driver == null) {
+		driver = new Driver();
+		}
+		server = new LocalServer();
 		server.start();
 	}
 	

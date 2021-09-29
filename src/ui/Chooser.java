@@ -20,7 +20,7 @@ public class Chooser {
 		input = new JFileChooser(new File(System.getProperty("user.dir")));
 		input.setFileFilter(new Filter());
 		
-		JFrame frame = new JFrame("Explorer");
+		JFrame frame = new JFrame("File Explorer");
 		frame.setSize(800, 500);
 		frame.setResizable(false);
 		frame.pack();

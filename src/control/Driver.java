@@ -11,12 +11,6 @@ import data.Board;
 import ui.Gui;
 
 public class Driver {
-	
-	private static Driver INSTANCE = new Driver();
-	
-	public static Driver getInstance(){
-		return INSTANCE;
-	}
 
 	public String[][] input(String json){
 		
@@ -35,8 +29,8 @@ public class Driver {
 			exc.printStackTrace();
 		}
 		Gui.output.setText(board.getMessage());
-		int score = board.getScore();
-		Gui.score.setText(score > 0 ? "+" + Integer.toString(score) : Integer.toString(score));		
+		long score = board.getScore();
+		Gui.score.setText(score > 0 ? "+" + Long.toString(score) : Long.toString(score));		
 		return board.getBoard();
 	}
 	
