@@ -9,7 +9,7 @@ import javax.swing.*;
 import control.Director;
 import control.Filter;
 
-public class Chooser {
+class Chooser {
 	
 	private Director director = Director.getInstance();
 

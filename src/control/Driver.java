@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import data.Board;
 import ui.Gui;
 
-public class Driver {
+class Driver {
 
 	public String[][] input(String json){
 		

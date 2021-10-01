@@ -482,7 +482,7 @@ public class Director{
 		setLevel(0);		
 		client = true;
 		if(driver == null) {
-		driver = new Driver();
+			driver = new Driver();
 		}
 		server = new LocalServer();
 		server.start();
@@ -501,7 +501,7 @@ public class Director{
 			client = false;			
 		}
 		if(server != null) {
-		server.shutdown();
+			server.shutdown();
 		}
 	}
 	

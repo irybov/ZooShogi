@@ -30,7 +30,7 @@ public class Clocks{
 		
 		while(true) {
 			try {
-				Thread.sleep(1000);
+				TimeUnit.SECONDS.sleep(1);
 				if(turn.equals("black")) {
 				if(secB < 59) {
 						secB++;

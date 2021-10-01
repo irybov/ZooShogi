@@ -12,7 +12,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class LocalServer extends Thread{
+class LocalServer extends Thread{
 	
 	private String line = null;
 	private String reply = null;

@@ -220,7 +220,7 @@ public class Gui {
 			public void stateChanged(ChangeEvent e) {
 				boost = (JSlider) e.getSource();
 				output.setText(boost.getValue()>0?"Gain +"+(float)boost.getValue():
-													  "Gain "+(float)boost.getValue());
+												  "Gain "+(float)boost.getValue());
 				Sound.setVol((float)boost.getValue());
 			}
 		});
