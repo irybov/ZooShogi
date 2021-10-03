@@ -13,7 +13,7 @@ class Chooser {
 	
 	private Director director = Director.getInstance();
 
-	JFileChooser input;
+	private JFileChooser input;
 	
 	public Chooser(){
 		

@@ -20,9 +20,17 @@ import ui.Gui;
 
 public class Director{
 	
-	private static Director INSTANCE = new Director();
+	private static volatile Director INSTANCE;
 	
 	public static Director getInstance(){
+		
+		if(INSTANCE == null) {
+			synchronized (Director.class) {
+				if(INSTANCE == null) {
+					INSTANCE = new Director();
+				}
+			}
+		}		
 		return INSTANCE;
 	}
 	
@@ -237,9 +245,10 @@ public class Director{
 				int cores = Runtime.getRuntime().availableProcessors();
 				List<Node> nodes = Separator.generateNodes(board);
 				ExecutorService es = Executors.newFixedThreadPool(cores);
-				for(Node node: nodes){
+/*				for(Node node: nodes){
 					es.submit(new ArtIntel(node, Copier.deepCopy(board), level));
 				}
+*/				nodes.forEach(node-> es.submit(new ArtIntel(node, Copier.deepCopy(board), level)));
 				es.shutdown();			
 				es.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
 				break;
@@ -399,11 +408,11 @@ public class Director{
 		
 		List<Player> players = ss.getList();
 		Player newPlayer = new Player(name, pass);
-		for(Player current: players) {
-			if(current.getName().equalsIgnoreCase(name)) {
-				return false;
-			}
-		}		
+			for(Player current: players) {
+				if(current.getName().equalsIgnoreCase(name)) {
+					return false;
+				}
+			}		
 			players.add(newPlayer);
 	    	player = newPlayer;
 		    try(FileOutputStream fos = new FileOutputStream("table.bin");
@@ -431,31 +440,31 @@ public class Director{
 	public void deletePlayer() {
 		
 		List<Player> players = ss.getList();
-		if(players.contains(player)) {
-			players.remove(player);
-		try(FileOutputStream fos = new FileOutputStream("table.bin");
-				ObjectOutputStream oos = new ObjectOutputStream(fos)){
-		        oos.writeObject(ss);
-		}			
-		catch (IOException ex) {
-			ex.printStackTrace();
-		}
-		Gui.output.setText("User profile deleted");
-		}
+			if(players.contains(player)) {
+				players.remove(player);
+			try(FileOutputStream fos = new FileOutputStream("table.bin");
+					ObjectOutputStream oos = new ObjectOutputStream(fos)){
+			        oos.writeObject(ss);
+			}			
+			catch (IOException ex) {
+				ex.printStackTrace();
+				}
+			Gui.output.setText("User profile deleted");
+			}
 	}
 	
 	private void updateScore(int scale) {
 		
 		List<Player> players = ss.getList();
-		if(players.contains(player)) {
-			player.setScore(player.getScore() + level*scale);
-		try(FileOutputStream fos = new FileOutputStream("table.bin");
-				ObjectOutputStream oos = new ObjectOutputStream(fos)){
-		        oos.writeObject(ss);
-		}			
-		catch (IOException ex) {
-			ex.printStackTrace();
-		}
+			if(players.contains(player)) {
+				player.setScore(player.getScore() + level*scale);
+			try(FileOutputStream fos = new FileOutputStream("table.bin");
+					ObjectOutputStream oos = new ObjectOutputStream(fos)){
+			        oos.writeObject(ss);
+			}			
+			catch (IOException ex) {
+				ex.printStackTrace();
+			}
 		}
 	}
 	
@@ -468,7 +477,7 @@ public class Director{
 	private boolean client = false;
 		
 	public LocalServer getServer() {
-		return this.server;
+		return server;
 	}
 	public boolean checkClient() {
 		return client;
