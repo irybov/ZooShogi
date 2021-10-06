@@ -672,18 +672,15 @@ public class ArtIntel implements Runnable{
 	return false;
 	}
 	
-	private int max(List<Integer> scores) {
-		
+	private int max(List<Integer> scores) {		
 		return scores.stream().reduce(Integer.MIN_VALUE+1, Integer::max);
 	}	
 	
-	private int min(List<Integer> scores) {
-		
+	private int min(List<Integer> scores) {		
 		return scores.stream().reduce(Integer.MAX_VALUE, Integer::min);
 	}
 	
-	private int exp(List<Integer> scores) {
-		
+	private int exp(List<Integer> scores) {		
 		return scores.stream().reduce(0, Integer::sum) / scores.size();	
 	}
 	
@@ -729,153 +726,155 @@ public class ArtIntel implements Runnable{
 				prev = evaluationMaterial(board, false) + evaluationPositional(board);
 		}
 	
-	if(turn.equals("black")){	
-		for(int i=0; i<legal.size(); i++){
-
-				int r = legal.get(i).getR();
-				int c = legal.get(i).getC();
-				int r2 = legal.get(i).getR2();
-				int c2 = legal.get(i).getC2();
-				String temp;
-				String prom;
-				int r3;
-				int c3 = 9;
-												
-				r3 = 0;
-				if((board[r][c].equals("p")&(r!=0 & (c!=4||c!=7)))&(r2==3&(c2==0||c2==1||c2==2))){
-					prom = "p";
-					c3 = Capture.take(board, r2, c2);
-					temp = board[r2][c2];
-					board[r2][c2] = "q";
-					board[r][c] = " ";
-				}
-				else if(board[r][c].equals("p") & (r==0 & (c==4||c==7))){
-					prom = " ";
-					temp = board[r2][c2];
-					board[r2][c2] = "p";
-					board[r][c] = " ";
-				}
-				else{
-					prom = " ";
-					c3 = Capture.take(board, r2, c2);
-					temp = board[r2][c2];
-					board[r2][c2] = board[r][c];
-					board[r][c] = " ";
-				}
-				
-				int value;				
-				if(temp.equals("K")){
-					value = 2000;	
-					}
-				else if((board[3][0].equals("k")||board[3][1].equals("k")||board[3][2].equals("k"))
-						&check(board, "white")==false){
-					value = 1000;
-				}				
-				else if(check(board, "white")){
-					value = -1000;
-				}
-				else{
-					if(prune)
-					value = evaluationMaterial(board, false) + evaluationPositional(board);
-					else
-					value = evaluationMaterial(board, false);
-				}
-				
-				legal.get(i).setValue(value);
-				sorted.add(legal.get(i));
-				
-				if(prom.equals("p") & board[r2][c2].equals("q")){
-					board[r][c] = "p";
-					board[r2][c2] = temp;
-					Capture.undo(board, r3, c3);
-				}
-				else{
-					board[r][c] = board[r2][c2];
-					board[r2][c2] = temp;
-					Capture.undo(board, r3, c3);
-				}			
-			}
-
-		Collections.sort(sorted, Collections.reverseOrder());
-		
-		if(prune){
-			sorted.removeIf(e -> e.getValue() < prev);
-		}		
-	}
+		if(turn.equals("black")){	
+			for(int i=0; i<legal.size(); i++){
 	
-	else{		
-		for(int i=0; i<legal.size(); i++){
-
-				int r = legal.get(i).getR();
-				int c = legal.get(i).getC();
-				int r2 = legal.get(i).getR2();
-				int c2 = legal.get(i).getC2();
-				String temp;
-				String prom;
-				int r3;
-				int c3 = 9;
-		
-				r3 = 3;
-				if((board[r][c].equals("P")&(r!=3 & (c!=4||c!=7)))&(r2==0&(c2==0||c2==1||c2==2))){
-					prom = "P";
-					c3 = Capture.take(board, r2, c2);
-					temp = board[r2][c2];
-					board[r2][c2] = "Q";
-					board[r][c] = " ";
-				}
-				else if(board[r][c].equals("P") & (r==3 & (c==4||c==7))){
-					prom = " ";
-					temp = board[r2][c2];
-					board[r2][c2] = "P";
-					board[r][c] = " ";
-				}
-				else{
-					prom = " ";
-					c3 = Capture.take(board, r2, c2);
-					temp = board[r2][c2];
-					board[r2][c2] = board[r][c];
-					board[r][c] = " ";
-				}
-		
-				int value;				
-				if(temp.equals("k")){
-					value = -2000;	
+					int r = legal.get(i).getR();
+					int c = legal.get(i).getC();
+					int r2 = legal.get(i).getR2();
+					int c2 = legal.get(i).getC2();
+					String temp;
+					String prom;
+					int r3;
+					int c3 = 9;
+													
+					r3 = 0;
+					if((board[r][c].equals("p")&(r!=0&(c!=4||c!=7)))&(r2==3&(c2==0||c2==1||c2==2))){
+						prom = "p";
+						c3 = Capture.take(board, r2, c2);
+						temp = board[r2][c2];
+						board[r2][c2] = "q";
+						board[r][c] = " ";
 					}
-				else if((board[0][0].equals("K")||board[0][1].equals("K")||board[0][2].equals("K"))
-						&check(board, "black")==false){
-					value = -1000;
-				}				
-				else if(check(board, "black")){
-					value = 1000;
+					else if(board[r][c].equals("p") & (r==0 & (c==4||c==7))){
+						prom = " ";
+						temp = board[r2][c2];
+						board[r2][c2] = "p";
+						board[r][c] = " ";
+					}
+					else{
+						prom = " ";
+						c3 = Capture.take(board, r2, c2);
+						temp = board[r2][c2];
+						board[r2][c2] = board[r][c];
+						board[r][c] = " ";
+					}
+					
+					int value;				
+					if(temp.equals("K")){
+						value = 2000;	
+						}
+					else if((board[3][0].equals("k")||board[3][1].equals("k")||board[3][2].equals("k"))
+							&check(board, "white")==false){
+						value = 1000;
+					}				
+					else if(check(board, "white")){
+						value = -1000;
+					}
+					else{
+						if(prune) {
+						value = evaluationMaterial(board, false) + evaluationPositional(board);
+						}
+						else {
+						value = evaluationMaterial(board, false);
+						}
+					}
+					
+					legal.get(i).setValue(value);
+					sorted.add(legal.get(i));
+					
+					if(prom.equals("p") & board[r2][c2].equals("q")){
+						board[r][c] = "p";
+						board[r2][c2] = temp;
+						Capture.undo(board, r3, c3);
+					}
+					else{
+						board[r][c] = board[r2][c2];
+						board[r2][c2] = temp;
+						Capture.undo(board, r3, c3);
+					}			
 				}
-				else{
-					if(prune)
-					value = evaluationMaterial(board, false) + evaluationPositional(board);
-					else
-					value = evaluationMaterial(board, false);
-				}
-				
-				legal.get(i).setValue(value);
-				sorted.add(legal.get(i));
-				
-				if(prom.equals("P") & board[r2][c2].equals("Q")){
-					board[r][c] = "P";
-					board[r2][c2] = temp;
-					Capture.undo(board, r3, c3);
-				}
-				else{
-					board[r][c] = board[r2][c2];
-					board[r2][c2] = temp;
-					Capture.undo(board, r3, c3);
-				}
-			}			
-
-		Collections.sort(sorted);
-		
-		if(prune){
-			sorted.removeIf(e -> e.getValue() > prev);
+	
+			Collections.sort(sorted, Collections.reverseOrder());			
+			if(prune){
+				sorted.removeIf(e -> e.getValue() < prev);
+			}		
 		}
-	}	
+		
+		else{		
+			for(int i=0; i<legal.size(); i++){
+	
+					int r = legal.get(i).getR();
+					int c = legal.get(i).getC();
+					int r2 = legal.get(i).getR2();
+					int c2 = legal.get(i).getC2();
+					String temp;
+					String prom;
+					int r3;
+					int c3 = 9;
+			
+					r3 = 3;
+					if((board[r][c].equals("P")&(r!=3&(c!=4||c!=7)))&(r2==0&(c2==0||c2==1||c2==2))){
+						prom = "P";
+						c3 = Capture.take(board, r2, c2);
+						temp = board[r2][c2];
+						board[r2][c2] = "Q";
+						board[r][c] = " ";
+					}
+					else if(board[r][c].equals("P") & (r==3 & (c==4||c==7))){
+						prom = " ";
+						temp = board[r2][c2];
+						board[r2][c2] = "P";
+						board[r][c] = " ";
+					}
+					else{
+						prom = " ";
+						c3 = Capture.take(board, r2, c2);
+						temp = board[r2][c2];
+						board[r2][c2] = board[r][c];
+						board[r][c] = " ";
+					}
+			
+					int value;				
+					if(temp.equals("k")){
+						value = -2000;	
+						}
+					else if((board[0][0].equals("K")||board[0][1].equals("K")||board[0][2].equals("K"))
+							&check(board, "black")==false){
+						value = -1000;
+					}				
+					else if(check(board, "black")){
+						value = 1000;
+					}
+					else{
+						if(prune) {
+						value = evaluationMaterial(board, false) + evaluationPositional(board);
+						}
+						else {
+						value = evaluationMaterial(board, false);
+						}
+					}
+					
+					legal.get(i).setValue(value);
+					sorted.add(legal.get(i));
+					
+					if(prom.equals("P") & board[r2][c2].equals("Q")){
+						board[r][c] = "P";
+						board[r2][c2] = temp;
+						Capture.undo(board, r3, c3);
+					}
+					else{
+						board[r][c] = board[r2][c2];
+						board[r2][c2] = temp;
+						Capture.undo(board, r3, c3);
+					}
+				}			
+	
+			Collections.sort(sorted);			
+			if(prune){
+				sorted.removeIf(e -> e.getValue() > prev);
+			}
+		}	
 		return sorted;
 	}
 

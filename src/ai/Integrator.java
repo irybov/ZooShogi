@@ -46,6 +46,47 @@ public class Integrator {
 		return best(moves, field);
 	}
 	
+	// do external engine's move
+	public String[][] activate(String[][] field, int r, int c, int r2, int c2, int score){
+
+		Gui.score.setText(score > 0 ? "+" + Integer.toString(score) : Integer.toString(score));
+		
+		String spot = field[r2][c2];
+		String pieceName = Message.pieceName(field[r][c]);
+
+		if(field[r][c].equals("p") & (r2==3 & (c2==0||c2==1||c2==2))){
+			if(r==0 & (c==4||c==7)){
+				field[r2][c2] = "p";
+				field[r][c] = " ";
+			}	
+			else{
+				Capture.take(field, r2, c2);
+				field[r2][c2] = "q";
+				field[r][c] = " ";
+			}
+		}
+		else{
+			Capture.take(field, r2, c2);
+			field[r2][c2] = field[r][c];
+			field[r][c] = " ";
+		}
+		
+		String col = Message.colName(c);
+		String col2 = Message.colName(c2);
+		
+		output(pieceName,c,col,r,spot,col2,r2);
+		if(!mute){
+		if(warn & check(field)){
+			sound.voice("check");
+			}
+		}	
+	
+		moves.clear();
+		MoveList.add(field);
+		
+		return field;
+	}
+	
 	// selects best move
 	private String[][] best(List<Node> spots, String[][] field) {
 		
@@ -92,32 +133,32 @@ public class Integrator {
 		String spot = field[r2][c2];
 		String pieceName = Message.pieceName(field[r][c]);
 
-	if(field[r][c].equals("p") & (r2==3 & (c2==0||c2==1||c2==2))){
-		if(r==0 & (c==4||c==7)){
-			field[r2][c2] = "p";
-			field[r][c] = " ";
-		}	
+		if(field[r][c].equals("p") & (r2==3 & (c2==0||c2==1||c2==2))){
+			if(r==0 & (c==4||c==7)){
+				field[r2][c2] = "p";
+				field[r][c] = " ";
+			}	
+			else{
+				Capture.take(field, r2, c2);
+				field[r2][c2] = "q";
+				field[r][c] = " ";
+			}
+		}
 		else{
 			Capture.take(field, r2, c2);
-			field[r2][c2] = "q";
+			field[r2][c2] = field[r][c];
 			field[r][c] = " ";
 		}
-	}
-	else{
-		Capture.take(field, r2, c2);
-		field[r2][c2] = field[r][c];
-		field[r][c] = " ";
-	}
-	
-	String col = Message.colName(c);
-	String col2 = Message.colName(c2);
-	
-	output(pieceName,c,col,r,spot,col2,r2);
-	if(!mute){
-	if(warn & check(field)){
-		sound.voice("check");
-		}
-	}	
+		
+		String col = Message.colName(c);
+		String col2 = Message.colName(c2);
+		
+		output(pieceName,c,col,r,spot,col2,r2);
+		if(!mute){
+		if(warn & check(field)){
+			sound.voice("check");
+			}
+		}	
 	
 		moves.clear();
 		MoveList.add(field);

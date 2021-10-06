@@ -70,7 +70,7 @@ public class Director{
 	
 	private int r, c, r2, c2;
 	private String piece;
-	private String[][] board = new String[4][];
+	private String[][] board;
 	private int level;
 
 	private boolean mute;
@@ -100,21 +100,11 @@ public class Director{
 	}
 	
 	public void initialize() {
-		
-		board[0] = new String[]{" "," "," "," "," "," "," "," "," "," "};
-		board[1] = new String[]{" "," "," "};
-		board[2] = new String[]{" "," "," "};		
-		board[3] = new String[]{" "," "," "," "," "," "," "," "," "," "};
 
-			board[1][1] = "p";
-			board[0][0] = "r";
-			board[0][1] = "k";
-			board[0][2] = "b";			
-						
-			board[2][1] = "P";
-			board[3][0] = "B";
-			board[3][1] = "K";
-			board[3][2] = "R";
+		board = new String[][]{{"r","k","b"," "," "," "," "," "," "," "},
+							   {" ","p"," "},
+							   {" ","P"," "},
+							   {"B","K","R"," "," "," "," "," "," "," "}};
 	}
 	
 	public String refresh(int r, int c) {				

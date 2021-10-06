@@ -2,6 +2,8 @@ package launch;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+
 import javax.swing.*;
 import ui.Gui;
 
@@ -40,6 +42,7 @@ public class ZooShogi {
 		newGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//starts main program
+				new File("/ui").mkdirs();
 				 javax.swing.SwingUtilities.invokeLater(new Runnable() {
 						public void run() {
 				new Gui();
