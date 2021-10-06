@@ -42,11 +42,12 @@ public class ZooShogi {
 		newGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//starts main program
-				new File(System.getProperty("user.dir") + "/ui").mkdir();
+				new File(System.getProperty("user.dir") +
+						 System.getProperty("file.separator") + "ui").mkdir();
 				 javax.swing.SwingUtilities.invokeLater(new Runnable() {
 						public void run() {
-				new Gui();
-				launchScreen.dispose();
+							new Gui();
+							launchScreen.dispose();
 						}
 					});
 			}
