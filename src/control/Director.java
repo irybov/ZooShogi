@@ -35,7 +35,7 @@ public class Director{
 	}
 	
 	private final Sound sound = Sound.getInstance();
-	private final Integrator integrator = new Integrator();
+	private final Integrator integrator = Integrator.getInstance();
 	
 	private Clocks clocks = Clocks.getInstance();
 

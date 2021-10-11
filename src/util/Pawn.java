@@ -6,14 +6,14 @@ public class Pawn {
 
 	private final static int VALUE = 20;
 	
-	static String getName() {		
+	public String getName() {		
 		return NAME;
 	}	
-	public static int getValue() {		
+	public int getValue() {		
 		return VALUE;
 	}
 
-	public static boolean move(int r, int c, int r2, int c2) {
+	public boolean move(int r, int c, int r2, int c2) {
 		
 		return ((r2>=0 & r2<=3) & (c2>=0 & c2<=2));
 	}			

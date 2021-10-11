@@ -35,6 +35,15 @@ public class ArtIntel implements Runnable{
 		this.level = level;
 	}
 	
+	King king = new King();
+	Queen queen = new Queen();
+	Rook rook = new Rook();
+	Bishop bishop = new Bishop();
+	Pawn pawn = new Pawn();
+	
+	private final Integrator integrator = Integrator.getInstance();
+	private final MoveList movelist = new MoveList();
+	
 	@Override
 	public void run(){		
 		algorithmSelector();
@@ -106,7 +115,7 @@ public class ArtIntel implements Runnable{
 				if(board[r][c].equals("p")){
 					r2 = r+1;
 					c2 = c;
-					if((Pawn.move(r, c, r2, c2))&&
+					if((pawn.move(r, c, r2, c2))&&
 					   (Capture.check(board, r2, c2, "black"))){
 						legal.add(new Node(r, c, r2, c2));
 					}
@@ -114,7 +123,7 @@ public class ArtIntel implements Runnable{
 				else if(board[r][c].equals("r")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
-						if((Rook.move(r, c, r2, c2))&&
+						if((rook.move(r, c, r2, c2))&&
 						   (Capture.check(board, r2, c2, "black"))){
 							legal.add(new Node(r, c, r2, c2));
 							}
@@ -124,7 +133,7 @@ public class ArtIntel implements Runnable{
 				else if(board[r][c].equals("k")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
-						if((King.move(r, c, r2, c2))&&
+						if((king.move(r, c, r2, c2))&&
 						   (Capture.check(board, r2, c2, "black"))){
 							legal.add(new Node(r, c, r2, c2));
 							}
@@ -134,7 +143,7 @@ public class ArtIntel implements Runnable{
 				else if(board[r][c].equals("b")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
-						if((Bishop.move(r, c, r2, c2))&&
+						if((bishop.move(r, c, r2, c2))&&
 						   (Capture.check(board, r2, c2, "black"))){
 							legal.add(new Node(r, c, r2, c2));
 							}
@@ -144,7 +153,7 @@ public class ArtIntel implements Runnable{
 				else if(board[r][c].equals("q")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
-						if((Queen.move(r, c, r2, c2, "black"))&&
+						if((queen.move(r, c, r2, c2, "black"))&&
 						   (Capture.check(board, r2, c2, "black"))){
 							legal.add(new Node(r, c, r2, c2));
 							}
@@ -180,7 +189,7 @@ public class ArtIntel implements Runnable{
 				if(board[r][c].equals("P")){
 					r2 = r-1;
 					c2 = c;
-					if((Pawn.move(r, c, r2, c2))&&
+					if((pawn.move(r, c, r2, c2))&&
 					   (Capture.check(board, r2, c2, "white"))){
 						legal.add(new Node(r, c, r2, c2));
 					}
@@ -188,7 +197,7 @@ public class ArtIntel implements Runnable{
 				else if(board[r][c].equals("R")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
-						if((Rook.move(r, c, r2, c2))&&
+						if((rook.move(r, c, r2, c2))&&
 						   (Capture.check(board, r2, c2, "white"))){
 							legal.add(new Node(r, c, r2, c2));
 							}
@@ -198,7 +207,7 @@ public class ArtIntel implements Runnable{
 				else if(board[r][c].equals("K")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
-						if((King.move(r, c, r2, c2))&&
+						if((king.move(r, c, r2, c2))&&
 						   (Capture.check(board, r2, c2, "white"))){
 							legal.add(new Node(r, c, r2, c2));
 							}
@@ -208,7 +217,7 @@ public class ArtIntel implements Runnable{
 				else if(board[r][c].equals("B")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
-						if((Bishop.move(r, c, r2, c2))&&
+						if((bishop.move(r, c, r2, c2))&&
 						   (Capture.check(board, r2, c2, "white"))){
 							legal.add(new Node(r, c, r2, c2));
 							}
@@ -218,7 +227,7 @@ public class ArtIntel implements Runnable{
 				else if(board[r][c].equals("Q")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
-						if((Queen.move(r, c, r2, c2, "white"))&&
+						if((queen.move(r, c, r2, c2, "white"))&&
 						   (Capture.check(board, r2, c2, "white"))){
 							legal.add(new Node(r, c, r2, c2));
 							}
@@ -277,28 +286,28 @@ public class ArtIntel implements Runnable{
 				if(!board[r][c].equals(" ")){
 					switch(board[r][c]){
 						case "p":
-							score += exp ? Pawn.getValue()*10 : Pawn.getValue();
+							score += exp ? pawn.getValue()*10 : pawn.getValue();
 							break;
 						case "r":
-							score += exp ? Rook.getValue()*10 : Rook.getValue();
+							score += exp ? rook.getValue()*10 : rook.getValue();
 							break;
 						case "b":
-							score += exp ? Bishop.getValue()*10 : Bishop.getValue();
+							score += exp ? bishop.getValue()*10 : bishop.getValue();
 							break;
 						case "q":
-							score += exp ? Queen.getValue()*10 : Queen.getValue();
+							score += exp ? queen.getValue()*10 : queen.getValue();
 							break;
 						case "P":
-							score += -Pawn.getValue();
+							score += -pawn.getValue();
 							break;
 						case "R":
-							score += -Rook.getValue();
+							score += -rook.getValue();
 							break;
 						case "B":
-							score += -Bishop.getValue();
+							score += -bishop.getValue();
 							break;
 						case "Q":
-							score += -Queen.getValue();
+							score += -queen.getValue();
 							break;
 						}
 					}
@@ -317,7 +326,7 @@ public class ArtIntel implements Runnable{
 				if(board[r][c].equals("p")){
 					r2 = r+1;
 					c2 = c;
-					if((Pawn.move(r, c, r2, c2))&&
+					if((pawn.move(r, c, r2, c2))&&
 					   (Capture.check(board, r2, c2, "black"))){
 						score += (Capture.attack(board, r2, c2, "black"));
 					}
@@ -326,7 +335,7 @@ public class ArtIntel implements Runnable{
 				else if(board[r][c].equals("r")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
-						if((Rook.move(r, c, r2, c2))&&
+						if((rook.move(r, c, r2, c2))&&
 						   (Capture.check(board, r2, c2, "black"))){
 							score += (Capture.attack(board, r2, c2, "black"));
 							}
@@ -337,7 +346,7 @@ public class ArtIntel implements Runnable{
 				else if(board[r][c].equals("k")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
-						if((King.move(r, c, r2, c2))&&
+						if((king.move(r, c, r2, c2))&&
 						   (Capture.check(board, r2, c2, "black"))){
 							score += (Capture.attack(board, r2, c2, "black"));
 							}
@@ -348,7 +357,7 @@ public class ArtIntel implements Runnable{
 				else if(board[r][c].equals("b")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
-						if((Bishop.move(r, c, r2, c2))&&
+						if((bishop.move(r, c, r2, c2))&&
 						   (Capture.check(board, r2, c2, "black"))){
 							score += (Capture.attack(board, r2, c2, "black"));
 							}
@@ -359,7 +368,7 @@ public class ArtIntel implements Runnable{
 				else if(board[r][c].equals("q")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
-						if((Queen.move(r, c, r2, c2, "black"))&&
+						if((queen.move(r, c, r2, c2, "black"))&&
 						   (Capture.check(board, r2, c2, "black"))){
 							score += (Capture.attack(board, r2, c2, "black"));
 							}
@@ -370,7 +379,7 @@ public class ArtIntel implements Runnable{
 				else if(board[r][c].equals("P")){
 					r2 = r-1;
 					c2 = c;
-					if((Pawn.move(r, c, r2, c2))&&
+					if((pawn.move(r, c, r2, c2))&&
 					   (Capture.check(board, r2, c2, "white"))){
 						score += (Capture.attack(board, r2, c2, "white"));
 					}
@@ -379,7 +388,7 @@ public class ArtIntel implements Runnable{
 				else if(board[r][c].equals("R")){				
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
-						if((Rook.move(r, c, r2, c2))&&
+						if((rook.move(r, c, r2, c2))&&
 						   (Capture.check(board, r2, c2, "white"))){
 							score += (Capture.attack(board, r2, c2, "white"));
 							}
@@ -390,7 +399,7 @@ public class ArtIntel implements Runnable{
 				else if(board[r][c].equals("K")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
-						if((King.move(r, c, r2, c2))&&
+						if((king.move(r, c, r2, c2))&&
 						   (Capture.check(board, r2, c2, "white"))){
 							score += (Capture.attack(board, r2, c2, "white"));
 							}
@@ -401,7 +410,7 @@ public class ArtIntel implements Runnable{
 				else if(board[r][c].equals("B")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
-						if((Bishop.move(r, c, r2, c2))&&
+						if((bishop.move(r, c, r2, c2))&&
 						   (Capture.check(board, r2, c2, "white"))){
 							score += (Capture.attack(board, r2, c2, "white"));
 							}
@@ -412,7 +421,7 @@ public class ArtIntel implements Runnable{
 				else if(board[r][c].equals("Q")){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
-						if((Queen.move(r, c, r2, c2, "white"))&&
+						if((queen.move(r, c, r2, c2, "white"))&&
 						   (Capture.check(board, r2, c2, "white"))){
 							score += (Capture.attack(board, r2, c2, "black"));
 							}
@@ -434,7 +443,7 @@ public class ArtIntel implements Runnable{
 					if(board[r][c].equals("p")){
 						r2 = r+1;
 						c2 = c;
-						if((Pawn.move(r, c, r2, c2))&&
+						if((pawn.move(r, c, r2, c2))&&
 						   (board[r2][c2].equals("K"))){
 							return true;
 						}
@@ -443,7 +452,7 @@ public class ArtIntel implements Runnable{
 					else if(board[r][c].equals("r")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
-							if((Rook.move(r, c, r2, c2))&&
+							if((rook.move(r, c, r2, c2))&&
 								(board[r2][c2].equals("K"))){
 								return true;
 								}
@@ -454,7 +463,7 @@ public class ArtIntel implements Runnable{
 					else if(board[r][c].equals("k")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
-							if((King.move(r, c, r2, c2))&&
+							if((king.move(r, c, r2, c2))&&
 								(board[r2][c2].equals("K"))){
 								return true;
 								}
@@ -465,7 +474,7 @@ public class ArtIntel implements Runnable{
 					else if(board[r][c].equals("b")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
-							if((Bishop.move(r, c, r2, c2))&&
+							if((bishop.move(r, c, r2, c2))&&
 								(board[r2][c2].equals("K"))){
 								return true;
 								}
@@ -476,7 +485,7 @@ public class ArtIntel implements Runnable{
 					else if(board[r][c].equals("q")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
-							if((Queen.move(r, c, r2, c2, "black"))&&
+							if((queen.move(r, c, r2, c2, "black"))&&
 								(board[r2][c2].equals("K"))){
 								return true;
 								}
@@ -493,7 +502,7 @@ public class ArtIntel implements Runnable{
 					if(board[r][c].equals("P")){
 						r2 = r-1;
 						c2 = c;
-						if((Pawn.move(r, c, r2, c2))&&
+						if((pawn.move(r, c, r2, c2))&&
 						   (board[r2][c2].equals("k"))){
 							return true;
 						}
@@ -502,7 +511,7 @@ public class ArtIntel implements Runnable{
 					else if(board[r][c].equals("R")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
-							if((Rook.move(r, c, r2, c2))&&
+							if((rook.move(r, c, r2, c2))&&
 								(board[r2][c2].equals("k"))){
 								return true;
 								}
@@ -513,7 +522,7 @@ public class ArtIntel implements Runnable{
 					else if(board[r][c].equals("K")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
-							if((King.move(r, c, r2, c2))&&
+							if((king.move(r, c, r2, c2))&&
 								(board[r2][c2].equals("k"))){
 								return true;
 								}
@@ -524,7 +533,7 @@ public class ArtIntel implements Runnable{
 					else if(board[r][c].equals("B")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
-							if((Bishop.move(r, c, r2, c2))&&
+							if((bishop.move(r, c, r2, c2))&&
 								(board[r2][c2].equals("k"))){
 								return true;
 								}
@@ -535,7 +544,7 @@ public class ArtIntel implements Runnable{
 					else if(board[r][c].equals("Q")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
-							if((Queen.move(r, c, r2, c2, "white"))&&
+							if((queen.move(r, c, r2, c2, "white"))&&
 								(board[r2][c2].equals("k"))){
 								return true;
 								}
@@ -558,7 +567,7 @@ public class ArtIntel implements Runnable{
 					if(board[r][c].equals("p")){
 						r2 = r+1;
 						c2 = c;
-						if((Pawn.move(r, c, r2, c2))&&
+						if((pawn.move(r, c, r2, c2))&&
 						   (board[r2][c2].equals("K"))){
 							return true;
 						}
@@ -567,7 +576,7 @@ public class ArtIntel implements Runnable{
 					else if(board[r][c].equals("r")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
-							if((Rook.move(r, c, r2, c2))&&
+							if((rook.move(r, c, r2, c2))&&
 								(board[r2][c2].equals("K"))){
 								return true;
 								}
@@ -578,7 +587,7 @@ public class ArtIntel implements Runnable{
 					else if(board[r][c].equals("k")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
-							if((King.move(r, c, r2, c2))&&
+							if((king.move(r, c, r2, c2))&&
 								(board[r2][c2].equals("K"))){
 								return true;
 								}
@@ -589,7 +598,7 @@ public class ArtIntel implements Runnable{
 					else if(board[r][c].equals("b")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
-							if((Bishop.move(r, c, r2, c2))&&
+							if((bishop.move(r, c, r2, c2))&&
 								(board[r2][c2].equals("K"))){
 								return true;
 								}
@@ -600,7 +609,7 @@ public class ArtIntel implements Runnable{
 					else if(board[r][c].equals("q")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
-							if((Queen.move(r, c, r2, c2, "black"))&&
+							if((queen.move(r, c, r2, c2, "black"))&&
 								(board[r2][c2].equals("K"))){
 								return true;
 								}
@@ -617,7 +626,7 @@ public class ArtIntel implements Runnable{
 					if(board[r][c].equals("P")){
 						r2 = r-1;
 						c2 = c;
-						if((Pawn.move(r, c, r2, c2))&&
+						if((pawn.move(r, c, r2, c2))&&
 						   (board[r2][c2].equals("k"))){
 							return true;
 						}
@@ -626,7 +635,7 @@ public class ArtIntel implements Runnable{
 					else if(board[r][c].equals("R")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
-							if((Rook.move(r, c, r2, c2))&&
+							if((rook.move(r, c, r2, c2))&&
 								(board[r2][c2].equals("k"))){
 								return true;
 								}
@@ -637,7 +646,7 @@ public class ArtIntel implements Runnable{
 					else if(board[r][c].equals("K")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
-							if((King.move(r, c, r2, c2))&&
+							if((king.move(r, c, r2, c2))&&
 								(board[r2][c2].equals("k"))){
 								return true;
 								}
@@ -648,7 +657,7 @@ public class ArtIntel implements Runnable{
 					else if(board[r][c].equals("B")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
-							if((Bishop.move(r, c, r2, c2))&&
+							if((bishop.move(r, c, r2, c2))&&
 								(board[r2][c2].equals("k"))){
 								return true;
 								}
@@ -659,7 +668,7 @@ public class ArtIntel implements Runnable{
 					else if(board[r][c].equals("Q")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
-							if((Queen.move(r, c, r2, c2, "white"))&&
+							if((queen.move(r, c, r2, c2, "white"))&&
 								(board[r2][c2].equals("k"))){
 								return true;
 								}
@@ -881,7 +890,7 @@ public class ArtIntel implements Runnable{
 	// minimax with capture and check extensions
 	private int minimaxEX(String turn, int depth, int alpha, int beta, boolean node) {
 		
-		if(turn.equals("white") && MoveList.repeat(board)){
+		if(turn.equals("white") && movelist.repeat(board)){
 			return 0;
 		}
 		
@@ -986,7 +995,7 @@ public class ArtIntel implements Runnable{
 						}
 					if(depth == 6){
 						root.setValue(value);
-						Integrator.mergeMoves(root);
+						integrator.mergeMoves(root);
 						hash.clear();
 						}										
 				}				
@@ -1066,7 +1075,7 @@ public class ArtIntel implements Runnable{
 	// minimax algorithm with alpha-beta pruning
 	private int minimaxAB(String turn, int depth, int alpha, int beta) {
 		
-		if(turn.equals("white") && MoveList.repeat(board)){
+		if(turn.equals("white") && movelist.repeat(board)){
 			return 0;
 		}
 		
@@ -1155,7 +1164,7 @@ public class ArtIntel implements Runnable{
 						}
 					if(depth == 8){
 						root.setValue(value);
-						Integrator.mergeMoves(root);
+						integrator.mergeMoves(root);
 						hash.clear();
 						}										
 				}				
@@ -1225,7 +1234,7 @@ public class ArtIntel implements Runnable{
 	// basic minimax algorithm
 	private int minimax(String turn, int depth) {
 		
-		if(turn.equals("white") && MoveList.repeat(board)){
+		if(turn.equals("white") && movelist.repeat(board)){
 			return 0;
 		}
 		
@@ -1302,7 +1311,7 @@ public class ArtIntel implements Runnable{
 						scores.add(value);
 					if(depth == 6){
 						root.setValue(value);
-						Integrator.mergeMoves(root);
+						integrator.mergeMoves(root);
 						}
 				}				
 				else{
@@ -1365,7 +1374,7 @@ public class ArtIntel implements Runnable{
 	// expectimax (a.k.a. poker) algorithm
 	private int expectimax(String turn, int depth) {
 		
-		if(turn.equals("white") && MoveList.repeat(board)){
+		if(turn.equals("white") && movelist.repeat(board)){
 			return 0;
 		}
 		
@@ -1442,7 +1451,7 @@ public class ArtIntel implements Runnable{
 						scores.add(value);
 					if(depth == 6){
 						root.setValue(value);
-						Integrator.mergeMoves(root);
+						integrator.mergeMoves(root);
 						}
 				}				
 				else{
@@ -1619,7 +1628,7 @@ public class ArtIntel implements Runnable{
 				value = breadthMM(nodes, "white", depth-1);
 				if(depth == 4){
 					root.setValue(value);
-					Integrator.mergeMoves(root);
+					integrator.mergeMoves(root);
 					}
 			}
 			else{
@@ -1638,7 +1647,7 @@ public class ArtIntel implements Runnable{
 	// minimax with vintage forward pruning
 	private int forward(String turn, int depth) {
 		
-		if(turn.equals("white" )&& MoveList.repeat(board)){
+		if(turn.equals("white" )&& movelist.repeat(board)){
 			return 0;
 		}
 		
@@ -1858,7 +1867,7 @@ public class ArtIntel implements Runnable{
 		if(moves.isEmpty()){
 			random();
 		}
-		Integrator.mergeMoves(moves);
+		integrator.mergeMoves(moves);
 	}
 	
 }

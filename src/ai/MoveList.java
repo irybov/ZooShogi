@@ -22,7 +22,7 @@ public class MoveList {
 	}
 
 	//checks 3-times repetition
-	static boolean repeat(String[][] field) {
+	boolean repeat(String[][] field) {
 		
 		StringBuilder current = new StringBuilder(26);
 		

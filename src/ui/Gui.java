@@ -13,6 +13,7 @@ import util.Bishop;
 import util.King;
 import util.Message;
 import util.Pawn;
+import util.Pieces;
 import util.Queen;
 import util.Rook;
 
@@ -485,14 +486,14 @@ public class Gui {
 		if(squares[r][c].getName().equals("p")){
 			r2 = r+1;
 			c2 = c;
-			if((Pawn.move(r, c, r2, c2)&&(squares[r2][c2].getName().equals("K")))){
+			if((Pieces.BPAWN.move(r, c, r2, c2)&&(squares[r2][c2].getName().equals("K")))){
 				squares[r2][c2].setBackground(Color.RED);
 			}
 		}
 		else if(squares[r][c].getName().equals("r")){
 			for(r2=r-1; r2<r+2; r2++){
 				for(c2=c-1; c2<c+2; c2++){
-			if((Rook.move(r, c, r2, c2)&&(squares[r2][c2].getName().equals("K")))){
+			if((Pieces.ROOK.move(r, c, r2, c2)&&(squares[r2][c2].getName().equals("K")))){
 				squares[r2][c2].setBackground(Color.RED);				
 			}
 				}
@@ -501,7 +502,7 @@ public class Gui {
 		else if(squares[r][c].getName().equals("k")){
 			for(r2=r-1; r2<r+2; r2++){
 				for(c2=c-1; c2<c+2; c2++){
-			if((King.move(r, c, r2, c2)&&(squares[r2][c2].getName().equals("K")))){
+			if((Pieces.KING.move(r, c, r2, c2)&&(squares[r2][c2].getName().equals("K")))){
 				squares[r2][c2].setBackground(Color.RED);				
 			}
 				}
@@ -510,7 +511,7 @@ public class Gui {
 		else if(squares[r][c].getName().equals("b")){
 			for(r2=r-1; r2<r+2; r2++){
 				for(c2=c-1; c2<c+2; c2++){
-			if((Bishop.move(r, c, r2, c2)&&(squares[r2][c2].getName().equals("K")))){
+			if((Pieces.BISHOP.move(r, c, r2, c2)&&(squares[r2][c2].getName().equals("K")))){
 				squares[r2][c2].setBackground(Color.RED);				
 			}
 				}
@@ -519,7 +520,7 @@ public class Gui {
 		else if(squares[r][c].getName().equals("q")){
 			for(r2=r-1; r2<r+2; r2++){
 				for(c2=c-1; c2<c+2; c2++){
-			if((Queen.move(r, c, r2, c2, "black")&&(squares[r2][c2].getName().equals("K")))){
+			if((Pieces.BQUEEN.move(r, c, r2, c2)&&(squares[r2][c2].getName().equals("K")))){
 				squares[r2][c2].setBackground(Color.RED);				
 			}
 				}
@@ -625,14 +626,14 @@ public class Gui {
 		if(squares[r][c].getName().equals("P")){
 			r2 = r-1;
 			c2 = c;
-			if((Pawn.move(r, c, r2, c2)&&director.legal(squares[r2][c2].getName()))){
+			if((Pieces.WPAWN.move(r, c, r2, c2)&&director.legal(squares[r2][c2].getName()))){
 				squares[r2][c2].setBackground(Color.GREEN);				
 			}
 		}
 		else if(squares[r][c].getName().equals("R")){
 			for(r2=r-1; r2<r+2; r2++){
 				for(c2=c-1; c2<c+2; c2++){
-			if((Rook.move(r, c, r2, c2)&&director.legal(squares[r2][c2].getName()))){
+			if((Pieces.ROOK.move(r, c, r2, c2)&&director.legal(squares[r2][c2].getName()))){
 				squares[r2][c2].setBackground(Color.GREEN);				
 			}
 				}
@@ -641,7 +642,7 @@ public class Gui {
 		else if(squares[r][c].getName().equals("K")){
 			for(r2=r-1; r2<r+2; r2++){
 				for(c2=c-1; c2<c+2; c2++){
-			if((King.move(r, c, r2, c2)&&director.legal(squares[r2][c2].getName()))){
+			if((Pieces.KING.move(r, c, r2, c2)&&director.legal(squares[r2][c2].getName()))){
 				squares[r2][c2].setBackground(Color.GREEN);				
 			}
 				}
@@ -650,7 +651,7 @@ public class Gui {
 		else if(squares[r][c].getName().equals("B")){
 			for(r2=r-1; r2<r+2; r2++){
 				for(c2=c-1; c2<c+2; c2++){
-			if((Bishop.move(r, c, r2, c2)&&director.legal(squares[r2][c2].getName()))){
+			if((Pieces.BISHOP.move(r, c, r2, c2)&&director.legal(squares[r2][c2].getName()))){
 				squares[r2][c2].setBackground(Color.GREEN);				
 			}
 				}
@@ -659,7 +660,7 @@ public class Gui {
 		else if(squares[r][c].getName().equals("Q")){
 			for(r2=r-1; r2<r+2; r2++){
 				for(c2=c-1; c2<c+2; c2++){
-			if((Queen.move(r, c, r2, c2, "white")&&director.legal(squares[r2][c2].getName()))){
+			if((Pieces.WQUEEN.move(r, c, r2, c2)&&director.legal(squares[r2][c2].getName()))){
 				squares[r2][c2].setBackground(Color.GREEN);				
 			}
 				}

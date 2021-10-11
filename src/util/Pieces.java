@@ -80,10 +80,10 @@ public enum Pieces {
 		this.value = value;
 	}
 	
-	String getName() {
+	public String getName() {
 		return name;
 	}
-	int getValue() {
+	public int getValue() {
 		return value;
 	}
 	

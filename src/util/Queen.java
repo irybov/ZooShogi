@@ -6,14 +6,14 @@ public class Queen {
 
 	private final static int VALUE = 50;
 	
-	static String getName() {		
+	public String getName() {		
 		return NAME;
 	}	
-	public static int getValue() {		
+	public int getValue() {		
 		return VALUE;
 	}
 
-	public static boolean move(int r, int c, int r2, int c2, String turn) {
+	public boolean move(int r, int c, int r2, int c2, String turn) {
 		
 		if((turn == "white") & ((r2 == r+1) & (c2 == c-1 || c2 == c+1))) {
 			return false;
