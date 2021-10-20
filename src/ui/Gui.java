@@ -9,13 +9,8 @@ import javax.swing.event.*;
 import control.Clocks;
 import control.Director;
 import sound.Sound;
-import util.Bishop;
-import util.King;
 import util.Message;
-import util.Pawn;
 import util.Pieces;
-import util.Queen;
-import util.Rook;
 
 public class Gui {
 	

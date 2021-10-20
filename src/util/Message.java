@@ -17,7 +17,7 @@ public class Message {
 			c = "C";
 			break;
 		case 3: case 4: case 5: case 6: case 7: case 8:
-			c = Integer.toString(col);
+			c = Integer.toString(col+1);
 			break;
 		}
 		return c;

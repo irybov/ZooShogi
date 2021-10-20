@@ -24,7 +24,7 @@ public enum Pieces {
 		@Override
 		public boolean move(int r, int c, int r2, int c2){
 			if(index(r, c, r2, c2)){
-				return (((r2==r)&(c2==c-1||c2==c+1)) || ((r2==r-1||r2==r+1)&(c2==c)));
+				return ((r2==r&(c2==c-1||c2==c+1)) || ((r2==r-1||r2==r+1)&c2==c));
 			}
 			return false;
 		}

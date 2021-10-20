@@ -43,18 +43,19 @@ public class Integrator {
 	
 	private Sound sound = Sound.getInstance();
 
-	// merges results from different threads
+	// adds results from a single thread
 	public void mergeMoves(List<Node> input){		
 		moves.addAll(input);
 	}
 	
-	// merges results from different threads
+	// merges results from multiple threads
 	public void mergeMoves(Node input){		
 		moves.add(input);
 	}
 	
 	// sends data to move selector
 	public String[][] activate(String[][] field){
+		System.out.println();
 		return best(moves, field);
 	}
 	
@@ -99,7 +100,7 @@ public class Integrator {
 		return field;
 	}
 	
-	// selects best move
+	// selects and do best move
 	private String[][] best(List<Node> spots, String[][] field) {
 		
 		int score = Integer.MIN_VALUE+1;

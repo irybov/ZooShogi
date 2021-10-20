@@ -10,7 +10,7 @@ public class MoveList {
 	// fills game moves list
 	static void add(String[][] field) {
 		
-		StringBuilder current = new StringBuilder(26);
+		StringBuilder current = new StringBuilder(24);
 		
 		for(int r=0; r<field.length ; r++){
 			for(int c=0; c<field[r].length ; c++){
@@ -24,7 +24,7 @@ public class MoveList {
 	//checks 3-times repetition
 	boolean repeat(String[][] field) {
 		
-		StringBuilder current = new StringBuilder(26);
+		StringBuilder current = new StringBuilder(24);
 		
 		for(int r=0; r<field.length ; r++){
 			for(int c=0; c<field[r].length ; c++){
@@ -35,4 +35,9 @@ public class MoveList {
 				
 		return(list.contains(hash));
 	}
+	
+	public static void clear() {		
+		list.clear();
+	}
+	
 }

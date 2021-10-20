@@ -10,6 +10,7 @@ import java.io.*;
 
 import ai.ArtIntel;
 import ai.Integrator;
+import ai.MoveList;
 import ai.Node;
 import ai.Separator;
 import data.*;
@@ -36,6 +37,7 @@ public class Director{
 	
 	private final Sound sound = Sound.getInstance();
 	private final Integrator integrator = Integrator.getInstance();
+	private final Separator separator = new Separator();
 	
 	private Clocks clocks = Clocks.getInstance();
 
@@ -101,10 +103,10 @@ public class Director{
 	
 	public void initialize() {
 
-		board = new String[][]{{"r","k","b"," "," "," "," "," "," "," "},
+		board = new String[][]{{"r","k","b"," "," "," "," "," "," "},
 							   {" ","p"," "},
 							   {" ","P"," "},
-							   {"B","K","R"," "," "," "," "," "," "," "}};
+							   {"B","K","R"," "," "," "," "," "," "}};
 	}
 	
 	public String refresh(int r, int c) {				
@@ -233,7 +235,9 @@ public class Director{
 			case 6:
 			case 7:
 				int cores = Runtime.getRuntime().availableProcessors();
-				List<Node> nodes = Separator.generateNodes(board);
+				List<Node> nodes = separator.generateNodes(board);
+				System.out.println(nodes);
+				System.out.println("Nodes: " + nodes.size());
 				ExecutorService es = Executors.newFixedThreadPool(cores);
 /*				for(Node node: nodes){
 					es.submit(new ArtIntel(node, Copier.deepCopy(board), level));
@@ -332,6 +336,7 @@ public class Director{
 	
 	public void clearing() {		
 		game.clear();
+		MoveList.clear();
 	}
 
 	private void output(String result) {

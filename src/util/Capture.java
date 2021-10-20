@@ -63,9 +63,6 @@ public class Capture {
 
 		if(side.equals("black")) {
 			switch(field[r2][c2]){
-			case " ":				
-				value = 1;
-				break;
 			case "P":				
 				value = 2;
 				break;
@@ -81,13 +78,13 @@ public class Capture {
 			case "K":				
 				value = 10;
 				break;
+			default:
+				value = 1;
+				break;
 			}
 		}
 		else {
 			switch(field[r2][c2]){
-			case " ":				
-				value = -1;
-				break;
 			case "p":				
 				value = -2;
 				break;
@@ -103,6 +100,9 @@ public class Capture {
 			case "k":				
 				value = -10;
 				break;
+			default:
+				value = -1;
+				break;				
 			}
 		}
 		return value;
@@ -200,7 +200,7 @@ public class Capture {
 
 	// undo calculated move
 	public static void undo(String[][] field, int r3, int c3){
-		
+		if(c3 != 9)
 		field[r3][c3] = " ";
 	}
 	

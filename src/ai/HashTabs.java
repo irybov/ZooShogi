@@ -11,7 +11,7 @@ class HashTabs {
 	// fills calculating hash
 	void add(String[][] field, String side, int depth) {
 		
-		StringBuilder current = new StringBuilder(26);
+		StringBuilder current = new StringBuilder(24);
 		
 		for(int r=0; r<field.length ; r++){
 			for(int c=0; c<field[r].length ; c++){
@@ -31,7 +31,7 @@ class HashTabs {
 	// checks repetitions while calculating	
 	boolean repeat(String[][] field,  String side, int depth) {
 		
-		StringBuilder current = new StringBuilder(26);
+		StringBuilder current = new StringBuilder(24);
 		
 		for(int r=0; r<field.length ; r++){
 			for(int c=0; c<field[r].length ; c++){
@@ -52,10 +52,9 @@ class HashTabs {
 	}
 	
 	// clears calculating hash
-	void clear() {
-		
-		black.clear();
-		white.clear();
+	void clear() {		
+		black = null;
+		white = null;
 	}
 	
 }
