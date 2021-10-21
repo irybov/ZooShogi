@@ -5,7 +5,7 @@ public enum Pieces {
 	WPAWN("Pawn", 20) {
 		@Override
 		public boolean move(int r, int c, int r2, int c2){
-			if(index(r, c, r2, c2)){
+			if(index(r2, c2)){
 				return (r2==r-1 & c2==c);
 			}
 			return false;
@@ -14,7 +14,7 @@ public enum Pieces {
 	BPAWN("Pawn", 20) {
 		@Override
 		public boolean move(int r, int c, int r2, int c2){
-			if(index(r, c, r2, c2)){
+			if(index(r2, c2)){
 				return (r2==r+1 & c2==c);
 			}
 			return false;
@@ -23,7 +23,7 @@ public enum Pieces {
 	ROOK("Rook", 40) {
 		@Override
 		public boolean move(int r, int c, int r2, int c2){
-			if(index(r, c, r2, c2)){
+			if(index(r2, c2)){
 				return ((r2==r&(c2==c-1||c2==c+1)) || ((r2==r-1||r2==r+1)&c2==c));
 			}
 			return false;
@@ -32,7 +32,7 @@ public enum Pieces {
 	BISHOP("Bishop", 30) {
 		@Override
 		public boolean move(int r, int c, int r2, int c2){
-			if(index(r, c, r2, c2)){
+			if(index(r2, c2)){
 				return ((r2==r-1||r2==r+1) & (c2==c-1||c2==c+1));
 			}
 			return false;
@@ -41,7 +41,7 @@ public enum Pieces {
 	KING("King", 0) {
 		@Override
 		public boolean move(int r, int c, int r2, int c2){
-			if(index(r, c, r2, c2)){
+			if(index(r2, c2)){
 				return ((r2==r||r2==r-1||r2==r+1) & (c2==c||c2==c-1||c2==c+1));
 			}
 			return false;
@@ -53,7 +53,7 @@ public enum Pieces {
 			if((r2 == r+1) & (c2 == c-1 || c2 == c+1)) {
 				return false;
 			}
-			if(index(r, c, r2, c2)){
+			if(index(r2, c2)){
 				return ((r2==r||r2==r-1||r2==r+1) & (c2==c||c2==c-1||c2==c+1));
 			}
 			return false;
@@ -65,7 +65,7 @@ public enum Pieces {
 			if((r2 == r-1) & (c2 == c-1 || c2 == c+1)) {
 				return false;
 			}
-			if(index(r, c, r2, c2)){
+			if(index(r2, c2)){
 				return ((r2==r||r2==r-1||r2==r+1) & (c2==c||c2==c-1||c2==c+1));
 			}
 			return false;
@@ -90,7 +90,7 @@ public enum Pieces {
 	public boolean move(int r, int c, int r2, int c2) {
 		return false;
 	}
-	private static boolean index(int r, int c, int r2, int c2) {
+	private static boolean index(int r2, int c2) {
 		return ((r2>=0 && r2<=3) & (c2>=0 && c2<=2));
 	}
 	

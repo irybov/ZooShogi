@@ -55,7 +55,6 @@ public class Integrator {
 	
 	// sends data to move selector
 	public String[][] activate(String[][] field){
-		System.out.println();
 		return best(moves, field);
 	}
 	
@@ -100,7 +99,7 @@ public class Integrator {
 		return field;
 	}
 	
-	// selects and do best move
+	// selects and makes best move
 	private String[][] best(List<Node> spots, String[][] field) {
 		
 		int score = Integer.MIN_VALUE+1;
@@ -118,6 +117,8 @@ public class Integrator {
 		}
 		
 		Collections.sort(random, Collections.reverseOrder());
+		System.out.println(random);
+		System.out.println("Nodes: " + random.size());
 		
 		int prev = random.get(0).getValue();
 		random.removeIf(e -> e.getValue() < prev);

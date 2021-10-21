@@ -238,11 +238,9 @@ public class Director{
 				List<Node> nodes = separator.generateNodes(board);
 				System.out.println(nodes);
 				System.out.println("Nodes: " + nodes.size());
+				System.out.println();
 				ExecutorService es = Executors.newFixedThreadPool(cores);
-/*				for(Node node: nodes){
-					es.submit(new ArtIntel(node, Copier.deepCopy(board), level));
-				}
-*/				nodes.forEach(node-> es.submit(new ArtIntel(node, Copier.deepCopy(board), level)));
+				nodes.forEach(node-> es.submit(new ArtIntel(node, Copier.deepCopy(board), level)));
 				es.shutdown();			
 				es.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
 				break;

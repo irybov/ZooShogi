@@ -29,7 +29,7 @@ public class Node implements Comparable<Node>{
 	public String toString() {
 		return "Node [depth=" + depth + ", value=" + value + ", side=" + side + ", "+ Message.colName(C) + (R+1) + Message.colName(C2) + (R2+1) + "]";
 	}
-	@Override
+/*	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -64,7 +64,7 @@ public class Node implements Comparable<Node>{
 			return false;
 		return true;
 	}
-	
+*/	
 	@Override
 	public int compareTo(Node node) {
 

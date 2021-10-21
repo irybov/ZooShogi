@@ -3,12 +3,10 @@ package ai;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
 import java.util.Collections;
 import java.util.Deque;
-import java.util.HashMap;
 import java.util.LinkedList;
 
 import util.Capture;
@@ -60,7 +58,7 @@ public class ArtIntel implements Runnable{
 			sendMovelist();
 			break;
 		case 3:
-			flatMM(5);
+			flatMM(board, 5);
 			break;			
 		case 4:
 			moves = new ArrayList<>();
@@ -723,7 +721,6 @@ public class ArtIntel implements Runnable{
 				prev = evaluationMaterial(board, false) + evaluationPositional(board);
 			}
 	
-
 		for(int i=0; i<legal.size(); i++){
 
 			int r = legal.get(i).getR();
@@ -739,7 +736,9 @@ public class ArtIntel implements Runnable{
 				r3 = 0;
 				if(board[r][c].equals("p") & r==2){
 					prom = "p";
-					c3 = Capture.take(board, r2, c2);
+					if(!board[r][c].equals(" ")) {
+						c3 = Capture.take(board, r2, c2);
+					}
 					temp = board[r2][c2];
 					board[r2][c2] = "q";
 					board[r][c] = " ";
@@ -752,7 +751,9 @@ public class ArtIntel implements Runnable{
 				}
 				else{
 					prom = " ";
-					c3 = Capture.take(board, r2, c2);
+					if(!board[r][c].equals(" ")) {
+						c3 = Capture.take(board, r2, c2);
+					}
 					temp = board[r2][c2];
 					board[r2][c2] = board[r][c];
 					board[r][c] = " ";
@@ -779,18 +780,7 @@ public class ArtIntel implements Runnable{
 				}
 				
 				legal.get(i).setValue(value);
-				sorted.add(legal.get(i));
-				
-				if(prom.equals("p")){
-					board[r][c] = "p";
-					board[r2][c2] = temp;
-					Capture.undo(board, r3, c3);
-				}
-				else{
-					board[r][c] = board[r2][c2];
-					board[r2][c2] = temp;
-					Capture.undo(board, r3, c3);
-				}			
+				sorted.add(legal.get(i));			
 	
 				Collections.sort(sorted, Collections.reverseOrder());			
 				if(prune){
@@ -801,7 +791,9 @@ public class ArtIntel implements Runnable{
 				r3 = 3;
 				if(board[r][c].equals("P") & r==1){
 					prom = "P";
-					c3 = Capture.take(board, r2, c2);
+					if(!board[r][c].equals(" ")) {
+						c3 = Capture.take(board, r2, c2);
+					}
 					temp = board[r2][c2];
 					board[r2][c2] = "Q";
 					board[r][c] = " ";
@@ -814,7 +806,9 @@ public class ArtIntel implements Runnable{
 				}
 				else{
 					prom = " ";
-					c3 = Capture.take(board, r2, c2);
+					if(!board[r][c].equals(" ")) {
+						c3 = Capture.take(board, r2, c2);
+					}
 					temp = board[r2][c2];
 					board[r2][c2] = board[r][c];
 					board[r][c] = " ";
@@ -842,24 +836,24 @@ public class ArtIntel implements Runnable{
 				
 				legal.get(i).setValue(value);
 				sorted.add(legal.get(i));
-				
-				if(prom.equals("p")){
-					board[r][c] = "p";
-				}
-				else if(prom.equals("P")){
-					board[r][c] = "P";
-				}
-				else{
-					board[r][c] = board[r2][c2];
-				}
-				board[r2][c2] = temp;
-				Capture.undo(board, r3, c3);
 		
 				Collections.sort(sorted);			
 				if(prune){
 					sorted.removeIf(e -> e.getValue() > prev);
 				}
-			}	
+			}
+			
+			if(prom.equals("p")){
+				board[r][c] = "p";
+			}
+			else if(prom.equals("P")){
+				board[r][c] = "P";
+			}
+			else{
+				board[r][c] = board[r2][c2];
+			}
+			board[r2][c2] = temp;
+			Capture.undo(board, r3, c3);
 		}	
 		return sorted;
 	}
@@ -942,7 +936,9 @@ public class ArtIntel implements Runnable{
 				
 				if(board[r][c].equals("p") & r==2){
 					prom = "p";
-					c3 = Capture.take(board, r2, c2);
+					if(!board[r][c].equals(" ")) {
+						c3 = Capture.take(board, r2, c2);
+					}
 					temp = board[r2][c2];
 					board[r2][c2] = "q";
 					board[r][c] = " ";
@@ -955,7 +951,9 @@ public class ArtIntel implements Runnable{
 				}
 				else{
 					prom = " ";
-					c3 = Capture.take(board, r2, c2);
+					if(!board[r][c].equals(" ")) {
+						c3 = Capture.take(board, r2, c2);
+					}
 					temp = board[r2][c2];
 					board[r2][c2] = board[r][c];
 					board[r][c] = " ";
@@ -986,7 +984,9 @@ public class ArtIntel implements Runnable{
 				
 				if(board[r][c].equals("P") & r==1){
 					prom = "P";
-					c3 = Capture.take(board, r2, c2);
+					if(!board[r][c].equals(" ")) {
+						c3 = Capture.take(board, r2, c2);
+					}
 					temp = board[r2][c2];
 					board[r2][c2] = "Q";
 					board[r][c] = " ";
@@ -999,7 +999,9 @@ public class ArtIntel implements Runnable{
 				}
 				else{
 					prom = " ";
-					c3 = Capture.take(board, r2, c2);
+					if(!board[r][c].equals(" ")) {
+						c3 = Capture.take(board, r2, c2);
+					}
 					temp = board[r2][c2];
 					board[r2][c2] = board[r][c];
 					board[r][c] = " ";
@@ -1109,7 +1111,9 @@ public class ArtIntel implements Runnable{
 				r3 = 0;
 				if(board[r][c].equals("p") & r==2){
 					prom = "p";
-					c3 = Capture.take(board, r2, c2);
+					if(!board[r][c].equals(" ")) {
+						c3 = Capture.take(board, r2, c2);
+					}
 					temp = board[r2][c2];
 					board[r2][c2] = "q";
 					board[r][c] = " ";
@@ -1122,7 +1126,9 @@ public class ArtIntel implements Runnable{
 				}
 				else{
 					prom = " ";
-					c3 = Capture.take(board, r2, c2);
+					if(!board[r][c].equals(" ")) {
+						c3 = Capture.take(board, r2, c2);
+					}
 					temp = board[r2][c2];
 					board[r2][c2] = board[r][c];
 					board[r][c] = " ";
@@ -1143,7 +1149,9 @@ public class ArtIntel implements Runnable{
 				r3 = 3;
 				if(board[r][c].equals("P") & r==1){
 					prom = "P";
-					c3 = Capture.take(board, r2, c2);
+					if(!board[r][c].equals(" ")) {
+						c3 = Capture.take(board, r2, c2);
+					}
 					temp = board[r2][c2];
 					board[r2][c2] = "Q";
 					board[r][c] = " ";
@@ -1156,7 +1164,9 @@ public class ArtIntel implements Runnable{
 				}
 				else{
 					prom = " ";
-					c3 = Capture.take(board, r2, c2);
+					if(!board[r][c].equals(" ")) {
+						c3 = Capture.take(board, r2, c2);
+					}
 					temp = board[r2][c2];
 					board[r2][c2] = board[r][c];
 					board[r][c] = " ";
@@ -1252,7 +1262,9 @@ public class ArtIntel implements Runnable{
 				r3 = 0;
 				if(board[r][c].equals("p") & r==2){
 					prom = "p";
-					c3 = Capture.take(board, r2, c2);
+					if(!board[r][c].equals(" ")) {
+						c3 = Capture.take(board, r2, c2);
+					}
 					temp = board[r2][c2];
 					board[r2][c2] = "q";
 					board[r][c] = " ";	
@@ -1265,7 +1277,9 @@ public class ArtIntel implements Runnable{
 				}
 				else{
 					prom = " ";
-					c3 = Capture.take(board, r2, c2);
+					if(!board[r][c].equals(" ")) {
+						c3 = Capture.take(board, r2, c2);
+					}
 					temp = board[r2][c2];
 					board[r2][c2] = board[r][c];
 					board[r][c] = " ";	
@@ -1282,7 +1296,9 @@ public class ArtIntel implements Runnable{
 				r3 = 3;
 				if(board[r][c].equals("P") & r==1){
 					prom = "P";
-					c3 = Capture.take(board, r2, c2);
+					if(!board[r][c].equals(" ")) {
+						c3 = Capture.take(board, r2, c2);
+					}
 					temp = board[r2][c2];
 					board[r2][c2] = "Q";
 					board[r][c] = " ";	
@@ -1295,7 +1311,9 @@ public class ArtIntel implements Runnable{
 				}
 				else{
 					prom = " ";
-					c3 = Capture.take(board, r2, c2);
+					if(!board[r][c].equals(" ")) {
+						c3 = Capture.take(board, r2, c2);
+					}
 					temp = board[r2][c2];
 					board[r2][c2] = board[r][c];
 					board[r][c] = " ";	
@@ -1384,7 +1402,9 @@ public class ArtIntel implements Runnable{
 				r3 = 0;
 				if(board[r][c].equals("p") & r==2){
 					prom = "p";
-					c3 = Capture.take(board, r2, c2);
+					if(!board[r][c].equals(" ")) {
+						c3 = Capture.take(board, r2, c2);
+					}
 					temp = board[r2][c2];
 					board[r2][c2] = "q";
 					board[r][c] = " ";	
@@ -1397,7 +1417,9 @@ public class ArtIntel implements Runnable{
 				}
 				else{
 					prom = " ";
-					c3 = Capture.take(board, r2, c2);
+					if(!board[r][c].equals(" ")) {
+						c3 = Capture.take(board, r2, c2);
+					}
 					temp = board[r2][c2];
 					board[r2][c2] = board[r][c];
 					board[r][c] = " ";	
@@ -1459,8 +1481,10 @@ public class ArtIntel implements Runnable{
 	}
 
 	// flat-searching pure minimax
-	private void flatMM(int depth) {
+	private void flatMM(String[][] field, int depth) {
 
+		String[][] board = Copier.deepCopy(field);
+		
 		Queue<String[][]> input = new LinkedList<>();
 		input.add(board);		
 		Queue<String[][]> poses = new LinkedList<>();
@@ -1472,8 +1496,9 @@ public class ArtIntel implements Runnable{
 		
 		while(depth > 0) {
 			
-			poses.addAll(input);
-			input = new LinkedList<>();
+			while(!input.isEmpty()) {
+			poses.add(input.remove());
+			}
 			
 			while(!poses.isEmpty()) {
 				board = poses.remove();
@@ -1491,8 +1516,8 @@ public class ArtIntel implements Runnable{
 					int c = legal.get(i).getC();
 					int r2 = legal.get(i).getR2();
 					int c2 = legal.get(i).getC2();
-					String temp;
-					String prom;
+					String temp = null;
+					String prom = null;
 					int r3;
 					int c3 = 9;
 					
@@ -1500,7 +1525,9 @@ public class ArtIntel implements Runnable{
 						r3 = 0;
 						if(board[r][c].equals("p") & r==2){
 							prom = "p";
-							c3 = Capture.take(board, r2, c2);
+							if(!board[r][c].equals(" ")) {
+								c3 = Capture.take(board, r2, c2);
+							}
 							temp = board[r2][c2];
 							board[r2][c2] = "q";
 							board[r][c] = " ";	
@@ -1513,10 +1540,12 @@ public class ArtIntel implements Runnable{
 						}
 						else{
 							prom = " ";
-							c3 = Capture.take(board, r2, c2);
+							if(!board[r][c].equals(" ")) {
+								c3 = Capture.take(board, r2, c2);
+							}
 							temp = board[r2][c2];
 							board[r2][c2] = board[r][c];
-							board[r][c] = " ";	
+							board[r][c] = " ";
 						}
 						
 						if(temp.equals("K")){
@@ -1532,7 +1561,7 @@ public class ArtIntel implements Runnable{
 						else{
 							legal.get(i).setValue(evaluationMaterial(board, false));
 								if(depth > 1) {
-									input.add(board);
+									input.add(Copier.deepCopy(board));
 									legal.get(i).addChildren(generateWhiteMoves(board));
 									moves.add(legal.get(i).getChidren());
 								}
@@ -1544,7 +1573,9 @@ public class ArtIntel implements Runnable{
 						r3 = 3;
 						if(board[r][c].equals("P") & r==1){
 							prom = "P";
-							c3 = Capture.take(board, r2, c2);
+							if(!board[r][c].equals(" ")) {
+								c3 = Capture.take(board, r2, c2);
+							}
 							temp = board[r2][c2];
 							board[r2][c2] = "Q";
 							board[r][c] = " ";	
@@ -1557,10 +1588,12 @@ public class ArtIntel implements Runnable{
 						}
 						else{
 							prom = " ";
-							c3 = Capture.take(board, r2, c2);
+							if(!board[r][c].equals(" ")) {
+								c3 = Capture.take(board, r2, c2);
+							}
 							temp = board[r2][c2];
 							board[r2][c2] = board[r][c];
-							board[r][c] = " ";	
+							board[r][c] = " ";
 						}					
 						
 						if(temp.equals("k")){
@@ -1576,7 +1609,7 @@ public class ArtIntel implements Runnable{
 						else{
 							legal.get(i).setValue(evaluationMaterial(board, false));
 								if(depth > 1) {
-									input.add(board);
+									input.add(Copier.deepCopy(board));
 									legal.get(i).addChildren(generateBlackMoves(board));
 									moves.add(legal.get(i).getChidren());
 								}
@@ -1597,8 +1630,9 @@ public class ArtIntel implements Runnable{
 					board[r2][c2] = temp;
 					Capture.undo(board, r3, c3);
 				}
+				legal = null;
 			}		
-		depth--;			
+			depth--;			
 		}
 		
 		legal = null;
@@ -1616,16 +1650,16 @@ public class ArtIntel implements Runnable{
                 	if(item.getSide().equals("black")) {        				
                 		item.setValue(min(scores));
                 	}
-                	else if(item.getSide().equals("white")){
-            			item.setValue(max(scores));                			
+                	else{
+            			item.setValue(max(scores));
                 	}
-                scores = null;
         	}
         }		
-		integrator.mergeMoves(root);		
-		System.out.println(root);
+		integrator.mergeMoves(root);
+		System.out.println("Thread n-" + Thread.currentThread().getId() + " " + root);
 		System.out.println("Children: " + root.getChidren().size());
 		System.out.println(root.getChidren());
+		System.out.println();
 	}
 	
 	// minimax with vintage forward pruning
@@ -1662,7 +1696,7 @@ public class ArtIntel implements Runnable{
 			start = generateBlackMoves(board);
 			legal.addAll(sortingMoveList(board, start, "black", true));			
 		}
-		else if(turn.equals("white")){
+		else{
 			start = generateWhiteMoves(board);
 			legal.addAll(sortingMoveList(board, start, "white", true));			
 		}
@@ -1684,7 +1718,9 @@ public class ArtIntel implements Runnable{
 				r3 = 0;
 				if(board[r][c].equals("p") & r==2){
 					prom = "p";
-					c3 = Capture.take(board, r2, c2);
+					if(!board[r][c].equals(" ")) {
+						c3 = Capture.take(board, r2, c2);
+					}
 					temp = board[r2][c2];
 					board[r2][c2] = "q";
 					board[r][c] = " ";	
@@ -1697,7 +1733,9 @@ public class ArtIntel implements Runnable{
 				}
 				else{
 					prom = " ";
-					c3 = Capture.take(board, r2, c2);
+					if(!board[r][c].equals(" ")) {
+						c3 = Capture.take(board, r2, c2);
+					}
 					temp = board[r2][c2];
 					board[r2][c2] = board[r][c];
 					board[r][c] = " ";	
@@ -1714,7 +1752,9 @@ public class ArtIntel implements Runnable{
 				r3 = 3;
 				if(board[r][c].equals("P") & r==1){
 					prom = "P";
-					c3 = Capture.take(board, r2, c2);
+					if(!board[r][c].equals(" ")) {
+						c3 = Capture.take(board, r2, c2);
+					}
 					temp = board[r2][c2];
 					board[r2][c2] = "Q";
 					board[r][c] = " ";	
@@ -1727,7 +1767,9 @@ public class ArtIntel implements Runnable{
 				}
 				else{
 					prom = " ";
-					c3 = Capture.take(board, r2, c2);
+					if(!board[r][c].equals(" ")) {
+						c3 = Capture.take(board, r2, c2);
+					}
 					temp = board[r2][c2];
 					board[r2][c2] = board[r][c];
 					board[r][c] = " ";	
@@ -1779,7 +1821,9 @@ public class ArtIntel implements Runnable{
 
 				if(board[r][c].equals("p") & r==2){
 					prom = "p";
-					c3 = Capture.take(board, r2, c2);
+					if(!board[r][c].equals(" ")) {
+						c3 = Capture.take(board, r2, c2);
+					}
 					temp = board[r2][c2];
 					board[r2][c2] = "q";
 					board[r][c] = " ";	
@@ -1792,7 +1836,9 @@ public class ArtIntel implements Runnable{
 				}
 				else{
 					prom = " ";
-					c3 = Capture.take(board, r2, c2);
+					if(!board[r][c].equals(" ")) {
+						c3 = Capture.take(board, r2, c2);
+					}
 					temp = board[r2][c2];
 					board[r2][c2] = board[r][c];
 					board[r][c] = " ";	
