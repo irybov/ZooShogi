@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Random;
+
+import control.Clocks;
+
 import java.util.Collections;
 import java.util.Deque;
 import java.util.LinkedList;
@@ -36,6 +39,8 @@ public class ArtIntel implements Runnable{
 	private final Integrator integrator = Integrator.getInstance();
 	private final MoveList movelist = new MoveList();
 	
+	private int count = 0;
+	
 	@Override
 	public void run(){		
 		algorithmSelector();
@@ -51,6 +56,7 @@ public class ArtIntel implements Runnable{
 			break;
 		case 1:
 			expectimax("black", 6);
+			Clocks.addNodes(count);
 			break;		
 		case 2:
 			moves = new ArrayList<>();
@@ -63,18 +69,22 @@ public class ArtIntel implements Runnable{
 		case 4:
 			moves = new ArrayList<>();
 			forward("black", 6);
+			Clocks.addNodes(count);
 			sendMovelist();
 			break;
 		case 5:
 			minimax("black", 6);
+			Clocks.addNodes(count);
 			break;
 		case 6:
 			hash = new HashTabs();
 			minimaxAB("black", 8, Integer.MIN_VALUE+1, Integer.MAX_VALUE);
+			Clocks.addNodes(count);
 			break;
 		case 7:
 			hash = new HashTabs();
 			minimaxEX("black", 6, Integer.MIN_VALUE+1, Integer.MAX_VALUE, false);
+			Clocks.addNodes(count);
 			break;
 			}
 	}
@@ -911,6 +921,7 @@ public class ArtIntel implements Runnable{
 				legal.addAll(sortingMoveList(board, start, "white", false));					
 			}
 		}
+		count += legal.size();
 		
 		ArrayList<Integer> scores = new ArrayList<>();
 		
@@ -1093,6 +1104,7 @@ public class ArtIntel implements Runnable{
 				legal.addAll(sortingMoveList(board, start, "white", false));					
 			}
 		}
+		count += legal.size();
 		
 		ArrayList<Integer> scores = new ArrayList<>();
 		
@@ -1244,6 +1256,7 @@ public class ArtIntel implements Runnable{
 				legal = generateWhiteMoves(board);				
 			}
 		}
+		count += legal.size();
 				
 		List<Integer> scores = new ArrayList<>();
 		
@@ -1355,12 +1368,12 @@ public class ArtIntel implements Runnable{
 			return 100/(depth);
 		}
 		if(winPositionWhite(board, turn)){
-			return -(2000*depth);
+			return -(1000*depth);
 		}
 		
 		if(check(board, turn) && depth < 6){
 			if(turn.equals("white")){
-				return -(2000*depth);
+				return -(1000*depth);
 			}
 			else if(turn.equals("black")){
 				return 50/depth;
@@ -1384,6 +1397,7 @@ public class ArtIntel implements Runnable{
 				legal = generateWhiteMoves(board);				
 			}
 		}
+		count += legal.size();
 		
 		List<Integer> scores = new ArrayList<>();
 		
@@ -1655,11 +1669,9 @@ public class ArtIntel implements Runnable{
                 	}
         	}
         }		
-		integrator.mergeMoves(root);
-		System.out.println("Thread n-" + Thread.currentThread().getId() + " " + root);
-		System.out.println("Children: " + root.getChidren().size());
-		System.out.println(root.getChidren());
-		System.out.println();
+		integrator.mergeMoves(root);		
+		Clocks.addNodes(stack.size());
+
 	}
 	
 	// minimax with vintage forward pruning
@@ -1700,6 +1712,7 @@ public class ArtIntel implements Runnable{
 			start = generateWhiteMoves(board);
 			legal.addAll(sortingMoveList(board, start, "white", true));			
 		}
+		count += legal.size();
 				
 		ArrayList<Integer> scores = new ArrayList<>();
 		
@@ -1803,8 +1816,7 @@ public class ArtIntel implements Runnable{
 	// greedy algorithm
 	private void greedy() {
 		
-		List<Node> legal = new ArrayList<>();
-		legal = generateBlackMoves(board);
+		List<Node> legal = new ArrayList<>(generateBlackMoves(board));
 		
 		int score;
 		String temp;
@@ -1864,19 +1876,22 @@ public class ArtIntel implements Runnable{
 			}
 			board[r2][c2] = temp;
 			Capture.undo(board, r3, c3);
-		}			
+		}				
+		Clocks.setNodes(legal.size());
+		
 	}
 	
 	// randomly moving algorithm
 	private void random() {
 		
-		List<Node> legal = new ArrayList<>();
-		legal = generateBlackMoves(board);
+		List<Node> legal = new ArrayList<>(generateBlackMoves(board));
 		
 		int i = new Random().nextInt(legal.size());
 		
 		legal.get(i).setValue(Integer.MIN_VALUE+2);
-		moves.add(legal.get(i));
+		moves.add(legal.get(i));		
+		Clocks.setNodes(legal.size());
+		
 	}
 
 	private void sendMovelist(){

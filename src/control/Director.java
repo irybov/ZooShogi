@@ -236,14 +236,17 @@ public class Director{
 			case 7:
 				int cores = Runtime.getRuntime().availableProcessors();
 				List<Node> nodes = separator.generateNodes(board);
-				System.out.println(nodes);
-				System.out.println("Nodes: " + nodes.size());
-				System.out.println();
 				ExecutorService es = Executors.newFixedThreadPool(cores);
 				nodes.forEach(node-> es.submit(new ArtIntel(node, Copier.deepCopy(board), level)));
 				es.shutdown();			
 				es.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
 				break;
+			}
+			try {
+				TimeUnit.SECONDS.sleep(1);
+			}
+			catch (InterruptedException exc) {
+				exc.printStackTrace();
 			}
 			integrator.activate(board);
 		}

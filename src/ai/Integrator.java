@@ -117,8 +117,6 @@ public class Integrator {
 		}
 		
 		Collections.sort(random, Collections.reverseOrder());
-		System.out.println(random);
-		System.out.println("Nodes: " + random.size());
 		
 		int prev = random.get(0).getValue();
 		random.removeIf(e -> e.getValue() < prev);

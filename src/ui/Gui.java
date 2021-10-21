@@ -60,6 +60,8 @@ public class Gui {
 	static JLabel black = new JLabel("Black's hand");
 	
 	static JLabel comp = new JLabel("Computer");
+	static JLabel nodes = new JLabel("Nodes:");
+	public static JLabel counter = new JLabel(" ");
 	
 	// service buttons
 	static JCheckBox volume = new JCheckBox("Mute volume", false);
@@ -116,6 +118,8 @@ public class Gui {
 //		frame.add(sound);
 //		sound.setBounds(100, 500, 300, 100);
 		frame.add(comp);
+		frame.add(nodes);
+		frame.add(counter);
 		
 		board.setBounds(500,100,600,800);
 		handB.setBounds(100,100,300,200);
@@ -128,12 +132,12 @@ public class Gui {
 		behave.setFont(new Font("Dialog", Font.PLAIN, 25));
 		behave.setHorizontalAlignment(JLabel.CENTER);
 		behave.setBounds(1200,450,300,50);
-		score.setFont(new Font("Dialog", Font.PLAIN, 50));
+		score.setFont(new Font("Dialog", Font.PLAIN, 45));
 		score.setHorizontalAlignment(JLabel.CENTER);
-		score.setBounds(100,750,300,100);
-		show.setFont(new Font("Dialog", Font.PLAIN, 50));
+		score.setBounds(100,800,300,100);
+		show.setFont(new Font("Dialog", Font.PLAIN, 45));
 		show.setHorizontalAlignment(JLabel.CENTER);
-		show.setBounds(100,700,300,50);
+		show.setBounds(100,750,300,50);
 		colA.setFont(new Font("Dialog", Font.PLAIN, 25));
 		colA.setHorizontalAlignment(JLabel.CENTER);
 //		colA.setBounds(500,50,200,50);
@@ -185,7 +189,13 @@ public class Gui {
 		clockW.setBackground(Color.WHITE);
 		comp.setFont(new Font("Dialog", Font.PLAIN, 25));
 		comp.setHorizontalAlignment(JLabel.CENTER);
-		comp.setBounds(1200,50,300,50);	
+		comp.setBounds(1200,50,300,50);
+		nodes.setFont(new Font("Dialog", Font.PLAIN, 25));
+		nodes.setHorizontalAlignment(JLabel.RIGHT);
+		nodes.setBounds(100,675,100,50);
+		counter.setFont(new Font("Dialog", Font.PLAIN, 25));
+		counter.setHorizontalAlignment(JLabel.CENTER);
+		counter.setBounds(200,675,200,50);
 		
 		volume.setFont(new Font("Dialog", Font.PLAIN, 20));
 		volume.setHorizontalAlignment(JCheckBox.CENTER);
@@ -348,11 +358,13 @@ public class Gui {
 								updateGui();
 								click = 1;
 								disable();
-								drop = false;
+								drop = false;								
 								
 									javax.swing.SwingUtilities.invokeLater(new Runnable() {
 										public void run() {
-										try {
+										try {											
+											Clocks.setNodes(0);
+											Gui.counter.setText(" ");
 											director.compute();
 										}
 										catch (InterruptedException e) {

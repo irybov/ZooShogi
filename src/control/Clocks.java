@@ -1,6 +1,7 @@
 package control;
 
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import ui.Gui;
 
@@ -12,6 +13,7 @@ public class Clocks{
 	private int secW = 0;
 
 	volatile private String turn = " ";
+	private static AtomicInteger nodes = new AtomicInteger(0);
 	
 	private static Clocks INSTANCE;
 	
@@ -30,6 +32,12 @@ public class Clocks{
 	public void setTurn(String turn) {
 		this.turn = turn;		
 	}
+	public static void setNodes(int count) {
+		nodes.set(count);
+	}
+	public static void addNodes(int count) {
+		nodes.addAndGet(count);
+	}
 	
 	public void setClock() {
 		
@@ -38,8 +46,8 @@ public class Clocks{
 		
 		while(true) {
 			try {
-				TimeUnit.SECONDS.sleep(1);
 				if(turn.equals("black")) {
+					Gui.counter.setText(nodes.toString());
 				if(secB < 59) {
 						secB++;
 					}
@@ -59,6 +67,7 @@ public class Clocks{
 					}
 					Gui.clockW.setText(String.format("%02d", minW)+":"+String.format("%02d", secW));
 				}
+				TimeUnit.SECONDS.sleep(1);
 			}
 			catch (InterruptedException e) {
 				e.printStackTrace();
@@ -71,6 +80,8 @@ public class Clocks{
 	
 	public void reset() {
 		
+		nodes.set(0);
+		Gui.counter.setText(" ");
 		turn = " ";
 		minB = 0;
 		secB = 0;
