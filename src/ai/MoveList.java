@@ -5,10 +5,11 @@ import java.util.Set;
 
 public class MoveList {
 	
-	private static Set<String> list = new HashSet<>();
+	private static Set<String> listB = new HashSet<>();
+	private static Set<String> listW = new HashSet<>();
 	
 	// fills game moves list
-	static void add(String[][] field) {
+	public static void add(String[][] field, String turn) {
 		
 		StringBuilder current = new StringBuilder(24);
 		
@@ -18,11 +19,18 @@ public class MoveList {
 			}
 		}
 		String hash = current.toString();
-		list.add(hash);		
+		
+		if(turn.equals("black")) {
+			listB.add(hash);
+		}
+		else {
+			listW.add(hash);			
+		}
+		
 	}
 
 	//checks 3-times repetition
-	boolean repeat(String[][] field) {
+	static boolean repeat(String[][] field, String turn) {
 		
 		StringBuilder current = new StringBuilder(24);
 		
@@ -32,12 +40,19 @@ public class MoveList {
 			}
 		}		
 		String hash = current.toString();
-				
-		return(list.contains(hash));
+			
+		if(turn.equals("black")) {
+			return(listB.contains(hash));
+		}
+		else {
+			return(listW.contains(hash));			
+		}
+		
 	}
 	
 	public static void clear() {		
-		list.clear();
+		listB.clear();
+		listW.clear();
 	}
 	
 }

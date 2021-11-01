@@ -5,12 +5,12 @@ public class Capture {
 	// checks if capture is possible
 	public static boolean check(String[][] field, int r2, int c2, String side) {
 		
-		if((side.equals("white"))&(field[r2][c2].equals(" ")||field[r2][c2].equals("p")||
+		if(side.equals("white")&(field[r2][c2].equals(" ")||field[r2][c2].equals("p")||
 			field[r2][c2].equals("q")||field[r2][c2].equals("r")||field[r2][c2].equals("b")
 			||field[r2][c2].equals("k"))) {
 			return true;
 		}
-		else if((side.equals("black"))&(field[r2][c2].equals(" ")||field[r2][c2].equals("P")||
+		else if(side.equals("black")&(field[r2][c2].equals(" ")||field[r2][c2].equals("P")||
 				field[r2][c2].equals("Q")||field[r2][c2].equals("R")||field[r2][c2].equals("B")
 				||field[r2][c2].equals("K"))) {
 			return true;
@@ -21,11 +21,11 @@ public class Capture {
 	// checks capture extensions
 	public static boolean extend(String piece, String side) {
 		
-		if((side.equals("white"))&(piece.equals("p")||piece.equals("q")||piece.equals("r")
+		if(side.equals("white")&(piece.equals("p")||piece.equals("q")||piece.equals("r")
 				||piece.equals("b")||piece.equals("k"))) {
 			return true;
 		}
-		else if((side.equals("black"))&(piece.equals("P")||piece.equals("Q")||piece.equals("R")
+		else if(side.equals("black")&(piece.equals("P")||piece.equals("Q")||piece.equals("R")
 				||piece.equals("B")||piece.equals("K"))) {
 			return true;
 		}

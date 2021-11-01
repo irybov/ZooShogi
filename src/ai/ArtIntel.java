@@ -23,7 +23,7 @@ public class ArtIntel implements Runnable{
 	
 	private Node root;
 	
-	private int level;
+	private final int level;
 	private String[][] board; 
 
 	public ArtIntel(int level, String[][] board) {		
@@ -37,7 +37,6 @@ public class ArtIntel implements Runnable{
 	}
 	
 	private final Integrator integrator = Integrator.getInstance();
-	private final MoveList movelist = new MoveList();
 	
 	private int count = 0;
 	
@@ -64,7 +63,7 @@ public class ArtIntel implements Runnable{
 			sendMovelist();
 			break;
 		case 3:
-			flatMM(board, 5);
+			trappy(board, 1);
 			break;			
 		case 4:
 			moves = new ArrayList<>();
@@ -272,6 +271,18 @@ public class ArtIntel implements Runnable{
 		return((a+b==2) || ((a+b==3 & turn.equals("white")) & 
 			   (board[0][0].equals("K")||board[0][1].equals("K")||board[0][2].equals("K"))));
 	}	
+	
+	private boolean winPromotion(String[][] board, String turn) {
+		
+		if(turn.equals("white")) {
+			return (board[3][0].equals("k")||board[3][1].equals("k")||board[3][2].equals("k")) &
+			(!board[0][0].equals("K")&&!board[0][1].equals("K")&&!board[0][2].equals("K"));		
+		}
+		else {
+			return (board[0][0].equals("K")||board[0][1].equals("K")||board[0][2].equals("K")) & 
+			(!board[3][0].equals("k")&&!board[3][1].equals("k")&&!board[3][2].equals("k"));
+		}
+	}
 	
 	private int evaluationMaterial(String[][] board, boolean exp) {
 		
@@ -773,12 +784,17 @@ public class ArtIntel implements Runnable{
 				if(temp.equals("K")){
 					value = 2000;	
 				}
-				else if((board[3][0].equals("k")||board[3][1].equals("k")||board[3][2].equals("k"))
-						&check(board, "white")==false){
-					value = 1000;
-				}				
+				else if(winPromotion(board, "white") & check(board, "white")==false){
+						value = 1000;
+				}
+				else if(MoveList.repeat(board, "black")) {
+					value = 0;
+				}
+				else if(winPromotion(board, "black") & check(board, "black")==false){
+						value = -1000;
+				}
 				else if(check(board, "white")){
-					value = -1000;
+					value = -2000;
 				}
 				else{
 					if(prune) {
@@ -828,13 +844,18 @@ public class ArtIntel implements Runnable{
 				if(temp.equals("k")){
 					value = -2000;	
 				}
-				else if((board[0][0].equals("K")||board[0][1].equals("K")||board[0][2].equals("K"))
-						&check(board, "black")==false){
-					value = -1000;
-				}				
-				else if(check(board, "black")){
-					value = 1000;
+				else if(winPromotion(board, "black") & check(board, "black")==false){
+						value = -1000;
 				}
+				else if(MoveList.repeat(board, "white")) {
+					value = 0;
+				}
+				else if(winPromotion(board, "white") & check(board, "white")==false){
+						value = 1000;
+				}
+				else if(check(board, "black")){
+					value = 2000;
+				}				
 				else{
 					if(prune) {
 					value = evaluationMaterial(board, false) + evaluationPositional(board);
@@ -871,7 +892,10 @@ public class ArtIntel implements Runnable{
 	// minimax with capture and check extensions
 	private int minimaxEX(String turn, int depth, int alpha, int beta, boolean node) {
 		
-		if(turn.equals("white") && movelist.repeat(board)){
+		if(turn.equals("white") && MoveList.repeat(board, "black")){
+			return 0;
+		}
+		if(turn.equals("black") && MoveList.repeat(board, "white")){
 			return 0;
 		}
 		
@@ -892,17 +916,17 @@ public class ArtIntel implements Runnable{
 			if(turn.equals("white")){
 				return -(1000+(depth*10));
 			}
-			else if(turn.equals("black")){
+			else{
 				return 1000+(depth*10);
 			}
 		}
 	
-		if(node==false & depth<=1){
+		if(node==false & depth <= 1){
 			return evaluationMaterial(board, false);
 		}
 		
 		if(depth == -3){
-			return  evaluationMaterial(board, false);
+			return evaluationMaterial(board, false);
 		}
 		
 		List<Node> legal = new ArrayList<>();
@@ -1058,7 +1082,10 @@ public class ArtIntel implements Runnable{
 	// minimax with alpha-beta pruning
 	private int minimaxAB(String turn, int depth, int alpha, int beta) {
 		
-		if(turn.equals("white") && movelist.repeat(board)){
+		if(turn.equals("white") && MoveList.repeat(board, "black")){
+			return 0;
+		}
+		if(turn.equals("black") && MoveList.repeat(board, "white")){
 			return 0;
 		}
 		
@@ -1079,13 +1106,13 @@ public class ArtIntel implements Runnable{
 			if(turn.equals("white")){
 				return -(1000+(depth*10));
 			}
-			else if(turn.equals("black")){
+			else{
 				return 1000+(depth*10);
 			}
 		}
 	
 		if(depth == 1){
-			return  evaluationMaterial(board, false);
+			return evaluationMaterial(board, false);
 		}
 
 		List<Node> legal = new ArrayList<>();
@@ -1219,9 +1246,12 @@ public class ArtIntel implements Runnable{
 	// basic minimax algorithm
 	private int minimax(String turn, int depth) {
 		
-		if(turn.equals("white") && movelist.repeat(board)){
+		if(turn.equals("white") && MoveList.repeat(board, "black")){
 			return 0;
 		}
+		if(turn.equals("black") && MoveList.repeat(board, "white")){
+			return 0;
+		}		
 		
 		if(winPositionBlack(board, turn)){
 			return 2000+(depth*100);
@@ -1234,7 +1264,7 @@ public class ArtIntel implements Runnable{
 			if(turn.equals("white")){
 				return -(1000+(depth*100));
 			}
-			else if(turn.equals("black")){
+			else{
 				return 1000+(depth*100);
 			}
 		}
@@ -1357,15 +1387,18 @@ public class ArtIntel implements Runnable{
 		}
 	}
 
-	// expectimax (a.k.a. poker) algorithm
+	// gambling (a.k.a. poker) algorithm
 	private int expectimax(String turn, int depth) {
 		
-		if(turn.equals("white") && movelist.repeat(board)){
+		if(turn.equals("white") && MoveList.repeat(board, "black")){
+			return 0;
+		}
+		if(turn.equals("black") && MoveList.repeat(board, "white")){
 			return 0;
 		}
 		
 		if(winPositionBlack(board, turn)){
-			return 100/(depth);
+			return 100/depth;
 		}
 		if(winPositionWhite(board, turn)){
 			return -(1000*depth);
@@ -1375,8 +1408,8 @@ public class ArtIntel implements Runnable{
 			if(turn.equals("white")){
 				return -(1000*depth);
 			}
-			else if(turn.equals("black")){
-				return 50/depth;
+			else{
+				return 100/depth;
 			}
 		}
 		
@@ -1494,8 +1527,8 @@ public class ArtIntel implements Runnable{
 		}
 	}
 
-	// flat-searching pure minimax
-	private void flatMM(String[][] field, int depth) {
+	// breadth-searching trappy minimax
+	private void trappy(String[][] field, int depth) {
 
 		String[][] board = Copier.deepCopy(field);
 		
@@ -1508,7 +1541,7 @@ public class ArtIntel implements Runnable{
 		
 		Queue<List<Node>> moves = new LinkedList<List<Node>>();
 		
-		while(depth > 0) {
+		while(depth < 6) {
 			
 			while(!input.isEmpty()) {
 			poses.add(input.remove());
@@ -1517,7 +1550,7 @@ public class ArtIntel implements Runnable{
 			while(!poses.isEmpty()) {
 				board = poses.remove();
 				
-				if(depth == 5){
+				if(depth == 1){
 					legal = new ArrayList<>(1);
 					legal.add(root);
 				}
@@ -1563,20 +1596,28 @@ public class ArtIntel implements Runnable{
 						}
 						
 						if(temp.equals("K")){
-							legal.get(i).setValue(2000+(depth*100));
+							legal.get(i).setValue(2000+(100/depth));
 						}
-						else if((board[3][0].equals("k")||board[3][1].equals("k")||board[3][2].equals("k"))
-								&check(board, "white")==false){
-							legal.get(i).setValue(1000+(depth*100));
+						else if(winPromotion(board, "white") & check(board, "white")==false){
+							legal.get(i).setValue(1000+(100/depth));
+						}
+						else if(MoveList.repeat(board, "black")) {
+							legal.get(i).setValue(0);
+						}
+						else if(winPromotion(board, "black") & check(board, "black")==false){
+							legal.get(i).setValue(-(1000+(100/depth)));
 						}
 						else if(check(board, "white")){
-							legal.get(i).setValue(-(1000+(depth*100)));
+							legal.get(i).setValue(-(2000+(100/depth)));
 						}
 						else{
 							legal.get(i).setValue(evaluationMaterial(board, false));
-								if(depth > 1) {
+								if(depth < 5) {
 									input.add(Copier.deepCopy(board));
 									legal.get(i).addChildren(generateWhiteMoves(board));
+									for(Node child: legal.get(i).getChidren()) {
+										child.addParent(legal.get(i));
+									}
 									moves.add(legal.get(i).getChidren());
 								}
 						}		
@@ -1611,20 +1652,28 @@ public class ArtIntel implements Runnable{
 						}					
 						
 						if(temp.equals("k")){
-							legal.get(i).setValue(-(2000+(depth*100)));
+							legal.get(i).setValue(-(2000+(100/depth)));
 						}
-						else if((board[0][0].equals("K")||board[0][1].equals("K")||board[0][2].equals("K"))
-								&check(board, "black")==false){
-							legal.get(i).setValue(-(1000+(depth*100)));
+						else if(winPromotion(board, "black") & check(board, "black")==false){
+							legal.get(i).setValue(-(1000+(100/depth)));
+						}
+						else if(MoveList.repeat(board, "white")) {
+							legal.get(i).setValue(0);
+						}
+						else if(winPromotion(board, "white") & check(board, "white")==false){
+							legal.get(i).setValue(1000+(100/depth));
 						}
 						else if(check(board, "black")){
-							legal.get(i).setValue(1000+(depth*100));
+							legal.get(i).setValue(2000+(100/depth));
 						}
 						else{
 							legal.get(i).setValue(evaluationMaterial(board, false));
-								if(depth > 1) {
+								if(depth < 5) {
 									input.add(Copier.deepCopy(board));
 									legal.get(i).addChildren(generateBlackMoves(board));
+									for(Node child: legal.get(i).getChidren()) {
+										child.addParent(legal.get(i));
+									}
 									moves.add(legal.get(i).getChidren());
 								}
 						}		
@@ -1646,7 +1695,7 @@ public class ArtIntel implements Runnable{
 				}
 				legal = null;
 			}		
-			depth--;			
+			depth++;			
 		}
 		
 		legal = null;
@@ -1655,21 +1704,40 @@ public class ArtIntel implements Runnable{
 		
 		List<Integer> scores;
 
-        for (Node item: stack) {
-        	if(item.hasChildren()) {
-        		scores = new ArrayList<>(item.getChidren().size());
-        		for(Node child: item.getChidren()) {
+        for (Node move: stack) {
+        	if(move.hasChildren()) {
+        		scores = new ArrayList<>(move.getChidren().size());
+        		for(Node child: move.getChidren()) {
         			scores.add(child.getValue());
         		}
-                	if(item.getSide().equals("black")) {        				
-                		item.setValue(min(scores));
+                	if(move.getSide().equals("black")) {        				
+                		move.setValue(min(scores));
                 	}
                 	else{
-            			item.setValue(max(scores));
+                		move.setValue(max(scores));
                 	}
         	}
-        }		
-		integrator.mergeMoves(root);		
+        }
+        
+        for (Node move: stack) {
+        	if(!move.hasChildren()) {        	
+        		int x = move.getValue();
+        		int y = 0;
+        		if(move.hasParent()) {
+        			Node current = move.getParent();
+	        		while(current.hasParent()) {
+	        			y += current.getValue();
+	        			current = current.getParent();
+	        		}
+        		}
+        		int newTrap = x-y;
+        		if(root.getTrap() < newTrap) {
+        			root.setTrap(newTrap);
+        		}
+        	}
+        }
+        
+		integrator.mergeMoves(root);
 		Clocks.addNodes(stack.size());
 
 	}
@@ -1677,10 +1745,13 @@ public class ArtIntel implements Runnable{
 	// minimax with vintage forward pruning
 	private int forward(String turn, int depth) {
 		
-		if(turn.equals("white" )&& movelist.repeat(board)){
+/*		if(turn.equals("white") && MoveList.repeat(board, "black")){
 			return 0;
 		}
-		
+		if(turn.equals("black") && MoveList.repeat(board, "white")){
+			return 0;
+		}
+*/		
 		if(winPositionBlack(board, turn)){
 			return 2000+(depth*100);
 		}
@@ -1692,7 +1763,7 @@ public class ArtIntel implements Runnable{
 			if(turn.equals("white")){
 				return -(1000+(depth*100));
 			}
-			else if(turn.equals("black")){
+			else{
 				return 1000+(depth*100);
 			}
 		}
@@ -1857,10 +1928,19 @@ public class ArtIntel implements Runnable{
 				}
 			
 			if(temp.equals("K")){
+				score = 2000;
+			}
+			else if(winPromotion(board, "white") & check(board, "white")==false){
 				score = 1000;
 			}
-			else if(check(board, "white")){
+			else if(MoveList.repeat(board, "black")) {
+				score = 0;
+			}
+			else if(winPromotion(board, "black") & check(board, "black")==false){
 				score = -1000;
+			}
+			else if(check(board, "white")){
+				score = -2000;
 			}
 			else{
 				score = evaluationMaterial(board, false);

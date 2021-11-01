@@ -6,14 +6,16 @@ public class Move {
 	private int colFrom;
 	private int rowTo;
 	private int colTo;
-	private long score;
+	private int score;
+	private int nodes;
 	
-	public Move(int rowFrom, int colFrom, int rowTo, int colTo, long score) {
+	public Move(int rowFrom, int colFrom, int rowTo, int colTo, int score, int nodes) {
 		this.rowFrom = rowFrom;
 		this.colFrom = colFrom;
 		this.rowTo = rowTo;
 		this.colTo = colTo;
 		this.score = score;
+		this.nodes = nodes;
 	}
 
 	public int getRowFrom() {
@@ -28,8 +30,11 @@ public class Move {
 	public int getColTo() {
 		return this.colTo;
 	}
-	public long getScore() {
+	public int getScore() {
 		return this.score;
 	}
-		
+	public int getNodes() {
+		return this.nodes;
+	}
+	
 }

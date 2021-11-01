@@ -55,7 +55,7 @@ public class Clocks{
 						secB = 0;
 						minB++;
 					}
-					Gui.clockB.setText(String.format("%02d", minB)+":"+String.format("%02d", secB));
+				Gui.clockB.setText(String.format("%02d", minB)+":"+String.format("%02d", secB));
 				}
 				else if(turn.equals("white")) {
 					if(secW < 59) {
@@ -65,7 +65,7 @@ public class Clocks{
 						secW = 0;
 						minW++;
 					}
-					Gui.clockW.setText(String.format("%02d", minW)+":"+String.format("%02d", secW));
+				Gui.clockW.setText(String.format("%02d", minW)+":"+String.format("%02d", secW));
 				}
 				TimeUnit.SECONDS.sleep(1);
 			}

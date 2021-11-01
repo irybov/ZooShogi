@@ -10,6 +10,8 @@ public class Node implements Comparable<Node>{
 	private int depth;
 	private int value;
 	private List<Node> children;
+	private Node parent;
+	private int trap = Integer.MIN_VALUE;
 	
 	private final int R;
 	private final int C;
@@ -68,8 +70,16 @@ public class Node implements Comparable<Node>{
 	@Override
 	public int compareTo(Node node) {
 
-		if(this.value == node.value){		
-			return 0;
+		if(this.value == node.value){
+			if(this.trap == node.trap) {
+				return 0;
+			}
+			else if(this.trap < node.trap){
+				return -1;			
+			}
+			else{
+				return 1;			
+			}
 		}
 		else if(this.value < node.value){
 			return -1;			
@@ -120,6 +130,26 @@ public class Node implements Comparable<Node>{
 			return false;
 		}
 		return true;
+	}
+	
+	public Node getParent() {
+		return parent;
+	}
+	public void addParent(Node newParent) {
+		parent = newParent;
+	}
+	public boolean hasParent() {
+		if(parent == null) {
+			return false;
+		}
+		return true;
+	}
+	
+	public int getTrap(){
+		return trap;
+	}
+	public void setTrap(int newTrap) {
+		trap = newTrap;
 	}
 	
 }

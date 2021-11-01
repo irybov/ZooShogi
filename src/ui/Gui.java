@@ -23,21 +23,21 @@ public class Gui {
 	private Clocks clocks = Clocks.getInstance();
 
 	//The Frame that's displayed. (Contains the Panels)
-	static JFrame frame = new JFrame();
+	private static JFrame frame = new JFrame();
 	
 	//Panels that handles the visual for the board object
-	static JPanel board = new JPanel(new GridLayout(4,3));
-	static JPanel handW = new JPanel(new GridLayout(2,3));
-	static JPanel handB = new JPanel(new GridLayout(2,3));
-	static JPanel cols = new JPanel(new GridLayout(1,3));
-	static JPanel rows = new JPanel(new GridLayout(4,1));
+	private static JPanel board = new JPanel(new GridLayout(4,3));
+	private static JPanel handW = new JPanel(new GridLayout(2,3));
+	private static JPanel handB = new JPanel(new GridLayout(2,3));
+	private static JPanel cols = new JPanel(new GridLayout(1,3));
+	private static JPanel rows = new JPanel(new GridLayout(4,1));
 	
 //	static JPanel sound = new JPanel(new GridLayout(2,1));	
 	
 	//Arrays of JButtons which handle the visual for the Square objects
-	static JButton[][] squares = new JButton[4][3];
-	static JButton[] dropW = new JButton[6];
-	static JButton[] dropB = new JButton[6];
+	private static JButton[][] squares = new JButton[4][3];
+	private static JButton[] dropW = new JButton[6];
+	private static JButton[] dropB = new JButton[6];
 	
 	// dialog windows
 	public static JLabel output = new JLabel(" ");
@@ -48,37 +48,39 @@ public class Gui {
 	public static JLabel clockW = new JLabel("00:00");
 	
 	// components labels
-	static JLabel show = new JLabel("Score:");
-	static JLabel colA = new JLabel("A");
-	static JLabel colB = new JLabel("B");
-	static JLabel colC = new JLabel("C");
-	static JLabel row1 = new JLabel("1");
-	static JLabel row2 = new JLabel("2");
-	static JLabel row3 = new JLabel("3");
-	static JLabel row4 = new JLabel("4");
-	static JLabel white = new JLabel("White's hand");
-	static JLabel black = new JLabel("Black's hand");
+	private static JLabel show = new JLabel("Score:");
+	private static JLabel colA = new JLabel("A");
+	private static JLabel colB = new JLabel("B");
+	private static JLabel colC = new JLabel("C");
+	private static JLabel row1 = new JLabel("1");
+	private static JLabel row2 = new JLabel("2");
+	private static JLabel row3 = new JLabel("3");
+	private static JLabel row4 = new JLabel("4");
+	private static JLabel white = new JLabel("White's hand");
+	private static JLabel black = new JLabel("Black's hand");
 	
-	static JLabel comp = new JLabel("Computer");
-	static JLabel nodes = new JLabel("Nodes:");
+	private static JLabel comp = new JLabel("Computer");
+	private static JLabel nodes = new JLabel("Nodes:");
 	public static JLabel counter = new JLabel(" ");
 	
 	// service buttons
-	static JCheckBox volume = new JCheckBox("Mute volume", false);
-	static JSlider boost = new JSlider(-6, 6, 0);
-	static JButton newgame = new JButton("New Game");
-	static JButton push = new JButton("MOVE");
-	static JCheckBox check = new JCheckBox("Check warning", true);
+	private static JCheckBox volume = new JCheckBox("Mute volume", false);
+	private static JSlider boost = new JSlider(-6, 6, 0);
+	private static JButton newgame = new JButton("New Game");
+	private static JButton push = new JButton();
+	private static JLabel label1 = new JLabel("Force");
+	private static JLabel label2 = new JLabel("Black");
+	private static JCheckBox check = new JCheckBox("Check warning", true);
 
 	// playing level selection
-	static JLabel behave = new JLabel("Select AI level / behave:");
-	static JPanel panel = new JPanel(new GridLayout(2,4));
-	static ButtonGroup level = new ButtonGroup();	
-	static String[] levelArray = {"Stupid", "Naive", "Greedy", "Tricky", 
+	private static JLabel behave = new JLabel("Select AI level / behave:");
+	private static JPanel panel = new JPanel(new GridLayout(2,4));
+	private static ButtonGroup level = new ButtonGroup();	
+	private static String[] levelArray = {"Stupid", "Naive", "Greedy", "Tricky", 
 								  "Active", "Clever", "Expert", "Master"};
-	static JToggleButton[] brain = new JToggleButton[levelArray.length];
+	private static JToggleButton[] brain = new JToggleButton[levelArray.length];
 	
-    static JMenuBar menuBar = new JMenuBar();
+	private static JMenuBar menuBar = new JMenuBar();
     
 	public Gui() {
 		
@@ -252,8 +254,15 @@ public class Gui {
 		});
 		frame.add(newgame);
 		
-		push.setFont(new Font("Dialog", Font.PLAIN, 50));
-		push.setBounds(100,350,300,100);		
+//		push.setFont(new Font("Dialog", Font.PLAIN, 45));
+		push.setLayout(new GridLayout(2,1));
+		push.add(label1);
+		push.add(label2);
+		label1.setFont(new Font("Dialog", Font.PLAIN, 45));
+		label2.setFont(new Font("Dialog", Font.PLAIN, 45));
+		label1.setHorizontalAlignment(JLabel.CENTER);
+		label2.setHorizontalAlignment(JLabel.CENTER);
+		push.setBounds(250,350,150,100);		
 		push.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				push = (JButton) e.getSource();
@@ -452,7 +461,7 @@ public class Gui {
 		frame.repaint();
 	}
 	
-	void updateGui() {
+	private void updateGui() {
 		
 		for(int r=0;r<4;r++) {
 			for(int c=0;c<3;c++) {
@@ -484,7 +493,7 @@ public class Gui {
 		}
 	}
 	
-	void warning(){
+	private void warning(){
 		
 		int r2, c2;
 		
@@ -537,7 +546,7 @@ public class Gui {
 		}
 	}
 	
-	String image(String piece){
+	private String image(String piece){
 		
 		String icon = " ";
 		
@@ -576,7 +585,7 @@ public class Gui {
 		return icon;
 	}
 	
-	String imageSmall(String piece){
+	private String imageSmall(String piece){
 		
 		String icon = " ";
 		
@@ -615,7 +624,7 @@ public class Gui {
 		return icon;
 	}
 	
-	void highlight(){
+	private void highlight(){
 		
 		for(int r=0;r<4;r++) {
 			for(int c=0;c<3;c++) {
@@ -626,7 +635,7 @@ public class Gui {
 		}
 	}
 	
-	void highlight(int r, int c){
+	private void highlight(int r, int c){
 		
 		int r2, c2;
 		
@@ -690,7 +699,7 @@ public class Gui {
 		}
 	}
 	
-	void unlock(){
+	private void unlock(){
 		
 		for(int r=0;r<4;r++) {
 			for(int c=0;c<3;c++) {
@@ -735,7 +744,7 @@ public class Gui {
 		}		
 	}
 	
-	JMenu createFileMenu(){
+	private JMenu createFileMenu(){
 
         JMenu file = new JMenu("File");
         JMenuItem newgame2 = new JMenuItem("New game");
@@ -803,7 +812,7 @@ public class Gui {
         return file;
 	}
 
-	JMenu createAccountMenu(){
+	private JMenu createAccountMenu(){
 		
         JMenu account = new JMenu("Account");
         JMenuItem create = new JMenuItem("Create");
@@ -817,15 +826,15 @@ public class Gui {
 		
 		create.addActionListener(new ActionListener() {
 			   public void actionPerformed(ActionEvent e) {				   							
-								new Login();								
-			   }
-			});
+							new Login();								
+		   }
+		});
 		
 		select.addActionListener(new ActionListener() {
 			   public void actionPerformed(ActionEvent e) {
 				   				new Users();				   
-			   }
-			});
+		   }
+		});
 		
 		delete.addActionListener(new ActionListener() {
 			   public void actionPerformed(ActionEvent e) {
@@ -839,13 +848,13 @@ public class Gui {
 					            	director.deletePlayer();
 					            	profile.setText("Player");
 					            }				   
-			   }
-			});
-        		
+		   }
+		});
+		
         return account;
 	}
 	
-	JMenu createOtherMenu(){
+	private JMenu createOtherMenu(){
 		
         JMenu other = new JMenu("Other");
         JMenuItem records = new JMenuItem("Records");
@@ -861,9 +870,9 @@ public class Gui {
         
         records.addActionListener(new ActionListener() {
 			   public void actionPerformed(ActionEvent e) {
-								new Table();
-			   }
-			});
+							new Table();
+		   }
+		});
 		
         help.addActionListener(new ActionListener() {
 			   public void actionPerformed(ActionEvent e) {
@@ -874,8 +883,8 @@ public class Gui {
 							"How to play Dobutsu Shogi (Catch the Lion)",
 								"About",
 									JOptionPane.DEFAULT_OPTION);		   
-			   }
-			});
+		   }
+		});
         
         engine.addActionListener(new ActionListener() {
 			   public void actionPerformed(ActionEvent e) {
@@ -885,8 +894,8 @@ public class Gui {
 								new Chooser();
 							}
 						});
-			   }
-			});
+		   }
+		});
         
 		server.addActionListener(new ActionListener() {
 			   public void actionPerformed(ActionEvent e) {
@@ -901,10 +910,12 @@ public class Gui {
 										director.shutdown();
 									}
 					            }				   
-			   }
-			});
-        
+		   }
+		});
+		
         return other;
 	}
+	
+	
 	
 }

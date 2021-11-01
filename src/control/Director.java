@@ -200,11 +200,15 @@ public class Director{
 			board[r2][c2] = board[r][c];
 		}
 		board[r][c] = " ";
+		
+		MoveList.add(board, "white");
 	}
 	
 	public void drop(){
 		board[r2][c2] = board[r][c];
 		board[r][c] = " ";
+		
+		MoveList.add(board, "white");
 	}
 	
 	public void compute() throws InterruptedException{
@@ -223,11 +227,17 @@ public class Director{
 			setBoard(receive());
 		}
 		else {
+			List<Node> nodes = separator.generateNodes(board);
 			switch(level){
 			case 0:
 			case 2:
-			case 4:	
-				new ArtIntel(level, board).run();
+			case 4:
+				if(nodes.get(0).getValue() > 999) {
+					integrator.mergeMoves(nodes.get(0));
+				}
+				else {
+					new ArtIntel(level, board).run();
+				}
 				break;
 			case 1:
 			case 3:
@@ -235,11 +245,16 @@ public class Director{
 			case 6:
 			case 7:
 				int cores = Runtime.getRuntime().availableProcessors();
-				List<Node> nodes = separator.generateNodes(board);
-				ExecutorService es = Executors.newFixedThreadPool(cores);
-				nodes.forEach(node-> es.submit(new ArtIntel(node, Copier.deepCopy(board), level)));
-				es.shutdown();			
-				es.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
+				if(nodes.get(0).getValue() > 999) {
+					integrator.mergeMoves(nodes.get(0));
+				}
+				else {
+					ExecutorService es = Executors.newFixedThreadPool(cores);
+					nodes.forEach(node-> 
+						es.submit(new ArtIntel(node, Copier.deepCopy(board), level)));
+					es.shutdown();			
+					es.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
+				}
 				break;
 			}
 			try {

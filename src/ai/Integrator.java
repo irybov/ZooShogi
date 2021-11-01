@@ -53,11 +53,6 @@ public class Integrator {
 		moves.add(input);
 	}
 	
-	// sends data to move selector
-	public String[][] activate(String[][] field){
-		return best(moves, field);
-	}
-	
 	// do external engine's move
 	public String[][] activate(String[][] field, int r, int c, int r2, int c2, int score){
 
@@ -66,8 +61,8 @@ public class Integrator {
 		String spot = field[r2][c2];
 		String pieceName = Message.pieceName(field[r][c]);
 
-		if(field[r][c].equals("p") & (r2==3 & (c2==0||c2==1||c2==2))){
-			if(r==0 & (c==4||c==7)){
+		if(field[r][c].equals("p") & r==2){
+			if(r==0 & c > 2){
 				field[r2][c2] = "p";
 				field[r][c] = " ";
 			}	
@@ -94,47 +89,59 @@ public class Integrator {
 		}	
 	
 		moves.clear();
-		MoveList.add(field);
+		MoveList.add(field, "black");
 		
 		return field;
 	}
 	
 	// selects and makes best move
-	private String[][] best(List<Node> spots, String[][] field) {
+	public String[][] activate(String[][] field) {
 		
 		int score = Integer.MIN_VALUE+1;
 		int r = -1;
 		int c = -1;
 		int r2 = -1;
 		int c2 = -1;
-
-		ArrayList<Node> random = new ArrayList<>();
-		for(int i=0; i<spots.size(); i++) {
-			if(score <= spots.get(i).getValue()){
-				score = spots.get(i).getValue();				
-				random.add(spots.get(i));
+		
+		if(moves.size() == 1) {
+			score = moves.get(0).getValue();
+			r = moves.get(0).getR();
+			c = moves.get(0).getC();
+			r2 = moves.get(0).getR2();
+			c2 = moves.get(0).getC2();	
+		}
+		else {
+			ArrayList<Node> random = new ArrayList<>();
+			for(int i=0; i<moves.size(); i++) {
+				if(score <= moves.get(i).getValue()){
+					score = moves.get(i).getValue();				
+					random.add(moves.get(i));
+				}
 			}
-		}
-		
-		Collections.sort(random, Collections.reverseOrder());
-		
-		int prev = random.get(0).getValue();
-		random.removeIf(e -> e.getValue() < prev);
-		
-		if(random.size()==1){
 			
-			r = random.get(0).getR();
-			c = random.get(0).getC();
-			r2 = random.get(0).getR2();
-			c2 = random.get(0).getC2();	
-		}
-		else{
-			int i = new Random().nextInt(random.size());
+			Collections.sort(random, Collections.reverseOrder());
 			
-			r = random.get(i).getR();
-			c = random.get(i).getC();
-			r2 = random.get(i).getR2();
-			c2 = random.get(i).getC2();	
+			int prev = random.get(0).getValue();
+			random.removeIf(e -> e.getValue() < prev);
+			
+			int trap = random.get(0).getTrap();
+			random.removeIf(e -> e.getTrap() < trap);
+			
+			if(random.size()==1){
+				
+				r = random.get(0).getR();
+				c = random.get(0).getC();
+				r2 = random.get(0).getR2();
+				c2 = random.get(0).getC2();	
+			}
+			else{
+				int i = new Random().nextInt(random.size());
+				
+				r = random.get(i).getR();
+				c = random.get(i).getC();
+				r2 = random.get(i).getR2();
+				c2 = random.get(i).getC2();	
+			}
 		}
 		
 		if(score==Integer.MIN_VALUE+2) {
@@ -145,8 +152,8 @@ public class Integrator {
 		String spot = field[r2][c2];
 		String pieceName = Message.pieceName(field[r][c]);
 
-		if(field[r][c].equals("p") & (r2==3 & (c2==0||c2==1||c2==2))){
-			if(r==0 & (c==4||c==7)){
+		if(field[r][c].equals("p") & r==2){
+			if(r==0 & c > 2){
 				field[r2][c2] = "p";
 				field[r][c] = " ";
 			}	
@@ -173,7 +180,7 @@ public class Integrator {
 		}	
 	
 		moves.clear();
-		MoveList.add(field);
+		MoveList.add(field, "black");
 		
 		return field;
 	}
