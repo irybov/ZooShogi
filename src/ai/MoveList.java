@@ -15,7 +15,12 @@ public class MoveList {
 		
 		for(int r=0; r<field.length ; r++){
 			for(int c=0; c<field[r].length ; c++){
-				current.append(field[r][c]);				
+				if(field[r][c].equals(" ")) {
+					current.append(String.valueOf(r) + String.valueOf(c));
+				}
+				else {
+					current.append(field[r][c]);
+				}
 			}
 		}
 		String hash = current.toString();
@@ -36,7 +41,12 @@ public class MoveList {
 		
 		for(int r=0; r<field.length ; r++){
 			for(int c=0; c<field[r].length ; c++){
-				current.append(field[r][c]);				
+				if(field[r][c].equals(" ")) {
+					current.append(String.valueOf(r) + String.valueOf(c));
+				}
+				else {
+					current.append(field[r][c]);
+				}			
 			}
 		}		
 		String hash = current.toString();

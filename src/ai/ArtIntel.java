@@ -54,6 +54,7 @@ public class ArtIntel implements Runnable{
 			sendMovelist();			
 			break;
 		case 1:
+			hash = new HashTabs();
 			expectimax("black", 6);
 			Clocks.addNodes(count);
 			break;		
@@ -72,6 +73,7 @@ public class ArtIntel implements Runnable{
 			sendMovelist();
 			break;
 		case 5:
+			hash = new HashTabs();
 			minimax("black", 6);
 			Clocks.addNodes(count);
 			break;
@@ -787,6 +789,9 @@ public class ArtIntel implements Runnable{
 				else if(winPromotion(board, "white") & check(board, "white")==false){
 						value = 1000;
 				}
+				else if(check(board, "black")) {
+					value = 500;
+				}
 				else if(MoveList.repeat(board, "black")) {
 					value = 0;
 				}
@@ -847,6 +852,9 @@ public class ArtIntel implements Runnable{
 				else if(winPromotion(board, "black") & check(board, "black")==false){
 						value = -1000;
 				}
+				else if(check(board, "white")) {
+					value = -500;
+				}
 				else if(MoveList.repeat(board, "white")) {
 					value = 0;
 				}
@@ -901,8 +909,7 @@ public class ArtIntel implements Runnable{
 		
 		if(hash.repeat(board, turn, depth)){
 			return 0;
-		}
-		
+		}		
 		hash.add(board, turn, depth);
 		
 		if(winPositionBlack(board, turn)){
@@ -938,11 +945,11 @@ public class ArtIntel implements Runnable{
 		else if(depth < 6){
 			if(turn.equals("black")) {
 				start = generateBlackMoves(board);
-				legal.addAll(sortingMoveList(board, start, "black", false));
+				legal.addAll(sortingMoveList(board, start, turn, false));
 			}
 			else {
 				start = generateWhiteMoves(board);
-				legal.addAll(sortingMoveList(board, start, "white", false));					
+				legal.addAll(sortingMoveList(board, start, turn, false));
 			}
 		}
 		count += legal.size();
@@ -1091,8 +1098,7 @@ public class ArtIntel implements Runnable{
 		
 		if(hash.repeat(board, turn, depth)){
 			return 0;
-		}
-		
+		}		
 		hash.add(board, turn, depth);
 		
 		if(winPositionBlack(board, turn)){
@@ -1124,11 +1130,11 @@ public class ArtIntel implements Runnable{
 		else if(depth < 8){
 			if(turn.equals("black")) {
 				start = generateBlackMoves(board);
-				legal.addAll(sortingMoveList(board, start, "black", false));
+				legal.addAll(sortingMoveList(board, start, turn, false));
 			}
 			else {
 				start = generateWhiteMoves(board);
-				legal.addAll(sortingMoveList(board, start, "white", false));					
+				legal.addAll(sortingMoveList(board, start, turn, false));
 			}
 		}
 		count += legal.size();
@@ -1251,7 +1257,14 @@ public class ArtIntel implements Runnable{
 		}
 		if(turn.equals("black") && MoveList.repeat(board, "white")){
 			return 0;
-		}		
+		}
+		
+		if(turn.equals("black")){
+			if(hash.repeat(board, turn, depth)){
+				return 0;
+			}		
+			hash.add(board, turn, depth);
+		}
 		
 		if(winPositionBlack(board, turn)){
 			return 2000+(depth*100);
@@ -1333,6 +1346,7 @@ public class ArtIntel implements Runnable{
 				if(depth == 6){
 					root.setValue(value);
 					integrator.mergeMoves(root);
+					hash.clear();
 					}
 			}				
 			else{
@@ -1395,6 +1409,13 @@ public class ArtIntel implements Runnable{
 		}
 		if(turn.equals("black") && MoveList.repeat(board, "white")){
 			return 0;
+		}
+		
+		if(turn.equals("black")){
+			if(hash.repeat(board, turn, depth)){
+				return 0;
+			}		
+			hash.add(board, turn, depth);
 		}
 		
 		if(winPositionBlack(board, turn)){
@@ -1477,6 +1498,7 @@ public class ArtIntel implements Runnable{
 				if(depth == 6){
 					root.setValue(value);
 					integrator.mergeMoves(root);
+					hash.clear();
 				}
 			}				
 			else{
@@ -1777,11 +1799,11 @@ public class ArtIntel implements Runnable{
 	
 		if(turn.equals("black")){
 			start = generateBlackMoves(board);
-			legal.addAll(sortingMoveList(board, start, "black", true));			
+			legal.addAll(sortingMoveList(board, start, turn, true));
 		}
 		else{
 			start = generateWhiteMoves(board);
-			legal.addAll(sortingMoveList(board, start, "white", true));			
+			legal.addAll(sortingMoveList(board, start, turn, true));
 		}
 		count += legal.size();
 				

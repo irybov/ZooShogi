@@ -228,16 +228,15 @@ public class Director{
 		}
 		else {
 			List<Node> nodes = separator.generateNodes(board);
+			if(nodes.get(0).getValue() > 999) {
+				integrator.mergeMoves(nodes.get(0));
+			}
+			else {
 			switch(level){
 			case 0:
 			case 2:
 			case 4:
-				if(nodes.get(0).getValue() > 999) {
-					integrator.mergeMoves(nodes.get(0));
-				}
-				else {
-					new ArtIntel(level, board).run();
-				}
+				new ArtIntel(level, board).run();
 				break;
 			case 1:
 			case 3:
@@ -245,23 +244,18 @@ public class Director{
 			case 6:
 			case 7:
 				int cores = Runtime.getRuntime().availableProcessors();
-				if(nodes.get(0).getValue() > 999) {
-					integrator.mergeMoves(nodes.get(0));
-				}
-				else {
-					ExecutorService es = Executors.newFixedThreadPool(cores);
-					nodes.forEach(node-> 
-						es.submit(new ArtIntel(node, Copier.deepCopy(board), level)));
-					es.shutdown();			
-					es.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
-				}
+				ExecutorService es = Executors.newFixedThreadPool(cores);
+				nodes.forEach(node-> es.submit(new ArtIntel(node, Copier.deepCopy(board), level)));
+				es.shutdown();			
+				es.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
 				break;
 			}
-			try {
-				TimeUnit.SECONDS.sleep(1);
-			}
-			catch (InterruptedException exc) {
-				exc.printStackTrace();
+				try {
+					TimeUnit.SECONDS.sleep(1);
+				}
+				catch (InterruptedException exc) {
+					exc.printStackTrace();
+				}
 			}
 			integrator.activate(board);
 		}

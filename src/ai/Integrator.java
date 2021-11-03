@@ -81,16 +81,7 @@ public class Integrator {
 		String col = Message.colName(c);
 		String col2 = Message.colName(c2);
 		
-		output(pieceName,c,col,r,spot,col2,r2);
-		if(!mute){
-		if(warn & check(field)){
-			sound.voice("check");
-			}
-		}	
-	
-		moves.clear();
-		MoveList.add(field, "black");
-		
+		output(field, pieceName,c,col,r,spot,col2,r2);		
 		return field;
 	}
 	
@@ -172,30 +163,27 @@ public class Integrator {
 		String col = Message.colName(c);
 		String col2 = Message.colName(c2);
 		
-		output(pieceName,c,col,r,spot,col2,r2);
-		if(!mute){
-		if(warn & check(field)){
-			sound.voice("check");
-			}
-		}	
-	
-		moves.clear();
-		MoveList.add(field, "black");
-		
+		output(field, pieceName,c,col,r,spot,col2,r2);		
 		return field;
 	}
 		
-	private void output(String name, int c, String col, int r, String spot, String col2, int r2){
+	private void output(String[][] field, String name,
+						int c, String col, int r, String spot, String col2, int r2){
 		
 		Gui.output.setText(name+" "+(c>2?"drops":"from "+col+(r+1))+
 				(spot.equals(" ")?" to ":" takes on ")+col2+(r2+1));
 		if(!mute){
 		sound.voice(name);
-		if(!spot.equals(" ")){
-			sound.voice("takes");			
-		}
+			if(!spot.equals(" ")){
+				sound.voice("takes");			
+			}
 		sound.voice(col2+String.valueOf(r2+1));
-		}
+			if(warn & check(field)){
+				sound.voice("check");
+			}
+		}		
+		moves.clear();
+		MoveList.add(field, "black");
 	}
 	
 	private boolean check(String[][] field) {		

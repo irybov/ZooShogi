@@ -15,15 +15,20 @@ class HashTabs {
 		
 		for(int r=0; r<field.length ; r++){
 			for(int c=0; c<field[r].length ; c++){
-				current.append(field[r][c]);				
+				if(field[r][c].equals(" ")) {
+					current.append(String.valueOf(r) + String.valueOf(c));
+				}
+				else {
+					current.append(field[r][c]);
+				}				
 			}
 		}		
 		String hash = current.toString();
 		
-		if(side=="black") {
+		if(side.equals("black")) {
 			black.putIfAbsent(hash, depth);
 		}
-		else if(side=="white") {
+		else {
 			white.putIfAbsent(hash, depth);
 		}
 	}
@@ -35,18 +40,23 @@ class HashTabs {
 		
 		for(int r=0; r<field.length ; r++){
 			for(int c=0; c<field[r].length ; c++){
-				current.append(field[r][c]);				
+				if(field[r][c].equals(" ")) {
+					current.append(String.valueOf(r) + String.valueOf(c));
+				}
+				else {
+					current.append(field[r][c]);
+				}				
 			}
 		}		
 		String hash = current.toString();
 			
-		if(side=="white" & white.containsKey(hash)) {			
+		if(side.equals("white") & white.containsKey(hash)) {			
 			return(white.get(hash) == depth+4);
 		}				
-		else if(side=="black" & black.containsKey(hash)) {
+		else if(side.equals("black") & black.containsKey(hash)) {
 			return(black.get(hash) == depth+4);
 		}
-		else{
+		else {
 			return false;
 		}
 	}

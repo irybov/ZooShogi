@@ -130,6 +130,9 @@ public class Separator {
 				else if(winPromotion(board, "white") & check(board, "white")==false){
 					value = 1000;
 				}
+				else if(check(board, "black")) {
+					value = 500;
+				}
 				else if(MoveList.repeat(board, "black")) {
 					value = 0;
 				}
