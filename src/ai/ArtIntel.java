@@ -1262,7 +1262,6 @@ public class ArtIntel implements Runnable{
 	private int minimax(String turn, int depth) {
 		
 		if(turn.equals("white") && integrator.getNote(board)) {
-			System.out.println("Got exp " + depth);
 			return -500;
 		}
 		

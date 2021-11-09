@@ -44,8 +44,7 @@ public class Copier {
 			}
 		}		
 		String hash = current.toString();
-		return hash;
-		
+		return hash;		
 	}
 	
 }

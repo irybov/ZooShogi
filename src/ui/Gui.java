@@ -71,6 +71,10 @@ public class Gui {
 	private static JLabel label1 = new JLabel("Force");
 	private static JLabel label2 = new JLabel("Black");
 	private static JCheckBox check = new JCheckBox("Check warning", true);
+	
+	private static JButton next = new JButton();
+	private static JLabel label3 = new JLabel("Next");
+	private static JLabel label4 = new JLabel("Best");
 
 	// playing level selection
 	private static JLabel behave = new JLabel("Select AI level / behave:");
@@ -282,6 +286,37 @@ public class Gui {
 			}
 		});
 		frame.add(push);
+
+//		next.setFont(new Font("Dialog", Font.PLAIN, 45));
+		next.setLayout(new GridLayout(2,1));
+		next.add(label3);
+		next.add(label4);
+		label3.setFont(new Font("Dialog", Font.PLAIN, 45));
+		label4.setFont(new Font("Dialog", Font.PLAIN, 45));
+		label3.setHorizontalAlignment(JLabel.CENTER);
+		label4.setHorizontalAlignment(JLabel.CENTER);
+		next.setBounds(100,350,150,100);		
+		next.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				next = (JButton) e.getSource();
+				disable();
+
+				director.undoMove();
+				updateGui();
+				javax.swing.SwingUtilities.invokeLater(new Runnable() {
+					public void run() {
+					try {						
+						director.compute();
+					}
+					catch (InterruptedException e) {
+						e.printStackTrace();
+						}
+					}
+				});
+				return;
+			}
+		});
+		frame.add(next);
 		
 		check.setFont(new Font("Dialog", Font.PLAIN, 25));
 		check.setHorizontalAlignment(JCheckBox.CENTER);
@@ -686,6 +721,7 @@ public class Gui {
 	
 	public static void lock(){
 		
+		next.setEnabled(false);
 		for(int r=0;r<4;r++) {
 			for(int c=0;c<3;c++) {
 				squares[r][c].setEnabled(false);
@@ -714,6 +750,7 @@ public class Gui {
 		}
 		
 		push.setEnabled(true);
+		next.setEnabled(true);
 		for(int i=0; i<levelArray.length; i++){
 			brain[i].setEnabled(true);
 		}		

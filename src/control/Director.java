@@ -76,6 +76,8 @@ public class Director{
 	private int level;
 
 	private boolean mute;
+	
+	private String[][] undo;
 
 	public void aiMute(boolean mute){
 		this.mute = mute;		
@@ -107,6 +109,8 @@ public class Director{
 							   {" ","p"," "},
 							   {" ","P"," "},
 							   {"B","K","R"," "," "," "," "," "," "}};
+							   
+		undo = 	Copier.deepCopy(board);
 	}
 	
 	public String refresh(int r, int c) {				
@@ -158,6 +162,8 @@ public class Director{
 	
 	public void move(){
 		
+		MoveList.add(board, "black");
+		
 		switch(board[r2][c2]){
 		case "b":
 			if(board[3][3].equals(" ")){
@@ -205,13 +211,31 @@ public class Director{
 	}
 	
 	public void drop(){
+		
+		MoveList.add(board, "black");
+		
 		board[r2][c2] = board[r][c];
 		board[r][c] = " ";
 		
 		MoveList.add(board, "white");
 	}
 	
+	public void undoMove() {
+
+		String hash = Copier.keyMaker(undo);
+		if(game.containsKey(hash)) {
+			game.merge(hash, -1, (oldVal, newVal) -> oldVal + newVal);
+		}
+		hash = Copier.keyMaker(board);		
+		if(game.containsKey(hash)) {
+			game.merge(hash, -1, (oldVal, newVal) -> oldVal + newVal);
+		}
+		board = Copier.deepCopy(undo);
+	}
+	
 	public void compute() throws InterruptedException{
+		
+		undo = Copier.deepCopy(board);
 		
 		clocks.setTurn("black");
 
@@ -310,24 +334,14 @@ public class Director{
 	}
 	
 	private boolean addToList(String turn) {
-		
-		int v = 0;
-		
-		StringBuilder current = new StringBuilder(24);
-		
-		if(turn.equals("black")){
-		for(int r=0; r<board.length ; r++){
-			for(int c=0; c<board[r].length ; c++){
-				current.append(board[r][c]);				
-			}
+			
+		if(turn.equals("black")) {
+			String hash = Copier.keyMaker(board);		
+			game.putIfAbsent(hash, 0);
+			game.merge(hash, 1, (oldVal, newVal) -> oldVal + newVal);
+			return game.get(hash)==3;
 		}
-		String hash = current.toString();
-		
-			game.putIfAbsent(hash, v);
-			game.merge(hash, 1, (oldVal, newVal) -> oldVal + newVal);		
-		return(game.get(hash)==3);
-		}
-	return false;
+		return false;
 	}
 	
 	private void voice(String result) {

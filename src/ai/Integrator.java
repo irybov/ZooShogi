@@ -64,6 +64,7 @@ public class Integrator {
 	public void newGame() {
 		game.clear();
 	}
+	
 	{
 		File file = new File("experience.bin");
 		if(!file.exists()) {
@@ -198,15 +199,17 @@ public class Integrator {
 		}
 		
 		if(score < -500) {
-			exp.add(game.peek());
-		    try(FileOutputStream fos = new FileOutputStream("experience.bin");
-		    		ObjectOutputStream oos = new ObjectOutputStream(fos)){
-		           oos.writeUnshared(exp);
-		           oos.flush();
-		           oos.reset();
-		    }			
-			catch (IOException ex) {
-				ex.printStackTrace();
+			if(!exp.contains(game.peek())) {
+				exp.add(game.peek());
+			    try(FileOutputStream fos = new FileOutputStream("experience.bin");
+			    		ObjectOutputStream oos = new ObjectOutputStream(fos)){
+			           oos.writeUnshared(exp);
+			           oos.flush();
+			           oos.reset();
+			    }			
+				catch (IOException ex) {
+					ex.printStackTrace();
+				}
 			}
 		}
 		else {
@@ -220,8 +223,8 @@ public class Integrator {
 		return field;
 	}
 		
-	private void output(String[][] field, String name,
-						int c, String col, int r, String spot, String col2, int r2){
+	private String[][] output(String[][] field, String name,
+							  int c, String col, int r, String spot, String col2, int r2){
 		
 		Gui.output.setText(name+" "+(c>2?"drops":"from "+col+(r+1))+
 				(spot.equals(" ")?" to ":" takes on ")+col2+(r2+1));
@@ -230,13 +233,14 @@ public class Integrator {
 			if(!spot.equals(" ")){
 				sound.voice("takes");			
 			}
-		sound.voice(col2+String.valueOf(r2+1));
+		sound.voice(col2+Integer.toString(r2+1));
 			if(warn & check(field)){
 				sound.voice("check");
 			}
 		}		
 		moves.clear();
-		MoveList.add(field, "black");
+//		MoveList.add(field, "black");
+		return field;
 	}
 	
 	private boolean check(String[][] field) {		
