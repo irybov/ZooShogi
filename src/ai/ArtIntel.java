@@ -892,6 +892,7 @@ public class ArtIntel implements Runnable{
 				board[r][c] = board[r2][c2];
 			}
 			board[r2][c2] = temp;
+			if(c3 != 9)
 			Capture.undo(board, r3, c3);
 		}	
 		return sorted;
@@ -900,10 +901,14 @@ public class ArtIntel implements Runnable{
 	// minimax with capture and check extensions
 	private int minimaxEX(String turn, int depth, int alpha, int beta, boolean node) {
 		
+		if(turn.equals("white") && integrator.getNote(board)) {
+			return -500;
+		}
+		
 		if(turn.equals("white") && MoveList.repeat(board, "black")){
 			return 0;
 		}
-		if(turn.equals("black") && MoveList.repeat(board, "white")){
+		if((turn.equals("black") && depth < 6) && MoveList.repeat(board, "white")){
 			return 0;
 		}
 		
@@ -913,18 +918,18 @@ public class ArtIntel implements Runnable{
 		hash.add(board, turn, depth);
 		
 		if(winPositionBlack(board, turn)){
-			return 2000+(depth*10);	
+			return 2000+(depth*100);	
 		}
 		if(winPositionWhite(board, turn)){
-			return -(2000+(depth*10));	
+			return -(2000+(depth*100));	
 		}	
 		
 		if(check(board, turn) && depth < 6){
 			if(turn.equals("white")){
-				return -(1000+(depth*10));
+				return -(1000+(depth*100));
 			}
 			else{
-				return 1000+(depth*10);
+				return 1000+(depth*100);
 			}
 		}
 	
@@ -1089,10 +1094,14 @@ public class ArtIntel implements Runnable{
 	// minimax with alpha-beta pruning
 	private int minimaxAB(String turn, int depth, int alpha, int beta) {
 		
+		if(turn.equals("white") && integrator.getNote(board)) {
+			return -500;
+		}
+		
 		if(turn.equals("white") && MoveList.repeat(board, "black")){
 			return 0;
 		}
-		if(turn.equals("black") && MoveList.repeat(board, "white")){
+		if((turn.equals("black") && depth < 8) && MoveList.repeat(board, "white")){
 			return 0;
 		}
 		
@@ -1102,18 +1111,18 @@ public class ArtIntel implements Runnable{
 		hash.add(board, turn, depth);
 		
 		if(winPositionBlack(board, turn)){
-			return 2000+(depth*10);	
+			return 2000+(depth*100);	
 		}
 		if(winPositionWhite(board, turn)){
-			return -(2000+(depth*10));	
+			return -(2000+(depth*100));	
 		}	
 		
 		if(check(board, turn) && depth < 8){
 			if(turn.equals("white")){
-				return -(1000+(depth*10));
+				return -(1000+(depth*100));
 			}
 			else{
-				return 1000+(depth*10);
+				return 1000+(depth*100);
 			}
 		}
 	
@@ -1252,10 +1261,15 @@ public class ArtIntel implements Runnable{
 	// basic minimax algorithm
 	private int minimax(String turn, int depth) {
 		
+		if(turn.equals("white") && integrator.getNote(board)) {
+			System.out.println("Got exp " + depth);
+			return -500;
+		}
+		
 		if(turn.equals("white") && MoveList.repeat(board, "black")){
 			return 0;
 		}
-		if(turn.equals("black") && MoveList.repeat(board, "white")){
+		if((turn.equals("black") && depth < 6) && MoveList.repeat(board, "white")){
 			return 0;
 		}
 		
@@ -1404,10 +1418,14 @@ public class ArtIntel implements Runnable{
 	// gambling (a.k.a. poker) algorithm
 	private int expectimax(String turn, int depth) {
 		
+		if(turn.equals("white") && integrator.getNote(board)) {
+			return -5000;
+		}
+		
 		if(turn.equals("white") && MoveList.repeat(board, "black")){
 			return 0;
 		}
-		if(turn.equals("black") && MoveList.repeat(board, "white")){
+		if((turn.equals("black") && depth < 6) && MoveList.repeat(board, "white")){
 			return 0;
 		}
 		
@@ -1626,6 +1644,9 @@ public class ArtIntel implements Runnable{
 						else if(MoveList.repeat(board, "black")) {
 							legal.get(i).setValue(0);
 						}
+						else if(integrator.getNote(board)) {
+							legal.get(i).setValue(-500);							
+						}						
 						else if(winPromotion(board, "black") & check(board, "black")==false){
 							legal.get(i).setValue(-(1000+(100/depth)));
 						}
@@ -1767,13 +1788,17 @@ public class ArtIntel implements Runnable{
 	// minimax with vintage forward pruning
 	private int forward(String turn, int depth) {
 		
-/*		if(turn.equals("white") && MoveList.repeat(board, "black")){
+		if(turn.equals("white") && integrator.getNote(board)) {
+			return -500;
+		}
+		
+		if(turn.equals("white") && MoveList.repeat(board, "black")){
 			return 0;
 		}
-		if(turn.equals("black") && MoveList.repeat(board, "white")){
+		if((turn.equals("black") && depth < 6) && MoveList.repeat(board, "white")){
 			return 0;
 		}
-*/		
+		
 		if(winPositionBlack(board, turn)){
 			return 2000+(depth*100);
 		}
@@ -1987,11 +2012,8 @@ public class ArtIntel implements Runnable{
 	private void random() {
 		
 		List<Node> legal = new ArrayList<>(generateBlackMoves(board));
-		
-		int i = new Random().nextInt(legal.size());
-		
-		legal.get(i).setValue(Integer.MIN_VALUE+2);
-		moves.add(legal.get(i));		
+			
+		moves.add(legal.get(new Random().nextInt(legal.size())));		
 		Clocks.setNodes(legal.size());
 		
 	}

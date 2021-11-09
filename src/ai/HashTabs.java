@@ -3,6 +3,8 @@ package ai;
 import java.util.HashMap;
 import java.util.Map;
 
+import util.Copier;
+
 class HashTabs {
 
 	private Map<String, Integer> black = new HashMap<>();
@@ -11,19 +13,7 @@ class HashTabs {
 	// fills calculating hash
 	void add(String[][] field, String side, int depth) {
 		
-		StringBuilder current = new StringBuilder(24);
-		
-		for(int r=0; r<field.length ; r++){
-			for(int c=0; c<field[r].length ; c++){
-				if(field[r][c].equals(" ")) {
-					current.append(String.valueOf(r) + String.valueOf(c));
-				}
-				else {
-					current.append(field[r][c]);
-				}				
-			}
-		}		
-		String hash = current.toString();
+		String hash = Copier.keyMaker(field);
 		
 		if(side.equals("black")) {
 			black.putIfAbsent(hash, depth);
@@ -36,29 +26,17 @@ class HashTabs {
 	// checks repetitions while calculating	
 	boolean repeat(String[][] field,  String side, int depth) {
 		
-		StringBuilder current = new StringBuilder(24);
-		
-		for(int r=0; r<field.length ; r++){
-			for(int c=0; c<field[r].length ; c++){
-				if(field[r][c].equals(" ")) {
-					current.append(String.valueOf(r) + String.valueOf(c));
-				}
-				else {
-					current.append(field[r][c]);
-				}				
-			}
-		}		
-		String hash = current.toString();
-			
-		if(side.equals("white") & white.containsKey(hash)) {			
-			return(white.get(hash) == depth+4);
-		}				
-		else if(side.equals("black") & black.containsKey(hash)) {
-			return(black.get(hash) == depth+4);
+		String hash = Copier.keyMaker(field);
+							
+		if(side.equals("black") & black.containsKey(hash)) {
+			if(black.containsKey(hash))
+				return(black.get(hash) == depth+4);
 		}
 		else {
-			return false;
+			if(white.containsKey(hash))
+				return(white.get(hash) == depth+4);				
 		}
+		return false;
 	}
 	
 	// clears calculating hash

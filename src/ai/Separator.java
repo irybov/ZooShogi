@@ -125,10 +125,10 @@ public class Separator {
 				
 				int value;				
 				if(temp.equals("K")){
-					value = 2000;	
+					value = 5000;	
 				}
 				else if(winPromotion(board, "white") & check(board, "white")==false){
-					value = 1000;
+					value = 5000;
 				}
 				else if(check(board, "black")) {
 					value = 500;
@@ -137,10 +137,10 @@ public class Separator {
 					value = 0;
 				}
 				else if(winPromotion(board, "black") & check(board, "black")==false){
-					value = -1000;
+					value = -5000;
 				}
 				else if(check(board, "white")){
-					value = -2000;
+					value = -5000;
 				}
 				else{
 					value = evaluation(board);
@@ -156,6 +156,7 @@ public class Separator {
 				board[r][c] = board[r2][c2];
 			}
 			board[r2][c2] = temp;
+			if(c3 != 9)
 			Capture.undo(board, r3, c3);
 		}
 		Collections.sort(sorted, Collections.reverseOrder());

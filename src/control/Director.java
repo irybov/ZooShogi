@@ -313,7 +313,7 @@ public class Director{
 		
 		int v = 0;
 		
-		StringBuilder current = new StringBuilder(26);
+		StringBuilder current = new StringBuilder(24);
 		
 		if(turn.equals("black")){
 		for(int r=0; r<board.length ; r++){
@@ -347,6 +347,7 @@ public class Director{
 	public void clearing() {		
 		game.clear();
 		MoveList.clear();
+		integrator.newGame();
 	}
 
 	private void output(String result) {

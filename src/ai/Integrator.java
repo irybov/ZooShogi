@@ -1,14 +1,19 @@
 package ai;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Deque;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import sound.Sound;
 import ui.Gui;
 import util.Capture;
+import util.Copier;
 import util.Message;
 import util.Pieces;
 
@@ -42,6 +47,17 @@ public class Integrator {
 	}
 	
 	private Sound sound = Sound.getInstance();
+	
+	private Deque<String> game = new ArrayDeque<>();
+	private Set<String> exp = new HashSet<>();
+	
+	boolean getNote(String[][] field) {
+		String note = Copier.keyMaker(field);
+		return exp.contains(note);
+	}
+	public void newGame() {
+		game.clear();
+	}
 
 	// adds results from a single thread
 	public void mergeMoves(List<Node> input){		
@@ -94,12 +110,10 @@ public class Integrator {
 		int r2 = -1;
 		int c2 = -1;
 		
+		Node move;
+		
 		if(moves.size() == 1) {
-			score = moves.get(0).getValue();
-			r = moves.get(0).getR();
-			c = moves.get(0).getC();
-			r2 = moves.get(0).getR2();
-			c2 = moves.get(0).getC2();	
+			move = moves.get(0);
 		}
 		else {
 			ArrayList<Node> random = new ArrayList<>();
@@ -119,25 +133,18 @@ public class Integrator {
 			random.removeIf(e -> e.getTrap() < trap);
 			
 			if(random.size()==1){
-				
-				r = random.get(0).getR();
-				c = random.get(0).getC();
-				r2 = random.get(0).getR2();
-				c2 = random.get(0).getC2();	
+				move = random.get(0);
 			}
 			else{
-				int i = new Random().nextInt(random.size());
-				
-				r = random.get(i).getR();
-				c = random.get(i).getC();
-				r2 = random.get(i).getR2();
-				c2 = random.get(i).getC2();	
+				move = random.get(new Random().nextInt(random.size()));
 			}
 		}
+		score = move.getValue();
+		r = move.getR();
+		c = move.getC();
+		r2 = move.getR2();
+		c2 = move.getC2();	
 		
-		if(score==Integer.MIN_VALUE+2) {
-			score = 0;
-		}
 		Gui.score.setText(score > 0 ? "+" + Integer.toString(score) : Integer.toString(score));
 		
 		String spot = field[r2][c2];
@@ -158,6 +165,13 @@ public class Integrator {
 			Capture.take(field, r2, c2);
 			field[r2][c2] = field[r][c];
 			field[r][c] = " ";
+		}
+		
+		if(score < -500) {
+			exp.add(game.peek());
+		}
+		else {
+			game.push(Copier.keyMaker(field));
 		}
 		
 		String col = Message.colName(c);

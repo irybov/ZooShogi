@@ -3,6 +3,8 @@ package ai;
 import java.util.HashSet;
 import java.util.Set;
 
+import util.Copier;
+
 public class MoveList {
 	
 	private static Set<String> listB = new HashSet<>();
@@ -11,19 +13,7 @@ public class MoveList {
 	// fills game moves list
 	public static void add(String[][] field, String turn) {
 		
-		StringBuilder current = new StringBuilder(24);
-		
-		for(int r=0; r<field.length ; r++){
-			for(int c=0; c<field[r].length ; c++){
-				if(field[r][c].equals(" ")) {
-					current.append(String.valueOf(r) + String.valueOf(c));
-				}
-				else {
-					current.append(field[r][c]);
-				}
-			}
-		}
-		String hash = current.toString();
+		String hash = Copier.keyMaker(field);
 		
 		if(turn.equals("black")) {
 			listB.add(hash);
@@ -37,19 +27,7 @@ public class MoveList {
 	//checks 3-times repetition
 	static boolean repeat(String[][] field, String turn) {
 		
-		StringBuilder current = new StringBuilder(24);
-		
-		for(int r=0; r<field.length ; r++){
-			for(int c=0; c<field[r].length ; c++){
-				if(field[r][c].equals(" ")) {
-					current.append(String.valueOf(r) + String.valueOf(c));
-				}
-				else {
-					current.append(field[r][c]);
-				}			
-			}
-		}		
-		String hash = current.toString();
+		String hash = Copier.keyMaker(field);
 			
 		if(turn.equals("black")) {
 			return(listB.contains(hash));

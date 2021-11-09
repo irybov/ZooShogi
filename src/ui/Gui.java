@@ -915,7 +915,5 @@ public class Gui {
 		
         return other;
 	}
-	
-	
-	
+		
 }
