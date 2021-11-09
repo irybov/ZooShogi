@@ -1,5 +1,11 @@
 package ai;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,7 +55,7 @@ public class Integrator {
 	private Sound sound = Sound.getInstance();
 	
 	private Deque<String> game = new ArrayDeque<>();
-	private Set<String> exp = new HashSet<>();
+	private Set<String> exp;
 	
 	boolean getNote(String[][] field) {
 		String note = Copier.keyMaker(field);
@@ -58,7 +64,31 @@ public class Integrator {
 	public void newGame() {
 		game.clear();
 	}
-
+	{
+		File file = new File("experience.bin");
+		if(!file.exists()) {
+			try {
+				file.createNewFile();
+				exp = new HashSet<>();
+			    try(FileOutputStream fos = new FileOutputStream("experience.bin");
+			    		ObjectOutputStream oos = new ObjectOutputStream(fos)){
+			           oos.writeObject(exp);
+			    }			
+			}
+			catch (IOException ex) {
+				ex.printStackTrace();
+			}
+		}
+		
+	    try(FileInputStream fis = new FileInputStream("experience.bin");
+	    		ObjectInputStream ois = new ObjectInputStream(fis)){
+	    	exp = (Set<String>) ois.readObject();
+	    }
+	    catch (IOException | ClassNotFoundException ex) {
+			ex.printStackTrace();
+		}
+	}
+	
 	// adds results from a single thread
 	public void mergeMoves(List<Node> input){		
 		moves.addAll(input);
@@ -169,6 +199,15 @@ public class Integrator {
 		
 		if(score < -500) {
 			exp.add(game.peek());
+		    try(FileOutputStream fos = new FileOutputStream("experience.bin");
+		    		ObjectOutputStream oos = new ObjectOutputStream(fos)){
+		           oos.writeUnshared(exp);
+		           oos.flush();
+		           oos.reset();
+		    }			
+			catch (IOException ex) {
+				ex.printStackTrace();
+			}
 		}
 		else {
 			game.push(Copier.keyMaker(field));
