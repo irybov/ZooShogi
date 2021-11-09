@@ -116,82 +116,82 @@ public class Capture {
 		switch(field[r2][c2]){
 		case "b":
 			if(field[3][3].equals(" ")){
-			field[3][3] = "B";
-			c3 = 3;
+				field[3][3] = "B";
+				c3 = 3;
 			}
 			else if(!field[3][3].equals(" ")){
-			field[3][6] = "B";
-			c3 = 6;
+				field[3][6] = "B";
+				c3 = 6;
 			}
 			break;
 		case "p":
 			if(field[3][4].equals(" ")){
-			field[3][4] = "P";
-			c3 = 4;
+				field[3][4] = "P";
+				c3 = 4;
 			}
 			else if(!field[3][4].equals(" ")){
-			field[3][7] = "P";
-			c3 = 7;
+				field[3][7] = "P";
+				c3 = 7;
 			}
 			break;
 		case "r":
 			if(field[3][5].equals(" ")){
-			field[3][5] = "R";
-			c3 = 5;
+				field[3][5] = "R";
+				c3 = 5;
 			}
 			else if(!field[3][5].equals(" ")){
-			field[3][8] = "R";
-			c3 = 8;
+				field[3][8] = "R";
+				c3 = 8;
 			}
 			break;
 		case "q":
 			if(field[3][4].equals(" ")){
-			field[3][4] = "P";
-			c3 = 4;
+				field[3][4] = "P";
+				c3 = 4;
 			}
 			else if(!field[3][4].equals(" ")){
-			field[3][7] = "P";
-			c3 = 7;
+				field[3][7] = "P";
+				c3 = 7;
 			}
 			break;						
 		case "B":
 			if(field[0][3].equals(" ")){
-			field[0][3] = "b";
-			c3 = 3;
+				field[0][3] = "b";
+				c3 = 3;
 			}
 			else if(!field[0][3].equals(" ")){
-			field[0][6] = "b";
-			c3 = 6;
+				field[0][6] = "b";
+				c3 = 6;
 			}
 			break;
 		case "P":
 			if(field[0][4].equals(" ")){
-			field[0][4] = "p";
-			c3 = 4;
+				field[0][4] = "p";
+				c3 = 4;
 			}
 			else if(!field[0][4].equals(" ")){
-			field[0][7] = "p";
-			c3 = 7;
+				field[0][7] = "p";
+				c3 = 7;
 			}
 			break;
 		case "R":
 			if(field[0][5].equals(" ")){
-			field[0][5] = "r";
-			c3 = 5;
+				field[0][5] = "r";
+				c3 = 5;
 			}
 			else if(!field[0][5].equals(" ")){
-			field[0][8] = "r";
-			c3 = 8;
+				field[0][8] = "r";
+				c3 = 8;
 			}
 			break;
 		case "Q":
-			if(field[0][4].equals(" ")){
-			field[0][4] = "p";
-			c3 = 4;
+				if(field[0][4].equals(" ")){
+				field[0][4] = "p";
+				c3 = 4;
 			}
 			else if(!field[0][4].equals(" ")){
-			field[0][7] = "p";
-			c3 = 7;
+				field[0][7] = "p";
+				c3 = 7;
 			}
 			break;
 		}

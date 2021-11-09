@@ -167,40 +167,40 @@ public class Director{
 		switch(board[r2][c2]){
 		case "b":
 			if(board[3][3].equals(" ")){
-			board[3][3] = "B";
+				board[3][3] = "B";
 			}
 			else if(!board[3][3].equals(" ")){
-			board[3][6] = "B";
+				board[3][6] = "B";
 			}
 			break;
 		case "p":
 			if(board[3][4].equals(" ")){
-			board[3][4] = "P";
+				board[3][4] = "P";
 			}
 			else if(!board[3][4].equals(" ")){
-			board[3][7] = "P";
+				board[3][7] = "P";
 			}
 			break;
 		case "r":
 			if(board[3][5].equals(" ")){
-			board[3][5] = "R";
+				board[3][5] = "R";
 			}
 			else if(!board[3][5].equals(" ")){
-			board[3][8] = "R";
+				board[3][8] = "R";
 			}
 			break;
 		case "q":
 			if(board[3][4].equals(" ")){
-			board[3][4] = "P";
+				board[3][4] = "P";
 			}
 			else if(!board[3][4].equals(" ")){
-			board[3][7] = "P";
+				board[3][7] = "P";
 			}
 			break;
 		}
 			
 		if(board[r][c].equals("P") & r2==0){
-		board[r2][c2] = "Q";
+			board[r2][c2] = "Q";
 		}
 		else{
 			board[r2][c2] = board[r][c];
@@ -230,6 +230,7 @@ public class Director{
 		if(game.containsKey(hash)) {
 			game.merge(hash, -1, (oldVal, newVal) -> oldVal + newVal);
 		}
+		System.out.println(game.toString());
 		board = Copier.deepCopy(undo);
 	}
 	

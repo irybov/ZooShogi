@@ -223,7 +223,7 @@ public class Integrator {
 		return field;
 	}
 		
-	private String[][] output(String[][] field, String name,
+	private void output(String[][] field, String name,
 							  int c, String col, int r, String spot, String col2, int r2){
 		
 		Gui.output.setText(name+" "+(c>2?"drops":"from "+col+(r+1))+
@@ -239,8 +239,6 @@ public class Integrator {
 			}
 		}		
 		moves.clear();
-//		MoveList.add(field, "black");
-		return field;
 	}
 	
 	private boolean check(String[][] field) {		
