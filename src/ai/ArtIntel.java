@@ -1982,6 +1982,9 @@ public class ArtIntel implements Runnable{
 			else if(MoveList.repeat(board, "black")) {
 				score = 0;
 			}
+			else if(integrator.getNote(board)) {
+				score = -500;							
+			}
 			else if(winPromotion(board, "black") & check(board, "black")==false){
 				score = -1000;
 			}

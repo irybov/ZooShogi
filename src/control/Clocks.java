@@ -12,7 +12,7 @@ public class Clocks{
 	private int minW = 0;
 	private int secW = 0;
 
-	volatile private String turn = " ";
+	private volatile String turn = " ";
 	private static AtomicInteger nodes = new AtomicInteger(0);
 	
 	private static Clocks INSTANCE;
@@ -47,7 +47,7 @@ public class Clocks{
 		while(true) {
 			try {
 				if(turn.equals("black")) {
-					Gui.counter.setText(nodes.toString());
+					Gui.counter.setText(String.format("%,d", nodes.get()));
 				if(secB < 59) {
 						secB++;
 					}

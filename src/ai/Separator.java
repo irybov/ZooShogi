@@ -125,10 +125,10 @@ public class Separator {
 				
 				int value;				
 				if(temp.equals("K")){
-					value = 5000;	
+					value = 2000;	
 				}
 				else if(winPromotion(board, "white") & check(board, "white")==false){
-					value = 5000;
+					value = 1000;
 				}
 				else if(check(board, "black")) {
 					value = 500;
@@ -137,10 +137,10 @@ public class Separator {
 					value = 0;
 				}
 				else if(winPromotion(board, "black") & check(board, "black")==false){
-					value = -5000;
+					value = -1000;
 				}
 				else if(check(board, "white")){
-					value = -5000;
+					value = -2000;
 				}
 				else{
 					value = evaluation(board);

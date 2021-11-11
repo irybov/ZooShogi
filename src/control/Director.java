@@ -220,6 +220,10 @@ public class Director{
 		MoveList.add(board, "white");
 	}
 	
+	public boolean start() {
+		return game.isEmpty();
+	}
+	
 	public void undoMove() {
 
 		String hash = Copier.keyMaker(undo);
@@ -230,7 +234,6 @@ public class Director{
 		if(game.containsKey(hash)) {
 			game.merge(hash, -1, (oldVal, newVal) -> oldVal + newVal);
 		}
-		System.out.println(game.toString());
 		board = Copier.deepCopy(undo);
 	}
 	

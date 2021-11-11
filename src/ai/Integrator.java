@@ -10,12 +10,13 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Deque;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
 
+import control.Clocks;
 import sound.Sound;
 import ui.Gui;
 import util.Capture;
@@ -70,7 +71,7 @@ public class Integrator {
 		if(!file.exists()) {
 			try {
 				file.createNewFile();
-				exp = new HashSet<>();
+				exp = new CopyOnWriteArraySet<>();
 			    try(FileOutputStream fos = new FileOutputStream("experience.bin");
 			    		ObjectOutputStream oos = new ObjectOutputStream(fos)){
 			           oos.writeObject(exp);
@@ -101,9 +102,11 @@ public class Integrator {
 	}
 	
 	// do external engine's move
-	public String[][] activate(String[][] field, int r, int c, int r2, int c2, int score){
+	public String[][] activate(String[][] field, int r, int c, int r2, int c2,
+														int score, int nodes){
 
 		Gui.score.setText(score > 0 ? "+" + Integer.toString(score) : Integer.toString(score));
+		Clocks.setNodes(nodes);
 		
 		String spot = field[r2][c2];
 		String pieceName = Message.pieceName(field[r][c]);
@@ -224,7 +227,7 @@ public class Integrator {
 	}
 		
 	private void output(String[][] field, String name,
-							  int c, String col, int r, String spot, String col2, int r2){
+						int c, String col, int r, String spot, String col2, int r2){
 		
 		Gui.output.setText(name+" "+(c>2?"drops":"from "+col+(r+1))+
 				(spot.equals(" ")?" to ":" takes on ")+col2+(r2+1));

@@ -65,7 +65,7 @@ public class Gui {
 	
 	// service buttons
 	private static JCheckBox volume = new JCheckBox("Mute volume", false);
-	private static JSlider boost = new JSlider(-6, 6, 0);
+	private static JSlider boost = new JSlider(-10, 10, 0);
 	private static JButton newgame = new JButton("New Game");
 	private static JButton push = new JButton();
 	private static JLabel label1 = new JLabel("Force");
@@ -132,15 +132,19 @@ public class Gui {
 		handW.setBounds(1200,700,300,200);
 		cols.setBounds(500,50,600,50);
 		rows.setBounds(450,100,50,800);		
-		output.setFont(new Font("Dialog", Font.PLAIN, 25));
+		output.setFont(new Font("Dialog", Font.PLAIN, 20));
 		output.setHorizontalAlignment(JLabel.CENTER);
-		output.setBounds(50,475,400,50);
+		output.setBounds(100,475,300,50);
+		output.setOpaque(true);
+		output.setBackground(Color.LIGHT_GRAY);
 		behave.setFont(new Font("Dialog", Font.PLAIN, 25));
 		behave.setHorizontalAlignment(JLabel.CENTER);
 		behave.setBounds(1200,450,300,50);
-		score.setFont(new Font("Dialog", Font.PLAIN, 45));
+		score.setFont(new Font("Dialog", Font.PLAIN, 40));
 		score.setHorizontalAlignment(JLabel.CENTER);
-		score.setBounds(100,800,300,100);
+		score.setBounds(100,825,300,75);
+		score.setOpaque(true);
+		score.setBackground(Color.LIGHT_GRAY);
 		show.setFont(new Font("Dialog", Font.PLAIN, 45));
 		show.setHorizontalAlignment(JLabel.CENTER);
 		show.setBounds(100,750,300,50);
@@ -197,11 +201,13 @@ public class Gui {
 		comp.setHorizontalAlignment(JLabel.CENTER);
 		comp.setBounds(1200,50,300,50);
 		nodes.setFont(new Font("Dialog", Font.PLAIN, 25));
-		nodes.setHorizontalAlignment(JLabel.RIGHT);
+		nodes.setHorizontalAlignment(JLabel.LEFT);
 		nodes.setBounds(100,675,100,50);
 		counter.setFont(new Font("Dialog", Font.PLAIN, 25));
 		counter.setHorizontalAlignment(JLabel.CENTER);
 		counter.setBounds(200,675,200,50);
+		counter.setOpaque(true);
+		counter.setBackground(Color.LIGHT_GRAY);
 		
 		volume.setFont(new Font("Dialog", Font.PLAIN, 20));
 		volume.setHorizontalAlignment(JCheckBox.CENTER);
@@ -299,8 +305,11 @@ public class Gui {
 		next.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				next = (JButton) e.getSource();
-				disable();
 
+				if(director.start()) {
+					return;
+				}
+				Clocks.setNodes(0);
 				director.undoMove();
 				updateGui();
 				javax.swing.SwingUtilities.invokeLater(new Runnable() {
