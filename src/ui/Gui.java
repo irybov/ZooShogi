@@ -25,7 +25,7 @@ public class Gui {
 	//The Frame that's displayed. (Contains the Panels)
 	private static JFrame frame = new JFrame();
 	
-	//Panels that handles the visual for the board object
+	//Panels that handle the visual for the board object
 	private static JPanel board = new JPanel(new GridLayout(4,3));
 	private static JPanel handW = new JPanel(new GridLayout(2,3));
 	private static JPanel handB = new JPanel(new GridLayout(2,3));
@@ -924,7 +924,6 @@ public class Gui {
 			   public void actionPerformed(ActionEvent e) {
 				   
 					JOptionPane.showMessageDialog(help,
-							"Press MOVE to make computer start the game\n" +
 							"For the rules of game watch on Youtube:\n" +
 							"How to play Dobutsu Shogi (Catch the Lion)",
 								"About",

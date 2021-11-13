@@ -17,19 +17,19 @@ public class Node implements Comparable<Node>{
 	private final int C;
 	private final int R2;
 	private final int C2;
-	private final String side;
+	private final String SIDE;
 
-	public Node(int r, int c, int r2, int c2, String side) {
-		this.R = r;
-		this.C = c;
-		this.R2 = r2;
-		this.C2 = c2;
-		this.side = side;
+	public Node(final int R, final int C, final int R2, final int C2, final String SIDE) {
+		this.R = R;
+		this.C = C;
+		this.R2 = R2;
+		this.C2 = C2;
+		this.SIDE = SIDE;
 	}
 	
 	@Override
 	public String toString() {
-		return "Node [depth=" + depth + ", value=" + value + ", side=" + side + ", "+ Message.colName(C) + (R+1) + Message.colName(C2) + (R2+1) + "]";
+		return "Node [depth=" + depth + ", value=" + value + ", side=" + SIDE + ", "+ Message.colName(C) + (R+1) + Message.colName(C2) + (R2+1) + "]";
 	}
 /*	@Override
 	public int hashCode() {
@@ -102,7 +102,7 @@ public class Node implements Comparable<Node>{
 		return C2;
 	}
 	public String getSide() {
-		return side;
+		return SIDE;
 	}
 
 	public int getDepth() {

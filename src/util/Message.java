@@ -2,11 +2,11 @@ package util;
 
 public class Message {
 
-	public static String colName(int col){
+	public static String colName(final int COL){
 		
 		String c = "";
 		
-		switch(col){
+		switch(COL){
 		case 0:
 			c = "A";
 			break;
@@ -17,17 +17,17 @@ public class Message {
 			c = "C";
 			break;
 		case 3: case 4: case 5: case 6: case 7: case 8:
-			c = Integer.toString(col+1);
+			c = Integer.toString(COL+1);
 			break;
 		}
 		return c;
  	}
 	
-	public static String pieceName(String piece){
+	public static String pieceName(final String PIECE){
 		
 		String name = "";
 		
-		switch(piece){
+		switch(PIECE){
 		case "P": case "p":
 			name = Pieces.BPAWN.getName();
 			break;
