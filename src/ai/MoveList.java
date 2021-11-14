@@ -3,7 +3,7 @@ package ai;
 import java.util.HashSet;
 import java.util.Set;
 
-import util.Copier;
+import util.Matrix;
 
 public class MoveList {
 	
@@ -13,7 +13,7 @@ public class MoveList {
 	// fills game moves list
 	public static void add(String[][] field, String turn) {
 		
-		String hash = Copier.keyMaker(field);
+		String hash = Matrix.keyMaker(field);
 		
 		if(turn.equals("black")) {
 			listB.add(hash);
@@ -27,7 +27,7 @@ public class MoveList {
 	//checks 3-times repetition
 	static boolean repeat(String[][] field, String turn) {
 		
-		String hash = Copier.keyMaker(field);
+		String hash = Matrix.keyMaker(field);
 			
 		if(turn.equals("black")) {
 			return(listB.contains(hash));

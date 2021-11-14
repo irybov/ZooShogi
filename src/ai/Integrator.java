@@ -20,7 +20,7 @@ import control.Clocks;
 import sound.Sound;
 import ui.Gui;
 import util.Capture;
-import util.Copier;
+import util.Matrix;
 import util.Message;
 import util.Pieces;
 
@@ -59,7 +59,7 @@ public class Integrator {
 	private Set<String> exp;
 	
 	boolean getNote(String[][] field) {
-		String note = Copier.keyMaker(field);
+		String note = Matrix.keyMaker(field);
 		return exp.contains(note);
 	}
 	public void newGame() {
@@ -216,7 +216,7 @@ public class Integrator {
 			}
 		}
 		else {
-			game.push(Copier.keyMaker(field));
+			game.push(Matrix.keyMaker(field));
 		}
 		
 		String col = Message.colName(c);

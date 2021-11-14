@@ -3,7 +3,7 @@ package ai;
 import java.util.HashMap;
 import java.util.Map;
 
-import util.Copier;
+import util.Matrix;
 
 class HashTabs {
 
@@ -13,7 +13,7 @@ class HashTabs {
 	// fills calculating hash
 	void add(String[][] field, String side, int depth) {
 		
-		String hash = Copier.keyMaker(field);
+		String hash = Matrix.keyMaker(field);
 		
 		if(side.equals("black")) {
 			black.putIfAbsent(hash, depth);
@@ -26,7 +26,7 @@ class HashTabs {
 	// checks repetitions while calculating	
 	boolean repeat(String[][] field,  String side, int depth) {
 		
-		String hash = Copier.keyMaker(field);
+		String hash = Matrix.keyMaker(field);
 							
 		if(side.equals("black") & black.containsKey(hash)) {
 			if(black.containsKey(hash))

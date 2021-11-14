@@ -15,6 +15,7 @@ import ai.Node;
 import ai.Separator;
 import data.*;
 import util.Copier;
+import util.Matrix;
 import util.Pieces;
 import sound.Sound;
 import ui.Gui;
@@ -226,11 +227,11 @@ public class Director{
 	
 	public void undoMove() {
 
-		String hash = Copier.keyMaker(undo);
+		String hash = Matrix.keyMaker(undo);
 		if(game.containsKey(hash)) {
 			game.merge(hash, -1, (oldVal, newVal) -> oldVal + newVal);
 		}
-		hash = Copier.keyMaker(board);		
+		hash = Matrix.keyMaker(board);		
 		if(game.containsKey(hash)) {
 			game.merge(hash, -1, (oldVal, newVal) -> oldVal + newVal);
 		}
@@ -340,7 +341,7 @@ public class Director{
 	private boolean addToList(String turn) {
 			
 		if(turn.equals("black")) {
-			String hash = Copier.keyMaker(board);		
+			String hash = Matrix.keyMaker(board);		
 			game.putIfAbsent(hash, 0);
 			game.merge(hash, 1, (oldVal, newVal) -> oldVal + newVal);
 			return game.get(hash)==3;
