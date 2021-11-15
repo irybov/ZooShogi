@@ -28,50 +28,49 @@ class Chooser {
 		frame.add(input);
 		frame.setVisible(true);
 				
-				int result = input.showOpenDialog(null);
-				if(result == JFileChooser.APPROVE_OPTION) {
-					
-					String name = input.getSelectedFile().getName();
-					
-					if(director.checkClient()) {
-						director.disconnect();
-					}
-					if(director.getServer() == null) {
-						director.establish();
-					}
-					else {
-						director.activate();
-					}
-					
-					JarFile jarfile = null;
-					File file = null;
-					if(name.endsWith(".jar")) {
-						try {
-							jarfile = new JarFile(input.getSelectedFile().getAbsolutePath());
-								Runtime.getRuntime().exec("javaw "+"-jar "+jarfile.getName()+" "+
-								jarfile.getManifest().getMainAttributes().getValue("Main-Class"));
-						}
-						catch (IOException exc) {
-							exc.printStackTrace();
-						}
-					}
-					else {
-						try {
-							file = new File(input.getSelectedFile().getAbsolutePath());
-							Runtime.getRuntime().exec(file.getName());
-						}
-						catch (IOException exc) {
-							exc.printStackTrace();
-						}
-					}
-					Gui.output.setText(name + " engine loaded");
-					frame.setVisible(false);
+		int result = input.showOpenDialog(null);
+		if(result == JFileChooser.APPROVE_OPTION) {
+			
+			String name = input.getSelectedFile().getName();
+			
+			if(director.checkClient()) {
+				director.disconnect();
+			}
+			if(director.getServer() == null) {
+				director.establish();
+			}
+			else {
+				director.activate();
+			}
+			
+			JarFile jarfile = null;
+			File file = null;
+			if(name.endsWith(".jar")) {
+				try {
+					jarfile = new JarFile(input.getSelectedFile().getAbsolutePath());
+						Runtime.getRuntime().exec("javaw "+"-jar "+jarfile.getName()+" "+
+						jarfile.getManifest().getMainAttributes().getValue("Main-Class"));
 				}
-				
-				else if (result == JFileChooser.CANCEL_OPTION) {
-					Gui.output.setText("No engine selected");
-					frame.setVisible(false);
+				catch (IOException exc) {
+					exc.printStackTrace();
 				}
+			}
+			else {
+				try {
+					file = new File(input.getSelectedFile().getAbsolutePath());
+					Runtime.getRuntime().exec(file.getName());
+				}
+				catch (IOException exc) {
+					exc.printStackTrace();
+				}
+			}
+			Gui.output.setText(name + " engine loaded");
+			frame.setVisible(false);
+		}		
+		else if (result == JFileChooser.CANCEL_OPTION) {
+			Gui.output.setText("No engine selected");
+			frame.setVisible(false);
+		}
 	}
 	
 }

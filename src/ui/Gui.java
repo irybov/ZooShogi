@@ -636,36 +636,36 @@ public class Gui {
 		String divider = System.getProperty("file.separator");
 		
 		switch(piece){
-		case "P":
-		icon = "images" + divider + "WP_small.png";
-		break;
-		case "R":
-		icon = "images" + divider + "WR_small.png";
-		break;
-		case "B":
-		icon = "images" + divider + "WB_small.png";
-		break;
-		case "K":
-		icon = "images" + divider + "WK_small.png";
-		break;
-		case "Q":
-		icon = "images" + divider + "WQ_small.png";
-		break;
-		case "p":
-		icon = "images" + divider + "BP_small.png";
-		break;
-		case "r":
-		icon = "images" + divider + "BR_small.png";
-		break;
-		case "b":
-		icon = "images" + divider + "BB_small.png";
-		break;
-		case "k":
-		icon = "images" + divider + "BK_small.png";
-		break;
-		case "q":
-		icon = "images" + divider + "BQ_small.png";
-		break;
+			case "P":
+			icon = "images" + divider + "WP_small.png";
+			break;
+			case "R":
+			icon = "images" + divider + "WR_small.png";
+			break;
+			case "B":
+			icon = "images" + divider + "WB_small.png";
+			break;
+			case "K":
+			icon = "images" + divider + "WK_small.png";
+			break;
+			case "Q":
+			icon = "images" + divider + "WQ_small.png";
+			break;
+			case "p":
+			icon = "images" + divider + "BP_small.png";
+			break;
+			case "r":
+			icon = "images" + divider + "BR_small.png";
+			break;
+			case "b":
+			icon = "images" + divider + "BB_small.png";
+			break;
+			case "k":
+			icon = "images" + divider + "BK_small.png";
+			break;
+			case "q":
+			icon = "images" + divider + "BQ_small.png";
+			break;
 		}
 		return icon;
 	}
