@@ -593,37 +593,38 @@ public class Gui {
 	private String image(String piece){
 		
 		String icon = " ";
+		String divider = System.getProperty("file.separator");
 		
 		switch(piece){
 			case "P":
-			icon = "images/WP.png";
+			icon = "images" + divider + "WP.png";
 			break;
 			case "R":
-			icon = "images/WR.png";
+			icon = "images" + divider + "WR.png";
 			break;
 			case "B":
-			icon = "images/WB.png";
+			icon = "images" + divider + "WB.png";
 			break;
 			case "K":
-			icon = "images/WK.png";
+			icon = "images" + divider + "WK.png";
 			break;
 			case "Q":
-			icon = "images/WQ.png";
+			icon = "images" + divider + "WQ.png";
 			break;
 			case "p":
-			icon = "images/BP.png";
+			icon = "images" + divider + "BP.png";
 			break;
 			case "r":
-			icon = "images/BR.png";
+			icon = "images" + divider + "BR.png";
 			break;
 			case "b":
-			icon = "images/BB.png";
+			icon = "images" + divider + "BB.png";
 			break;
 			case "k":
-			icon = "images/BK.png";
+			icon = "images" + divider + "BK.png";
 			break;
 			case "q":
-			icon = "images/BQ.png";
+			icon = "images" + divider + "BQ.png";
 			break;
 		}
 		return icon;
@@ -632,37 +633,38 @@ public class Gui {
 	private String imageSmall(String piece){
 		
 		String icon = " ";
+		String divider = System.getProperty("file.separator");
 		
 		switch(piece){
 		case "P":
-		icon = "images/WP_small.png";
+		icon = "images" + divider + "WP_small.png";
 		break;
 		case "R":
-		icon = "images/WR_small.png";
+		icon = "images" + divider + "WR_small.png";
 		break;
 		case "B":
-		icon = "images/WB_small.png";
+		icon = "images" + divider + "WB_small.png";
 		break;
 		case "K":
-		icon = "images/WK_small.png";
+		icon = "images" + divider + "WK_small.png";
 		break;
 		case "Q":
-		icon = "images/WQ_small.png";
+		icon = "images" + divider + "WQ_small.png";
 		break;
 		case "p":
-		icon = "images/BP_small.png";
+		icon = "images" + divider + "BP_small.png";
 		break;
 		case "r":
-		icon = "images/BR_small.png";
+		icon = "images" + divider + "BR_small.png";
 		break;
 		case "b":
-		icon = "images/BB_small.png";
+		icon = "images" + divider + "BB_small.png";
 		break;
 		case "k":
-		icon = "images/BK_small.png";
+		icon = "images" + divider + "BK_small.png";
 		break;
 		case "q":
-		icon = "images/BQ_small.png";
+		icon = "images" + divider + "BQ_small.png";
 		break;
 		}
 		return icon;

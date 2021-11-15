@@ -20,7 +20,7 @@ public class MatrixTest {
 	
 	@Test
 	public void testKeyMakerCreate() {		
-		assertNotNull(board);
+		assertNotNull(Matrix.keyMaker(board));
 	}
 
 	@Test(expected = NullPointerException.class)
