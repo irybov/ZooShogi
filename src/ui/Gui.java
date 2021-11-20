@@ -250,11 +250,16 @@ public class Gui {
 		newgame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				newgame = (JButton) e.getSource();
-				unlock();
+				
+				unlockBoard();
+				unlockButtons();
+				if(director.checkClient() == false) {
+					enable();
+				}
 				output.setText(" ");
 				score.setText(" ");
 				director.initialize();
-				director.clearing();
+				director.newGame();
 				
 				clocks.reset();
 				
@@ -306,7 +311,7 @@ public class Gui {
 			public void actionPerformed(ActionEvent e) {
 				next = (JButton) e.getSource();
 
-				if(director.start()) {
+				if(director.beginning()) {
 					return;
 				}
 				Clocks.setNodes(0);
@@ -593,38 +598,37 @@ public class Gui {
 	private String image(String piece){
 		
 		String icon = " ";
-		String divider = System.getProperty("file.separator");
 		
 		switch(piece){
 			case "P":
-			icon = "images" + divider + "WP.png";
+			icon = "images/WP.png";
 			break;
 			case "R":
-			icon = "images" + divider + "WR.png";
+			icon = "images/WR.png";
 			break;
 			case "B":
-			icon = "images" + divider + "WB.png";
+			icon = "images/WB.png";
 			break;
 			case "K":
-			icon = "images" + divider + "WK.png";
+			icon = "images/WK.png";
 			break;
 			case "Q":
-			icon = "images" + divider + "WQ.png";
+			icon = "images/WQ.png";
 			break;
 			case "p":
-			icon = "images" + divider + "BP.png";
+			icon = "images/BP.png";
 			break;
 			case "r":
-			icon = "images" + divider + "BR.png";
+			icon = "images/BR.png";
 			break;
 			case "b":
-			icon = "images" + divider + "BB.png";
+			icon = "images/BB.png";
 			break;
 			case "k":
-			icon = "images" + divider + "BK.png";
+			icon = "images/BK.png";
 			break;
 			case "q":
-			icon = "images" + divider + "BQ.png";
+			icon = "images/BQ.png";
 			break;
 		}
 		return icon;
@@ -633,38 +637,37 @@ public class Gui {
 	private String imageSmall(String piece){
 		
 		String icon = " ";
-		String divider = System.getProperty("file.separator");
 		
 		switch(piece){
 			case "P":
-			icon = "images" + divider + "WP_small.png";
+			icon = "images/WP_small.png";
 			break;
 			case "R":
-			icon = "images" + divider + "WR_small.png";
+			icon = "images/WR_small.png";
 			break;
 			case "B":
-			icon = "images" + divider + "WB_small.png";
+			icon = "images/WB_small.png";
 			break;
 			case "K":
-			icon = "images" + divider + "WK_small.png";
+			icon = "images/WK_small.png";
 			break;
 			case "Q":
-			icon = "images" + divider + "WQ_small.png";
+			icon = "images/WQ_small.png";
 			break;
 			case "p":
-			icon = "images" + divider + "BP_small.png";
+			icon = "images/BP_small.png";
 			break;
 			case "r":
-			icon = "images" + divider + "BR_small.png";
+			icon = "images/BR_small.png";
 			break;
 			case "b":
-			icon = "images" + divider + "BB_small.png";
+			icon = "images/BB_small.png";
 			break;
 			case "k":
-			icon = "images" + divider + "BK_small.png";
+			icon = "images/BK_small.png";
 			break;
 			case "q":
-			icon = "images" + divider + "BQ_small.png";
+			icon = "images/BQ_small.png";
 			break;
 		}
 		return icon;
@@ -744,9 +747,8 @@ public class Gui {
 		for(int c=0;c<6;c++) {
 			dropB[c].setEnabled(false);			
 		}
-	}
-	
-	private void unlock(){
+	}	
+	private void unlockBoard(){
 		
 		for(int r=0;r<4;r++) {
 			for(int c=0;c<3;c++) {
@@ -758,13 +760,11 @@ public class Gui {
 		}
 		for(int c=0;c<6;c++) {
 			dropB[c].setEnabled(true);			
-		}
-		
-		push.setEnabled(true);
-		next.setEnabled(true);
-		for(int i=0; i<levelArray.length; i++){
-			brain[i].setEnabled(true);
 		}		
+	}	
+	private void unlockButtons(){				
+		push.setEnabled(true);
+		next.setEnabled(true);		
 	}
 	
 	public static void doClick(){
@@ -789,6 +789,13 @@ public class Gui {
 		push.setEnabled(false);
 		for(int i=0; i<levelArray.length; i++){
 			brain[i].setEnabled(false);
+		}		
+	}	
+	private void enable() {
+		
+		push.setEnabled(true);
+		for(int i=0; i<levelArray.length; i++){
+			brain[i].setEnabled(true);
 		}		
 	}
 	
@@ -955,6 +962,7 @@ public class Gui {
 					            if (result == JOptionPane.YES_OPTION) {
 									if(director.getServer() != null) {
 										director.shutdown();
+										newgame.doClick();
 									}
 					            }				   
 		   }

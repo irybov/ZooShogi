@@ -1,29 +1,17 @@
 package ai;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.CopyOnWriteArraySet;
 
 import control.Clocks;
-import sound.Sound;
-import ui.Gui;
 import util.Capture;
 import util.Matrix;
 import util.Message;
-import util.Pieces;
-
 
 public class Integrator {
 	
@@ -43,54 +31,24 @@ public class Integrator {
 	
 	private List<Node> moves = new CopyOnWriteArrayList<>();
 	
-	private boolean warn = true;
+	private Info info = new Info();
 	public void setWarn(boolean warn){
-		this.warn = warn;		
+		info.setWarn(warn);		
 	}
-	
-	private boolean mute = false;
 	public void setMute(boolean mute){
-		this.mute = mute;		
+		info.setMute(mute);		
 	}
-	
-	private Sound sound = Sound.getInstance();
 	
 	private Deque<String> game = new ArrayDeque<>();
-	private Set<String> exp;
+	private Experience exp = new Experience();
 	
 	boolean getNote(String[][] field) {
-		String note = Matrix.keyMaker(field);
-		return exp.contains(note);
+		return exp.bingo(Matrix.keyMaker(field));
 	}
 	public void newGame() {
 		game.clear();
 	}
-	
-	{
-		File file = new File("experience.bin");
-		if(!file.exists()) {
-			try {
-				file.createNewFile();
-				exp = new CopyOnWriteArraySet<>();
-			    try(FileOutputStream fos = new FileOutputStream("experience.bin");
-			    		ObjectOutputStream oos = new ObjectOutputStream(fos)){
-			           oos.writeObject(exp);
-			    }			
-			}
-			catch (IOException ex) {
-				ex.printStackTrace();
-			}
-		}
 		
-	    try(FileInputStream fis = new FileInputStream("experience.bin");
-	    		ObjectInputStream ois = new ObjectInputStream(fis)){
-	    	exp = (Set<String>) ois.readObject();
-	    }
-	    catch (IOException | ClassNotFoundException ex) {
-			ex.printStackTrace();
-		}
-	}
-	
 	// adds results from a single thread
 	public void mergeMoves(List<Node> input){		
 		moves.addAll(input);
@@ -104,8 +62,6 @@ public class Integrator {
 	// do external engine's move
 	public String[][] activate(String[][] field, int r, int c, int r2, int c2,
 														int score, int nodes){
-
-		Gui.score.setText(score > 0 ? "+" + Integer.toString(score) : Integer.toString(score));
 		Clocks.setNodes(nodes);
 		
 		String spot = field[r2][c2];
@@ -131,7 +87,7 @@ public class Integrator {
 		String col = Message.colName(c);
 		String col2 = Message.colName(c2);
 		
-		output(field, pieceName,c,col,r,spot,col2,r2);		
+		info.output(score, field, pieceName,c,col,r,spot,col2,r2);		
 		return field;
 	}
 	
@@ -179,8 +135,6 @@ public class Integrator {
 		r2 = move.getR2();
 		c2 = move.getC2();	
 		
-		Gui.score.setText(score > 0 ? "+" + Integer.toString(score) : Integer.toString(score));
-		
 		String spot = field[r2][c2];
 		String pieceName = Message.pieceName(field[r][c]);
 
@@ -202,17 +156,8 @@ public class Integrator {
 		}
 		
 		if(score < -500) {
-			if(!exp.contains(game.peek())) {
-				exp.add(game.peek());
-			    try(FileOutputStream fos = new FileOutputStream("experience.bin");
-			    		ObjectOutputStream oos = new ObjectOutputStream(fos)){
-			           oos.writeUnshared(exp);
-			           oos.flush();
-			           oos.reset();
-			    }			
-				catch (IOException ex) {
-					ex.printStackTrace();
-				}
+			if(!exp.bingo(game.peek())) {
+				exp.learn(game.peek());
 			}
 		}
 		else {
@@ -222,89 +167,9 @@ public class Integrator {
 		String col = Message.colName(c);
 		String col2 = Message.colName(c2);
 		
-		output(field, pieceName,c,col,r,spot,col2,r2);		
-		return field;
-	}
-		
-	private void output(String[][] field, String name,
-						int c, String col, int r, String spot, String col2, int r2){
-		
-		Gui.output.setText(name+" "+(c>2?"drops":"from "+col+(r+1))+
-				(spot.equals(" ")?" to ":" takes on ")+col2+(r2+1));
-		if(!mute){
-		sound.voice(name);
-			if(!spot.equals(" ")){
-				sound.voice("takes");			
-			}
-		sound.voice(col2+Integer.toString(r2+1));
-			if(warn & check(field)){
-				sound.voice("check");
-			}
-		}		
+		info.output(score, field, pieceName,c,col,r,spot,col2,r2);	
 		moves.clear();
-	}
-	
-	private boolean check(String[][] field) {		
-		
-		int r,c,r2,c2;
-			
-			for(r=0; r<4; r++){
-				for(c=0; c<3; c++){					
-					if(field[r][c].equals("p")){
-						r2 = r+1;
-						c2 = c;
-						if((Pieces.BPAWN.move(r, c, r2, c2))&&
-						   (field[r2][c2].equals("K"))){
-							return true;
-						}
-					}
-					
-					else if(field[r][c].equals("r")){						
-						for(r2=r-1; r2<r+2; r2++){
-							for(c2=c-1; c2<c+2; c2++){
-							if((Pieces.ROOK.move(r, c, r2, c2))&&
-								(field[r2][c2].equals("K"))){
-								return true;
-								}
-							}							
-						}
-					}
-	
-					else if(field[r][c].equals("k")){						
-						for(r2=r-1; r2<r+2; r2++){
-							for(c2=c-1; c2<c+2; c2++){
-							if((Pieces.KING.move(r, c, r2, c2))&&
-								(field[r2][c2].equals("K"))){
-								return true;
-								}
-							}							
-						}
-					}
-					
-					else if(field[r][c].equals("b")){						
-						for(r2=r-1; r2<r+2; r2++){
-							for(c2=c-1; c2<c+2; c2++){
-							if((Pieces.BISHOP.move(r, c, r2, c2))&&
-								(field[r2][c2].equals("K"))){
-								return true;
-								}
-							}							
-						}
-					}
-					
-					else if(field[r][c].equals("q")){						
-						for(r2=r-1; r2<r+2; r2++){
-							for(c2=c-1; c2<c+2; c2++){
-							if((Pieces.BQUEEN.move(r, c, r2, c2))&&
-								(field[r2][c2].equals("K"))){
-								return true;
-								}
-							}							
-						}
-					}
-				}
-			}				
-	return false;
+		return field;
 	}
 	
 }

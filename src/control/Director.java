@@ -221,7 +221,7 @@ public class Director{
 		MoveList.add(board, "white");
 	}
 	
-	public boolean start() {
+	public boolean beginning() {
 		return game.isEmpty();
 	}
 	
@@ -363,7 +363,7 @@ public class Director{
 		}		
 	}
 	
-	public void clearing() {		
+	public void newGame() {		
 		game.clear();
 		MoveList.clear();
 		integrator.newGame();
@@ -536,6 +536,7 @@ public class Director{
 		}
 		if(server != null) {
 			server.shutdown();
+			server = null;
 		}
 	}
 	

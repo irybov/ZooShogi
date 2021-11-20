@@ -41,87 +41,86 @@ public class Sound {
 		clocks.setTurn(" ");
 		
 		String beep = " ";
-		String divider = System.getProperty("file.separator");
 		
 		switch(action){
 			case "Pawn":
-			beep = "voice" + divider + "pawn.wav";
+			beep = "voice/pawn.wav";
 			break;
 			case "Rook":
-			beep = "voice" + divider + "rook.wav";
+			beep = "voice/rook.wav";
 			break;
 			case "Bishop":
-			beep = "voice" + divider + "bishop.wav";
+			beep = "voice/bishop.wav";
 			break;
 			case "King":
-			beep = "voice" + divider + "king.wav";
+			beep = "voice/king.wav";
 			break;
 			case "Queen":
-			beep = "voice" + divider + "queen.wav";
+			beep = "voice/queen.wav";
 			break;
 			case "check":				
 				Thread.sleep(1000);
-			beep = "voice" + divider + "check.wav";
+			beep = "voice/check.wav";
 			break;
 			case "mate":
 				Thread.sleep(1000);
-			beep = "voice" + divider + "mate.wav";
+			beep = "voice/mate.wav";
 			break;
 			case "draw":
 				Thread.sleep(1000);
-			beep = "voice" + divider + "draw.wav";
+			beep = "voice/draw.wav";
 			break;
 			case "takes":
 				Thread.sleep(1000);
-			beep = "voice" + divider + "takes.wav";
+			beep = "voice/takes.wav";
 			break;
 			case "A1":
 				Thread.sleep(1000);
-			beep = "voice" + divider + "a1.wav";
+			beep = "voice/a1.wav";
 			break;
 			case "A2":
 				Thread.sleep(1000);
-			beep = "voice" + divider + "a2.wav";
+			beep = "voice/a2.wav";
 			break;
 			case "A3":
 				Thread.sleep(1000);
-			beep = "voice" + divider + "a3.wav";
+			beep = "voice/a3.wav";
 			break;
 			case "A4":
 				Thread.sleep(1000);
-			beep = "voice" + divider + "a4.wav";
+			beep = "voice/a4.wav";
 			break;
 			case "B1":
 				Thread.sleep(1000);
-			beep = "voice" + divider + "b1.wav";
+			beep = "voice/b1.wav";
 			break;
 			case "B2":
 				Thread.sleep(1000);
-			beep = "voice" + divider + "b2.wav";
+			beep = "voice/b2.wav";
 			break;
 			case "B3":
 				Thread.sleep(1000);
-			beep = "voice" + divider + "b3.wav";
+			beep = "voice/b3.wav";
 			break;
 			case "B4":
 				Thread.sleep(1000);
-			beep = "voice" + divider + "b4.wav";
+			beep = "voice/b4.wav";
 			break;
 			case "C1":
 				Thread.sleep(1000);
-			beep = "voice" + divider + "c1.wav";
+			beep = "voice/c1.wav";
 			break;
 			case "C2":
 				Thread.sleep(1000);
-			beep = "voice" + divider + "c2.wav";
+			beep = "voice/c2.wav";
 			break;
 			case "C3":
 				Thread.sleep(1000);
-			beep = "voice" + divider + "c3.wav";
+			beep = "voice/c3.wav";
 			break;
 			case "C4":
 				Thread.sleep(1000);
-			beep = "voice" + divider + "c4.wav";
+			beep = "voice/c4.wav";
 			break;
 		}
 		return beep;

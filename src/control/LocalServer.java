@@ -2,12 +2,14 @@ package control;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Properties;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -21,7 +23,7 @@ class LocalServer extends Thread{
 	private AtomicBoolean active = new AtomicBoolean(true);
 	
 	public void shutdown() {
-		System.out.println("Server is down");		
+//		System.out.println("Server is down");		
 		active.set(false);
 	}
 		
@@ -44,6 +46,23 @@ class LocalServer extends Thread{
 		}
 		return reply;
 	}
+	
+    Properties prop;
+    int PORT;
+    String URL;
+	{
+		try (InputStream input = new FileInputStream("config.txt")) {
+	
+	        prop = new Properties();
+	        prop.load(input);
+	        PORT = Integer.parseInt(prop.getProperty("port"));
+	        URL = prop.getProperty("url");
+	
+	    }
+		catch (IOException ex) {
+	        ex.printStackTrace();
+		}
+	}
 
 	public void run() {
 		
@@ -51,9 +70,9 @@ class LocalServer extends Thread{
 		
 		try {
 			try {
-				InetAddress ia = InetAddress.getByName("localhost");			
-				server = new ServerSocket(1980, 1, ia);
-				System.out.println("Server established");
+				InetAddress ia = InetAddress.getByName(URL);			
+				server = new ServerSocket(PORT, 1, ia);
+//				System.out.println("Server established");
 				
 				while(active.get()) {
 					Socket socket = server.accept();
@@ -79,7 +98,7 @@ class LocalServer extends Thread{
 	
 	private void operate(Socket socket) {
 
-		System.out.println("Client connected");
+//		System.out.println("Client connected");
 		
 		InputStream sin = null;
 		OutputStream sout = null;
@@ -93,23 +112,40 @@ class LocalServer extends Thread{
 			dos = new DataOutputStream(sout);
 						
 			while(true) {
-				line = bq.take();				
+				try {
+					line = bq.take();
+				}
+				catch (InterruptedException exc) {
+					exc.printStackTrace();
+				}				
 				dos.writeUTF(line);
 				dos.flush();
-				System.out.println("Sended from server: " + line);
+//				System.out.println("Sended from server: " + line);
 			    if(line.equals("quit")) {
-					System.out.println("Client disconnected from server");			    	
+//					System.out.println("Client disconnected from server");			    	
 					line = null;
-					socket.close();
 			    	break;
 			    }
 			    reply = dis.readUTF();
-				bq.put(reply);			    
-				System.out.println("Received by server: " + reply);
+				try {
+					bq.put(reply);
+				}
+				catch (InterruptedException exc) {
+					exc.printStackTrace();
+				}			    
+//				System.out.println("Received by server: " + reply);
 			}		
 		}
-		catch(Exception exc) {
+		catch(IOException exc) {
 			exc.printStackTrace();
+		}
+		finally {
+			try {
+				socket.close();
+			}
+			catch (IOException exc) {
+				exc.printStackTrace();
+			}			
 		}
 	}
 	

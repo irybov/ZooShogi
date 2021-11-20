@@ -36,6 +36,7 @@ class Chooser {
 			if(director.checkClient()) {
 				director.disconnect();
 			}
+			
 			if(director.getServer() == null) {
 				director.establish();
 			}
