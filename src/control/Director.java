@@ -52,8 +52,8 @@ public class Director{
 			try {
 				file.createNewFile();
 				ss = new ScoreSheet();
-			    try(FileOutputStream fos = new FileOutputStream("table.bin");
-			    		ObjectOutputStream oos = new ObjectOutputStream(fos)){
+			    try(ObjectOutputStream oos = new ObjectOutputStream
+				   (new BufferedOutputStream(new FileOutputStream("table.bin")))){
 			           oos.writeObject(ss);
 			    }			
 			}
@@ -62,8 +62,8 @@ public class Director{
 			}
 		}
 		
-	    try(FileInputStream fis = new FileInputStream("table.bin");
-	    		ObjectInputStream ois = new ObjectInputStream(fis)){
+	    try(ObjectInputStream ois = new ObjectInputStream
+	 	   (new BufferedInputStream(new FileInputStream("table.bin")))){
 	    	ss = (ScoreSheet) ois.readObject();
 	    }
 	    catch (IOException | ClassNotFoundException ex) {
@@ -243,7 +243,6 @@ public class Director{
 		undo = Copier.deepCopy(board);
 		
 		clocks.setTurn("black");
-
 		if(endGame("black")){
 			game.clear();
 			Gui.lock();
@@ -253,7 +252,14 @@ public class Director{
 		
 		if(client) {
 			send();
-			setBoard(receive());
+			int[] move = receive();
+			integrator.activate(board, move);
+				try {
+					TimeUnit.SECONDS.sleep(1);
+				}
+				catch (InterruptedException exc) {
+					exc.printStackTrace();
+				}
 		}
 		else {
 			List<Node> nodes = separator.generateNodes(board);
@@ -296,8 +302,7 @@ public class Director{
 			Gui.lock();
 			clocks.setTurn(" ");
 			return;
-		}
-		
+		}		
 		clocks.setTurn("white");
 	}
 	
@@ -467,8 +472,8 @@ public class Director{
 		List<Player> players = ss.getList();
 		if(players.contains(player)) {
 			players.remove(player);
-			try(FileOutputStream fos = new FileOutputStream("table.bin");
-					ObjectOutputStream oos = new ObjectOutputStream(fos)){
+			try(ObjectOutputStream oos = new ObjectOutputStream
+			   (new BufferedOutputStream(new FileOutputStream("table.bin")))){
 			        oos.writeObject(ss);
 			}			
 			catch (IOException ex) {
@@ -483,8 +488,8 @@ public class Director{
 		List<Player> players = ss.getList();
 		if(players.contains(player)) {
 			player.setScore(player.getScore() + level*scale);
-			try(FileOutputStream fos = new FileOutputStream("table.bin");
-					ObjectOutputStream oos = new ObjectOutputStream(fos)){
+			try(ObjectOutputStream oos = new ObjectOutputStream
+			   (new BufferedOutputStream(new FileOutputStream("table.bin")))){
 			        oos.writeObject(ss);
 			}			
 			catch (IOException ex) {
@@ -546,10 +551,11 @@ public class Director{
 		server.setLine(line);
 	}
 	
-	public String[][] receive() {
+	public int[] receive() {
 		String reply = null;
 		reply = server.getAnswer();
 		return driver.input(reply);
+		
 	}
 	
 }

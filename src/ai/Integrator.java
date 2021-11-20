@@ -60,8 +60,15 @@ public class Integrator {
 	}
 	
 	// do external engine's move
-	public String[][] activate(String[][] field, int r, int c, int r2, int c2,
-														int score, int nodes){
+	public String[][] activate(String[][] field, final int[] args){
+		
+		final int r = args[0];
+		final int c = args[1];
+		final int r2 = args[2];
+		final int c2 = args[3];
+		final int score = args[4];
+		final int nodes = args[5];
+		
 		Clocks.setNodes(nodes);
 		
 		String spot = field[r2][c2];
