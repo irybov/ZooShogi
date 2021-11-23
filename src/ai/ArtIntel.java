@@ -7,15 +7,14 @@ import java.util.Queue;
 import java.util.Random;
 
 import control.Clocks;
+import utilpack.Capture;
+import utilpack.Copier;
+import utilpack.Examiner;
+import utilpack.Pieces;
 
 import java.util.Collections;
 import java.util.Deque;
 import java.util.LinkedList;
-
-import util.Capture;
-import util.Copier;
-import util.Examiner;
-import util.Pieces;
 
 public class ArtIntel implements Runnable{
 	
@@ -88,7 +87,7 @@ public class ArtIntel implements Runnable{
 			minimaxEX("black", 6, Integer.MIN_VALUE+1, Integer.MAX_VALUE, false);
 			Clocks.addNodes(count);
 			break;
-			}
+		}
 	}
 	
 	private List<Node> generateBlackMoves(String[][] board) {
@@ -283,34 +282,34 @@ public class ArtIntel implements Runnable{
 			for(int c=0; c<board[r].length; c++){
 				if(!board[r][c].equals(" ")){
 					switch(board[r][c]){
-						case "p":
-							score += exp ? Pieces.BPAWN.getValue()*10 : Pieces.BPAWN.getValue();
-							break;
-						case "r":
-							score += exp ? Pieces.ROOK.getValue()*10 : Pieces.ROOK.getValue();
-							break;
-						case "b":
-							score += exp ? Pieces.BISHOP.getValue()*10 : Pieces.BISHOP.getValue();
-							break;
-						case "q":
-							score += exp ? Pieces.BQUEEN.getValue()*10 : Pieces.BQUEEN.getValue();
-							break;
-						case "P":
-							score += -Pieces.WPAWN.getValue();
-							break;
-						case "R":
-							score += -Pieces.ROOK.getValue();
-							break;
-						case "B":
-							score += -Pieces.BISHOP.getValue();
-							break;
-						case "Q":
-							score += -Pieces.WQUEEN.getValue();
-							break;
-						}
+					case "p":
+						score += exp ? Pieces.BPAWN.getValue()*10 : Pieces.BPAWN.getValue();
+						break;
+					case "r":
+						score += exp ? Pieces.ROOK.getValue()*10 : Pieces.ROOK.getValue();
+						break;
+					case "b":
+						score += exp ? Pieces.BISHOP.getValue()*10 : Pieces.BISHOP.getValue();
+						break;
+					case "q":
+						score += exp ? Pieces.BQUEEN.getValue()*10 : Pieces.BQUEEN.getValue();
+						break;
+					case "P":
+						score += -Pieces.WPAWN.getValue();
+						break;
+					case "R":
+						score += -Pieces.ROOK.getValue();
+						break;
+					case "B":
+						score += -Pieces.BISHOP.getValue();
+						break;
+					case "Q":
+						score += -Pieces.WQUEEN.getValue();
+						break;
 					}
 				}
 			}
+		}
 		return score;
 	}
 
@@ -651,7 +650,7 @@ public class ArtIntel implements Runnable{
 				if(temp.equals("K")){
 					value = 2000;	
 				}
-				else if(Examiner.winPromotion(board, "white") & !Examiner.check(board, "white")){
+				else if(Examiner.winPromotion(board, "white") && !Examiner.check(board, "white")){
 					value = 1000;
 				}
 				else if(Examiner.check(board, "black") && !Examiner.check(board, "white")) {
@@ -660,7 +659,7 @@ public class ArtIntel implements Runnable{
 				else if(MoveList.repeat(board, "black")) {
 					value = 0;
 				}
-				else if(Examiner.winPromotion(board, "black") & !Examiner.check(board, "black")){
+				else if(Examiner.winPromotion(board, "black") && !Examiner.check(board, "black")){
 					value = -1000;
 				}
 				else if(Examiner.check(board, "white")){
@@ -714,16 +713,16 @@ public class ArtIntel implements Runnable{
 				if(temp.equals("k")){
 					value = -2000;	
 				}
-				else if(Examiner.winPromotion(board, "black") & !Examiner.check(board, "black")){
+				else if(Examiner.winPromotion(board, "black") && !Examiner.check(board, "black")){
 						value = -1000;
 				}
-				else if(Examiner.check(board, "white")&& !Examiner.check(board, "black")) {
+				else if(Examiner.check(board, "white") && !Examiner.check(board, "black")) {
 					value = -500;
 				}
 				else if(MoveList.repeat(board, "white")) {
 					value = 0;
 				}
-				else if(Examiner.winPromotion(board, "white") & !Examiner.check(board, "white")){
+				else if(Examiner.winPromotion(board, "white") && !Examiner.check(board, "white")){
 						value = 1000;
 				}
 				else if(Examiner.check(board, "black")){
@@ -1502,7 +1501,7 @@ public class ArtIntel implements Runnable{
 						if(temp.equals("K")){
 							legal.get(i).setValue(2000+(100/depth));
 						}
-						else if(Examiner.winPromotion(board, "white") &
+						else if(Examiner.winPromotion(board, "white") &&
 								!Examiner.check(board, "white")){
 							legal.get(i).setValue(1000+(100/depth));
 						}
@@ -1512,7 +1511,7 @@ public class ArtIntel implements Runnable{
 						else if(integrator.getNote(board)) {
 							legal.get(i).setValue(-500);							
 						}						
-						else if(Examiner.winPromotion(board, "black") &
+						else if(Examiner.winPromotion(board, "black") &&
 								!Examiner.check(board, "black")){
 							legal.get(i).setValue(-(1000+(100/depth)));
 						}
@@ -1563,14 +1562,14 @@ public class ArtIntel implements Runnable{
 						if(temp.equals("k")){
 							legal.get(i).setValue(-(2000+(100/depth)));
 						}
-						else if(Examiner.winPromotion(board, "black") &
+						else if(Examiner.winPromotion(board, "black") &&
 								!Examiner.check(board, "black")){
 							legal.get(i).setValue(-(1000+(100/depth)));
 						}
 						else if(MoveList.repeat(board, "white")) {
 							legal.get(i).setValue(0);
 						}
-						else if(Examiner.winPromotion(board, "white") &
+						else if(Examiner.winPromotion(board, "white") &&
 								!Examiner.check(board, "white")){
 							legal.get(i).setValue(1000+(100/depth));
 						}
@@ -1628,8 +1627,7 @@ public class ArtIntel implements Runnable{
                 		move.setValue(max(scores));
                 	}
         	}
-        }
-        
+        }        
         for (Node move: stack) {
         	if(!move.hasChildren()) {        	
         		int x = move.getValue();
@@ -1646,8 +1644,7 @@ public class ArtIntel implements Runnable{
         			root.setTrap(newTrap);
         		}
         	}
-        }
-        
+        }        
 		integrator.mergeMoves(root);
 		Clocks.addNodes(stack.size());
 
@@ -1845,7 +1842,7 @@ public class ArtIntel implements Runnable{
 			if(temp.equals("K")){
 				score = 2000;
 			}
-			else if(Examiner.winPromotion(board, "white") & !Examiner.check(board, "white")){
+			else if(Examiner.winPromotion(board, "white") && !Examiner.check(board, "white")){
 				score = 1000;
 			}
 			else if(MoveList.repeat(board, "black")) {
@@ -1854,7 +1851,7 @@ public class ArtIntel implements Runnable{
 			else if(integrator.getNote(board)) {
 				score = -500;							
 			}
-			else if(Examiner.winPromotion(board, "black") & !Examiner.check(board, "black")){
+			else if(Examiner.winPromotion(board, "black") && !Examiner.check(board, "black")){
 				score = -1000;
 			}
 			else if(Examiner.check(board, "white")){
@@ -1864,7 +1861,6 @@ public class ArtIntel implements Runnable{
 				score = evaluationMaterial(board, false);
 			}
 			legal.get(i).setValue(score);
-			moves.add(legal.get(i));
 			
 			if(prom.equals("p")){
 				board[r][c] = "p";
@@ -1874,7 +1870,8 @@ public class ArtIntel implements Runnable{
 			}
 			board[r2][c2] = temp;
 			Capture.undo(board, r3, c3);
-		}				
+		}
+		moves.addAll(legal);
 		Clocks.setNodes(legal.size());
 		
 	}
@@ -1884,9 +1881,8 @@ public class ArtIntel implements Runnable{
 		
 		List<Node> legal = new ArrayList<>(generateBlackMoves(board));
 			
-		moves.add(legal.get(new Random().nextInt(legal.size())));		
-		Clocks.setNodes(legal.size());
-		
+		moves.add(legal.get(new Random().nextInt(legal.size())));
+		Clocks.setNodes(legal.size());		
 	}
 
 	private void sendMovelist(){

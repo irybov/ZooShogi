@@ -8,6 +8,9 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import utilpack.Copier;
+import utilpack.Matrix;
+
 public class CopierTest {
 
 	private static String[][] board;

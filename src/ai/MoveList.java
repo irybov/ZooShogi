@@ -3,7 +3,7 @@ package ai;
 import java.util.HashSet;
 import java.util.Set;
 
-import util.Matrix;
+import utilpack.Matrix;
 
 public class MoveList {
 	

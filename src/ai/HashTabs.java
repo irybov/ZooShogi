@@ -3,7 +3,7 @@ package ai;
 import java.util.HashMap;
 import java.util.Map;
 
-import util.Matrix;
+import utilpack.Matrix;
 
 class HashTabs {
 

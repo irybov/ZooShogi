@@ -67,7 +67,7 @@ public class Clocks{
 					}
 				Gui.clockW.setText(String.format("%02d", minW)+":"+String.format("%02d", secW));
 				}
-				TimeUnit.SECONDS.sleep(1);
+			TimeUnit.SECONDS.sleep(1);
 			}
 			catch (InterruptedException e) {
 				e.printStackTrace();

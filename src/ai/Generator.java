@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import util.Capture;
-import util.Examiner;
-import util.Pieces;
+import utilpack.Capture;
+import utilpack.Examiner;
+import utilpack.Pieces;
 
 public class Generator {
 
@@ -128,7 +128,7 @@ public class Generator {
 				if(temp.equals("K")){
 					value = 2000;	
 				}
-				else if(Examiner.winPromotion(board, "white") & !Examiner.check(board, "white")){
+				else if(Examiner.winPromotion(board, "white") && !Examiner.check(board, "white")){
 					value = 1000;
 				}
 				else if(Examiner.check(board, "black") && !Examiner.check(board, "white")) {
@@ -137,7 +137,7 @@ public class Generator {
 				else if(MoveList.repeat(board, "black")) {
 					value = 0;
 				}
-				else if(Examiner.winPromotion(board, "black") & !Examiner.check(board, "black")){
+				else if(Examiner.winPromotion(board, "black") && !Examiner.check(board, "black")){
 					value = -1000;
 				}
 				else if(Examiner.check(board, "white")){

@@ -3,7 +3,7 @@ package ai;
 import java.util.ArrayList;
 import java.util.List;
 
-import util.Message;
+import utilpack.Message;
 
 public class Node implements Comparable<Node>{
 

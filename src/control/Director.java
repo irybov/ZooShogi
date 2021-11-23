@@ -14,11 +14,11 @@ import ai.MoveList;
 import ai.Node;
 import ai.Generator;
 import data.*;
-import util.Copier;
-import util.Matrix;
-import util.Pieces;
 import sound.Sound;
 import ui.Gui;
+import utilpack.Copier;
+import utilpack.Matrix;
+import utilpack.Pieces;
 
 public class Director{
 	
@@ -238,6 +238,8 @@ public class Director{
 		board = Copier.deepCopy(undo);
 	}
 	
+	private volatile int cores = Runtime.getRuntime().availableProcessors();
+	
 	public void compute() throws InterruptedException{
 		
 		undo = Copier.deepCopy(board);
@@ -254,12 +256,12 @@ public class Director{
 			send();
 			int[] move = receive();
 			integrator.activate(board, move);
-				try {
-					TimeUnit.SECONDS.sleep(1);
-				}
-				catch (InterruptedException exc) {
-					exc.printStackTrace();
-				}
+			try {
+				TimeUnit.SECONDS.sleep(1);
+			}
+			catch (InterruptedException exc) {
+				exc.printStackTrace();
+			}
 		}
 		else {
 			List<Node> nodes = generator.generateNodes(board);
@@ -278,7 +280,6 @@ public class Director{
 			case 5:
 			case 6:
 			case 7:
-				int cores = Runtime.getRuntime().availableProcessors();
 				ExecutorService es = Executors.newFixedThreadPool(cores);
 				nodes.forEach(node-> es.submit(new ArtIntel(node, Copier.deepCopy(board), level)));
 				es.shutdown();			

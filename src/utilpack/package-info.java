@@ -5,4 +5,4 @@
  * @author Ivan Ryabov
  *
  */
-package util;
+package utilpack;

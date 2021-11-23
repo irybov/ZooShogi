@@ -9,9 +9,9 @@ import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import control.Clocks;
-import util.Capture;
-import util.Matrix;
-import util.Message;
+import utilpack.Capture;
+import utilpack.Matrix;
+import utilpack.Message;
 
 public class Integrator {
 	

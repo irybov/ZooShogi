@@ -9,8 +9,8 @@ import javax.swing.event.*;
 import control.Clocks;
 import control.Director;
 import sound.Sound;
-import util.Message;
-import util.Pieces;
+import utilpack.Message;
+import utilpack.Pieces;
 
 public class Gui {
 	
@@ -601,35 +601,35 @@ public class Gui {
 		
 		switch(piece){
 			case "P":
-			icon = "images/WP.png";
-			break;
+				icon = "images/WP.png";
+				break;
 			case "R":
-			icon = "images/WR.png";
-			break;
+				icon = "images/WR.png";
+				break;
 			case "B":
-			icon = "images/WB.png";
-			break;
+				icon = "images/WB.png";
+				break;
 			case "K":
-			icon = "images/WK.png";
-			break;
+				icon = "images/WK.png";
+				break;
 			case "Q":
-			icon = "images/WQ.png";
-			break;
+				icon = "images/WQ.png";
+				break;
 			case "p":
-			icon = "images/BP.png";
-			break;
+				icon = "images/BP.png";
+				break;
 			case "r":
-			icon = "images/BR.png";
-			break;
+				icon = "images/BR.png";
+				break;
 			case "b":
-			icon = "images/BB.png";
-			break;
+				icon = "images/BB.png";
+				break;
 			case "k":
-			icon = "images/BK.png";
-			break;
+				icon = "images/BK.png";
+				break;
 			case "q":
-			icon = "images/BQ.png";
-			break;
+				icon = "images/BQ.png";
+				break;
 		}
 		return icon;
 	}
@@ -640,35 +640,35 @@ public class Gui {
 		
 		switch(piece){
 			case "P":
-			icon = "images/WP_small.png";
-			break;
+				icon = "images/WP_small.png";
+				break;
 			case "R":
-			icon = "images/WR_small.png";
-			break;
+				icon = "images/WR_small.png";
+				break;
 			case "B":
-			icon = "images/WB_small.png";
-			break;
+				icon = "images/WB_small.png";
+				break;
 			case "K":
-			icon = "images/WK_small.png";
-			break;
+				icon = "images/WK_small.png";
+				break;
 			case "Q":
-			icon = "images/WQ_small.png";
-			break;
+				icon = "images/WQ_small.png";
+				break;
 			case "p":
-			icon = "images/BP_small.png";
-			break;
+				icon = "images/BP_small.png";
+				break;
 			case "r":
-			icon = "images/BR_small.png";
-			break;
+				icon = "images/BR_small.png";
+				break;
 			case "b":
-			icon = "images/BB_small.png";
-			break;
+				icon = "images/BB_small.png";
+				break;
 			case "k":
-			icon = "images/BK_small.png";
-			break;
+				icon = "images/BK_small.png";
+				break;
 			case "q":
-			icon = "images/BQ_small.png";
-			break;
+				icon = "images/BQ_small.png";
+				break;
 		}
 		return icon;
 	}
