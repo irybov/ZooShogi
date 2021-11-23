@@ -12,20 +12,12 @@ import java.net.Socket;
 import java.util.Properties;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 class LocalServer extends Thread{
 	
 	private String line = null;
 	private String reply = null;
 	private BlockingQueue<String> bq = new ArrayBlockingQueue<>(1, true);
-	
-	private AtomicBoolean active = new AtomicBoolean(true);
-	
-	public void shutdown() {
-//		System.out.println("Server is down");		
-		active.set(false);
-	}
 		
 	public void setLine(String line) {
 		reply = null;
@@ -74,7 +66,7 @@ class LocalServer extends Thread{
 				server = new ServerSocket(PORT, 1, ia);
 //				System.out.println("Server established");
 				
-				while(active.get()) {
+				while(!Thread.interrupted()) {
 					Socket socket = server.accept();
 					operate(socket);
 				}

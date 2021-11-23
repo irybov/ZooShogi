@@ -12,7 +12,7 @@ import ai.ArtIntel;
 import ai.Integrator;
 import ai.MoveList;
 import ai.Node;
-import ai.Separator;
+import ai.Generator;
 import data.*;
 import util.Copier;
 import util.Matrix;
@@ -38,7 +38,7 @@ public class Director{
 	
 	private final Sound sound = Sound.getInstance();
 	private final Integrator integrator = Integrator.getInstance();
-	private final Separator separator = new Separator();
+	private final Generator generator = new Generator();
 	
 	private Clocks clocks = Clocks.getInstance();
 
@@ -262,7 +262,7 @@ public class Director{
 				}
 		}
 		else {
-			List<Node> nodes = separator.generateNodes(board);
+			List<Node> nodes = generator.generateNodes(board);
 			if(nodes.get(0).getValue() > 999) {
 				integrator.mergeMoves(nodes.get(0));
 			}
@@ -540,7 +540,7 @@ public class Director{
 			client = false;			
 		}
 		if(server != null) {
-			server.shutdown();
+			server.interrupt();
 			server = null;
 		}
 	}

@@ -5,9 +5,10 @@ import java.util.Collections;
 import java.util.List;
 
 import util.Capture;
+import util.Examiner;
 import util.Pieces;
 
-public class Separator {
+public class Generator {
 
 	public List<Node> generateNodes(String[][] field) {
 		
@@ -127,19 +128,19 @@ public class Separator {
 				if(temp.equals("K")){
 					value = 2000;	
 				}
-				else if(winPromotion(board, "white") & check(board, "white")==false){
+				else if(Examiner.winPromotion(board, "white") & !Examiner.check(board, "white")){
 					value = 1000;
 				}
-				else if(check(board, "black")) {
+				else if(Examiner.check(board, "black") && !Examiner.check(board, "white")) {
 					value = 500;
 				}
 				else if(MoveList.repeat(board, "black")) {
 					value = 0;
 				}
-				else if(winPromotion(board, "black") & check(board, "black")==false){
+				else if(Examiner.winPromotion(board, "black") & !Examiner.check(board, "black")){
 					value = -1000;
 				}
-				else if(check(board, "white")){
+				else if(Examiner.check(board, "white")){
 					value = -2000;
 				}
 				else{
@@ -163,7 +164,7 @@ public class Separator {
 		
 		return sorted;
 	}
-	
+
 	private int evaluation(String[][] board) {
 		
 		int score = 0;
@@ -201,142 +202,6 @@ public class Separator {
 				}
 			}
 		return score;
-	}
-
-	private boolean check(String[][] board, String turn) {		
-		
-		int r,c,r2,c2;
-			
-		if(turn.equals("black")){	
-			for(r=0; r<4; r++){
-				for(c=0; c<3; c++){					
-					if(board[r][c].equals("p")){
-						r2 = r+1;
-						c2 = c;
-						if((Pieces.BPAWN.move(r, c, r2, c2))&&
-						   (board[r2][c2].equals("K"))){
-							return true;
-						}
-					}
-					
-					else if(board[r][c].equals("r")){						
-						for(r2=r-1; r2<r+2; r2++){
-							for(c2=c-1; c2<c+2; c2++){
-							if((Pieces.ROOK.move(r, c, r2, c2))&&
-								(board[r2][c2].equals("K"))){
-								return true;
-								}
-							}							
-						}
-					}
-
-					else if(board[r][c].equals("k")){						
-						for(r2=r-1; r2<r+2; r2++){
-							for(c2=c-1; c2<c+2; c2++){
-							if((Pieces.KING.move(r, c, r2, c2))&&
-								(board[r2][c2].equals("K"))){
-								return true;
-								}
-							}							
-						}
-					}
-					
-					else if(board[r][c].equals("b")){						
-						for(r2=r-1; r2<r+2; r2++){
-							for(c2=c-1; c2<c+2; c2++){
-							if((Pieces.BISHOP.move(r, c, r2, c2))&&
-								(board[r2][c2].equals("K"))){
-								return true;
-								}
-							}							
-						}
-					}
-					
-					else if(board[r][c].equals("q")){						
-						for(r2=r-1; r2<r+2; r2++){
-							for(c2=c-1; c2<c+2; c2++){
-							if((Pieces.BQUEEN.move(r, c, r2, c2))&&
-								(board[r2][c2].equals("K"))){
-								return true;
-								}
-							}							
-						}
-					}
-				}
-			}
-		}
-				
-		else{
-			for(r=0; r<4; r++){
-				for(c=0; c<3; c++){					
-					if(board[r][c].equals("P")){
-						r2 = r-1;
-						c2 = c;
-						if((Pieces.WPAWN.move(r, c, r2, c2))&&
-						   (board[r2][c2].equals("k"))){
-							return true;
-						}
-					}
-					
-					else if(board[r][c].equals("R")){						
-						for(r2=r-1; r2<r+2; r2++){
-							for(c2=c-1; c2<c+2; c2++){
-							if((Pieces.ROOK.move(r, c, r2, c2))&&
-								(board[r2][c2].equals("k"))){
-								return true;
-								}
-							}							
-						}
-					}
-					
-					else if(board[r][c].equals("K")){						
-						for(r2=r-1; r2<r+2; r2++){
-							for(c2=c-1; c2<c+2; c2++){
-							if((Pieces.KING.move(r, c, r2, c2))&&
-								(board[r2][c2].equals("k"))){
-								return true;
-								}
-							}							
-						}
-					}
-
-					else if(board[r][c].equals("B")){						
-						for(r2=r-1; r2<r+2; r2++){
-							for(c2=c-1; c2<c+2; c2++){
-							if((Pieces.BISHOP.move(r, c, r2, c2))&&
-								(board[r2][c2].equals("k"))){
-								return true;
-								}
-							}							
-						}
-					}
-					
-					else if(board[r][c].equals("Q")){						
-						for(r2=r-1; r2<r+2; r2++){
-							for(c2=c-1; c2<c+2; c2++){
-							if((Pieces.WQUEEN.move(r, c, r2, c2))&&
-								(board[r2][c2].equals("k"))){
-								return true;
-								}
-							}							
-						}
-					}
-				}
-			}
-		}
-	return false;
-	}
-	
-	private boolean winPromotion(String[][] board, String turn) {
-		
-		if(turn.equals("white")) {
-			return (board[3][0].equals("k")||board[3][1].equals("k")||board[3][2].equals("k")) &
-			(!board[0][0].equals("K")&&!board[0][1].equals("K")&&!board[0][2].equals("K"));		
-		}
-		else {
-			return (board[0][0].equals("K")||board[0][1].equals("K")||board[0][2].equals("K")) & 
-			(!board[3][0].equals("k")&&!board[3][1].equals("k")&&!board[3][2].equals("k"));
-		}
 	}
 	
 }
