@@ -4,10 +4,12 @@ import static org.junit.Assert.*;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import utilpack.Matrix;
 
+@Ignore
 public class MatrixTest {
 
 	private static String[][] board;

@@ -516,21 +516,18 @@ public class Gui {
 			for(int c=0;c<3;c++) {
 				squares[r][c].setBackground(Color.decode("#db9356"));
 				squares[r][c].setName(director.refresh(r,c));
-				squares[r][c].setIcon(new ImageIcon(getClass().getResource
-									 (image(squares[r][c].getName()))));
+				squares[r][c].setIcon(new ImageIcon(imageLarge(squares[r][c].getName())));
 			}
 		}		
 		for(int c=0;c<6;c++) {
 			dropW[c].setBackground(Color.decode("#db9356"));
 			dropW[c].setName(director.refresh(3,c+3));
-			dropW[c].setIcon(new ImageIcon(getClass().getResource
-							(imageSmall(dropW[c].getName()))));
+			dropW[c].setIcon(new ImageIcon(imageSmall(dropW[c].getName())));
 		}		
 		for(int c=0;c<6;c++) {
 			dropB[c].setBackground(Color.decode("#db9356"));
 			dropB[c].setName(director.refresh(0,c+3));
-			dropB[c].setIcon(new ImageIcon(getClass().getResource
-							(imageSmall(dropB[c].getName()))));			
+			dropB[c].setIcon(new ImageIcon(imageSmall(dropB[c].getName())));			
 		}
 		
 		if(warn){
@@ -595,40 +592,40 @@ public class Gui {
 		}
 	}
 	
-	private String image(String piece){
+	private String imageLarge(String piece){
 		
 		String icon = " ";
 		
 		switch(piece){
 			case "P":
-				icon = "images/WP.png";
+				icon = "ui/images/large/WP.png";
 				break;
 			case "R":
-				icon = "images/WR.png";
+				icon = "ui/images/large/WR.png";
 				break;
 			case "B":
-				icon = "images/WB.png";
+				icon = "ui/images/large/WB.png";
 				break;
 			case "K":
-				icon = "images/WK.png";
+				icon = "ui/images/large/WK.png";
 				break;
 			case "Q":
-				icon = "images/WQ.png";
+				icon = "ui/images/large/WQ.png";
 				break;
 			case "p":
-				icon = "images/BP.png";
+				icon = "ui/images/large/BP.png";
 				break;
 			case "r":
-				icon = "images/BR.png";
+				icon = "ui/images/large/BR.png";
 				break;
 			case "b":
-				icon = "images/BB.png";
+				icon = "ui/images/large/BB.png";
 				break;
 			case "k":
-				icon = "images/BK.png";
+				icon = "ui/images/large/BK.png";
 				break;
 			case "q":
-				icon = "images/BQ.png";
+				icon = "ui/images/large/BQ.png";
 				break;
 		}
 		return icon;
@@ -640,34 +637,34 @@ public class Gui {
 		
 		switch(piece){
 			case "P":
-				icon = "images/WP_small.png";
+				icon = "ui/images/small/WP_small.png";
 				break;
 			case "R":
-				icon = "images/WR_small.png";
+				icon = "ui/images/small/WR_small.png";
 				break;
 			case "B":
-				icon = "images/WB_small.png";
+				icon = "ui/images/small/WB_small.png";
 				break;
 			case "K":
-				icon = "images/WK_small.png";
+				icon = "ui/images/small/WK_small.png";
 				break;
 			case "Q":
-				icon = "images/WQ_small.png";
+				icon = "ui/images/small/WQ_small.png";
 				break;
 			case "p":
-				icon = "images/BP_small.png";
+				icon = "ui/images/small/BP_small.png";
 				break;
 			case "r":
-				icon = "images/BR_small.png";
+				icon = "ui/images/small/BR_small.png";
 				break;
 			case "b":
-				icon = "images/BB_small.png";
+				icon = "ui/images/small/BB_small.png";
 				break;
 			case "k":
-				icon = "images/BK_small.png";
+				icon = "ui/images/small/BK_small.png";
 				break;
 			case "q":
-				icon = "images/BQ_small.png";
+				icon = "ui/images/small/BQ_small.png";
 				break;
 		}
 		return icon;

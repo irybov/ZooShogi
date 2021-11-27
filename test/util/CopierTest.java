@@ -6,11 +6,13 @@ import java.util.Arrays;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import utilpack.Copier;
 import utilpack.Matrix;
 
+@Ignore
 public class CopierTest {
 
 	private static String[][] board;

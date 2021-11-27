@@ -797,7 +797,7 @@ public class ArtIntel implements Runnable{
 			}
 		}
 	
-		if(node==false & depth <= 1){
+		if(node==false & depth < 2){
 			return evaluationMaterial(board, false);
 		}
 		
@@ -814,11 +814,11 @@ public class ArtIntel implements Runnable{
 		else if(depth < 6){
 			if(turn.equals("black")) {
 				start = generateBlackMoves(board);
-				legal.addAll(sortingMoveList(board, start, turn, false));
+				legal = sortingMoveList(board, start, turn, false);
 			}
 			else {
 				start = generateWhiteMoves(board);
-				legal.addAll(sortingMoveList(board, start, turn, false));
+				legal = sortingMoveList(board, start, turn, false);
 			}
 		}
 		count += legal.size();
@@ -1003,11 +1003,11 @@ public class ArtIntel implements Runnable{
 		else if(depth < 8){
 			if(turn.equals("black")) {
 				start = generateBlackMoves(board);
-				legal.addAll(sortingMoveList(board, start, turn, false));
+				legal = sortingMoveList(board, start, turn, false);
 			}
 			else {
 				start = generateWhiteMoves(board);
-				legal.addAll(sortingMoveList(board, start, turn, false));
+				legal = sortingMoveList(board, start, turn, false);
 			}
 		}
 		count += legal.size();
@@ -1689,11 +1689,11 @@ public class ArtIntel implements Runnable{
 	
 		if(turn.equals("black")){
 			start = generateBlackMoves(board);
-			legal.addAll(sortingMoveList(board, start, turn, true));
+			legal = sortingMoveList(board, start, turn, true);
 		}
 		else{
 			start = generateWhiteMoves(board);
-			legal.addAll(sortingMoveList(board, start, turn, true));
+			legal = sortingMoveList(board, start, turn, true);
 		}
 		count += legal.size();
 				
