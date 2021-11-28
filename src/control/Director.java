@@ -236,6 +236,15 @@ public class Director{
 			game.merge(hash, -1, (oldVal, newVal) -> oldVal + newVal);
 		}
 		board = Copier.deepCopy(undo);
+
+		integrator.nextBest(board);
+		try {
+			TimeUnit.MILLISECONDS.sleep(100);
+		}
+		catch (InterruptedException exc) {
+			exc.printStackTrace();
+		}
+		Gui.doClick();
 	}
 	
 	private volatile int cores = Runtime.getRuntime().availableProcessors();

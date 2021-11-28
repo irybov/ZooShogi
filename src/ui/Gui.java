@@ -317,7 +317,7 @@ public class Gui {
 				Clocks.setNodes(0);
 				director.undoMove();
 				updateGui();
-				javax.swing.SwingUtilities.invokeLater(new Runnable() {
+/*				javax.swing.SwingUtilities.invokeLater(new Runnable() {
 					public void run() {
 					try {						
 						director.compute();
@@ -327,7 +327,7 @@ public class Gui {
 						}
 					}
 				});
-				return;
+*/				return;
 			}
 		});
 		frame.add(next);
