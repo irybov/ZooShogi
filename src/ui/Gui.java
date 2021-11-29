@@ -6,6 +6,7 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.event.*;
 
+import ai.Cache;
 import control.Clocks;
 import control.Director;
 import sound.Sound;
@@ -311,16 +312,11 @@ public class Gui {
 			public void actionPerformed(ActionEvent e) {
 				next = (JButton) e.getSource();
 
-				if(director.beginning()) {
+				if(director.beginning() || !Cache.empty()) {
 					return;
 				}
 				Clocks.setNodes(0);
-				try {
-					director.undoMove();
-				}
-				catch (InterruptedException exc) {
-					exc.printStackTrace();
-				}
+				director.undoMove();
 				updateGui();
 /*				javax.swing.SwingUtilities.invokeLater(new Runnable() {
 					public void run() {
