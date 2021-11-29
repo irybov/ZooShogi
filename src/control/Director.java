@@ -232,7 +232,7 @@ public class Director{
 		return game.isEmpty();
 	}
 	
-	public void undoMove() {
+	public void undoMove() throws InterruptedException {
 
 		String hash = Matrix.keyMaker(undo);
 		if(game.containsKey(hash)) {
@@ -244,14 +244,14 @@ public class Director{
 		}
 		board = Copier.deepCopy(undo);
 
-		integrator.nextBest(board);
-		try {
+		if(Cache.empty()) {
+			integrator.nextBest(board);
 			TimeUnit.MILLISECONDS.sleep(100);
+			Gui.doClick();
 		}
-		catch (InterruptedException exc) {
-			exc.printStackTrace();
+		else {
+			compute();
 		}
-		Gui.doClick();
 	}
 	
 	private volatile int cores = Runtime.getRuntime().availableProcessors();

@@ -59,7 +59,7 @@ public class Cache {
 		return cache.get(move);
 	}
 	
-	static boolean empty() {
+	public static boolean empty() {
 		return cache.isEmpty();
 	}
 	

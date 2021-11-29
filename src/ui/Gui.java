@@ -315,7 +315,12 @@ public class Gui {
 					return;
 				}
 				Clocks.setNodes(0);
-				director.undoMove();
+				try {
+					director.undoMove();
+				}
+				catch (InterruptedException exc) {
+					exc.printStackTrace();
+				}
 				updateGui();
 /*				javax.swing.SwingUtilities.invokeLater(new Runnable() {
 					public void run() {
