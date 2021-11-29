@@ -173,7 +173,9 @@ public class Integrator {
 		}
 		
 		if(score > 500 & Cache.empty()) {
-			Cache.add(Copier.deepCopy(field), move.getChidren());
+			if(move.hasChildren()) {
+				Cache.add(Copier.deepCopy(field), move.getChidren());
+			}
 		}
 		
 		String col = Message.colName(c);

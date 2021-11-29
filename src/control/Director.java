@@ -272,12 +272,7 @@ public class Director{
 			send();
 			int[] move = receive();
 			integrator.activate(board, move);
-			try {
-				TimeUnit.SECONDS.sleep(1);
-			}
-			catch (InterruptedException exc) {
-				exc.printStackTrace();
-			}
+			TimeUnit.SECONDS.sleep(1);
 		}
 		else if(Cache.has(move)) {
 			integrator.nextBest(board, Cache.get(move));
@@ -288,29 +283,25 @@ public class Director{
 				integrator.mergeMoves(nodes.get(0));
 			}
 			else {
-			switch(level){
-			case 0:
-			case 2:
-			case 4:
-				new ArtIntel(level, board).run();
-				break;
-			case 1:
-			case 3:
-			case 5:
-			case 6:
-			case 7:
-				ExecutorService es = Executors.newFixedThreadPool(cores);
-				nodes.forEach(node-> es.submit(new ArtIntel(node, Copier.deepCopy(board), level)));
-				es.shutdown();			
-				es.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
-				break;
-			}
-				try {
-					TimeUnit.SECONDS.sleep(1);
+				switch(level){
+				case 0:
+				case 2:
+				case 4:
+					new ArtIntel(level, board).run();
+					break;
+				case 1:
+				case 3:
+				case 5:
+				case 6:
+				case 7:
+					ExecutorService es = Executors.newFixedThreadPool(cores);
+					nodes.forEach(node-> es.submit
+							(new ArtIntel(node, Copier.deepCopy(board), level)));
+					es.shutdown();			
+					es.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
+					break;
 				}
-				catch (InterruptedException exc) {
-					exc.printStackTrace();
-				}
+			TimeUnit.SECONDS.sleep(1);
 			}
 			integrator.activate(board);
 		}

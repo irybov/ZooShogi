@@ -1,19 +1,16 @@
-package util;
+package utilpack;
 
 import static org.junit.Assert.*;
-
-import java.util.Arrays;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import utilpack.Copier;
 import utilpack.Matrix;
 
 @Ignore
-public class CopierTest {
+public class MatrixTest {
 
 	private static String[][] board;
 	
@@ -26,19 +23,24 @@ public class CopierTest {
 	}
 	
 	@Test
-	public void testDeepCopy() {
-		assertTrue(Arrays.deepEquals(board, Copier.deepCopy(board)));
+	public void testKeyMakerCreate() {		
+		assertNotNull(Matrix.keyMaker(board));
 	}
-	
+
 	@Test(expected = NullPointerException.class)
-	public void testEmptyCopy() {		
+	public void testKeyMakerEmpty() {		
 		String[][] board = null;		
 		assertNull(Matrix.keyMaker(board));
+	}
+	
+	@Test
+	public void testKeyMakerLength() {
+		assertEquals(24, Matrix.keyMaker(board).length());
 	}
 	
 	@AfterClass
 	public static void clearMemory() {
 		board = null;
 	}
-
+	
 }

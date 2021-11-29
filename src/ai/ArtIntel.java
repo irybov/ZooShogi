@@ -1384,7 +1384,7 @@ public class ArtIntel implements Runnable{
 					scores.add(value);
 					legal.get(i).setValue(value);
 				if(depth == 6){
-					root.setValue(value);
+					root.setValue(value/10);
 					integrator.mergeMoves(root);
 					hash.clear();
 				}
