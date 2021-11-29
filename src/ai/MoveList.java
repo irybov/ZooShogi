@@ -38,7 +38,7 @@ public class MoveList {
 		
 	}
 	
-	public static void clear() {		
+	static void clear() {		
 		listB.clear();
 		listW.clear();
 	}

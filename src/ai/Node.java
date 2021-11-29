@@ -31,7 +31,7 @@ public class Node implements Comparable<Node>{
 	public String toString() {
 		return "Node [depth=" + depth + ", value=" + value + ", side=" + SIDE + ", "+ Message.colName(C) + (R+1) + Message.colName(C2) + (R2+1) + "]";
 	}
-	
+
 	@Override
 	public int compareTo(Node node) {
 

@@ -126,10 +126,10 @@ public class Generator {
 				
 				int value;				
 				if(temp.equals("K")){
-					value = 2000;	
+					value = 5000;	
 				}
-				else if(Examiner.winPromotion(board, "white") && !Examiner.check(board, "white")){
-					value = 1000;
+				else if(Examiner.winPromotion(board, "black") && !Examiner.check(board, "white")){
+					value = 5000;
 				}
 				else if(Examiner.check(board, "black") && !Examiner.check(board, "white")) {
 					value = 500;
@@ -137,11 +137,11 @@ public class Generator {
 				else if(MoveList.repeat(board, "black")) {
 					value = 0;
 				}
-				else if(Examiner.winPromotion(board, "black") && !Examiner.check(board, "black")){
-					value = -1000;
+				else if(Examiner.winPromotion(board, "white")){
+					value = -5000;
 				}
 				else if(Examiner.check(board, "white")){
-					value = -2000;
+					value = -5000;
 				}
 				else{
 					value = evaluation(board);

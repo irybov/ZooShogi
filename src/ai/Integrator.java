@@ -11,6 +11,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import control.Clocks;
 import utilpack.Capture;
+import utilpack.Copier;
 import utilpack.Matrix;
 import utilpack.Message;
 
@@ -49,8 +50,10 @@ public class Integrator {
 	}
 	public void newGame() {
 		game.clear();
+		MoveList.clear();
+		Cache.clear();
 	}
-	public String[][] nextBest(String[][] field) {
+	public String[][] nextBest(String[][] field) {		
 		if(!ring.isEmpty()) {
 			ring.add(ring.poll());
 			Node move = ring.peek();
@@ -60,6 +63,9 @@ public class Integrator {
 		else {
 			return field;
 		}
+	}
+	public String[][] nextBest(String[][] field, Node move) {
+		return doMove(move, field);
 	}
 	
 	// adds results from a single thread
@@ -164,6 +170,10 @@ public class Integrator {
 			Capture.take(field, r2, c2);
 			field[r2][c2] = field[r][c];
 			field[r][c] = " ";
+		}
+		
+		if(score > 500 & Cache.empty()) {
+			Cache.add(Copier.deepCopy(field), move.getChidren());
 		}
 		
 		String col = Message.colName(c);

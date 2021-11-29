@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 import java.io.*;
 
 import ai.ArtIntel;
+import ai.Cache;
 import ai.Integrator;
 import ai.MoveList;
 import ai.Node;
@@ -161,6 +162,8 @@ public class Director{
 		}
 	}
 	
+	private String move;
+	
 	public void move(){
 		
 		MoveList.add(board, "black");
@@ -209,6 +212,8 @@ public class Director{
 		board[r][c] = " ";
 		
 		MoveList.add(board, "white");
+		
+		move = Matrix.keyMaker(board);
 	}
 	
 	public void drop(){
@@ -219,6 +224,8 @@ public class Director{
 		board[r][c] = " ";
 		
 		MoveList.add(board, "white");
+		
+		move = Matrix.keyMaker(board);
 	}
 	
 	public boolean beginning() {
@@ -272,6 +279,9 @@ public class Director{
 				exc.printStackTrace();
 			}
 		}
+		else if(Cache.has(move)) {
+			integrator.nextBest(board, Cache.get(move));
+		}		
 		else {
 			List<Node> nodes = generator.generateNodes(board);
 			if(nodes.get(0).getValue() > 999) {
@@ -380,7 +390,6 @@ public class Director{
 	
 	public void newGame() {		
 		game.clear();
-		MoveList.clear();
 		integrator.newGame();
 	}
 
