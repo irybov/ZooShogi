@@ -143,15 +143,6 @@ public class Integrator {
 		int r2 = move.getR2();
 		int c2 = move.getC2();
 		
-		if(score < -500) {
-			if(!exp.bingo(game.peek())) {
-				exp.learn(game.peek());
-			}
-		}
-		else {
-			game.push(Matrix.keyMaker(field));
-		}
-		
 		String spot = field[r2][c2];
 		String pieceName = Message.pieceName(field[r][c]);
 
@@ -170,6 +161,15 @@ public class Integrator {
 			Capture.take(field, r2, c2);
 			field[r2][c2] = field[r][c];
 			field[r][c] = " ";
+		}
+		
+		if(score < -500) {
+			if(!exp.bingo(game.peek())) {
+				exp.learn(game.peek());
+			}
+		}
+		else {
+			game.push(Matrix.keyMaker(field));
 		}
 		
 		if(score > 500 & Cache.empty()) {

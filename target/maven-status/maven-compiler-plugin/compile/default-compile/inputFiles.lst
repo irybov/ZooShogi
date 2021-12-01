@@ -3,6 +3,7 @@ C:\workspace\ZooShogi\src\control\Clocks.java
 C:\workspace\ZooShogi\src\launch\ZooShogi.java
 C:\workspace\ZooShogi\src\ai\ArtIntel.java
 C:\workspace\ZooShogi\src\control\Driver.java
+C:\workspace\ZooShogi\src\ai\Cache.java
 C:\workspace\ZooShogi\src\ai\Info.java
 C:\workspace\ZooShogi\src\ui\Table.java
 C:\workspace\ZooShogi\src\utilpack\Matrix.java
@@ -17,6 +18,7 @@ C:\workspace\ZooShogi\src\data\Player.java
 C:\workspace\ZooShogi\src\ui\Users.java
 C:\workspace\ZooShogi\src\ui\Gui.java
 C:\workspace\ZooShogi\src\ai\package-info.java
+C:\workspace\ZooShogi\src\control\Writer.java
 C:\workspace\ZooShogi\src\ai\Experience.java
 C:\workspace\ZooShogi\src\utilpack\Examiner.java
 C:\workspace\ZooShogi\src\ui\package-info.java

@@ -48,13 +48,13 @@ public class Director{
 	private Player player;
 	private ScoreSheet ss;
 	{
-		File file = new File("table.bin");
+		File file = new File("scores.bin");
 		if(!file.exists()) {
 			try {
 				file.createNewFile();
 				ss = new ScoreSheet();
 			    try(ObjectOutputStream oos = new ObjectOutputStream
-				   (new BufferedOutputStream(new FileOutputStream("table.bin")))){
+				   (new BufferedOutputStream(new FileOutputStream("scores.bin")))){
 			           oos.writeObject(ss);
 			    }			
 			}
@@ -64,7 +64,7 @@ public class Director{
 		}
 		
 	    try(ObjectInputStream ois = new ObjectInputStream
-	 	   (new BufferedInputStream(new FileInputStream("table.bin")))){
+	 	   (new BufferedInputStream(new FileInputStream("scores.bin")))){
 	    	ss = (ScoreSheet) ois.readObject();
 	    }
 	    catch (IOException | ClassNotFoundException ex) {
@@ -244,14 +244,24 @@ public class Director{
 		}
 		board = Copier.deepCopy(undo);
 
-		integrator.nextBest(board);
-		try {
-			TimeUnit.MILLISECONDS.sleep(100);
+		if(!client) {
+			integrator.nextBest(board);
+			try {
+				TimeUnit.MILLISECONDS.sleep(100);
+			}
+			catch (InterruptedException exc) {
+				exc.printStackTrace();
+			}
+			Gui.doClick();
 		}
-		catch (InterruptedException exc) {
-			exc.printStackTrace();
+		else {
+			try {
+				compute();
+			}
+			catch (InterruptedException exc) {
+				exc.printStackTrace();
+			}
 		}
-		Gui.doClick();
 	}
 	
 	private volatile int cores = Runtime.getRuntime().availableProcessors();
@@ -417,7 +427,7 @@ public class Director{
 		
 		GameState state = new GameState(getBoard(), getMoves(), level);
 		
-	    try(FileOutputStream fos = new FileOutputStream("game.bin");
+	    try(FileOutputStream fos = new FileOutputStream("save.bin");
 	    		ObjectOutputStream oos = new ObjectOutputStream(fos)){
 	           oos.writeUnshared(state);
 	           oos.flush();
@@ -430,7 +440,7 @@ public class Director{
 	
 	public boolean loadGame() {
 	
-	    try(FileInputStream fis = new FileInputStream("game.bin");
+	    try(FileInputStream fis = new FileInputStream("save.bin");
 	    		ObjectInputStream ois = new ObjectInputStream(fis)){
 	    	GameState state = (GameState) ois.readUnshared();
 			setBoard(state.getBoard());
@@ -455,7 +465,7 @@ public class Director{
 		}		
 		players.add(newPlayer);
     	player = newPlayer;
-	    try(FileOutputStream fos = new FileOutputStream("table.bin");
+	    try(FileOutputStream fos = new FileOutputStream("scores.bin");
 	    		ObjectOutputStream oos = new ObjectOutputStream(fos)){
 	           oos.writeObject(ss);
 	    }
@@ -483,7 +493,7 @@ public class Director{
 		if(players.contains(player)) {
 			players.remove(player);
 			try(ObjectOutputStream oos = new ObjectOutputStream
-			   (new BufferedOutputStream(new FileOutputStream("table.bin")))){
+			   (new BufferedOutputStream(new FileOutputStream("scores.bin")))){
 			        oos.writeObject(ss);
 			}			
 			catch (IOException ex) {
@@ -499,7 +509,7 @@ public class Director{
 		if(players.contains(player)) {
 			player.setScore(player.getScore() + level*scale);
 			try(ObjectOutputStream oos = new ObjectOutputStream
-			   (new BufferedOutputStream(new FileOutputStream("table.bin")))){
+			   (new BufferedOutputStream(new FileOutputStream("scores.bin")))){
 			        oos.writeObject(ss);
 			}			
 			catch (IOException ex) {

@@ -1,11 +1,15 @@
 package control;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Reader;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -22,12 +26,12 @@ class LocalServer extends Thread{
 	public void setLine(String line) {
 		reply = null;
 		this.line = line;
-			try {
-				bq.put(line);
-			}
-			catch (InterruptedException exc) {
-				exc.printStackTrace();
-			}
+		try {
+			bq.put(line);
+		}
+		catch (InterruptedException exc) {
+			exc.printStackTrace();
+		}
 	}
 	public String getAnswer() {
 		line = null;		
@@ -43,13 +47,11 @@ class LocalServer extends Thread{
     int PORT;
     String URL;
 	{
-		try (InputStream input = new FileInputStream("config.txt")) {
-	
+		try (Reader config = new BufferedReader(new FileReader("config.txt"))) {	
 	        prop = new Properties();
-	        prop.load(input);
+	        prop.load(config);
 	        PORT = Integer.parseInt(prop.getProperty("port"));
-	        URL = prop.getProperty("url");
-	
+	        URL = prop.getProperty("url");	
 	    }
 		catch (IOException ex) {
 	        ex.printStackTrace();
@@ -79,6 +81,7 @@ class LocalServer extends Thread{
 		finally {
 			try {
 				if(server != null) {
+//					System.out.println("Server shutdown");					
 					server.close();
 				}
 			}
@@ -94,14 +97,18 @@ class LocalServer extends Thread{
 		
 		InputStream sin = null;
 		OutputStream sout = null;
+		BufferedInputStream bis = null;
+		BufferedOutputStream bos = null;
    		DataInputStream dis = null;
    		DataOutputStream dos = null;
 		
 		try {
 			sin  = socket.getInputStream();
 			sout = socket.getOutputStream();
-			dis = new DataInputStream (sin);
-			dos = new DataOutputStream(sout);
+			bis = new BufferedInputStream(sin);
+			bos = new BufferedOutputStream(sout);
+			dis = new DataInputStream (bis);
+			dos = new DataOutputStream(bos);
 						
 			while(true) {
 				try {
@@ -133,6 +140,8 @@ class LocalServer extends Thread{
 		}
 		finally {
 			try {
+				dis.close();
+				dos.close();
 				socket.close();
 			}
 			catch (IOException exc) {

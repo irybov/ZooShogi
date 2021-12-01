@@ -100,8 +100,6 @@ public class Gui {
         menuBar.add(createOtherMenu());
         frame.setJMenuBar(menuBar);
 		
-		director.initialize();
-		
 		// fixed positions layout
 		frame.setResizable(false);
 		frame.setLayout(null);
@@ -318,17 +316,7 @@ public class Gui {
 				Clocks.setNodes(0);
 				director.undoMove();
 				updateGui();
-/*				javax.swing.SwingUtilities.invokeLater(new Runnable() {
-					public void run() {
-					try {						
-						director.compute();
-					}
-					catch (InterruptedException e) {
-						e.printStackTrace();
-						}
-					}
-				});
-*/				return;
+				return;
 			}
 		});
 		frame.add(next);
@@ -366,7 +354,7 @@ public class Gui {
 							director.setLevel(i);
 							output.setText("Level " + Integer.toString(i)+ " selected");
 							if(director.checkClient()) {
-							director.disconnect();
+								director.disconnect();
 							}
 							return;
 						}
@@ -504,7 +492,7 @@ public class Gui {
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		brain[0].doClick();
-		updateGui();
+		newgame.doClick();
 		frame.setVisible(true);
 		//Redraw the graphics to show the squares
 		frame.revalidate();
@@ -781,7 +769,15 @@ public class Gui {
 	public static void setLevel(int i) {
 		brain[i].doClick();
 	}
-
+	public static String getLevel() {
+		for(int i=0; i<levelArray.length; i++){
+			if(brain[i].isSelected()){
+				return brain[i].getText();
+			}
+		}
+		return null;
+	}
+	
 	private void disable() {
 		
 		push.setEnabled(false);
@@ -885,7 +881,7 @@ public class Gui {
 		
 		select.addActionListener(new ActionListener() {
 			   public void actionPerformed(ActionEvent e) {
-				   				new Users();				   
+				   			new Users();				   
 		   }
 		});
 		
@@ -940,12 +936,7 @@ public class Gui {
         
         engine.addActionListener(new ActionListener() {
 			   public void actionPerformed(ActionEvent e) {
-				   
-					 javax.swing.SwingUtilities.invokeLater(new Runnable() {
-							public void run() {
-								new Chooser();
-							}
-						});
+							new Chooser();
 		   }
 		});
         
