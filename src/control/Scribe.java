@@ -36,8 +36,6 @@ public class Scribe {
 				if(action.equals("new") & number > 1) {
 					number = 1;
 					nova = true;
-					scribe.newLine();
-					scribe.newLine();
 				}
 				else if(action.equals("end")){
 					scribe.append(data);
@@ -49,6 +47,8 @@ public class Scribe {
 				break;
 			case "white": case "black":
 				if(number == 1 & nova) {
+					scribe.newLine();
+					scribe.newLine();
 					LocalDateTime now = LocalDateTime.now();
 					scribe.append(now.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")));
 					scribe.newLine();
