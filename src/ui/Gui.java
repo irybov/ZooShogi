@@ -95,6 +95,8 @@ public class Gui {
 			}
 		}).start();
 		
+		director.initialize();
+		
         menuBar.add(createFileMenu());
         menuBar.add(createAccountMenu());
         menuBar.add(createOtherMenu());
@@ -492,7 +494,7 @@ public class Gui {
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		brain[0].doClick();
-		newgame.doClick();
+		updateGui();
 		frame.setVisible(true);
 		//Redraw the graphics to show the squares
 		frame.revalidate();

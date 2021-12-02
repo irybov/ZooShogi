@@ -10,6 +10,7 @@ import java.util.Queue;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import control.Clocks;
+import control.Scribe;
 import utilpack.Capture;
 import utilpack.Copier;
 import utilpack.Matrix;
@@ -127,13 +128,14 @@ public class Integrator {
 		final int c2 = args[3];
 		final int score = args[4];
 		final int nodes = args[5];
-		Node move = new Node(r, c, r2, c2, "black");
+		Node move = new Node(r, c, r2, c2, "black", field[r][c]);
 		move.setValue(score);
 		
 		Clocks.setNodes(nodes);	
 		return doMove(move, field);
 	}
 
+	private Scribe scribe = Scribe.getInstance();
 	// do external engine's move
 	private String[][] doMove(final Node move, String[][] field){
 		
@@ -142,6 +144,9 @@ public class Integrator {
 		int c = move.getC();
 		int r2 = move.getR2();
 		int c2 = move.getC2();
+		
+		String edge = new Edge(r, c, r2, c2, field[r][c]).toString();		
+		scribe.writeGame("black", edge);
 		
 		String spot = field[r2][c2];
 		String pieceName = Message.pieceName(field[r][c]);
@@ -181,7 +186,7 @@ public class Integrator {
 		String col = Message.colName(c);
 		String col2 = Message.colName(c2);
 		
-		info.output(score, field, pieceName, c, col, r, spot, col2, r2);		
+		info.output(score, field, pieceName, c, col, r, spot, col2, r2);
 		return field;		
 	}
 	

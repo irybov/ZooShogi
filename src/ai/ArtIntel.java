@@ -102,7 +102,7 @@ public class ArtIntel implements Runnable{
 				for(int r=0; r<4; r++){
 					for(int c=0; c<3; c++){
 						if(board[r][c].equals(" ")){
-							legal.add(new Node(0, i, r, c, "black"));
+							legal.add(new Node(0, i, r, c, "black", board[r][c]));
 						}
 					}
 				}
@@ -116,7 +116,7 @@ public class ArtIntel implements Runnable{
 					c2 = c;
 					if((Pieces.BPAWN.move(r, c, r2, c2))&&
 					   (Capture.check(board, r2, c2, "black"))){
-						legal.add(new Node(r, c, r2, c2, "black"));
+						legal.add(new Node(r, c, r2, c2, "black", board[r][c]));
 					}
 				}				
 				else if(board[r][c].equals("r")){					
@@ -124,7 +124,7 @@ public class ArtIntel implements Runnable{
 						for(c2=c-1; c2<c+2; c2++){
 						if((Pieces.ROOK.move(r, c, r2, c2))&&
 						   (Capture.check(board, r2, c2, "black"))){
-							legal.add(new Node(r, c, r2, c2, "black"));
+							legal.add(new Node(r, c, r2, c2, "black", board[r][c]));
 							}
 						}							
 					}
@@ -134,7 +134,7 @@ public class ArtIntel implements Runnable{
 						for(c2=c-1; c2<c+2; c2++){
 						if((Pieces.KING.move(r, c, r2, c2))&&
 						   (Capture.check(board, r2, c2, "black"))){
-							legal.add(new Node(r, c, r2, c2, "black"));
+							legal.add(new Node(r, c, r2, c2, "black", board[r][c]));
 							}
 						}							
 					}
@@ -144,7 +144,7 @@ public class ArtIntel implements Runnable{
 						for(c2=c-1; c2<c+2; c2++){
 						if((Pieces.BISHOP.move(r, c, r2, c2))&&
 						   (Capture.check(board, r2, c2, "black"))){
-							legal.add(new Node(r, c, r2, c2, "black"));
+							legal.add(new Node(r, c, r2, c2, "black", board[r][c]));
 							}
 						}							
 					}
@@ -154,7 +154,7 @@ public class ArtIntel implements Runnable{
 						for(c2=c-1; c2<c+2; c2++){
 						if((Pieces.BQUEEN.move(r, c, r2, c2))&&
 						   (Capture.check(board, r2, c2, "black"))){
-							legal.add(new Node(r, c, r2, c2, "black"));
+							legal.add(new Node(r, c, r2, c2, "black", board[r][c]));
 							}
 						}							
 					}
@@ -175,7 +175,7 @@ public class ArtIntel implements Runnable{
 				for(int r=0; r<4; r++){
 					for(int c=0; c<3; c++){
 						if(board[r][c].equals(" ")){
-							legal.add(new Node(3, i, r, c, "white"));
+							legal.add(new Node(3, i, r, c, "white", board[r][c]));
 						}
 					}
 				}
@@ -189,7 +189,7 @@ public class ArtIntel implements Runnable{
 					c2 = c;
 					if((Pieces.WPAWN.move(r, c, r2, c2))&&
 					   (Capture.check(board, r2, c2, "white"))){
-						legal.add(new Node(r, c, r2, c2, "white"));
+						legal.add(new Node(r, c, r2, c2, "white", board[r][c]));
 					}
 				}
 				else if(board[r][c].equals("R")){					
@@ -197,7 +197,7 @@ public class ArtIntel implements Runnable{
 						for(c2=c-1; c2<c+2; c2++){
 						if((Pieces.ROOK.move(r, c, r2, c2))&&
 						   (Capture.check(board, r2, c2, "white"))){
-							legal.add(new Node(r, c, r2, c2, "white"));
+							legal.add(new Node(r, c, r2, c2, "white", board[r][c]));
 							}
 						}							
 					}
@@ -207,7 +207,7 @@ public class ArtIntel implements Runnable{
 						for(c2=c-1; c2<c+2; c2++){
 						if((Pieces.KING.move(r, c, r2, c2))&&
 						   (Capture.check(board, r2, c2, "white"))){
-							legal.add(new Node(r, c, r2, c2, "white"));
+							legal.add(new Node(r, c, r2, c2, "white", board[r][c]));
 							}
 						}							
 					}
@@ -217,7 +217,7 @@ public class ArtIntel implements Runnable{
 						for(c2=c-1; c2<c+2; c2++){
 						if((Pieces.BISHOP.move(r, c, r2, c2))&&
 						   (Capture.check(board, r2, c2, "white"))){
-							legal.add(new Node(r, c, r2, c2, "white"));
+							legal.add(new Node(r, c, r2, c2, "white", board[r][c]));
 							}
 						}							
 					}
@@ -227,7 +227,7 @@ public class ArtIntel implements Runnable{
 						for(c2=c-1; c2<c+2; c2++){
 						if((Pieces.WQUEEN.move(r, c, r2, c2))&&
 						   (Capture.check(board, r2, c2, "white"))){
-							legal.add(new Node(r, c, r2, c2, "white"));
+							legal.add(new Node(r, c, r2, c2, "white", board[r][c]));
 							}
 						}							
 					}
@@ -1630,7 +1630,7 @@ public class ArtIntel implements Runnable{
         		for(Node child: move.getChidren()) {
         			scores.add(child.getValue());
         		}
-                	if(move.getSide().equals("black")) {        				
+                	if(move.getDepth() % 2 == 1) {
                 		move.setValue(min(scores));
                 	}
                 	else{

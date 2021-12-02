@@ -10,6 +10,7 @@ import java.io.*;
 
 import ai.ArtIntel;
 import ai.Cache;
+import ai.Edge;
 import ai.Integrator;
 import ai.MoveList;
 import ai.Node;
@@ -48,13 +49,13 @@ public class Director{
 	private Player player;
 	private ScoreSheet ss;
 	{
-		File file = new File("scores.bin");
+		File file = new File("scoresheet.bin");
 		if(!file.exists()) {
 			try {
 				file.createNewFile();
 				ss = new ScoreSheet();
 			    try(ObjectOutputStream oos = new ObjectOutputStream
-				   (new BufferedOutputStream(new FileOutputStream("scores.bin")))){
+				   (new BufferedOutputStream(new FileOutputStream("scoresheet.bin")))){
 			           oos.writeObject(ss);
 			    }			
 			}
@@ -64,7 +65,7 @@ public class Director{
 		}
 		
 	    try(ObjectInputStream ois = new ObjectInputStream
-	 	   (new BufferedInputStream(new FileInputStream("scores.bin")))){
+	 	   (new BufferedInputStream(new FileInputStream("scoresheet.bin")))){
 	    	ss = (ScoreSheet) ois.readObject();
 	    }
 	    catch (IOException | ClassNotFoundException ex) {
@@ -163,8 +164,13 @@ public class Director{
 	}
 	
 	private String move;
+	private String edge;
+	private Scribe scribe = Scribe.getInstance();
 	
 	public void move(){
+		
+		edge = new Edge(r, c, r2, c2, board[r][c]).toString();
+		scribe.writeGame("white", edge);
 		
 		MoveList.add(board, "black");
 		
@@ -218,6 +224,9 @@ public class Director{
 	
 	public void drop(){
 		
+		edge = new Edge(r, c, r2, c2, board[r][c]).toString();
+		scribe.writeGame("white", edge);
+		
 		MoveList.add(board, "black");
 		
 		board[r2][c2] = board[r][c];
@@ -233,6 +242,8 @@ public class Director{
 	}
 	
 	public void undoMove() {
+		
+		scribe.writeGame("undo", null);
 
 		String hash = Matrix.keyMaker(undo);
 		if(game.containsKey(hash)) {
@@ -344,18 +355,21 @@ public class Director{
 		}
 		
 		if(addToList("black")){
+			scribe.writeGame("end", "1/2");
 			output("draw");
 			voice("draw");
 			return true;
 		}
 		else if((a+b==2 & turn.equals("black")) || (a+b==3 & turn.equals("white")) & 
 				(board[0][0].equals("K")||board[0][1].equals("K")||board[0][2].equals("K"))){
+			scribe.writeGame("end", "1-0");
 			output("white");
 			voice("mate");
 			return true;
 		}
 		else if((a+b==1 & turn.equals("white")) || (a+b==3 & turn.equals("black")) & 
 				(board[3][0].equals("k")||board[3][1].equals("k")||board[3][2].equals("k"))){
+			scribe.writeGame("end", "0-1");
 			output("black");
 			voice("mate");
 			return true;
@@ -389,7 +403,8 @@ public class Director{
 		}		
 	}
 	
-	public void newGame() {		
+	public void newGame() {
+		scribe.writeGame("new", null);
 		game.clear();
 		integrator.newGame();
 	}
@@ -403,7 +418,7 @@ public class Director{
 		case "white":
 			Gui.output.setText("You win and gain +" + level*10 + " points!");
 			try {
-				new FileOutputStream("game.bin").close();
+				new FileOutputStream("save.bin").close();
 			}
 		    catch (IOException ex) {
 				ex.printStackTrace();
@@ -413,7 +428,7 @@ public class Director{
 		case "draw":
 			Gui.output.setText("Draw. You gain +" + level*5 + " points!");
 			try {
-				new FileOutputStream("game.bin").close();
+				new FileOutputStream("save.bin").close();
 			}
 		    catch (IOException ex) {
 				ex.printStackTrace();
@@ -465,7 +480,7 @@ public class Director{
 		}		
 		players.add(newPlayer);
     	player = newPlayer;
-	    try(FileOutputStream fos = new FileOutputStream("scores.bin");
+	    try(FileOutputStream fos = new FileOutputStream("scoresheet.bin");
 	    		ObjectOutputStream oos = new ObjectOutputStream(fos)){
 	           oos.writeObject(ss);
 	    }
@@ -493,7 +508,7 @@ public class Director{
 		if(players.contains(player)) {
 			players.remove(player);
 			try(ObjectOutputStream oos = new ObjectOutputStream
-			   (new BufferedOutputStream(new FileOutputStream("scores.bin")))){
+			   (new BufferedOutputStream(new FileOutputStream("scoresheet.bin")))){
 			        oos.writeObject(ss);
 			}			
 			catch (IOException ex) {
@@ -509,7 +524,7 @@ public class Director{
 		if(players.contains(player)) {
 			player.setScore(player.getScore() + level*scale);
 			try(ObjectOutputStream oos = new ObjectOutputStream
-			   (new BufferedOutputStream(new FileOutputStream("scores.bin")))){
+			   (new BufferedOutputStream(new FileOutputStream("scoresheet.bin")))){
 			        oos.writeObject(ss);
 			}			
 			catch (IOException ex) {

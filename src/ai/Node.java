@@ -3,8 +3,6 @@ package ai;
 import java.util.ArrayList;
 import java.util.List;
 
-import utilpack.Message;
-
 public class Node implements Comparable<Node>{
 
 	private int depth;
@@ -18,18 +16,24 @@ public class Node implements Comparable<Node>{
 	private final int R2;
 	private final int C2;
 	private final String SIDE;
+	private final String PIECE;
 
-	public Node(final int R, final int C, final int R2, final int C2, final String SIDE) {
+	public Node(int R, int C, int R2, int C2, String SIDE, String PIECE) {
 		this.R = R;
 		this.C = C;
 		this.R2 = R2;
 		this.C2 = C2;
 		this.SIDE = SIDE;
+		this.PIECE = PIECE;
 	}
 	
 	@Override
 	public String toString() {
-		return "Node [depth=" + depth + ", value=" + value + ", side=" + SIDE + ", "+ Message.colName(C) + (R+1) + Message.colName(C2) + (R2+1) + "]";
+		return "Node [depth=" + depth + ", value=" + value + ", side=" + SIDE + ", "
+				+ new Edge(R, C, R2, C2, PIECE).toString();
+	}
+	public String getEdge() {
+		return new Edge(R, C, R2, C2, PIECE).toString();
 	}
 
 	@Override
