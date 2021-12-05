@@ -2,9 +2,9 @@ package utilpack;
 
 public class Message {
 
-	public static String colName(final int COL){
+	public static String getColName(final int COL){
 		
-		String c = "";
+		String c;
 		
 		switch(COL){
 		case 0:
@@ -17,13 +17,13 @@ public class Message {
 			c = "C";
 			break;
 		default:
-			c = "d";
+			c = "#";
 			break;
 		}
 		return c;
  	}
 	
-	public static String pieceName(final String PIECE){
+	public static String getPieceName(final String PIECE){
 		
 		String name = "";
 		
@@ -45,6 +45,11 @@ public class Message {
 			break;
 		}
 		return name;
+	}
+	
+	public static String getEdge(int R, int C, int R2, int C2, String piece) {
+		return (C < 3 ? Message.getColName(C) + (R+1) : piece.toUpperCase()
+				+ Message.getColName(C)) + Message.getColName(C2) + (R2+1);
 	}
 	
 }

@@ -25,7 +25,7 @@ public class ArtIntelTest {
 	
 	@BeforeClass
 	public static void createNode() {
-		node = new Node(0, 0, 1, 0, "black", board[0][0]);
+		node = new Node(0, 0, 1, 0, "black");
 	}
 	
 	@Test(timeout = 5000)

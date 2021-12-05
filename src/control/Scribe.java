@@ -39,6 +39,8 @@ public class Scribe {
 				}
 				else if(action.equals("end")){
 					scribe.append(data);
+					number = 1;
+					nova = true;
 				}
 				break;
 			case "undo":
@@ -52,7 +54,7 @@ public class Scribe {
 					LocalDateTime now = LocalDateTime.now();
 					scribe.append(now.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")));
 					scribe.newLine();
-					scribe.append("Human vs " + "AI " + Gui.getLevel());
+					scribe.append(Gui.getHuman() + " vs AI " + Gui.getLevel());
 					scribe.newLine();
 					scribe.newLine();
 					scribe.append(number + ". ");

@@ -34,7 +34,6 @@ launch\ZooShogi$1.class
 ui\Gui.class
 ai\ArtIntel.class
 ui\Gui$1.class
-control\Writer.class
 ai\Node.class
 ui\Users$1.class
 ui\Gui$20.class

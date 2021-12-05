@@ -10,7 +10,6 @@ import java.io.*;
 
 import ai.ArtIntel;
 import ai.Cache;
-import ai.Edge;
 import ai.Integrator;
 import ai.MoveList;
 import ai.Node;
@@ -20,6 +19,7 @@ import sound.Sound;
 import ui.Gui;
 import utilpack.Copier;
 import utilpack.Matrix;
+import utilpack.Message;
 import utilpack.Pieces;
 
 public class Director{
@@ -169,7 +169,7 @@ public class Director{
 	
 	public void move(){
 		
-		edge = new Edge(r, c, r2, c2, board[r][c]).toString();
+		edge = Message.getEdge(r, c, r2, c2, board[r][c]);
 		scribe.writeGame("white", edge);
 		
 		MoveList.add(board, "black");
@@ -224,7 +224,7 @@ public class Director{
 	
 	public void drop(){
 		
-		edge = new Edge(r, c, r2, c2, board[r][c]).toString();
+		edge = Message.getEdge(r, c, r2, c2, board[r][c]);
 		scribe.writeGame("white", edge);
 		
 		MoveList.add(board, "black");
@@ -295,13 +295,17 @@ public class Director{
 			integrator.activate(board, move);
 			TimeUnit.SECONDS.sleep(1);
 		}
+		else if(integrator.hasNode(board)) {
+			Node node = integrator.getNode(board);
+			integrator.nextBest(board, node);
+		}
 		else if(Cache.has(move)) {
 			integrator.nextBest(board, Cache.get(move));
 		}		
 		else {
 			List<Node> nodes = generator.generateNodes(board);
 			if(nodes.get(0).getValue() > 999) {
-				integrator.mergeMoves(nodes.get(0));
+				integrator.nextBest(board, nodes.get(0));
 			}
 			else {
 				switch(level){
@@ -322,9 +326,9 @@ public class Director{
 					es.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
 					break;
 				}
-			TimeUnit.SECONDS.sleep(1);
+				TimeUnit.SECONDS.sleep(1);
+				integrator.activate(board);
 			}
-			integrator.activate(board);
 		}
 
 		Gui.doClick();

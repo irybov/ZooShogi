@@ -102,7 +102,7 @@ public class ArtIntel implements Runnable{
 				for(int r=0; r<4; r++){
 					for(int c=0; c<3; c++){
 						if(board[r][c].equals(" ")){
-							legal.add(new Node(0, i, r, c, "black", board[r][c]));
+							legal.add(new Node(0, i, r, c, "black"));
 						}
 					}
 				}
@@ -116,7 +116,7 @@ public class ArtIntel implements Runnable{
 					c2 = c;
 					if((Pieces.BPAWN.move(r, c, r2, c2))&&
 					   (Capture.check(board, r2, c2, "black"))){
-						legal.add(new Node(r, c, r2, c2, "black", board[r][c]));
+						legal.add(new Node(r, c, r2, c2, "black"));
 					}
 				}				
 				else if(board[r][c].equals("r")){					
@@ -124,7 +124,7 @@ public class ArtIntel implements Runnable{
 						for(c2=c-1; c2<c+2; c2++){
 						if((Pieces.ROOK.move(r, c, r2, c2))&&
 						   (Capture.check(board, r2, c2, "black"))){
-							legal.add(new Node(r, c, r2, c2, "black", board[r][c]));
+							legal.add(new Node(r, c, r2, c2, "black"));
 							}
 						}							
 					}
@@ -134,7 +134,7 @@ public class ArtIntel implements Runnable{
 						for(c2=c-1; c2<c+2; c2++){
 						if((Pieces.KING.move(r, c, r2, c2))&&
 						   (Capture.check(board, r2, c2, "black"))){
-							legal.add(new Node(r, c, r2, c2, "black", board[r][c]));
+							legal.add(new Node(r, c, r2, c2, "black"));
 							}
 						}							
 					}
@@ -144,7 +144,7 @@ public class ArtIntel implements Runnable{
 						for(c2=c-1; c2<c+2; c2++){
 						if((Pieces.BISHOP.move(r, c, r2, c2))&&
 						   (Capture.check(board, r2, c2, "black"))){
-							legal.add(new Node(r, c, r2, c2, "black", board[r][c]));
+							legal.add(new Node(r, c, r2, c2, "black"));
 							}
 						}							
 					}
@@ -154,7 +154,7 @@ public class ArtIntel implements Runnable{
 						for(c2=c-1; c2<c+2; c2++){
 						if((Pieces.BQUEEN.move(r, c, r2, c2))&&
 						   (Capture.check(board, r2, c2, "black"))){
-							legal.add(new Node(r, c, r2, c2, "black", board[r][c]));
+							legal.add(new Node(r, c, r2, c2, "black"));
 							}
 						}							
 					}
@@ -175,7 +175,7 @@ public class ArtIntel implements Runnable{
 				for(int r=0; r<4; r++){
 					for(int c=0; c<3; c++){
 						if(board[r][c].equals(" ")){
-							legal.add(new Node(3, i, r, c, "white", board[r][c]));
+							legal.add(new Node(3, i, r, c, "white"));
 						}
 					}
 				}
@@ -189,7 +189,7 @@ public class ArtIntel implements Runnable{
 					c2 = c;
 					if((Pieces.WPAWN.move(r, c, r2, c2))&&
 					   (Capture.check(board, r2, c2, "white"))){
-						legal.add(new Node(r, c, r2, c2, "white", board[r][c]));
+						legal.add(new Node(r, c, r2, c2, "white"));
 					}
 				}
 				else if(board[r][c].equals("R")){					
@@ -197,7 +197,7 @@ public class ArtIntel implements Runnable{
 						for(c2=c-1; c2<c+2; c2++){
 						if((Pieces.ROOK.move(r, c, r2, c2))&&
 						   (Capture.check(board, r2, c2, "white"))){
-							legal.add(new Node(r, c, r2, c2, "white", board[r][c]));
+							legal.add(new Node(r, c, r2, c2, "white"));
 							}
 						}							
 					}
@@ -207,7 +207,7 @@ public class ArtIntel implements Runnable{
 						for(c2=c-1; c2<c+2; c2++){
 						if((Pieces.KING.move(r, c, r2, c2))&&
 						   (Capture.check(board, r2, c2, "white"))){
-							legal.add(new Node(r, c, r2, c2, "white", board[r][c]));
+							legal.add(new Node(r, c, r2, c2, "white"));
 							}
 						}							
 					}
@@ -217,7 +217,7 @@ public class ArtIntel implements Runnable{
 						for(c2=c-1; c2<c+2; c2++){
 						if((Pieces.BISHOP.move(r, c, r2, c2))&&
 						   (Capture.check(board, r2, c2, "white"))){
-							legal.add(new Node(r, c, r2, c2, "white", board[r][c]));
+							legal.add(new Node(r, c, r2, c2, "white"));
 							}
 						}							
 					}
@@ -227,7 +227,7 @@ public class ArtIntel implements Runnable{
 						for(c2=c-1; c2<c+2; c2++){
 						if((Pieces.WQUEEN.move(r, c, r2, c2))&&
 						   (Capture.check(board, r2, c2, "white"))){
-							legal.add(new Node(r, c, r2, c2, "white", board[r][c]));
+							legal.add(new Node(r, c, r2, c2, "white"));
 							}
 						}							
 					}
@@ -790,12 +790,9 @@ public class ArtIntel implements Runnable{
 			return -(2000+(depth*100));	
 		}	
 		
-		if(Examiner.check(board, turn) && depth < 6){
-			if(turn.equals("white")){
+		if(turn.equals("white")){
+			if(Examiner.check(board, turn) && depth < 6){
 				return -(1000+(depth*100));
-			}
-			else{
-				return 1000+(depth*100);
 			}
 		}
 	
@@ -868,11 +865,14 @@ public class ArtIntel implements Runnable{
 															||Examiner.check(board, "black"));
 				}
 		
-				List<Node> children = generateWhiteMoves(board);
-				for(Node child: children) {
-					child.addParent(legal.get(i));
+				List<Node> children = null;
+				if(temp != "K" & depth > -2) {
+					children = generateWhiteMoves(board);
+					for(Node child: children) {
+						child.addParent(legal.get(i));
+					}
+					legal.get(i).addChildren(children);
 				}
-				legal.get(i).addChildren(children);
 				
 				int value = minimaxEX("white", depth-1, alpha, beta, node, children);
 				if(value > alpha){
@@ -923,11 +923,14 @@ public class ArtIntel implements Runnable{
 														||Examiner.check(board, "white"));
 				}
 
-				List<Node> children = generateBlackMoves(board);
-				for(Node child: children) {
-					child.addParent(legal.get(i));
+				List<Node> children = null;
+				if(temp != "k") {
+					children = generateBlackMoves(board);
+					for(Node child: children) {
+						child.addParent(legal.get(i));
+					}
+					legal.get(i).addChildren(children);
 				}
-				legal.get(i).addChildren(children);
 				
 				int value = minimaxEX("black", depth-1, alpha, beta, node, children);
 				if(value < beta){
@@ -988,12 +991,9 @@ public class ArtIntel implements Runnable{
 			return -(2000+(depth*100));	
 		}	
 		
-		if(Examiner.check(board, turn) && depth < 8){
-			if(turn.equals("white")){
+		if(turn.equals("white")){
+			if(Examiner.check(board, turn) && depth < 8){
 				return -(1000+(depth*100));
-			}
-			else{
-				return 1000+(depth*100);
 			}
 		}
 	
@@ -1050,11 +1050,14 @@ public class ArtIntel implements Runnable{
 					board[r][c] = " ";
 				}
 				
-				List<Node> children = generateWhiteMoves(board);
-				for(Node child: children) {
-					child.addParent(legal.get(i));
+				List<Node> children = null;
+				if(temp != "K" & depth > 2) {
+					children = generateWhiteMoves(board);
+					for(Node child: children) {
+						child.addParent(legal.get(i));
+					}
+					legal.get(i).addChildren(children);
 				}
-				legal.get(i).addChildren(children);
 
 				int value = minimaxAB("white", depth-1, alpha, beta, children);
 				if(value > alpha){
@@ -1095,11 +1098,14 @@ public class ArtIntel implements Runnable{
 					board[r][c] = " ";
 				}
 			
-				List<Node> children = generateBlackMoves(board);
-				for(Node child: children) {
-					child.addParent(legal.get(i));
+				List<Node> children = null;
+				if(temp != "k") {
+					children = generateBlackMoves(board);
+					for(Node child: children) {
+						child.addParent(legal.get(i));
+					}
+					legal.get(i).addChildren(children);
 				}
-				legal.get(i).addChildren(children);
 				
 				int value = minimaxAB("black", depth-1, alpha, beta, children);
 				if(value < beta){
@@ -1162,12 +1168,9 @@ public class ArtIntel implements Runnable{
 			return -(2000+(depth*100));
 		}
 		
-		if(Examiner.check(board, turn) && depth < 6){
-			if(turn.equals("white")){
+		if(turn.equals("white")){
+			if(Examiner.check(board, turn) && depth < 6){
 				return -(1000+(depth*100));
-			}
-			else{
-				return 1000+(depth*100);
 			}
 		}
 
@@ -1217,11 +1220,14 @@ public class ArtIntel implements Runnable{
 					board[r][c] = " ";	
 				}
 				
-				List<Node> children = generateWhiteMoves(board);
-				for(Node child: children) {
-					child.addParent(legal.get(i));
+				List<Node> children = null;
+				if(temp != "K" & depth > 2) {
+					children = generateWhiteMoves(board);
+					for(Node child: children) {
+						child.addParent(legal.get(i));
+					}
+					legal.get(i).addChildren(children);
 				}
-				legal.get(i).addChildren(children);
 				
 				int value = minimax("white", depth-1, children);
 					scores.add(value);
@@ -1230,7 +1236,7 @@ public class ArtIntel implements Runnable{
 					root.setValue(value);
 					integrator.mergeMoves(root);
 					hash.clear();
-					}
+				}
 			}				
 			else{
 				r3 = 3;
@@ -1259,16 +1265,19 @@ public class ArtIntel implements Runnable{
 					board[r][c] = " ";	
 				}
 				
-				List<Node> children = generateBlackMoves(board);
-				for(Node child: children) {
-					child.addParent(legal.get(i));
+				List<Node> children = null;
+				if(temp != "k") {
+					children = generateBlackMoves(board);
+					for(Node child: children) {
+						child.addParent(legal.get(i));
+					}
+					legal.get(i).addChildren(children);
 				}
-				legal.get(i).addChildren(children);
 				
 				int value = minimax("black", depth-1, children);
 					scores.add(value);
 					legal.get(i).setValue(value);
-				}
+			}
 			
 			if(prom.equals("p")){
 				board[r][c] = "p";
@@ -1319,12 +1328,9 @@ public class ArtIntel implements Runnable{
 			return -(1000*depth);
 		}
 		
-		if(Examiner.check(board, turn) && depth < 6){
-			if(turn.equals("white")){
-				return -(1000*depth);
-			}
-			else{
-				return 100/depth;
+		if(turn.equals("white")){
+			if(Examiner.check(board, turn) && depth < 6){
+				return -(1000+(depth*100));
 			}
 		}
 		
@@ -1374,11 +1380,14 @@ public class ArtIntel implements Runnable{
 					board[r][c] = " ";	
 				}
 				
-				List<Node> children = generateWhiteMoves(board);
-				for(Node child: children) {
-					child.addParent(legal.get(i));
+				List<Node> children = null;
+				if(temp != "K" & depth > 2) {
+					children = generateWhiteMoves(board);
+					for(Node child: children) {
+						child.addParent(legal.get(i));
+					}
+					legal.get(i).addChildren(children);
 				}
-				legal.get(i).addChildren(children);
 				
 				int value = expectimax("white", depth-1, children);
 					scores.add(value);
@@ -1412,11 +1421,14 @@ public class ArtIntel implements Runnable{
 					board[r][c] = " ";	
 				}
 				
-				List<Node> children = generateBlackMoves(board);
-				for(Node child: children) {
-					child.addParent(legal.get(i));
+				List<Node> children = null;
+				if(temp != "k") {
+					children = generateBlackMoves(board);
+					for(Node child: children) {
+						child.addParent(legal.get(i));
+					}
+					legal.get(i).addChildren(children);
 				}
-				legal.get(i).addChildren(children);
 				
 				int value = expectimax("black", depth-1, children);
 					scores.add(value);

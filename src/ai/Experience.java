@@ -8,18 +8,21 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
 
 public class Experience {
 
-	private Set<String> exp;	
+	private Set<String> exp;
+	private Map<String, Node> pos;
 	{
 		File file = new File("experience.bin");
 		if(!file.exists()) {
 			try {
 				file.createNewFile();
-				exp = new CopyOnWriteArraySet<>();
+				exp = new HashSet<>();
 			    try(ObjectOutputStream oos = new ObjectOutputStream
 			       (new BufferedOutputStream(new FileOutputStream("experience.bin")))){
 			           oos.writeObject(exp);
@@ -37,10 +40,33 @@ public class Experience {
 	    catch (IOException | ClassNotFoundException ex) {
 			ex.printStackTrace();
 		}
+	    
+		File file2 = new File("positions.bin");
+		if(!file2.exists()) {
+			try {
+				file2.createNewFile();
+				pos = new HashMap<>();
+			    try(ObjectOutputStream oos = new ObjectOutputStream
+			       (new BufferedOutputStream(new FileOutputStream("positions.bin")))){
+			           oos.writeObject(pos);
+			    }			
+			}
+			catch (IOException ex) {
+				ex.printStackTrace();
+			}
+		}
+		
+	    try(ObjectInputStream ois = new ObjectInputStream
+	       (new BufferedInputStream(new FileInputStream("positions.bin")))){
+	    	pos = (Map<String, Node>) ois.readObject();
+	    }
+	    catch (IOException | ClassNotFoundException ex) {
+			ex.printStackTrace();
+		}
 	}
 	
 	boolean bingo(String note) {
-		return exp.contains(note);		
+		return exp.contains(note);
 	}
 	
 	void learn(String note) {
@@ -48,6 +74,26 @@ public class Experience {
 	    try(ObjectOutputStream oos = new ObjectOutputStream
 		   (new BufferedOutputStream(new FileOutputStream("experience.bin")))){
 	           oos.writeUnshared(exp);
+	           oos.flush();
+	           oos.reset();
+	    }			
+		catch (IOException ex) {
+			ex.printStackTrace();
+		}
+	}
+	
+	boolean bingo2(String note) {
+		return pos.containsKey(note);		
+	}
+	Node get(String note) {
+		return pos.get(note);		
+	}
+	
+	void learn2(String note, Node node) {
+		pos.putIfAbsent(note, node);
+	    try(ObjectOutputStream oos = new ObjectOutputStream
+		   (new BufferedOutputStream(new FileOutputStream("positions.bin")))){
+	           oos.writeUnshared(pos);
 	           oos.flush();
 	           oos.reset();
 	    }			

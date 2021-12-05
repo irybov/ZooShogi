@@ -384,7 +384,7 @@ public class Gui {
 							highlight(r, c);
 							director.from(r, c, squares[r][c].getName());
 							click = 2;
-							output.setText(Message.pieceName(squares[r][c].getName())
+							output.setText(Message.getPieceName(squares[r][c].getName())
 																		+" choosen");
 							drop = false;
 							return;
@@ -778,6 +778,9 @@ public class Gui {
 			}
 		}
 		return null;
+	}
+	public static String getHuman() {
+		return profile.getText();
 	}
 	
 	private void disable() {

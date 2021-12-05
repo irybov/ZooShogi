@@ -1,9 +1,10 @@
 package ai;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Node implements Comparable<Node>{
+public class Node implements Comparable<Node>, Serializable{
 
 	private int depth;
 	private int value;
@@ -16,24 +17,19 @@ public class Node implements Comparable<Node>{
 	private final int R2;
 	private final int C2;
 	private final String SIDE;
-	private final String PIECE;
 
-	public Node(int R, int C, int R2, int C2, String SIDE, String PIECE) {
+	public Node(int R, int C, int R2, int C2, String SIDE) {
 		this.R = R;
 		this.C = C;
 		this.R2 = R2;
 		this.C2 = C2;
 		this.SIDE = SIDE;
-		this.PIECE = PIECE;
 	}
 	
 	@Override
 	public String toString() {
 		return "Node [depth=" + depth + ", value=" + value + ", side=" + SIDE + ", "
-				+ new Edge(R, C, R2, C2, PIECE).toString();
-	}
-	public String getEdge() {
-		return new Edge(R, C, R2, C2, PIECE).toString();
+													+ (R) + (C) + (R2) + (C2) + "]";
 	}
 
 	@Override

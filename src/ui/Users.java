@@ -39,7 +39,7 @@ public class Users extends JFrame {
                 									"Authorization", 
                                                 JOptionPane.DEFAULT_OPTION); 
             	if(director.selectPlayer(username, password)) {
-        			Gui.profile.setText("Player: " + username);
+        			Gui.profile.setText(username);
                 dispose();
             	}
             	else {

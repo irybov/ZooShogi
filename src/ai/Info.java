@@ -23,7 +23,7 @@ public class Info {
 		Gui.score.setText(score > 0 ? "+" + Integer.toString(score) : Integer.toString(score));
 		
 		Gui.output.setText(name+" "+(c>2?"drops":"from "+col+(r+1))+
-			(spot.equals(" ")?" to ":" takes on ")+col2+(r2+1));
+				(spot.equals(" ")?" to ":" takes on ")+col2+(r2+1));
 		if(!mute){
 		sound.voice(name);
 			if(!spot.equals(" ")){

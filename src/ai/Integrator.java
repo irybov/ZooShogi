@@ -49,6 +49,12 @@ public class Integrator {
 	boolean getNote(String[][] field) {
 		return exp.bingo(Matrix.keyMaker(field));
 	}
+	public boolean hasNode(String[][] field) {
+		return exp.bingo2(Matrix.keyMaker(field));
+	}
+	public Node getNode(String[][] field) {
+		return exp.get(Matrix.keyMaker(field));
+	}
 	public void newGame() {
 		game.clear();
 		MoveList.clear();
@@ -128,7 +134,7 @@ public class Integrator {
 		final int c2 = args[3];
 		final int score = args[4];
 		final int nodes = args[5];
-		Node move = new Node(r, c, r2, c2, "black", field[r][c]);
+		Node move = new Node(r, c, r2, c2, "black");
 		move.setValue(score);
 		
 		Clocks.setNodes(nodes);	
@@ -145,11 +151,16 @@ public class Integrator {
 		int r2 = move.getR2();
 		int c2 = move.getC2();
 		
-		String edge = new Edge(r, c, r2, c2, field[r][c]).toString();		
+		if(score > 500 & Cache.empty()) {
+			String state = Matrix.keyMaker(field);
+			exp.learn2(state, move);
+		}
+		
+		String edge = Message.getEdge(r, c, r2, c2, field[r][c]);		
 		scribe.writeGame("black", edge);
 		
 		String spot = field[r2][c2];
-		String pieceName = Message.pieceName(field[r][c]);
+		String pieceName = Message.getPieceName(field[r][c]);
 
 		if(field[r][c].equals("p") & r==2){
 			if(r==0 & c > 2){
@@ -183,8 +194,8 @@ public class Integrator {
 			}
 		}
 		
-		String col = Message.colName(c);
-		String col2 = Message.colName(c2);
+		String col = Message.getColName(c);
+		String col2 = Message.getColName(c2);
 		
 		info.output(score, field, pieceName, c, col, r, spot, col2, r2);
 		return field;		
