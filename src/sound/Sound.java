@@ -21,7 +21,7 @@ public class Sound {
 	static float gain;	
 	public static void setVol(float g){
 		gain = g;
-		}
+	}
 	
 	public void voice(String action){
 

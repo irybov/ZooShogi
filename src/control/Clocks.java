@@ -7,10 +7,10 @@ import ui.Gui;
 
 public class Clocks{
 	
-	private int minB = 0;
-	private int secB = 0;
-	private int minW = 0;
-	private int secW = 0;
+	private static int minB = 0;
+	private static int secB = 0;
+	private static int minW = 0;
+	private static int secW = 0;
 
 	private volatile String turn = " ";
 	private static AtomicInteger nodes = new AtomicInteger(0);
@@ -39,7 +39,7 @@ public class Clocks{
 		nodes.addAndGet(count);
 	}
 	
-	public void setClock() {
+	public void showClock() {
 		
 //		new Thread(new Runnable() {
 //			public void run() {
@@ -48,7 +48,7 @@ public class Clocks{
 			try {
 				if(turn.equals("black")) {
 					Gui.counter.setText(String.format("%,d", nodes.get()));
-				if(secB < 59) {
+					if(secB < 59) {
 						secB++;
 					}
 					else {

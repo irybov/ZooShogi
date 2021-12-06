@@ -91,7 +91,7 @@ public class Gui {
 		
 		new Thread(new Runnable() {
 			public void run() {
-				clocks.setClock();
+				clocks.showClock();
 			}
 		}).start();
 		

@@ -866,7 +866,7 @@ public class ArtIntel implements Runnable{
 				}
 		
 				List<Node> children = null;
-				if(temp != "K" & depth > -2) {
+				if(temp != "K" & (node ? depth > -2 : depth > 2)) {
 					children = generateWhiteMoves(board);
 					for(Node child: children) {
 						child.addParent(legal.get(i));

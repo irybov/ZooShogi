@@ -22,11 +22,11 @@ public class Capture {
 	public static boolean extend(String piece, String side) {
 		
 		if(side.equals("white")&(piece.equals("p")||piece.equals("q")||piece.equals("r")
-				||piece.equals("b")||piece.equals("k"))) {
+				||piece.equals("b"))) {
 			return true;
 		}
 		else if(side.equals("black")&(piece.equals("P")||piece.equals("Q")||piece.equals("R")
-				||piece.equals("B")||piece.equals("K"))) {
+				||piece.equals("B"))) {
 			return true;
 		}
 		return false;
