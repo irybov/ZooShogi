@@ -154,11 +154,11 @@ public class Integrator {
 		
 		if(score > 500 & Cache.empty()) {
 			String state = Matrix.keyMaker(field);
-			exp.learn2(state, move);
+			exp.learn(state, move);
 			String mirror = Matrix.keySwapper(state);
 			Copier.deepCopy(Arrays.asList(move), null, true);
 			Node twin = Copier.getRoot();
-			exp.learn2(mirror, twin);
+			exp.learn(mirror, twin);
 		}
 		
 		String edge = Message.getEdge(r, c, r2, c2, field[r][c]);		
@@ -187,6 +187,7 @@ public class Integrator {
 		if(score < -500) {
 			if(!exp.bingo(game.peek())) {
 				exp.learn(game.peek());
+				exp.learn(Matrix.keySwapper(game.peek()));
 			}
 		}
 		else {

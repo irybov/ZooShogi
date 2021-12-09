@@ -37,7 +37,7 @@ public class Copier {
 	public static void deepCopy(List<Node> original, List<Node> modified, boolean ceil) {
 		
 		if(ceil) {
-			modified = new ArrayList<>(1);
+			modified = new ArrayList<>(original.size());
 			int c = original.get(0).getC() > 2 ?
 					original.get(0).getC() : getIndex(original.get(0).getC());
 			int c2 = getIndex(original.get(0).getC2());
@@ -54,16 +54,18 @@ public class Copier {
 				List<Node> children = original.get(i).getChidren();
 				List<Node> twins = new ArrayList<>(children.size());
 				
-				for(Node child: children) {
-					int c = child.getC() > 2 ? child.getC() : getIndex(child.getC());
-					int c2 = getIndex(child.getC2());									
-					twins.add(new Node(child.getR(), c, child.getR2(), c2, child.getSide()));
-					twins.get(i).setValue(child.getValue());
-					modified.get(i).addChildren(twins);
+				for(int j=0; j<children.size(); j++) {
+					int c = children.get(j).getC() > 2 ?
+							children.get(j).getC() : getIndex(children.get(j).getC());
+					int c2 = getIndex(children.get(j).getC2());									
+					twins.add(new Node(children.get(j).getR(), c, children.get(j).getR2(), c2,
+							children.get(j).getSide()));
+					twins.get(j).setValue(children.get(j).getValue());
 					for(Node twin: twins) {
 						twin.addParent(modified.get(i));
 					}
 				}
+				modified.get(i).addChildren(twins);
 				deepCopy(children, twins, false);
 			}
 		}

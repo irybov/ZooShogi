@@ -15,17 +15,17 @@ import java.util.Set;
 
 public class Experience {
 
-	private Set<String> exp;
+	private Set<String> neg;
 	private Map<String, Node> pos;
 	{
-		File file = new File("experience.bin");
-		if(!file.exists()) {
+		File negative = new File("negative.bin");
+		if(!negative.exists()) {
 			try {
-				file.createNewFile();
-				exp = new HashSet<>();
+				negative.createNewFile();
+				neg = new HashSet<>();
 			    try(ObjectOutputStream oos = new ObjectOutputStream
-			       (new BufferedOutputStream(new FileOutputStream("experience.bin")))){
-			           oos.writeObject(exp);
+			       (new BufferedOutputStream(new FileOutputStream("negative.bin")))){
+			           oos.writeObject(neg);
 			    }			
 			}
 			catch (IOException ex) {
@@ -34,20 +34,20 @@ public class Experience {
 		}
 		
 	    try(ObjectInputStream ois = new ObjectInputStream
-	       (new BufferedInputStream(new FileInputStream("experience.bin")))){
-	    	exp = (Set<String>) ois.readObject();
+	       (new BufferedInputStream(new FileInputStream("negative.bin")))){
+	    	neg = (Set<String>) ois.readObject();
 	    }
 	    catch (IOException | ClassNotFoundException ex) {
 			ex.printStackTrace();
 		}
 	    
-		File file2 = new File("positions.bin");
-		if(!file2.exists()) {
+		File positive = new File("positive.bin");
+		if(!positive.exists()) {
 			try {
-				file2.createNewFile();
+				positive.createNewFile();
 				pos = new HashMap<>();
 			    try(ObjectOutputStream oos = new ObjectOutputStream
-			       (new BufferedOutputStream(new FileOutputStream("positions.bin")))){
+			       (new BufferedOutputStream(new FileOutputStream("positive.bin")))){
 			           oos.writeObject(pos);
 			    }			
 			}
@@ -57,7 +57,7 @@ public class Experience {
 		}
 		
 	    try(ObjectInputStream ois = new ObjectInputStream
-	       (new BufferedInputStream(new FileInputStream("positions.bin")))){
+	       (new BufferedInputStream(new FileInputStream("positive.bin")))){
 	    	pos = (Map<String, Node>) ois.readObject();
 	    }
 	    catch (IOException | ClassNotFoundException ex) {
@@ -66,14 +66,14 @@ public class Experience {
 	}
 	
 	boolean bingo(String note) {
-		return exp.contains(note);
+		return neg.contains(note);
 	}
 	
 	void learn(String note) {
-		exp.add(note);
+		neg.add(note);
 	    try(ObjectOutputStream oos = new ObjectOutputStream
-		   (new BufferedOutputStream(new FileOutputStream("experience.bin")))){
-	           oos.writeUnshared(exp);
+		   (new BufferedOutputStream(new FileOutputStream("negative.bin")))){
+	           oos.writeUnshared(neg);
 	           oos.flush();
 	           oos.reset();
 	    }			
@@ -89,10 +89,10 @@ public class Experience {
 		return pos.get(note);		
 	}
 	
-	void learn2(String note, Node node) {
+	void learn(String note, Node node) {
 		pos.putIfAbsent(note, node);
 	    try(ObjectOutputStream oos = new ObjectOutputStream
-		   (new BufferedOutputStream(new FileOutputStream("positions.bin")))){
+		   (new BufferedOutputStream(new FileOutputStream("positive.bin")))){
 	           oos.writeUnshared(pos);
 	           oos.flush();
 	           oos.reset();
