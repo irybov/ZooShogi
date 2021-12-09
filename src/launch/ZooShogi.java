@@ -2,6 +2,7 @@ package launch;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
 
 import javax.swing.*;
 import ui.Gui;
@@ -40,7 +41,10 @@ public class ZooShogi {
 		//setup button listeners to do what they say they do
 		newGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//starts main program			
+				//starts main program
+				new File(System.getProperty("user.dir") +
+						 System.getProperty("file.separator") + "exp").mkdir();
+				
 				 javax.swing.SwingUtilities.invokeLater(new Runnable() {
 						public void run() {
 							new Gui();

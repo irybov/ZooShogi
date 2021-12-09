@@ -61,9 +61,9 @@ public class Copier {
 					twins.add(new Node(children.get(j).getR(), c, children.get(j).getR2(), c2,
 							children.get(j).getSide()));
 					twins.get(j).setValue(children.get(j).getValue());
-					for(Node twin: twins) {
-						twin.addParent(modified.get(i));
-					}
+				}
+				for(Node twin: twins) {
+					twin.addParent(modified.get(i));
 				}
 				modified.get(i).addChildren(twins);
 				deepCopy(children, twins, false);

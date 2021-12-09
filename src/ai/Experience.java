@@ -18,13 +18,13 @@ public class Experience {
 	private Set<String> neg;
 	private Map<String, Node> pos;
 	{
-		File negative = new File("negative.bin");
+		File negative = new File("exp/negative.bin");
 		if(!negative.exists()) {
 			try {
 				negative.createNewFile();
 				neg = new HashSet<>();
 			    try(ObjectOutputStream oos = new ObjectOutputStream
-			       (new BufferedOutputStream(new FileOutputStream("negative.bin")))){
+			       (new BufferedOutputStream(new FileOutputStream("exp/negative.bin")))){
 			           oos.writeObject(neg);
 			    }			
 			}
@@ -34,20 +34,20 @@ public class Experience {
 		}
 		
 	    try(ObjectInputStream ois = new ObjectInputStream
-	       (new BufferedInputStream(new FileInputStream("negative.bin")))){
+	       (new BufferedInputStream(new FileInputStream("exp/negative.bin")))){
 	    	neg = (Set<String>) ois.readObject();
 	    }
 	    catch (IOException | ClassNotFoundException ex) {
 			ex.printStackTrace();
 		}
 	    
-		File positive = new File("positive.bin");
+		File positive = new File("exp/positive.bin");
 		if(!positive.exists()) {
 			try {
 				positive.createNewFile();
 				pos = new HashMap<>();
 			    try(ObjectOutputStream oos = new ObjectOutputStream
-			       (new BufferedOutputStream(new FileOutputStream("positive.bin")))){
+			       (new BufferedOutputStream(new FileOutputStream("exp/positive.bin")))){
 			           oos.writeObject(pos);
 			    }			
 			}
@@ -57,7 +57,7 @@ public class Experience {
 		}
 		
 	    try(ObjectInputStream ois = new ObjectInputStream
-	       (new BufferedInputStream(new FileInputStream("positive.bin")))){
+	       (new BufferedInputStream(new FileInputStream("exp/positive.bin")))){
 	    	pos = (Map<String, Node>) ois.readObject();
 	    }
 	    catch (IOException | ClassNotFoundException ex) {
@@ -72,7 +72,7 @@ public class Experience {
 	void learn(String note) {
 		neg.add(note);
 	    try(ObjectOutputStream oos = new ObjectOutputStream
-		   (new BufferedOutputStream(new FileOutputStream("negative.bin")))){
+		   (new BufferedOutputStream(new FileOutputStream("exp/negative.bin")))){
 	           oos.writeUnshared(neg);
 	           oos.flush();
 	           oos.reset();
@@ -92,7 +92,7 @@ public class Experience {
 	void learn(String note, Node node) {
 		pos.putIfAbsent(note, node);
 	    try(ObjectOutputStream oos = new ObjectOutputStream
-		   (new BufferedOutputStream(new FileOutputStream("positive.bin")))){
+		   (new BufferedOutputStream(new FileOutputStream("exp/positive.bin")))){
 	           oos.writeUnshared(pos);
 	           oos.flush();
 	           oos.reset();

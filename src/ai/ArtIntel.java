@@ -431,130 +431,6 @@ public class ArtIntel implements Runnable{
 		return score;
 	}
 
-	private boolean unsafe(String[][] board, String turn) {		
-		
-		int r,c,r2,c2;
-		
-		if(turn.equals("white")){	
-			for(r=0; r<4; r++){
-				for(c=0; c<3; c++){					
-					if(board[r][c].equals("p")){
-						r2 = r+1;
-						c2 = c;
-						if((Pieces.BPAWN.move(r, c, r2, c2))&&
-						   (board[r2][c2].equals("K"))){
-							return true;
-						}
-					}
-					
-					else if(board[r][c].equals("r")){						
-						for(r2=r-1; r2<r+2; r2++){
-							for(c2=c-1; c2<c+2; c2++){
-							if((Pieces.ROOK.move(r, c, r2, c2))&&
-								(board[r2][c2].equals("K"))){
-								return true;
-								}
-							}							
-						}
-					}
-					
-					else if(board[r][c].equals("k")){						
-						for(r2=r-1; r2<r+2; r2++){
-							for(c2=c-1; c2<c+2; c2++){
-							if((Pieces.KING.move(r, c, r2, c2))&&
-								(board[r2][c2].equals("K"))){
-								return true;
-								}
-							}							
-						}
-					}
-
-					else if(board[r][c].equals("b")){						
-						for(r2=r-1; r2<r+2; r2++){
-							for(c2=c-1; c2<c+2; c2++){
-							if((Pieces.BISHOP.move(r, c, r2, c2))&&
-								(board[r2][c2].equals("K"))){
-								return true;
-								}
-							}							
-						}
-					}
-					
-					else if(board[r][c].equals("q")){						
-						for(r2=r-1; r2<r+2; r2++){
-							for(c2=c-1; c2<c+2; c2++){
-							if((Pieces.BQUEEN.move(r, c, r2, c2))&&
-								(board[r2][c2].equals("K"))){
-								return true;
-								}
-							}							
-						}
-					}
-				}
-			}
-		}
-				
-		else{
-			for(r=0; r<4; r++){
-				for(c=0; c<3; c++){					
-					if(board[r][c].equals("P")){
-						r2 = r-1;
-						c2 = c;
-						if((Pieces.WPAWN.move(r, c, r2, c2))&&
-						   (board[r2][c2].equals("k"))){
-							return true;
-						}
-					}
-					
-					else if(board[r][c].equals("R")){						
-						for(r2=r-1; r2<r+2; r2++){
-							for(c2=c-1; c2<c+2; c2++){
-							if((Pieces.ROOK.move(r, c, r2, c2))&&
-								(board[r2][c2].equals("k"))){
-								return true;
-								}
-							}							
-						}
-					}
-					
-					else if(board[r][c].equals("K")){						
-						for(r2=r-1; r2<r+2; r2++){
-							for(c2=c-1; c2<c+2; c2++){
-							if((Pieces.KING.move(r, c, r2, c2))&&
-								(board[r2][c2].equals("k"))){
-								return true;
-								}
-							}							
-						}
-					}
-
-					else if(board[r][c].equals("B")){						
-						for(r2=r-1; r2<r+2; r2++){
-							for(c2=c-1; c2<c+2; c2++){
-							if((Pieces.BISHOP.move(r, c, r2, c2))&&
-								(board[r2][c2].equals("k"))){
-								return true;
-								}
-							}							
-						}
-					}
-					
-					else if(board[r][c].equals("Q")){						
-						for(r2=r-1; r2<r+2; r2++){
-							for(c2=c-1; c2<c+2; c2++){
-							if((Pieces.WQUEEN.move(r, c, r2, c2))&&
-								(board[r2][c2].equals("k"))){
-								return true;
-								}
-							}							
-						}
-					}
-				}
-			}
-		}
-	return false;
-	}
-	
 	private int max(List<Integer> scores) {		
 		return scores.stream().reduce(Integer.MIN_VALUE+1, Integer::max);
 	}	
@@ -825,7 +701,7 @@ public class ArtIntel implements Runnable{
 				r3 = 0;
 				
 				if(board[r][c].equals("k")){
-					node = unsafe(board, "black");
+					node = Examiner.check(board, "white");
 				}
 				
 				if(board[r][c].equals("p") & r==2){
@@ -854,8 +730,8 @@ public class ArtIntel implements Runnable{
 				}
 				
 				if(node==false){
-					node = (Capture.extend(temp, "black")||Capture.prom(board, r2, c2, "black")
-															||Examiner.check(board, "black"));
+					node = (Capture.extend(temp, turn)||Capture.prom(board, r2, c2, turn)
+															||Examiner.check(board, turn));
 				}
 		
 				List<Node> children = null;
@@ -885,7 +761,7 @@ public class ArtIntel implements Runnable{
 				r3 = 3;
 				
 				if(board[r][c].equals("K")){
-					node = unsafe(board, "white");
+					node = Examiner.check(board, "black");
 				}
 				
 				if(board[r][c].equals("P") & r==1){
@@ -914,8 +790,8 @@ public class ArtIntel implements Runnable{
 				}
 				
 				if(node==false){
-				node = (Capture.extend(temp, "white")||Capture.prom(board, r2, c2, "white")
-														||Examiner.check(board, "white"));
+				node = (Capture.extend(temp, turn)||Capture.prom(board, r2, c2, turn)
+														||Examiner.check(board, turn));
 				}
 
 				List<Node> children = null;
