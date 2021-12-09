@@ -28,7 +28,7 @@ class HashTabs {
 		
 		String hash = Matrix.keyMaker(field);
 							
-		if(side.equals("black") & black.containsKey(hash)) {
+		if(side.equals("black")) {
 			if(black.containsKey(hash))
 				return(black.get(hash) == depth+4);
 		}

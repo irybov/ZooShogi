@@ -1,4 +1,4 @@
-package utilpack;
+package ai;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import ai.ArtIntel;
 import ai.Node;
+import utilpack.Copier;
 
 @Ignore
 public class ArtIntelTest {
@@ -17,7 +18,7 @@ public class ArtIntelTest {
 	
 	@BeforeClass
 	public static void initBoard() {
-		board = new String[][]{{"r","k"," ","b","p","r","b","p"," "},
+		board = new String[][]{{" ","k"," ","b","p","r","b","p","r"},
 				  			   {" "," "," "},
 				  			   {" "," "," "},
 				  			   {" ","K"," "," "," "," "," "," "," "}};				

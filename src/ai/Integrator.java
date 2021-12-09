@@ -2,6 +2,7 @@ package ai;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.LinkedList;
@@ -154,6 +155,10 @@ public class Integrator {
 		if(score > 500 & Cache.empty()) {
 			String state = Matrix.keyMaker(field);
 			exp.learn2(state, move);
+			String mirror = Matrix.keySwapper(state);
+			Copier.deepCopy(Arrays.asList(move), null, true);
+			Node twin = Copier.getRoot();
+			exp.learn2(mirror, twin);
 		}
 		
 		String edge = Message.getEdge(r, c, r2, c2, field[r][c]);		

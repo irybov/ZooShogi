@@ -765,7 +765,7 @@ public class ArtIntel implements Runnable{
 
 	// minimax with capture and check extensions
 	private int minimaxEX(String turn, int depth, int alpha, int beta, boolean node,
-			List<Node> start) {
+			List<Node> legal) {
 		
 		if(turn.equals("white") && integrator.getNote(board)) {
 			return -500;
@@ -803,14 +803,7 @@ public class ArtIntel implements Runnable{
 		if(depth == -3){
 			return evaluationMaterial(board, false);
 		}
-		
-		List<Node> legal = new ArrayList<>(start.size());
-		if(depth == 6){
-			legal.addAll(start);
-		}
-		else{
-			legal = sortingMoves(board, start, turn, false);
-		}
+
 		count += legal.size();
 		
 		ArrayList<Integer> scores = new ArrayList<>();
@@ -866,15 +859,17 @@ public class ArtIntel implements Runnable{
 				}
 		
 				List<Node> children = null;
+				List<Node> sorted = null;
 				if(temp != "K" & (node ? depth > -2 : depth > 2)) {
 					children = generateWhiteMoves(board);
-					for(Node child: children) {
+					sorted = sortingMoves(board, children, "white", false);
+					for(Node child: sorted) {
 						child.addParent(legal.get(i));
 					}
-					legal.get(i).addChildren(children);
+					legal.get(i).addChildren(sorted);
 				}
 				
-				int value = minimaxEX("white", depth-1, alpha, beta, node, children);
+				int value = minimaxEX("white", depth-1, alpha, beta, node, sorted);
 				if(value > alpha){
 					alpha = value;
 					scores.add(value);
@@ -924,15 +919,17 @@ public class ArtIntel implements Runnable{
 				}
 
 				List<Node> children = null;
+				List<Node> sorted = null;
 				if(temp != "k") {
 					children = generateBlackMoves(board);
-					for(Node child: children) {
+					sorted = sortingMoves(board, children, "black", false);
+					for(Node child: sorted) {
 						child.addParent(legal.get(i));
 					}
-					legal.get(i).addChildren(children);
+					legal.get(i).addChildren(sorted);
 				}
 				
-				int value = minimaxEX("black", depth-1, alpha, beta, node, children);
+				int value = minimaxEX("black", depth-1, alpha, beta, node, sorted);
 				if(value < beta){
 					beta = value;
 					scores.add(value);
@@ -966,7 +963,7 @@ public class ArtIntel implements Runnable{
 	}
 
 	// minimax with alpha-beta pruning
-	private int minimaxAB(String turn, int depth, int alpha, int beta, List<Node> start) {
+	private int minimaxAB(String turn, int depth, int alpha, int beta, List<Node> legal) {
 		
 		if(turn.equals("white") && integrator.getNote(board)) {
 			return -500;
@@ -1001,13 +998,6 @@ public class ArtIntel implements Runnable{
 			return evaluationMaterial(board, false);
 		}
 
-		List<Node> legal = new ArrayList<>(start.size());
-		if(depth == 8){
-			legal.addAll(start);
-		}
-		else{
-			legal = sortingMoves(board, start, turn, false);
-		}
 		count += legal.size();
 		
 		ArrayList<Integer> scores = new ArrayList<>();
@@ -1051,15 +1041,17 @@ public class ArtIntel implements Runnable{
 				}
 				
 				List<Node> children = null;
+				List<Node> sorted = null;
 				if(temp != "K" & depth > 2) {
 					children = generateWhiteMoves(board);
-					for(Node child: children) {
+					sorted = sortingMoves(board, children, "white", false);
+					for(Node child: sorted) {
 						child.addParent(legal.get(i));
 					}
-					legal.get(i).addChildren(children);
+					legal.get(i).addChildren(sorted);
 				}
 
-				int value = minimaxAB("white", depth-1, alpha, beta, children);
+				int value = minimaxAB("white", depth-1, alpha, beta, sorted);
 				if(value > alpha){
 					alpha = value;
 					scores.add(value);
@@ -1099,15 +1091,17 @@ public class ArtIntel implements Runnable{
 				}
 			
 				List<Node> children = null;
+				List<Node> sorted = null;
 				if(temp != "k") {
 					children = generateBlackMoves(board);
-					for(Node child: children) {
+					sorted = sortingMoves(board, children, "black", false);
+					for(Node child: sorted) {
 						child.addParent(legal.get(i));
 					}
-					legal.get(i).addChildren(children);
+					legal.get(i).addChildren(sorted);
 				}
 				
-				int value = minimaxAB("black", depth-1, alpha, beta, children);
+				int value = minimaxAB("black", depth-1, alpha, beta, sorted);
 				if(value < beta){
 					beta = value;
 					scores.add(value);
