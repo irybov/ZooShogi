@@ -11,9 +11,7 @@ import control.Clocks;
 import utilpack.Capture;
 import utilpack.Copier;
 import utilpack.Examiner;
-import utilpack.Pieces;
 
-import java.util.Collections;
 import java.util.Deque;
 import java.util.LinkedList;
 
@@ -22,6 +20,8 @@ public class ArtIntel implements Runnable{
 	private HashTabs hash;
 	private List<Node> moves;
 	
+	private final Generator generator = new Generator();
+	private final Evaluator evaluator = new Evaluator();
 	private Node root;
 	
 	private final int level;
@@ -91,554 +91,6 @@ public class ArtIntel implements Runnable{
 		}
 	}
 	
-	private List<Node> generateBlackMoves(String[][] board) {
-		
-		List<Node> legal = new ArrayList<>();
-		
-		int r2, c2;
-
-		for(int i=3; i<9; i++) {
-			if(!board[0][i].equals(" ")){
-				for(int r=0; r<4; r++){
-					for(int c=0; c<3; c++){
-						if(board[r][c].equals(" ")){
-							legal.add(new Node(0, i, r, c, "black"));
-						}
-					}
-				}
-			}
-		}
-			
-		for(int r=0; r<4; r++){
-			for(int c=0; c<3; c++){					
-				if(board[r][c].equals("p")){
-					r2 = r+1;
-					c2 = c;
-					if((Pieces.BPAWN.move(r, c, r2, c2))&&
-					   (Capture.check(board, r2, c2, "black"))){
-						legal.add(new Node(r, c, r2, c2, "black"));
-					}
-				}				
-				else if(board[r][c].equals("r")){					
-					for(r2=r-1; r2<r+2; r2++){
-						for(c2=c-1; c2<c+2; c2++){
-						if((Pieces.ROOK.move(r, c, r2, c2))&&
-						   (Capture.check(board, r2, c2, "black"))){
-							legal.add(new Node(r, c, r2, c2, "black"));
-							}
-						}							
-					}
-				}				
-				else if(board[r][c].equals("k")){					
-					for(r2=r-1; r2<r+2; r2++){
-						for(c2=c-1; c2<c+2; c2++){
-						if((Pieces.KING.move(r, c, r2, c2))&&
-						   (Capture.check(board, r2, c2, "black"))){
-							legal.add(new Node(r, c, r2, c2, "black"));
-							}
-						}							
-					}
-				}				
-				else if(board[r][c].equals("b")){					
-					for(r2=r-1; r2<r+2; r2++){
-						for(c2=c-1; c2<c+2; c2++){
-						if((Pieces.BISHOP.move(r, c, r2, c2))&&
-						   (Capture.check(board, r2, c2, "black"))){
-							legal.add(new Node(r, c, r2, c2, "black"));
-							}
-						}							
-					}
-				}				
-				else if(board[r][c].equals("q")){					
-					for(r2=r-1; r2<r+2; r2++){
-						for(c2=c-1; c2<c+2; c2++){
-						if((Pieces.BQUEEN.move(r, c, r2, c2))&&
-						   (Capture.check(board, r2, c2, "black"))){
-							legal.add(new Node(r, c, r2, c2, "black"));
-							}
-						}							
-					}
-				}
-			}
-		}
-		return legal;
-	}
-	
-	private List<Node> generateWhiteMoves(String[][] board) {
-		
-		List<Node> legal = new ArrayList<>();
-		
-		int r2, c2;
-
-		for(int i=3; i<9; i++) {
-			if(!board[3][i].equals(" ")){
-				for(int r=0; r<4; r++){
-					for(int c=0; c<3; c++){
-						if(board[r][c].equals(" ")){
-							legal.add(new Node(3, i, r, c, "white"));
-						}
-					}
-				}
-			}
-		}
-			
-		for(int r=0; r<4; r++){
-			for(int c=0; c<3; c++){					
-				if(board[r][c].equals("P")){
-					r2 = r-1;
-					c2 = c;
-					if((Pieces.WPAWN.move(r, c, r2, c2))&&
-					   (Capture.check(board, r2, c2, "white"))){
-						legal.add(new Node(r, c, r2, c2, "white"));
-					}
-				}
-				else if(board[r][c].equals("R")){					
-					for(r2=r-1; r2<r+2; r2++){
-						for(c2=c-1; c2<c+2; c2++){
-						if((Pieces.ROOK.move(r, c, r2, c2))&&
-						   (Capture.check(board, r2, c2, "white"))){
-							legal.add(new Node(r, c, r2, c2, "white"));
-							}
-						}							
-					}
-				}
-				else if(board[r][c].equals("K")){					
-					for(r2=r-1; r2<r+2; r2++){
-						for(c2=c-1; c2<c+2; c2++){
-						if((Pieces.KING.move(r, c, r2, c2))&&
-						   (Capture.check(board, r2, c2, "white"))){
-							legal.add(new Node(r, c, r2, c2, "white"));
-							}
-						}							
-					}
-				}				
-				else if(board[r][c].equals("B")){					
-					for(r2=r-1; r2<r+2; r2++){
-						for(c2=c-1; c2<c+2; c2++){
-						if((Pieces.BISHOP.move(r, c, r2, c2))&&
-						   (Capture.check(board, r2, c2, "white"))){
-							legal.add(new Node(r, c, r2, c2, "white"));
-							}
-						}							
-					}
-				}				
-				else if(board[r][c].equals("Q")){					
-					for(r2=r-1; r2<r+2; r2++){
-						for(c2=c-1; c2<c+2; c2++){
-						if((Pieces.WQUEEN.move(r, c, r2, c2))&&
-						   (Capture.check(board, r2, c2, "white"))){
-							legal.add(new Node(r, c, r2, c2, "white"));
-							}
-						}							
-					}
-				}
-			}
-		}
-		return legal;
-	}
-
-	private boolean winPositionBlack(String[][] board, String turn)  {
-		
-		int a = 0;
-		int b = 0;
-		
-		for(int r=0; r<4; r++){
-			for(int c=0; c<3; c++){
-				if(board[r][c].equals("K")){
-					a = 2;
-				}
-				if(board[r][c].equals("k")){
-					b = 1;
-				}
-			}
-		}		
-		return((a+b==1) || ((a+b==3 & turn.equals("black")) & 
-			   (board[3][0].equals("k")||board[3][1].equals("k")||board[3][2].equals("k"))));
-	}
-	
-	private boolean winPositionWhite(String[][] board, String turn)  {
-		
-		int a = 0;
-		int b = 0;
-		
-		for(int r=0; r<4; r++){
-			for(int c=0; c<3; c++){
-				if(board[r][c].equals("K")){
-					a = 2;
-				}
-				if(board[r][c].equals("k")){
-					b = 1;
-				}
-			}
-		}		
-		return((a+b==2) || ((a+b==3 & turn.equals("white")) & 
-			   (board[0][0].equals("K")||board[0][1].equals("K")||board[0][2].equals("K"))));
-	}	
-	
-	private int evaluationMaterial(String[][] board, boolean exp) {
-		
-		int score = 0;
-
-		for(int r=0; r<4; r++){
-			for(int c=0; c<board[r].length; c++){
-				if(!board[r][c].equals(" ")){
-					switch(board[r][c]){
-					case "p":
-						score += exp ? Pieces.BPAWN.getValue()*10 : Pieces.BPAWN.getValue();
-						break;
-					case "r":
-						score += exp ? Pieces.ROOK.getValue()*10 : Pieces.ROOK.getValue();
-						break;
-					case "b":
-						score += exp ? Pieces.BISHOP.getValue()*10 : Pieces.BISHOP.getValue();
-						break;
-					case "q":
-						score += exp ? Pieces.BQUEEN.getValue()*10 : Pieces.BQUEEN.getValue();
-						break;
-					case "P":
-						score += -Pieces.WPAWN.getValue();
-						break;
-					case "R":
-						score += -Pieces.ROOK.getValue();
-						break;
-					case "B":
-						score += -Pieces.BISHOP.getValue();
-						break;
-					case "Q":
-						score += -Pieces.WQUEEN.getValue();
-						break;
-					}
-				}
-			}
-		}
-		return score;
-	}
-
-	private int evaluationPositional(String[][] board) {		
-		
-		int score = 0;
-		int r,c,r2,c2;
-	
-		for(r=0; r<4; r++){
-			for(c=0; c<3; c++){					
-				if(board[r][c].equals("p")){
-					r2 = r+1;
-					c2 = c;
-					if((Pieces.BPAWN.move(r, c, r2, c2))&&
-					   (Capture.check(board, r2, c2, "black"))){
-						score += (Capture.attack(board, r2, c2, "black"));
-					}
-				}
-				
-				else if(board[r][c].equals("r")){					
-					for(r2=r-1; r2<r+2; r2++){
-						for(c2=c-1; c2<c+2; c2++){
-						if((Pieces.ROOK.move(r, c, r2, c2))&&
-						   (Capture.check(board, r2, c2, "black"))){
-							score += (Capture.attack(board, r2, c2, "black"));
-							}
-						}							
-					}
-				}
-				
-				else if(board[r][c].equals("k")){					
-					for(r2=r-1; r2<r+2; r2++){
-						for(c2=c-1; c2<c+2; c2++){
-						if((Pieces.KING.move(r, c, r2, c2))&&
-						   (Capture.check(board, r2, c2, "black"))){
-							score += (Capture.attack(board, r2, c2, "black"));
-							}
-						}							
-					}
-				}
-				
-				else if(board[r][c].equals("b")){					
-					for(r2=r-1; r2<r+2; r2++){
-						for(c2=c-1; c2<c+2; c2++){
-						if((Pieces.BISHOP.move(r, c, r2, c2))&&
-						   (Capture.check(board, r2, c2, "black"))){
-							score += (Capture.attack(board, r2, c2, "black"));
-							}
-						}							
-					}
-				}
-				
-				else if(board[r][c].equals("q")){					
-					for(r2=r-1; r2<r+2; r2++){
-						for(c2=c-1; c2<c+2; c2++){
-						if((Pieces.BQUEEN.move(r, c, r2, c2))&&
-						   (Capture.check(board, r2, c2, "black"))){
-							score += (Capture.attack(board, r2, c2, "black"));
-							}
-						}							
-					}
-				}
-	
-				else if(board[r][c].equals("P")){
-					r2 = r-1;
-					c2 = c;
-					if((Pieces.WPAWN.move(r, c, r2, c2))&&
-					   (Capture.check(board, r2, c2, "white"))){
-						score += (Capture.attack(board, r2, c2, "white"));
-					}
-				}
-				
-				else if(board[r][c].equals("R")){				
-					for(r2=r-1; r2<r+2; r2++){
-						for(c2=c-1; c2<c+2; c2++){
-						if((Pieces.ROOK.move(r, c, r2, c2))&&
-						   (Capture.check(board, r2, c2, "white"))){
-							score += (Capture.attack(board, r2, c2, "white"));
-							}
-						}							
-					}
-				}
-				
-				else if(board[r][c].equals("K")){					
-					for(r2=r-1; r2<r+2; r2++){
-						for(c2=c-1; c2<c+2; c2++){
-						if((Pieces.KING.move(r, c, r2, c2))&&
-						   (Capture.check(board, r2, c2, "white"))){
-							score += (Capture.attack(board, r2, c2, "white"));
-							}
-						}							
-					}
-				}
-				
-				else if(board[r][c].equals("B")){					
-					for(r2=r-1; r2<r+2; r2++){
-						for(c2=c-1; c2<c+2; c2++){
-						if((Pieces.BISHOP.move(r, c, r2, c2))&&
-						   (Capture.check(board, r2, c2, "white"))){
-							score += (Capture.attack(board, r2, c2, "white"));
-							}
-						}							
-					}
-				}
-	
-				else if(board[r][c].equals("Q")){					
-					for(r2=r-1; r2<r+2; r2++){
-						for(c2=c-1; c2<c+2; c2++){
-						if((Pieces.WQUEEN.move(r, c, r2, c2))&&
-						   (Capture.check(board, r2, c2, "white"))){
-							score += (Capture.attack(board, r2, c2, "white"));
-							}
-						}							
-					}
-				}
-			}
-		}						
-		return score;
-	}
-
-	private int max(List<Integer> scores) {		
-		return scores.stream().reduce(Integer.MIN_VALUE+1, Integer::max);
-	}	
-	
-	private int min(List<Integer> scores) {		
-		return scores.stream().reduce(Integer.MAX_VALUE, Integer::min);
-	}
-	
-	private int exp(List<Integer> scores) {		
-		return scores.stream().reduce(0, Integer::sum) / scores.size();	
-	}
-	
-	private int alpha(List<Integer> scores, int alpha, int beta) {
-		
-		for(int i=0; i<scores.size(); i++){
-			if (scores.get(i) > alpha){
-				alpha = scores.get(i);
-			}
-			if(alpha >= beta){
-				break;
-				}
-		}
-		return alpha;
-	}
-	
-	private int beta(List<Integer> scores, int alpha, int beta) {
-		
-		for(int i=0; i<scores.size(); i++){
-			if (scores.get(i) < beta){
-				beta = scores.get(i);
-			}
-			if(alpha >= beta){
-				break;
-				}
-		}
-		return beta;
-	}
-
-	private List<Node> sortingMoves(String[][] board, List<Node> legal,
-			String turn, boolean prune) {
-		
-		List<Node> sorted = new ArrayList<>();
-		
-		int prev;
-			if(Examiner.check(board, "white")){
-				prev = -1000;
-			}
-			else if(Examiner.check(board, "black")){
-				prev = 1000;
-			}
-			else{
-				prev = evaluationMaterial(board, false) + evaluationPositional(board);
-			}
-	
-		for(int i=0; i<legal.size(); i++){
-
-			int r = legal.get(i).getR();
-			int c = legal.get(i).getC();
-			int r2 = legal.get(i).getR2();
-			int c2 = legal.get(i).getC2();
-			String temp;
-			String prom;
-			int r3;
-			int c3 = 9;
-
-			if(turn.equals("black")){						
-				r3 = 0;
-				if(board[r][c].equals("p") & r==2){
-					prom = "p";
-					if(!board[r][c].equals(" ")) {
-						c3 = Capture.take(board, r2, c2);
-					}
-					temp = board[r2][c2];
-					board[r2][c2] = "q";
-					board[r][c] = " ";
-				}
-				else if(r==0 & c > 2){
-					prom = " ";
-					temp = " ";
-					board[r2][c2] = board[r][c];
-					board[r][c] = " ";
-				}
-				else{
-					prom = " ";
-					if(!board[r][c].equals(" ")) {
-						c3 = Capture.take(board, r2, c2);
-					}
-					temp = board[r2][c2];
-					board[r2][c2] = board[r][c];
-					board[r][c] = " ";
-				}
-				
-				int value;				
-				if(temp.equals("K")){
-					value = 5000;	
-				}
-				else if(Examiner.winPromotion(board, "black") && !Examiner.check(board, "white")){
-					value = 5000;
-				}
-				else if(Examiner.check(board, "black") && !Examiner.check(board, "white")) {
-					value = 500;
-				}
-				else if(MoveList.repeat(board, "black")) {
-					value = 0;
-				}
-				else if(Examiner.winPromotion(board, "white")){
-					value = -5000;
-				}
-				else if(Examiner.check(board, "white")){
-					value = -5000;
-				}
-				else{
-					if(prune) {
-					value = evaluationMaterial(board, false) + evaluationPositional(board);
-					}
-					else {
-					value = evaluationMaterial(board, false);
-					}
-				}
-				
-				legal.get(i).setValue(value);
-				sorted.add(legal.get(i));			
-	
-				Collections.sort(sorted, Collections.reverseOrder());			
-				if(prune){
-					sorted.removeIf(e -> e.getValue() < prev);
-				}
-			}		
-			else{					
-				r3 = 3;
-				if(board[r][c].equals("P") & r==1){
-					prom = "P";
-					if(!board[r][c].equals(" ")) {
-						c3 = Capture.take(board, r2, c2);
-					}
-					temp = board[r2][c2];
-					board[r2][c2] = "Q";
-					board[r][c] = " ";
-				}
-				else if(r==3 & c > 2){
-					prom = " ";
-					temp = " ";
-					board[r2][c2] = board[r][c];
-					board[r][c] = " ";
-				}
-				else{
-					prom = " ";
-					if(!board[r][c].equals(" ")) {
-						c3 = Capture.take(board, r2, c2);
-					}
-					temp = board[r2][c2];
-					board[r2][c2] = board[r][c];
-					board[r][c] = " ";
-				}
-		
-				int value;				
-				if(temp.equals("k")){
-					value = -5000;	
-				}
-				else if(Examiner.winPromotion(board, "white") && !Examiner.check(board, "black")){
-						value = -5000;
-				}
-				else if(Examiner.check(board, "white") && !Examiner.check(board, "black")) {
-					value = -500;
-				}
-				else if(MoveList.repeat(board, "white")) {
-					value = 0;
-				}
-				else if(Examiner.winPromotion(board, "black")){
-						value = 5000;
-				}
-				else if(Examiner.check(board, "black")){
-					value = 5000;
-				}				
-				else{
-					if(prune) {
-					value = evaluationMaterial(board, false) + evaluationPositional(board);
-					}
-					else {
-					value = evaluationMaterial(board, false);
-					}
-				}
-				
-				legal.get(i).setValue(value);
-				sorted.add(legal.get(i));
-		
-				Collections.sort(sorted);			
-				if(prune){
-					sorted.removeIf(e -> e.getValue() > prev);
-				}
-			}
-			
-			if(prom.equals("p")){
-				board[r][c] = "p";
-			}
-			else if(prom.equals("P")){
-				board[r][c] = "P";
-			}
-			else{
-				board[r][c] = board[r2][c2];
-			}
-			board[r2][c2] = temp;
-			if(c3 != 9)
-			Capture.undo(board, r3, c3);
-		}	
-		return sorted;
-	}
-
 	// minimax with capture and check extensions
 	private int minimaxEX(String turn, int depth, int alpha, int beta, boolean node,
 			List<Node> legal) {
@@ -659,30 +111,33 @@ public class ArtIntel implements Runnable{
 		}		
 		hash.add(board, turn, depth);
 		
-		if(winPositionBlack(board, turn)){
+		if(Examiner.winPositionBlack(board, turn)){
 			return 2000+(depth*100);	
 		}
-		if(winPositionWhite(board, turn)){
+		if(Examiner.winPositionWhite(board, turn)){
 			return -(2000+(depth*100));	
 		}	
 		
-		if(turn.equals("white")){
-			if(Examiner.check(board, turn) && depth < 6){
+		if(Examiner.check(board, turn) && depth < 6){
+			if(turn.equals("white")){
 				return -(1000+(depth*100));
+			}
+			else {
+				return 1000+(depth*100);				
 			}
 		}
 	
 		if(node==false & depth < 2){
-			return evaluationMaterial(board, false);
+			return evaluator.evaluationMaterial(board, false);
 		}
 		
 		if(depth == -3){
-			return evaluationMaterial(board, false);
+			return evaluator.evaluationMaterial(board, false);
 		}
 
 		count += legal.size();
 		
-		ArrayList<Integer> scores = new ArrayList<>();
+		List<Integer> scores = new ArrayList<>();
 		
 		for(int i=0; i<legal.size(); i++){
 
@@ -737,8 +192,8 @@ public class ArtIntel implements Runnable{
 				List<Node> children = null;
 				List<Node> sorted = null;
 				if(temp != "K" & (node ? depth > -2 : depth > 2)) {
-					children = generateWhiteMoves(board);
-					sorted = sortingMoves(board, children, "white", false);
+					children = generator.generateMoves(board, "white");
+					sorted = generator.sortMoves(board, children, "white", false);
 					for(Node child: sorted) {
 						child.addParent(legal.get(i));
 					}
@@ -796,9 +251,9 @@ public class ArtIntel implements Runnable{
 
 				List<Node> children = null;
 				List<Node> sorted = null;
-				if(temp != "k") {
-					children = generateBlackMoves(board);
-					sorted = sortingMoves(board, children, "black", false);
+				if(temp != "k" & (node ? depth > -2 : depth > 2)) {
+					children = generator.generateMoves(board, "black");
+					sorted = generator.sortMoves(board, children, "black", false);
 					for(Node child: sorted) {
 						child.addParent(legal.get(i));
 					}
@@ -831,10 +286,10 @@ public class ArtIntel implements Runnable{
 			}
 		
 		if(turn.equals("black")){
-			return alpha(scores, alpha, beta);
+			return evaluator.alpha(scores, alpha, beta);
 		}
 		else{
-			return beta(scores, alpha, beta);
+			return evaluator.beta(scores, alpha, beta);
 		}
 	}
 
@@ -857,26 +312,29 @@ public class ArtIntel implements Runnable{
 		}		
 		hash.add(board, turn, depth);
 		
-		if(winPositionBlack(board, turn)){
+		if(Examiner.winPositionBlack(board, turn)){
 			return 2000+(depth*100);	
 		}
-		if(winPositionWhite(board, turn)){
+		if(Examiner.winPositionWhite(board, turn)){
 			return -(2000+(depth*100));	
 		}	
 		
-		if(turn.equals("white")){
-			if(Examiner.check(board, turn) && depth < 8){
+		if(Examiner.check(board, turn) && depth < 6){
+			if(turn.equals("white")){
 				return -(1000+(depth*100));
+			}
+			else {
+				return 1000+(depth*100);				
 			}
 		}
 	
 		if(depth == 1){
-			return evaluationMaterial(board, false);
+			return evaluator.evaluationMaterial(board, false);
 		}
 
 		count += legal.size();
 		
-		ArrayList<Integer> scores = new ArrayList<>();
+		List<Integer> scores = new ArrayList<>();
 		
 		for(int i=0; i<legal.size(); i++){
 
@@ -919,8 +377,8 @@ public class ArtIntel implements Runnable{
 				List<Node> children = null;
 				List<Node> sorted = null;
 				if(temp != "K" & depth > 2) {
-					children = generateWhiteMoves(board);
-					sorted = sortingMoves(board, children, "white", false);
+					children = generator.generateMoves(board, "white");
+					sorted = generator.sortMoves(board, children, "white", false);
 					for(Node child: sorted) {
 						child.addParent(legal.get(i));
 					}
@@ -968,9 +426,9 @@ public class ArtIntel implements Runnable{
 			
 				List<Node> children = null;
 				List<Node> sorted = null;
-				if(temp != "k") {
-					children = generateBlackMoves(board);
-					sorted = sortingMoves(board, children, "black", false);
+				if(temp != "k" & depth > 2) {
+					children = generator.generateMoves(board, "black");
+					sorted = generator.sortMoves(board, children, "black", false);
 					for(Node child: sorted) {
 						child.addParent(legal.get(i));
 					}
@@ -1003,10 +461,10 @@ public class ArtIntel implements Runnable{
 		}
 		
 		if(turn.equals("black")){
-			return alpha(scores, alpha, beta);
+			return evaluator.alpha(scores, alpha, beta);
 		}
 		else{
-			return beta(scores, alpha, beta);
+			return evaluator.beta(scores, alpha, beta);
 		}
 	}
 	
@@ -1031,21 +489,24 @@ public class ArtIntel implements Runnable{
 			hash.add(board, turn, depth);
 		}
 		
-		if(winPositionBlack(board, turn)){
+		if(Examiner.winPositionBlack(board, turn)){
 			return 2000+(depth*100);
 		}
-		if(winPositionWhite(board, turn)){
+		if(Examiner.winPositionWhite(board, turn)){
 			return -(2000+(depth*100));
 		}
 		
-		if(turn.equals("white")){
-			if(Examiner.check(board, turn) && depth < 6){
+		if(Examiner.check(board, turn) && depth < 6){
+			if(turn.equals("white")){
 				return -(1000+(depth*100));
+			}
+			else {
+				return 1000+(depth*100);				
 			}
 		}
 
 		if(depth == 1){
-			return evaluationMaterial(board, false);
+			return evaluator.evaluationMaterial(board, false);
 		}
 
 		count += legal.size();
@@ -1092,7 +553,7 @@ public class ArtIntel implements Runnable{
 				
 				List<Node> children = null;
 				if(temp != "K" & depth > 2) {
-					children = generateWhiteMoves(board);
+					children = generator.generateMoves(board, "white");
 					for(Node child: children) {
 						child.addParent(legal.get(i));
 					}
@@ -1136,8 +597,8 @@ public class ArtIntel implements Runnable{
 				}
 				
 				List<Node> children = null;
-				if(temp != "k") {
-					children = generateBlackMoves(board);
+				if(temp != "k" & depth > 2) {
+					children = generator.generateMoves(board, "black");
 					for(Node child: children) {
 						child.addParent(legal.get(i));
 					}
@@ -1163,10 +624,10 @@ public class ArtIntel implements Runnable{
 		}
 		
 		if(turn.equals("black")){
-			return max(scores);
+			return evaluator.max(scores);
 		}
 		else{
-			return min(scores);
+			return evaluator.min(scores);
 		}
 	}
 
@@ -1191,21 +652,24 @@ public class ArtIntel implements Runnable{
 			hash.add(board, turn, depth);
 		}
 		
-		if(winPositionBlack(board, turn)){
+		if(Examiner.winPositionBlack(board, turn)){
 			return 100/depth;
 		}
-		if(winPositionWhite(board, turn)){
+		if(Examiner.winPositionWhite(board, turn)){
 			return -(1000*depth);
 		}
 		
-		if(turn.equals("white")){
-			if(Examiner.check(board, turn) && depth < 6){
+		if(Examiner.check(board, turn) && depth < 6){
+			if(turn.equals("white")){
 				return -(1000+(depth*100));
+			}
+			else {
+				return 1000+(depth*100);				
 			}
 		}
 		
 		if(depth == 1){
-			return evaluationMaterial(board, true)/depth;
+			return evaluator.evaluationMaterial(board, true)/depth;
 		}
 
 		count += legal.size();
@@ -1252,7 +716,7 @@ public class ArtIntel implements Runnable{
 				
 				List<Node> children = null;
 				if(temp != "K" & depth > 2) {
-					children = generateWhiteMoves(board);
+					children = generator.generateMoves(board, "white");
 					for(Node child: children) {
 						child.addParent(legal.get(i));
 					}
@@ -1292,8 +756,8 @@ public class ArtIntel implements Runnable{
 				}
 				
 				List<Node> children = null;
-				if(temp != "k") {
-					children = generateBlackMoves(board);
+				if(temp != "k" & depth > 2) {
+					children = generator.generateMoves(board, "black");
 					for(Node child: children) {
 						child.addParent(legal.get(i));
 					}
@@ -1319,10 +783,10 @@ public class ArtIntel implements Runnable{
 		}
 		
 		if(turn.equals("black")){
-			return max(scores);
+			return evaluator.max(scores);
 		}
 		else{
-			return exp(scores);
+			return evaluator.exp(scores);
 		}
 	}
 
@@ -1414,10 +878,10 @@ public class ArtIntel implements Runnable{
 							legal.get(i).setValue(-(2000+(100/depth)));
 						}
 						else{
-							legal.get(i).setValue(evaluationMaterial(board, false));
+							legal.get(i).setValue(evaluator.evaluationMaterial(board, false));
 							if(depth < 5) {
 								input.add(Copier.deepCopy(board));
-								legal.get(i).addChildren(generateWhiteMoves(board));
+								legal.get(i).addChildren(generator.generateMoves(board, "white"));
 								for(Node child: legal.get(i).getChidren()) {
 									child.addParent(legal.get(i));
 								}
@@ -1469,10 +933,10 @@ public class ArtIntel implements Runnable{
 							legal.get(i).setValue(2000+(100/depth));
 						}
 						else{
-							legal.get(i).setValue(evaluationMaterial(board, false));
+							legal.get(i).setValue(evaluator.evaluationMaterial(board, false));
 							if(depth < 5) {
 								input.add(Copier.deepCopy(board));
-								legal.get(i).addChildren(generateBlackMoves(board));
+								legal.get(i).addChildren(generator.generateMoves(board, "black"));
 								for(Node child: legal.get(i).getChidren()) {
 									child.addParent(legal.get(i));
 								}
@@ -1513,10 +977,10 @@ public class ArtIntel implements Runnable{
         			scores.add(child.getValue());
         		}
                 	if(move.getDepth() % 2 == 1) {
-                		move.setValue(min(scores));
+                		move.setValue(evaluator.min(scores));
                 	}
                 	else{
-                		move.setValue(max(scores));
+                		move.setValue(evaluator.max(scores));
                 	}
         	}
         }        
@@ -1555,10 +1019,10 @@ public class ArtIntel implements Runnable{
 			return 0;
 		}
 		
-		if(winPositionBlack(board, turn)){
+		if(Examiner.winPositionBlack(board, turn)){
 			return 2000+(depth*100);
 		}
-		if(winPositionWhite(board, turn)){
+		if(Examiner.winPositionWhite(board, turn)){
 			return -(2000+(depth*100));
 		}
 		
@@ -1572,19 +1036,20 @@ public class ArtIntel implements Runnable{
 		}
 	
 		if(depth == 1){
-			return evaluationMaterial(board, false) + evaluationPositional(board);
+			return evaluator.evaluationMaterial(board, false)
+					+ evaluator.evaluationPositional(board);
 		}
 		
 		List<Node> legal = new ArrayList<>();
 		List<Node> start = new ArrayList<>();
 	
 		if(turn.equals("black")){
-			start = generateBlackMoves(board);
-			legal = sortingMoves(board, start, turn, true);
+			start = generator.generateMoves(board, "black");
+			legal = generator.sortMoves(board, start, turn, true);
 		}
 		else{
-			start = generateWhiteMoves(board);
-			legal = sortingMoves(board, start, turn, true);
+			start = generator.generateMoves(board, "white");
+			legal = generator.sortMoves(board, start, turn, true);
 		}
 		count += legal.size();
 				
@@ -1680,17 +1145,17 @@ public class ArtIntel implements Runnable{
 		}
 		
 		if(turn.equals("black")){
-			return max(scores);
+			return evaluator.max(scores);
 		}
 		else{
-			return min(scores);
+			return evaluator.min(scores);
 		}
 	}
 
 	// greedy algorithm
 	private void greedy() {
 		
-		List<Node> legal = new ArrayList<>(generateBlackMoves(board));
+		List<Node> legal = new ArrayList<>(generator.generateMoves(board, "black"));
 		
 		int score;
 		String temp;
@@ -1749,7 +1214,7 @@ public class ArtIntel implements Runnable{
 				score = -5000;
 			}
 			else{
-				score = evaluationMaterial(board, false);
+				score = evaluator.evaluationMaterial(board, false);
 			}
 			legal.get(i).setValue(score);
 			
@@ -1769,7 +1234,7 @@ public class ArtIntel implements Runnable{
 	// randomly moving algorithm
 	private void random() {
 		
-		List<Node> legal = new ArrayList<>(generateBlackMoves(board));
+		List<Node> legal = new ArrayList<>(generator.generateMoves(board, "black"));
 			
 		moves.add(legal.get(new Random().nextInt(legal.size())));
 		Clocks.setNodes(legal.size());		

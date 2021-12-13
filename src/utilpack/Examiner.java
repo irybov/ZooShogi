@@ -63,8 +63,7 @@ public class Examiner {
 					}
 				}
 			}
-		}
-				
+		}				
 		else{
 			for(r=0; r<4; r++){
 				for(c=0; c<3; c++){					
@@ -138,7 +137,7 @@ public class Examiner {
 		}
 	}
 
-	public static boolean winPosition(String[][] board, String turn)  {		
+	public static boolean winPositionBlack(String[][] board, String turn)  {
 		
 		int a = 0;
 		int b = 0;
@@ -152,14 +151,28 @@ public class Examiner {
 					b = 1;
 				}
 			}
-		}
-		
-		if(turn.equals("white")){
-			return (a+b==1);
-		}
-		else {
-			return (a+b==2);			
-		}
+		}		
+		return((a+b==1) || ((a+b==3 & turn.equals("black")) & 
+			   (board[3][0].equals("k")||board[3][1].equals("k")||board[3][2].equals("k"))));
 	}
+	
+	public static boolean winPositionWhite(String[][] board, String turn)  {
+		
+		int a = 0;
+		int b = 0;
+		
+		for(int r=0; r<4; r++){
+			for(int c=0; c<3; c++){
+				if(board[r][c].equals("K")){
+					a = 2;
+				}
+				if(board[r][c].equals("k")){
+					b = 1;
+				}
+			}
+		}		
+		return((a+b==2) || ((a+b==3 & turn.equals("white")) & 
+			   (board[0][0].equals("K")||board[0][1].equals("K")||board[0][2].equals("K"))));
+	}	
 	
 }

@@ -1,5 +1,6 @@
 package control;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
@@ -269,9 +270,8 @@ public class Director{
 		}
 	}
 	
-	private final Generator generator = new Generator();
 	private volatile int cores = Runtime.getRuntime().availableProcessors();
-	private Clocks clocks = Clocks.getInstance();	
+	private Clocks clocks = Clocks.getInstance();
 	public void compute() throws InterruptedException{
 		
 		undo = Copier.deepCopy(board);
@@ -298,7 +298,10 @@ public class Director{
 			integrator.nextBest(board, Cache.get(move));
 		}		
 		else {
-			List<Node> nodes = generator.generateNodes(board);
+			final Generator generator = new Generator();
+			List<Node> legal = generator.generateMoves(board, "black");
+			List<Node> nodes = new ArrayList<>(legal.size());
+			nodes = generator.sortMoves(board, legal, "black", false);
 			if(nodes.get(0).getValue() > 999) {
 				integrator.nextBest(board, nodes.get(0));
 			}
@@ -590,8 +593,7 @@ public class Director{
 	public int[] receive() {
 		String reply = null;
 		reply = server.getAnswer();
-		return driver.input(reply);
-		
+		return driver.input(reply);		
 	}
 	
 }
