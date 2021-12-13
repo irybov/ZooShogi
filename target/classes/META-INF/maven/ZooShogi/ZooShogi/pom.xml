@@ -55,6 +55,7 @@
           </archive>
         </configuration>
       </plugin>
+      <?comment
 	  <plugin>
 	    <groupId>com.github.wvengen</groupId>
 	    <artifactId>proguard-maven-plugin</artifactId>
@@ -91,7 +92,8 @@
 	    		<scope>runtime</scope>
 			</dependency>
 		</dependencies>	
-	  </plugin>      
+	  </plugin>
+		?>      
 	</plugins>
   </build>
   <dependencies>
@@ -106,12 +108,14 @@
 	    <artifactId>jackson-databind</artifactId>
 	    <version>2.12.5</version>
 	</dependency>
+	<?comment
 	<dependency>
 	    <groupId>com.sun</groupId>
 	    <artifactId>tools</artifactId>
 	    <version>1.8</version>
 	    <scope>system</scope>
 	    <systemPath>${JAVA_HOME}/lib/tools.jar</systemPath>
-	</dependency>		 	
+	</dependency>
+	?>		 	
   </dependencies>
 </project>

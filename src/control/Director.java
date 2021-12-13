@@ -38,11 +38,7 @@ public class Director{
 		return INSTANCE;
 	}
 	
-	private final Sound sound = Sound.getInstance();
 	private final Integrator integrator = Integrator.getInstance();
-	private final Generator generator = new Generator();
-	
-	private Clocks clocks = Clocks.getInstance();
 
 	private Map<String, Integer> game = new HashMap<>();
 
@@ -74,11 +70,8 @@ public class Director{
 	}
 	
 	private int r, c, r2, c2;
-	private String piece;
 	private String[][] board;
 	private int level;
-
-	private boolean mute;
 	
 	private String[][] undo;
 
@@ -130,6 +123,7 @@ public class Director{
 			   probe.equals("b") || probe.equals("p") || probe.equals(" ");
 	}
 
+	private String piece;	
 	public void from(int x, int y, String probe) {
 		
 		r = x;
@@ -275,8 +269,9 @@ public class Director{
 		}
 	}
 	
+	private final Generator generator = new Generator();
 	private volatile int cores = Runtime.getRuntime().availableProcessors();
-	
+	private Clocks clocks = Clocks.getInstance();	
 	public void compute() throws InterruptedException{
 		
 		undo = Copier.deepCopy(board);
@@ -393,6 +388,8 @@ public class Director{
 		return false;
 	}
 	
+	private final Sound sound = Sound.getInstance();
+	private boolean mute;	
 	private void voice(String result) {
 		
 		if(!mute){

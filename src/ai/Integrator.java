@@ -51,7 +51,7 @@ public class Integrator {
 		return exp.bingo(Matrix.keyMaker(field));
 	}
 	public boolean hasNode(String[][] field) {
-		return exp.bingo2(Matrix.keyMaker(field));
+		return exp.has(Matrix.keyMaker(field));
 	}
 	public Node getNode(String[][] field) {
 		return exp.get(Matrix.keyMaker(field));

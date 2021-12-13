@@ -82,7 +82,7 @@ public class Experience {
 		}
 	}
 	
-	boolean bingo2(String note) {
+	boolean has(String note) {
 		return pos.containsKey(note);		
 	}
 	Node get(String note) {
