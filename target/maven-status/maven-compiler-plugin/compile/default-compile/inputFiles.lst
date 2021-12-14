@@ -25,14 +25,15 @@ C:\workspace\ZooShogi\src\ui\package-info.java
 C:\workspace\ZooShogi\src\data\ScoreSheet.java
 C:\workspace\ZooShogi\src\utilpack\package-info.java
 C:\workspace\ZooShogi\src\data\GameState.java
+C:\workspace\ZooShogi\src\ai\Evaluator.java
 C:\workspace\ZooShogi\src\ai\Node.java
 C:\workspace\ZooShogi\src\ai\HashTabs.java
 C:\workspace\ZooShogi\src\ai\Integrator.java
-C:\workspace\ZooShogi\src\ai\MoveList.java
 C:\workspace\ZooShogi\src\control\Filter.java
 C:\workspace\ZooShogi\src\ui\Chooser.java
 C:\workspace\ZooShogi\src\ai\Generator.java
 C:\workspace\ZooShogi\src\sound\Sound.java
+C:\workspace\ZooShogi\src\ai\MovesList.java
 C:\workspace\ZooShogi\src\utilpack\Capture.java
 C:\workspace\ZooShogi\src\utilpack\Message.java
 C:\workspace\ZooShogi\src\utilpack\Sides.java
