@@ -25,7 +25,9 @@ public class Experience {
 				neg = new HashSet<>();
 			    try(ObjectOutputStream oos = new ObjectOutputStream
 			       (new BufferedOutputStream(new FileOutputStream("exp/negative.bin")))){
-			           oos.writeObject(neg);
+			           oos.writeUnshared(neg);
+			           oos.flush();
+			           oos.reset();
 			    }			
 			}
 			catch (IOException ex) {
@@ -48,7 +50,9 @@ public class Experience {
 				pos = new HashMap<>();
 			    try(ObjectOutputStream oos = new ObjectOutputStream
 			       (new BufferedOutputStream(new FileOutputStream("exp/positive.bin")))){
-			           oos.writeObject(pos);
+			           oos.writeUnshared(pos);
+			           oos.flush();
+			           oos.reset();
 			    }			
 			}
 			catch (IOException ex) {

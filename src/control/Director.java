@@ -53,7 +53,9 @@ public class Director{
 				ss = new ScoreSheet();
 			    try(ObjectOutputStream oos = new ObjectOutputStream
 				   (new BufferedOutputStream(new FileOutputStream("scoresheet.bin")))){
-			           oos.writeObject(ss);
+			           oos.writeUnshared(ss);
+			           oos.flush();
+			           oos.reset();
 			    }			
 			}
 			catch (IOException ex) {
@@ -270,9 +272,10 @@ public class Director{
 		}
 	}
 	
-	private volatile int cores = Runtime.getRuntime().availableProcessors();
-	private Clocks clocks = Clocks.getInstance();
+
 	public void compute() throws InterruptedException{
+
+		Clocks clocks = Clocks.getInstance();
 		
 		undo = Copier.deepCopy(board);
 		
@@ -300,8 +303,7 @@ public class Director{
 		else {
 			final Generator generator = new Generator();
 			List<Node> legal = generator.generateMoves(board, "black");
-			List<Node> nodes = new ArrayList<>(legal.size());
-			nodes = generator.sortMoves(board, legal, "black", false);
+			List<Node> nodes = new ArrayList<>(generator.sortMoves(board, legal, "black", false));
 			if(nodes.get(0).getValue() > 999) {
 				integrator.nextBest(board, nodes.get(0));
 			}
@@ -309,14 +311,22 @@ public class Director{
 				switch(level){
 				case 0:
 				case 2:
-				case 4:
 					new ArtIntel(level, board).run();
 					break;
+				case 4:
+					nodes = new ArrayList<>
+					(generator.sortMoves(board, legal, "black", true));
+					if(nodes.size()==0) {
+						nodes = new ArrayList<>
+						(generator.sortMoves(board, legal, "black", false));
+						nodes.subList(1, nodes.size()).clear();
+					}
 				case 1:
 				case 3:
 				case 5:
 				case 6:
 				case 7:
+					final int cores = Runtime.getRuntime().availableProcessors();
 					ExecutorService es = Executors.newFixedThreadPool(cores);
 					nodes.forEach(node-> es.submit
 							(new ArtIntel(node, Copier.deepCopy(board), level)));
@@ -486,7 +496,9 @@ public class Director{
     	player = newPlayer;
 	    try(FileOutputStream fos = new FileOutputStream("scoresheet.bin");
 	    		ObjectOutputStream oos = new ObjectOutputStream(fos)){
-	           oos.writeObject(ss);
+	           oos.writeUnshared(ss);
+	           oos.flush();
+	           oos.reset();
 	    }
 	    catch (IOException ex) {
 			ex.printStackTrace();
@@ -513,7 +525,9 @@ public class Director{
 			players.remove(player);
 			try(ObjectOutputStream oos = new ObjectOutputStream
 			   (new BufferedOutputStream(new FileOutputStream("scoresheet.bin")))){
-			        oos.writeObject(ss);
+		           oos.writeUnshared(ss);
+		           oos.flush();
+		           oos.reset();
 			}			
 			catch (IOException ex) {
 				ex.printStackTrace();
@@ -529,7 +543,9 @@ public class Director{
 			player.setScore(player.getScore() + level*scale);
 			try(ObjectOutputStream oos = new ObjectOutputStream
 			   (new BufferedOutputStream(new FileOutputStream("scoresheet.bin")))){
-			        oos.writeObject(ss);
+		           oos.writeUnshared(ss);
+		           oos.flush();
+		           oos.reset();
 			}			
 			catch (IOException ex) {
 				ex.printStackTrace();

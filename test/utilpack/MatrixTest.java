@@ -15,10 +15,10 @@ public class MatrixTest {
 	
 	@BeforeClass
 	public static void initBoard() {
-		board = new String[][]{{"r","k","b"," "," "," "," "," "," "},
+		board = new String[][]{{"r","k"," ","b"," "," "," "," "," "},
 				  			   {" "," ","p"},
 				  			   {" ","P"," "},
-				  			   {"B","K","R"," "," "," "," "," "," "}};				  			   
+				  			   {"B","K"," "," "," ","R"," "," "," "}};				  			   
 	}
 	
 	@Test
@@ -34,13 +34,13 @@ public class MatrixTest {
 	
 	@Test
 	public void testKeyMakerLength() {
-		assertEquals(12, Matrix.keyMaker(board).length());
+		assertEquals(24, Matrix.keyMaker(board).length());
 		key = Matrix.keyMaker(board);
 	}
 	
 	@Test
 	public void testKeySwapper() {
-		assertEquals("bkrp###P#RKB", Matrix.keySwapper(key));
+		assertEquals("#krp###P##KBb#######R###", Matrix.keySwapper(key));
 	}
 	
 	@AfterClass

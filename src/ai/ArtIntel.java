@@ -52,7 +52,7 @@ public class ArtIntel implements Runnable{
 		case 0:
 			moves = new ArrayList<>();
 			random();
-			sendMovelist();			
+			sendMoves();			
 			break;
 		case 1:
 			hash = new HashTabs();
@@ -62,16 +62,16 @@ public class ArtIntel implements Runnable{
 		case 2:
 			moves = new ArrayList<>();
 			greedy();
-			sendMovelist();
+			sendMoves();
 			break;
 		case 3:
+			hash = new HashTabs();
 			trappy(board, 1);
 			break;			
 		case 4:
-			moves = new ArrayList<>();
-			forward("black", 6);
+			hash = new HashTabs();
+			forward("black", 6, Arrays.asList(root));
 			Clocks.addNodes(count);
-			sendMovelist();
 			break;
 		case 5:
 			hash = new HashTabs();
@@ -187,8 +187,7 @@ public class ArtIntel implements Runnable{
 				if(node==false){
 					node = (Capture.extend(temp, turn)||Capture.prom(board, r2, c2, turn)
 															||Examiner.check(board, turn));
-				}
-		
+				}		
 				List<Node> children = null;
 				List<Node> sorted = null;
 				if(temp != "K" & (node ? depth > -2 : depth > 2)) {
@@ -248,7 +247,6 @@ public class ArtIntel implements Runnable{
 				node = (Capture.extend(temp, turn)||Capture.prom(board, r2, c2, turn)
 														||Examiner.check(board, turn));
 				}
-
 				List<Node> children = null;
 				List<Node> sorted = null;
 				if(temp != "k" & (node ? depth > -2 : depth > 2)) {
@@ -482,7 +480,7 @@ public class ArtIntel implements Runnable{
 			return 0;
 		}
 		
-		if(turn.equals("black")){
+		if(turn.equals("white")){
 			if(hash.repeat(board, turn, depth)){
 				return 0;
 			}		
@@ -645,7 +643,7 @@ public class ArtIntel implements Runnable{
 			return 0;
 		}
 		
-		if(turn.equals("black")){
+		if(turn.equals("white")){
 			if(hash.repeat(board, turn, depth)){
 				return 0;
 			}		
@@ -857,6 +855,8 @@ public class ArtIntel implements Runnable{
 							board[r2][c2] = board[r][c];
 							board[r][c] = " ";
 						}
+							
+						hash.add(board, "black", depth+4);
 						
 						if(temp.equals("K")){
 							legal.get(i).setValue(2000+(100/depth));
@@ -868,6 +868,9 @@ public class ArtIntel implements Runnable{
 						else if(MoveList.repeat(board, "black")) {
 							legal.get(i).setValue(0);
 						}
+						else if(hash.repeat(board, "black", depth-4)){
+							legal.get(i).setValue(0);
+						}	
 						else if(integrator.getNote(board)) {
 							legal.get(i).setValue(-500);							
 						}						
@@ -1006,7 +1009,7 @@ public class ArtIntel implements Runnable{
 	}
 	
 	// minimax with vintage forward pruning
-	private int forward(String turn, int depth) {
+	private int forward(String turn, int depth, List<Node> legal) {
 		
 		if(turn.equals("white") && integrator.getNote(board)) {
 			return -500;
@@ -1017,6 +1020,13 @@ public class ArtIntel implements Runnable{
 		}
 		if((turn.equals("black") && depth < 6) && MoveList.repeat(board, "white")){
 			return 0;
+		}
+		
+		if(turn.equals("white")){
+			if(hash.repeat(board, turn, depth)){
+				return 0;
+			}		
+			hash.add(board, turn, depth);
 		}
 		
 		if(Examiner.winPositionBlack(board, turn)){
@@ -1039,18 +1049,7 @@ public class ArtIntel implements Runnable{
 			return evaluator.evaluationMaterial(board, false)
 					+ evaluator.evaluationPositional(board);
 		}
-		
-		List<Node> legal = new ArrayList<>();
-		List<Node> start = new ArrayList<>();
-	
-		if(turn.equals("black")){
-			start = generator.generateMoves(board, "black");
-			legal = generator.sortMoves(board, start, turn, true);
-		}
-		else{
-			start = generator.generateMoves(board, "white");
-			legal = generator.sortMoves(board, start, turn, true);
-		}
+
 		count += legal.size();
 				
 		ArrayList<Integer> scores = new ArrayList<>();
@@ -1093,12 +1092,25 @@ public class ArtIntel implements Runnable{
 					board[r][c] = " ";	
 				}
 				
-				int value = forward("white", depth-1);
-					scores.add(value);
-				if(depth == 6){
-					legal.get(i).setValue(value);
-					moves.add(legal.get(i));
+				List<Node> children = null;
+				List<Node> sorted = null;
+				if(temp != "K" & depth > 2) {
+					children = generator.generateMoves(board, "white");
+					sorted = generator.sortMoves(board, children, "white", true);
+					for(Node child: sorted) {
+						child.addParent(legal.get(i));
+					}
+					legal.get(i).addChildren(sorted);
 				}
+
+				int value = forward("white", depth-1, sorted);
+					scores.add(value);
+					legal.get(i).setValue(value);
+				if(depth == 6){
+					root.setValue(value);
+					integrator.mergeMoves(root);
+					hash.clear();
+				}										
 			}				
 			else{
 				r3 = 3;
@@ -1127,9 +1139,21 @@ public class ArtIntel implements Runnable{
 					board[r][c] = " ";	
 				}
 				
-				int value = forward("black", depth-1);
-					scores.add(value);	
+				List<Node> children = null;
+				List<Node> sorted = null;
+				if(temp != "k" & depth > 2) {
+					children = generator.generateMoves(board, "black");
+					sorted = generator.sortMoves(board, children, "black", false);
+					for(Node child: sorted) {
+						child.addParent(legal.get(i));
+					}
+					legal.get(i).addChildren(sorted);
 				}
+				
+				int value = forward("black", depth-1, sorted);
+					scores.add(value);
+					legal.get(i).setValue(value);
+			}
 			
 			if(prom.equals("p")){
 				board[r][c] = "p";
@@ -1240,7 +1264,7 @@ public class ArtIntel implements Runnable{
 		Clocks.setNodes(legal.size());		
 	}
 
-	private void sendMovelist(){
+	private void sendMoves(){
 		
 		if(moves.isEmpty()){
 			random();
