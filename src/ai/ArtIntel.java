@@ -99,10 +99,10 @@ public class ArtIntel implements Runnable{
 			return -500;
 		}
 		
-		if(turn.equals("white") && MoveList.repeat(board, "black")){
+		if(turn.equals("white") && MovesList.repeat(board, "black")){
 			return 0;
 		}
-		if((turn.equals("black") && depth < 6) && MoveList.repeat(board, "white")){
+		if((turn.equals("black") && depth < 6) && MovesList.repeat(board, "white")){
 			return 0;
 		}
 		
@@ -298,10 +298,10 @@ public class ArtIntel implements Runnable{
 			return -500;
 		}
 		
-		if(turn.equals("white") && MoveList.repeat(board, "black")){
+		if(turn.equals("white") && MovesList.repeat(board, "black")){
 			return 0;
 		}
-		if((turn.equals("black") && depth < 8) && MoveList.repeat(board, "white")){
+		if((turn.equals("black") && depth < 8) && MovesList.repeat(board, "white")){
 			return 0;
 		}
 		
@@ -473,10 +473,10 @@ public class ArtIntel implements Runnable{
 			return -500;
 		}
 		
-		if(turn.equals("white") && MoveList.repeat(board, "black")){
+		if(turn.equals("white") && MovesList.repeat(board, "black")){
 			return 0;
 		}
-		if((turn.equals("black") && depth < 6) && MoveList.repeat(board, "white")){
+		if((turn.equals("black") && depth < 6) && MovesList.repeat(board, "white")){
 			return 0;
 		}
 		
@@ -636,10 +636,10 @@ public class ArtIntel implements Runnable{
 			return -5000;
 		}
 		
-		if(turn.equals("white") && MoveList.repeat(board, "black")){
+		if(turn.equals("white") && MovesList.repeat(board, "black")){
 			return 0;
 		}
-		if((turn.equals("black") && depth < 6) && MoveList.repeat(board, "white")){
+		if((turn.equals("black") && depth < 6) && MovesList.repeat(board, "white")){
 			return 0;
 		}
 		
@@ -865,7 +865,7 @@ public class ArtIntel implements Runnable{
 								!Examiner.check(board, "white")){
 							legal.get(i).setValue(1000+(100/depth));
 						}
-						else if(MoveList.repeat(board, "black")) {
+						else if(MovesList.repeat(board, "black")) {
 							legal.get(i).setValue(0);
 						}
 						else if(hash.repeat(board, "black", depth-4)){
@@ -926,7 +926,7 @@ public class ArtIntel implements Runnable{
 								!Examiner.check(board, "black")){
 							legal.get(i).setValue(-(1000+(100/depth)));
 						}
-						else if(MoveList.repeat(board, "white")) {
+						else if(MovesList.repeat(board, "white")) {
 							legal.get(i).setValue(0);
 						}
 						else if(Examiner.winPromotion(board, "black")){
@@ -1015,10 +1015,10 @@ public class ArtIntel implements Runnable{
 			return -500;
 		}
 		
-		if(turn.equals("white") && MoveList.repeat(board, "black")){
+		if(turn.equals("white") && MovesList.repeat(board, "black")){
 			return 0;
 		}
-		if((turn.equals("black") && depth < 6) && MoveList.repeat(board, "white")){
+		if((turn.equals("black") && depth < 6) && MovesList.repeat(board, "white")){
 			return 0;
 		}
 		
@@ -1225,7 +1225,7 @@ public class ArtIntel implements Runnable{
 			else if(Examiner.winPromotion(board, "black") && !Examiner.check(board, "white")){
 				score = 5000;
 			}
-			else if(MoveList.repeat(board, "black")) {
+			else if(MovesList.repeat(board, "black")) {
 				score = 0;
 			}
 			else if(integrator.getNote(board)) {

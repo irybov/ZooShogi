@@ -58,7 +58,7 @@ public class Integrator {
 	}
 	public void newGame() {
 		game.clear();
-		MoveList.clear();
+		MovesList.clear();
 		Cache.clear();
 	}
 	public String[][] nextBest(String[][] field) {		
@@ -152,13 +152,15 @@ public class Integrator {
 		int r2 = move.getR2();
 		int c2 = move.getC2();
 		
-		if(score > 500 & Cache.empty()) {
+		if(score > 500) {
 			String state = Matrix.keyMaker(field);
-			exp.learn(state, move);
-			String mirror = Matrix.keySwapper(state);
-			Copier.deepCopy(Arrays.asList(move), null, true);
-			Node twin = Copier.getRoot();
-			exp.learn(mirror, twin);
+			if(!exp.has(state)) {
+				exp.learn(state, move);
+				String mirror = Matrix.keySwapper(state);
+				Copier.deepCopy(Arrays.asList(move), null, true);
+				Node twin = Copier.getRoot();
+				exp.learn(mirror, twin);
+			}
 		}
 		
 		String edge = Message.getEdge(r, c, r2, c2, field[r][c]);		

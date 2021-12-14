@@ -12,7 +12,7 @@ import java.io.*;
 import ai.ArtIntel;
 import ai.Cache;
 import ai.Integrator;
-import ai.MoveList;
+import ai.MovesList;
 import ai.Node;
 import ai.Generator;
 import data.*;
@@ -160,7 +160,7 @@ public class Director{
 		}
 	}
 	
-	private String move;
+	private String state;
 	private String edge;
 	private Scribe scribe = Scribe.getInstance();
 	
@@ -169,7 +169,7 @@ public class Director{
 		edge = Message.getEdge(r, c, r2, c2, board[r][c]);
 		scribe.writeGame("white", edge);
 		
-		MoveList.add(board, "black");
+		MovesList.add(board, "black");
 		
 		switch(board[r2][c2]){
 		case "b":
@@ -214,9 +214,9 @@ public class Director{
 		}
 		board[r][c] = " ";
 		
-		MoveList.add(board, "white");
+		MovesList.add(board, "white");
 		
-		move = Matrix.keyMaker(board);
+		state = Matrix.keyMaker(board);
 	}
 	
 	public void drop(){
@@ -224,14 +224,14 @@ public class Director{
 		edge = Message.getEdge(r, c, r2, c2, board[r][c]);
 		scribe.writeGame("white", edge);
 		
-		MoveList.add(board, "black");
+		MovesList.add(board, "black");
 		
 		board[r2][c2] = board[r][c];
 		board[r][c] = " ";
 		
-		MoveList.add(board, "white");
+		MovesList.add(board, "white");
 		
-		move = Matrix.keyMaker(board);
+		state = Matrix.keyMaker(board);
 	}
 	
 	public boolean beginning() {
@@ -293,12 +293,12 @@ public class Director{
 			integrator.activate(board, move);
 			TimeUnit.SECONDS.sleep(1);
 		}
+		else if(!Cache.empty() && Cache.has(state)) {
+			integrator.nextBest(board, Cache.get(state));
+		}
 		else if(integrator.hasNode(board)) {
 			Node node = integrator.getNode(board);
 			integrator.nextBest(board, node);
-		}
-		else if(Cache.has(move)) {
-			integrator.nextBest(board, Cache.get(move));
 		}		
 		else {
 			final Generator generator = new Generator();

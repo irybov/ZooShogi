@@ -23,31 +23,46 @@ public class Cache {
 				int r2 = move.getR2();
 				int c2 = move.getC2();
 				
-				String[][] field = Copier.deepCopy(board);			
-				if(field[r][c].equals("p") & r==2){
-					if(r==0 & c > 2){
-						field[r2][c2] = "p";
-						field[r][c] = " ";
-					}	
-					else{
-						Capture.take(field, r2, c2);
-						field[r2][c2] = "q";
-						field[r][c] = " ";
+				String[][] field = Copier.deepCopy(board);	
+				Capture.take(field, r2, c2);
+				if(field[r][c].equals("P")){	
+					if(r==1){
+						field[r2][c2] = "Q";
+					}
+					else {
+						field[r2][c2] = "P";					
 					}
 				}
 				else{
-					Capture.take(field, r2, c2);
 					field[r2][c2] = field[r][c];
-					field[r][c] = " ";
-				}			
+				}
+				field[r][c] = " ";
 				String state = Matrix.keyMaker(field);
 				
 				List<Node> children = move.getChidren();
 				Node child = children.stream().max(Comparator.comparing(Node::getValue)).get();
 				cache.putIfAbsent(state, child);
 				
-				if(child.hasChildren()) {
-					add(field, child.getChidren());
+				if(child.hasChildren()) {					
+					r = child.getR();
+					c = child.getC();
+					r2 = child.getR2();
+					c2 = child.getC2();
+								
+					Capture.take(field, r2, c2);
+					if(field[r][c].equals("p")){	
+						if(r==2){
+							field[r2][c2] = "q";
+						}
+						else {
+							field[r2][c2] = "p";					
+						}
+					}
+					else{
+						field[r2][c2] = field[r][c];
+					}
+					field[r][c] = " ";
+					add(Copier.deepCopy(field), child.getChidren());
 				}
 			}
 		}

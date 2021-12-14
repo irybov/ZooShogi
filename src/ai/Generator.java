@@ -218,7 +218,7 @@ public class Generator {
 				else if(Examiner.check(board, "black") && !Examiner.check(board, "white")) {
 					value = 500;
 				}
-				else if(MoveList.repeat(board, "black")) {
+				else if(MovesList.repeat(board, "black")) {
 					value = 0;
 				}
 				else if(Examiner.winPromotion(board, "white")){
@@ -282,7 +282,7 @@ public class Generator {
 				else if(Examiner.check(board, "white") && !Examiner.check(board, "black")) {
 					value = -500;
 				}
-				else if(MoveList.repeat(board, "white")) {
+				else if(MovesList.repeat(board, "white")) {
 					value = 0;
 				}
 				else if(Examiner.winPromotion(board, "black")){

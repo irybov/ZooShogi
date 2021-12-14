@@ -5,7 +5,7 @@ import java.util.Set;
 
 import utilpack.Matrix;
 
-public class MoveList {
+public class MovesList {
 	
 	private static Set<String> listB = new HashSet<>();
 	private static Set<String> listW = new HashSet<>();
