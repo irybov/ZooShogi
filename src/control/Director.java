@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.io.*;
 
@@ -311,7 +313,7 @@ public class Director{
 				switch(level){
 				case 0:
 				case 2:
-					new ArtIntel(level, board).run();
+					new ArtIntel(level, board).call();
 					break;
 				case 4:
 					nodes = new ArrayList<>
@@ -328,10 +330,24 @@ public class Director{
 				case 7:
 					final int cores = Runtime.getRuntime().availableProcessors();
 					ExecutorService es = Executors.newFixedThreadPool(cores);
-					nodes.forEach(node-> es.submit
-							(new ArtIntel(node, Copier.deepCopy(board), level)));
-					es.shutdown();			
-					es.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
+					List<Future<Integer>> tasks = new ArrayList<>(nodes.size());
+					boolean stopped = false;
+					Interceptor f14 = new Interceptor(es, tasks, stopped);
+					try {				
+						for(Node node: nodes) {					
+						Future<Integer> score = es.submit
+								(new ArtIntel(node, Copier.deepCopy(board), level));
+						tasks.add(score);
+						}
+						f14.start();
+					}
+					finally {
+						if(!stopped){
+							es.shutdown();			
+							es.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
+							f14.interrupt();
+						}
+					}
 					break;
 				}
 				TimeUnit.SECONDS.sleep(1);

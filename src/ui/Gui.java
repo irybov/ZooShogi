@@ -286,11 +286,11 @@ public class Gui {
 				
 				javax.swing.SwingUtilities.invokeLater(new Runnable() {
 					public void run() {
-					try {
-						director.compute();
-					}
-					catch (InterruptedException e) {
-						e.printStackTrace();
+						try {
+							director.compute();
+						}
+						catch (InterruptedException e) {
+							e.printStackTrace();
 						}
 					}
 				});
@@ -411,13 +411,13 @@ public class Gui {
 								
 									javax.swing.SwingUtilities.invokeLater(new Runnable() {
 										public void run() {
-										try {											
-											Clocks.setNodes(0);
-											Gui.counter.setText(" ");
-											director.compute();
-										}
-										catch (InterruptedException e) {
-											e.printStackTrace();
+											try {											
+												Clocks.setNodes(0);
+												Gui.counter.setText(" ");
+												director.compute();
+											}
+											catch (InterruptedException e) {
+												e.printStackTrace();
 											}
 										}
 									});

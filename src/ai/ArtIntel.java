@@ -6,6 +6,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Queue;
 import java.util.Random;
+import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
 
 import control.Clocks;
 import utilpack.Capture;
@@ -15,7 +17,7 @@ import utilpack.Examiner;
 import java.util.Deque;
 import java.util.LinkedList;
 
-public class ArtIntel implements Runnable{
+public class ArtIntel implements Callable<Integer>{
 	
 	private HashTabs hash;
 	private List<Node> moves;
@@ -42,8 +44,16 @@ public class ArtIntel implements Runnable{
 	private int count = 0;
 	
 	@Override
-	public void run(){		
-		algorithmSelector();
+	public Integer call(){
+		try {
+			TimeUnit.NANOSECONDS.sleep(1);
+			algorithmSelector();
+		}
+		catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+		}
+//		algorithmSelector();
+		return root.getValue();
 	}
 	
 	private void algorithmSelector(){
