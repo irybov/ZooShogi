@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -331,7 +330,7 @@ public class Director{
 					final int cores = Runtime.getRuntime().availableProcessors();
 					ExecutorService es = Executors.newFixedThreadPool(cores);
 					List<Future<Integer>> tasks = new ArrayList<>(nodes.size());
-					boolean stopped = false;
+					Boolean stopped = Boolean.FALSE;
 					Interceptor f14 = new Interceptor(es, tasks, stopped);
 					try {				
 						for(Node node: nodes) {					
@@ -345,8 +344,8 @@ public class Director{
 						if(!stopped){
 							es.shutdown();			
 							es.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
-							f14.interrupt();
 						}
+						f14.interrupt();
 					}
 					break;
 				}
