@@ -45,14 +45,15 @@ public class ArtIntel implements Callable<Integer>{
 	
 	@Override
 	public Integer call(){
-		try {
+/*		try {
 			TimeUnit.NANOSECONDS.sleep(1);
 			algorithmSelector();
 		}
 		catch (InterruptedException e) {
+			e.printStackTrace();
 			Thread.currentThread().interrupt();
 		}
-//		algorithmSelector();
+*/		algorithmSelector();
 		return root.getValue();
 	}
 	

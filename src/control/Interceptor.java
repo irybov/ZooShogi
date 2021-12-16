@@ -10,12 +10,12 @@ public class Interceptor extends Thread{
 
 	private ExecutorService es;
 	private List<Future<Integer>> tasks;
-	private Boolean stopped;
+//	private Boolean stopped;
 	
-	public Interceptor(ExecutorService es, List<Future<Integer>> tasks, Boolean stopped) {
+	public Interceptor(ExecutorService es, List<Future<Integer>> tasks) {
 		this.es = es;
 		this.tasks = tasks;
-		this.stopped = stopped;
+//		this.stopped = stopped;
 	}
 
 	@Override
@@ -28,10 +28,10 @@ public class Interceptor extends Thread{
 						for(Future<Integer> each: tasks) {
 							each.cancel(true);
 						}
-						es.shutdownNow();
+/*						es.shutdownNow();
 						es.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
 						stopped = Boolean.TRUE;
-						System.out.println("Interrupted in " + 
+*/						System.out.println("Interrupted in " + 
 								Thread.currentThread());
 					}
 				}
