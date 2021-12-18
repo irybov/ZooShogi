@@ -331,7 +331,7 @@ public class Director{
 					ExecutorService es = Executors.newFixedThreadPool(cores);
 					List<Future<Integer>> tasks = new ArrayList<>(nodes.size());
 //					Boolean stopped = Boolean.FALSE;
-					Interceptor f14 = new Interceptor(es, tasks);			
+					Interceptor f14 = new Interceptor(tasks);			
 					for(Node node: nodes) {					
 						Future<Integer> score = es.submit
 								(new ArtIntel(node, Copier.deepCopy(board), level));

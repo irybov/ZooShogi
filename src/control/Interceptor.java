@@ -8,12 +8,12 @@ import java.util.concurrent.TimeUnit;
 
 public class Interceptor extends Thread{
 
-	private ExecutorService es;
+//	private ExecutorService es;
 	private List<Future<Integer>> tasks;
 //	private Boolean stopped;
 	
-	public Interceptor(ExecutorService es, List<Future<Integer>> tasks) {
-		this.es = es;
+	public Interceptor(List<Future<Integer>> tasks) {
+//		this.es = es;
 		this.tasks = tasks;
 //		this.stopped = stopped;
 	}
