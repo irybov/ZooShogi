@@ -40,9 +40,9 @@ class HashTabs {
 	}
 	
 	// clears calculating hash
-	void clear() {		
+/*	void clear() {		
 		black = null;
 		white = null;
 	}
-	
+*/	
 }

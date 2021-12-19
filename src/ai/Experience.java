@@ -17,7 +17,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 public class Experience {
@@ -69,7 +68,7 @@ public class Experience {
 		            ZipEntry entry = new ZipEntry("positive.bin");
 		            zos.putNextEntry(entry);
 		            ByteArrayInputStream bais = new ByteArrayInputStream(data);
-		            byte[] buffer = new byte[1024];
+		            byte[] buffer = new byte[8192];
 		            int len;
 		            while ((len = bais.read(buffer)) > 0) {
 		                zos.write(buffer, 0, len);
@@ -99,8 +98,8 @@ public class Experience {
 
 	        ByteArrayOutputStream baos = new ByteArrayOutputStream();
 	    	int count;
-	        byte[] buffer = new byte[1024];
-	        while ((count = bis.read(buffer, 0, 1024)) > 0) {
+	        byte[] buffer = new byte[8192];
+	        while ((count = bis.read(buffer, 0, 8192)) > 0) {
 	            baos.write(buffer, 0, count);
 	            baos.flush();
 	        }  

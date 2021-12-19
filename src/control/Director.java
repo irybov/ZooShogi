@@ -15,6 +15,7 @@ import ai.Cache;
 import ai.Integrator;
 import ai.MovesList;
 import ai.Node;
+import ai.PseudoAI;
 import ai.Generator;
 import data.*;
 import sound.Sound;
@@ -311,8 +312,8 @@ public class Director{
 			else {
 				switch(level){
 				case 0:
-				case 2:
-					new ArtIntel(level, board).call();
+				case 1:
+					new PseudoAI(level, board).run();
 					break;
 				case 4:
 					nodes = new ArrayList<>
@@ -322,7 +323,7 @@ public class Director{
 						(generator.sortMoves(board, legal, "black", false));
 						nodes.subList(1, nodes.size()).clear();
 					}
-				case 1:
+				case 2:
 				case 3:
 				case 5:
 				case 6:
@@ -330,7 +331,6 @@ public class Director{
 					final int cores = Runtime.getRuntime().availableProcessors();
 					ExecutorService es = Executors.newFixedThreadPool(cores);
 					List<Future<Integer>> tasks = new ArrayList<>(nodes.size());
-//					Boolean stopped = Boolean.FALSE;
 					Interceptor f14 = new Interceptor(tasks);			
 					for(Node node: nodes) {					
 						Future<Integer> score = es.submit
@@ -338,14 +338,9 @@ public class Director{
 						tasks.add(score);
 					}
 					f14.start();
-//					if(!stopped){
 						es.shutdown();			
 						es.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
-/*					}
-					else {
-						System.out.println("Submit stopped");
-					}
-*/					f14.interrupt();
+					f14.interrupt();
 					break;
 				}
 				TimeUnit.SECONDS.sleep(1);

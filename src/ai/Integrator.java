@@ -77,11 +77,11 @@ public class Integrator {
 	}
 	
 	// adds results from a single thread
-	public void mergeMoves(List<Node> input){		
+	void mergeMoves(List<Node> input){		
 		moves.addAll(input);
 	}	
 	// merges results from multiple threads
-	public void mergeMoves(Node input){		
+	void mergeMoves(Node input){		
 		moves.add(input);
 	}
 	
@@ -152,7 +152,7 @@ public class Integrator {
 		int r2 = move.getR2();
 		int c2 = move.getC2();
 		
-		if(score > 500) {
+		if(score > 500 & Cache.empty()) {
 			String state = Matrix.keyMaker(field);
 			if(!exp.has(state)) {
 				exp.learn(state, move);

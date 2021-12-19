@@ -2,20 +2,14 @@ package control;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 
 public class Interceptor extends Thread{
 
-//	private ExecutorService es;
 	private List<Future<Integer>> tasks;
-//	private Boolean stopped;
 	
 	public Interceptor(List<Future<Integer>> tasks) {
-//		this.es = es;
 		this.tasks = tasks;
-//		this.stopped = stopped;
 	}
 
 	@Override
@@ -28,11 +22,6 @@ public class Interceptor extends Thread{
 						for(Future<Integer> each: tasks) {
 							each.cancel(true);
 						}
-/*						es.shutdownNow();
-						es.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
-						stopped = Boolean.TRUE;
-*/						System.out.println("Interrupted in " + 
-								Thread.currentThread());
 					}
 				}
 				catch (InterruptedException | ExecutionException exc) {

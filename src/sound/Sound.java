@@ -9,9 +9,17 @@ import control.Clocks;
 
 public class Sound {
 	
-	private static final Sound INSTANCE = new Sound();
+	private static volatile Sound INSTANCE;
 	
 	public static Sound getInstance(){
+		
+		if(INSTANCE == null) {
+			synchronized (Sound.class) {
+				if(INSTANCE == null) {
+					INSTANCE = new Sound();
+				}
+			}
+		}		
 		return INSTANCE;
 	}
 	

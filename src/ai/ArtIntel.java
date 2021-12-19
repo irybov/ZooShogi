@@ -5,9 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Queue;
-import java.util.Random;
 import java.util.concurrent.Callable;
-import java.util.concurrent.TimeUnit;
 
 import control.Clocks;
 import utilpack.Capture;
@@ -20,7 +18,6 @@ import java.util.LinkedList;
 public class ArtIntel implements Callable<Integer>{
 	
 	private HashTabs hash;
-	private List<Node> moves;
 	
 	private final Generator generator = new Generator();
 	private final Evaluator evaluator = new Evaluator();
@@ -29,10 +26,6 @@ public class ArtIntel implements Callable<Integer>{
 	private final int level;
 	private String[][] board; 
 
-	public ArtIntel(int level, String[][] board) {		
-		this.level = level;
-		this.board = board;
-	}
 	public ArtIntel(Node root, String[][] board, int level) {		
 		this.root = root;
 		this.board = board;
@@ -45,61 +38,33 @@ public class ArtIntel implements Callable<Integer>{
 	
 	@Override
 	public Integer call(){
-/*		try {
-			TimeUnit.NANOSECONDS.sleep(1);
-			algorithmSelector();
-		}
-		catch (InterruptedException e) {
-			e.printStackTrace();
-			Thread.currentThread().interrupt();
-		}
-*/		algorithmSelector();
+		algorithmSelector();
 		return root.getValue();
-	}
-	
+	}	
 	private void algorithmSelector(){
-		
+
+		hash = new HashTabs();
 		switch(level){
-		case 0:
-			moves = new ArrayList<>();
-			random();
-			sendMoves();			
-			break;
-		case 1:
-			hash = new HashTabs();
-			expectimax("black", 6, Arrays.asList(root));
-			Clocks.addNodes(count);
-			break;		
 		case 2:
-			moves = new ArrayList<>();
-			greedy();
-			sendMoves();
-			break;
+			expectimax("black", 6, Arrays.asList(root));
+			break;		
 		case 3:
-			hash = new HashTabs();
 			trappy(board, 1);
 			break;			
 		case 4:
-			hash = new HashTabs();
 			forward("black", 6, Arrays.asList(root));
-			Clocks.addNodes(count);
 			break;
 		case 5:
-			hash = new HashTabs();
 			minimax("black", 6, Arrays.asList(root));
-			Clocks.addNodes(count);
 			break;
 		case 6:
-			hash = new HashTabs();
 			minimaxAB("black", 8, Integer.MIN_VALUE+1, Integer.MAX_VALUE, Arrays.asList(root));
-			Clocks.addNodes(count);
 			break;
 		case 7:
-			hash = new HashTabs();
 			minimaxEX("black",6,Integer.MIN_VALUE+1,Integer.MAX_VALUE,false,Arrays.asList(root));
-			Clocks.addNodes(count);
 			break;
 		}
+		Clocks.addNodes(count);
 	}
 	
 	// minimax with capture and check extensions
@@ -219,7 +184,7 @@ public class ArtIntel implements Callable<Integer>{
 				if(depth == 6){
 					root.setValue(value);
 					integrator.mergeMoves(root);
-					hash.clear();
+//					hash.clear();
 				}										
 			}				
 			else{
@@ -328,7 +293,7 @@ public class ArtIntel implements Callable<Integer>{
 			return -(2000+(depth*100));	
 		}	
 		
-		if(Examiner.check(board, turn) && depth < 6){
+		if(Examiner.check(board, turn) && depth < 8){
 			if(turn.equals("white")){
 				return -(1000+(depth*100));
 			}
@@ -403,7 +368,7 @@ public class ArtIntel implements Callable<Integer>{
 				if(depth == 8){
 					root.setValue(value);
 					integrator.mergeMoves(root);
-					hash.clear();
+//					hash.clear();
 				}										
 			}				
 			else{				
@@ -575,7 +540,7 @@ public class ArtIntel implements Callable<Integer>{
 				if(depth == 6){
 					root.setValue(value);
 					integrator.mergeMoves(root);
-					hash.clear();
+//					hash.clear();
 				}
 			}				
 			else{
@@ -738,7 +703,7 @@ public class ArtIntel implements Callable<Integer>{
 				if(depth == 6){
 					root.setValue(value/10);
 					integrator.mergeMoves(root);
-					hash.clear();
+//					hash.clear();
 				}
 			}				
 			else{
@@ -1016,7 +981,7 @@ public class ArtIntel implements Callable<Integer>{
         	}
         }        
 		integrator.mergeMoves(root);
-		Clocks.addNodes(stack.size());
+		count = stack.size();
 	}
 	
 	// minimax with vintage forward pruning
@@ -1120,7 +1085,7 @@ public class ArtIntel implements Callable<Integer>{
 				if(depth == 6){
 					root.setValue(value);
 					integrator.mergeMoves(root);
-					hash.clear();
+//					hash.clear();
 				}										
 			}				
 			else{
@@ -1185,102 +1150,6 @@ public class ArtIntel implements Callable<Integer>{
 		else{
 			return evaluator.min(scores);
 		}
-	}
-
-	// greedy algorithm
-	private void greedy() {
-		
-		List<Node> legal = new ArrayList<>(generator.generateMoves(board, "black"));
-		
-		int score;
-		String temp;
-		
-		for(int i=0; i<legal.size(); i++){
-
-			int r = legal.get(i).getR();
-			int c = legal.get(i).getC();
-			int r2 = legal.get(i).getR2();
-			int c2 = legal.get(i).getC2();
-			String prom;
-			int r3 = 0;
-			int c3 = 9;
-
-				if(board[r][c].equals("p") & r==2){
-					prom = "p";
-					if(!board[r][c].equals(" ")) {
-						c3 = Capture.take(board, r2, c2);
-					}
-					temp = board[r2][c2];
-					board[r2][c2] = "q";
-					board[r][c] = " ";	
-				}
-				else if(r==0 & c > 2){
-					prom = " ";
-					temp = " ";
-					board[r2][c2] = board[r][c];
-					board[r][c] = " ";
-				}
-				else{
-					prom = " ";
-					if(!board[r][c].equals(" ")) {
-						c3 = Capture.take(board, r2, c2);
-					}
-					temp = board[r2][c2];
-					board[r2][c2] = board[r][c];
-					board[r][c] = " ";	
-				}
-			
-			if(temp.equals("K")){
-				score = 5000;
-			}
-			else if(Examiner.winPromotion(board, "black") && !Examiner.check(board, "white")){
-				score = 5000;
-			}
-			else if(MovesList.repeat(board, "black")) {
-				score = 0;
-			}
-			else if(integrator.getNote(board)) {
-				score = -500;							
-			}
-			else if(Examiner.winPromotion(board, "white")){
-				score = -5000;
-			}
-			else if(Examiner.check(board, "white")){
-				score = -5000;
-			}
-			else{
-				score = evaluator.evaluationMaterial(board, false);
-			}
-			legal.get(i).setValue(score);
-			
-			if(prom.equals("p")){
-				board[r][c] = "p";
-			}
-			else{
-				board[r][c] = board[r2][c2];
-			}
-			board[r2][c2] = temp;
-			Capture.undo(board, r3, c3);
-		}
-		moves.addAll(legal);
-		Clocks.setNodes(legal.size());		
-	}
-	
-	// randomly moving algorithm
-	private void random() {
-		
-		List<Node> legal = new ArrayList<>(generator.generateMoves(board, "black"));
-			
-		moves.add(legal.get(new Random().nextInt(legal.size())));
-		Clocks.setNodes(legal.size());		
-	}
-
-	private void sendMoves(){
-		
-		if(moves.isEmpty()){
-			random();
-		}
-		integrator.mergeMoves(moves);
 	}
 	
 }

@@ -15,7 +15,7 @@ public class Clocks{
 	private volatile String turn = " ";
 	private static AtomicInteger nodes = new AtomicInteger(0);
 	
-	private static Clocks INSTANCE;
+	private static volatile Clocks INSTANCE;
 	
 	public static Clocks getInstance() {
 		
