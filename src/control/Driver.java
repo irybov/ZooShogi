@@ -28,7 +28,7 @@ class Driver {
 	
 	public String output(String[][] position) {
 		
-		String reply = null;		
+		String reply = null;
 		ObjectMapper mapper = new ObjectMapper();
 		
 		try {

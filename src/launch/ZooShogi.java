@@ -48,9 +48,9 @@ public class ZooShogi {
 				 javax.swing.SwingUtilities.invokeLater(new Runnable() {
 						public void run() {
 							new Gui();
-							launchScreen.dispose();
 						}
 					});
+				launchScreen.dispose();
 			}
 		});
 /*
@@ -69,7 +69,7 @@ public class ZooShogi {
 				//shows information
 				JOptionPane.showMessageDialog(launchScreen,
 					"Zoo Shogi by Ivan Ryabov\n" +
-					"This program is free for non-commercial use only\n" +						
+					"This program is free for non-commercial usage only\n" +						
 					"E-mail: v_cho@list.ru",
 						"About",
 							JOptionPane.DEFAULT_OPTION);

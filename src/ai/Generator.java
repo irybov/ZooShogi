@@ -153,8 +153,7 @@ public class Generator {
 		return legal;
 	}
 	
-	public List<Node> sortMoves(String[][] board, List<Node> legal,
-			String turn, boolean prune) {
+	public List<Node> sortMoves(String[][] board, List<Node> legal, String turn, boolean prune) {
 		
 		List<Node> sorted = new ArrayList<>();
 		

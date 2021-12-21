@@ -8,7 +8,6 @@ import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import control.Clocks;
 import control.Scribe;
@@ -33,7 +32,7 @@ public class Integrator {
 		return INSTANCE;
 	}
 	
-	private List<Node> moves = new CopyOnWriteArrayList<>();
+	private List<Node> moves = new ArrayList<>();
 	
 	private Info info = new Info();
 	public void setWarn(boolean warn){
@@ -135,6 +134,7 @@ public class Integrator {
 		final int c2 = args[3];
 		final int score = args[4];
 		final int nodes = args[5];
+		
 		Node move = new Node(r, c, r2, c2, "black");
 		move.setValue(score);
 		
@@ -206,6 +206,7 @@ public class Integrator {
 		String col2 = Message.getColName(c2);
 		
 		info.output(score, field, pieceName, c, col, r, spot, col2, r2);
+		Memorizer.getInstance().clear();
 		return field;		
 	}
 	

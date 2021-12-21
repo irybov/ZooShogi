@@ -30,19 +30,13 @@ class HashTabs {
 							
 		if(side.equals("black")) {
 			if(black.containsKey(hash))
-				return(black.get(hash) == depth+4);
+				return(black.get(hash) == depth-4);
 		}
 		else {
 			if(white.containsKey(hash))
-				return(white.get(hash) == depth+4);				
+				return(white.get(hash) == depth-4);
 		}
 		return false;
 	}
-	
-	// clears calculating hash
-/*	void clear() {		
-		black = null;
-		white = null;
-	}
-*/	
+		
 }

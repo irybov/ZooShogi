@@ -2,15 +2,12 @@ package ai;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import control.Clocks;
 import utilpack.Capture;
 import utilpack.Examiner;
 
 public class PseudoAI implements Runnable {
-
-	private List<Node> moves;
 	
 	private final Generator generator = new Generator();
 	private final Evaluator evaluator = new Evaluator();
@@ -24,29 +21,28 @@ public class PseudoAI implements Runnable {
 	}
 	
 	private final Integrator integrator = Integrator.getInstance();
+	List<Node> legal;
 	
 	@Override
 	public void run() {
 		algorithmSelector();		
 	}	
 	private void algorithmSelector(){
-
-		moves = new ArrayList<>();
+		
+		legal = new ArrayList<>(generator.generateMoves(board, "black"));
 		switch(level){
 		case 0:
-			random();
 			break;
 		case 1:
 			greedy();			
 			break;
 		}
-		sendMoves();
+		Clocks.setNodes(legal.size());
+		integrator.mergeMoves(legal);
 	}
 	
 	// greedy algorithm
 	private void greedy() {
-		
-		List<Node> legal = new ArrayList<>(generator.generateMoves(board, "black"));
 		
 		int score;
 		String temp;
@@ -117,26 +113,7 @@ public class PseudoAI implements Runnable {
 			}
 			board[r2][c2] = temp;
 			Capture.undo(board, r3, c3);
-		}
-		moves.addAll(legal);
-		Clocks.setNodes(legal.size());		
-	}
-	
-	// randomly moving algorithm
-	private void random() {
-		
-		List<Node> legal = new ArrayList<>(generator.generateMoves(board, "black"));
-			
-		moves.add(legal.get(new Random().nextInt(legal.size())));
-		Clocks.setNodes(legal.size());		
-	}
-
-	private void sendMoves(){
-		
-		if(moves.isEmpty()){
-			random();
-		}
-		integrator.mergeMoves(moves);
+		}	
 	}
 
 }

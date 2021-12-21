@@ -7,8 +7,8 @@ import utilpack.Matrix;
 
 public class MovesList {
 	
-	private static Set<String> listB = new HashSet<>();
-	private static Set<String> listW = new HashSet<>();
+	private static Set<String> black = new HashSet<>();
+	private static Set<String> white = new HashSet<>();
 	
 	// fills game moves list
 	public static void add(String[][] field, String turn) {
@@ -16,10 +16,10 @@ public class MovesList {
 		String hash = Matrix.keyMaker(field);
 		
 		if(turn.equals("black")) {
-			listB.add(hash);
+			black.add(hash);
 		}
 		else {
-			listW.add(hash);			
+			white.add(hash);			
 		}
 		
 	}
@@ -30,17 +30,17 @@ public class MovesList {
 		String hash = Matrix.keyMaker(field);
 			
 		if(turn.equals("black")) {
-			return(listB.contains(hash));
+			return(black.contains(hash));
 		}
 		else {
-			return(listW.contains(hash));			
+			return(white.contains(hash));			
 		}
 		
 	}
 	
 	static void clear() {		
-		listB.clear();
-		listW.clear();
+		black.clear();
+		white.clear();
 	}
 	
 }
