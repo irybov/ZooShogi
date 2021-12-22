@@ -12,7 +12,7 @@ import javax.swing.table.JTableHeader;
 import control.Director;
 import data.Player;
 
-public class Table {
+class Table {
 	
 	// Create a couple of columns 								
 	private Director director = Director.getInstance();

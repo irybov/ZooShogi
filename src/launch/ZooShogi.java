@@ -7,7 +7,7 @@ import java.io.File;
 import javax.swing.*;
 import ui.Gui;
 
-public class ZooShogi {
+class ZooShogi {
 
 	public static void main(String[] args) {
 		setup();

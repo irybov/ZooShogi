@@ -6,26 +6,20 @@ import java.util.concurrent.ConcurrentHashMap;
 import utilpack.Matrix;
 
 public class Memorizer {
-
-	private static volatile Memorizer INSTANCE;
 	
-	public static Memorizer getInstance(){
-		
-		if(INSTANCE == null) {
-			synchronized (Memorizer.class) {
-				if(INSTANCE == null) {
-					INSTANCE = new Memorizer();
-				}
-			}
-		}		
-		return INSTANCE;
-	}
+    private Memorizer(){}    
+    private static class SingletonHolder {
+        public static final Memorizer HOLDER_INSTANCE = new Memorizer();
+    }    
+    public static Memorizer getInstance() {
+        return SingletonHolder.HOLDER_INSTANCE;
+    }
 	
-	private Map<String, Node> black = new ConcurrentHashMap<>();
-	private Map<String, Node> white = new ConcurrentHashMap<>();
+	private Map<String, Edge> black = new ConcurrentHashMap<>();
+	private Map<String, Edge> white = new ConcurrentHashMap<>();
 	
 	// fills calculating hash
-	void add(String[][] field, String side, Node edge) {
+	void add(String[][] field, String side, Edge edge) {
 		
 		String hash = Matrix.keyMaker(field);
 		
@@ -54,7 +48,7 @@ public class Memorizer {
 	int get(String[][] field,  String side) {
 		
 		String hash = Matrix.keyMaker(field);
-		Node entry;
+		Edge entry;
 		
 		if(side.equals("black")) {
 			entry = black.get(hash);			
@@ -67,10 +61,10 @@ public class Memorizer {
 	}
 	
 	// updates previously calculated results	
-	void update(String[][] field,  String side, Node edge) {
+	void update(String[][] field,  String side, Edge edge) {
 		
 		String hash = Matrix.keyMaker(field);		
-		Node entry;
+		Edge entry;
 		
 		if(side.equals("black")) {
 			entry = black.get(hash);

@@ -19,7 +19,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
-public class Experience {
+class Experience {
 
 	private Set<String> neg;
 	private Map<String, Node> pos;

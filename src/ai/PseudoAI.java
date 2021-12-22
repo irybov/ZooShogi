@@ -83,10 +83,10 @@ public class PseudoAI implements Runnable {
 				}
 			
 			if(temp.equals("K")){
-				score = 5000;
+				score = 2000;
 			}
 			else if(Examiner.winPromotion(board, "black") && !Examiner.check(board, "white")){
-				score = 5000;
+				score = 1000;
 			}
 			else if(MovesList.repeat(board, "black")) {
 				score = 0;
@@ -95,10 +95,10 @@ public class PseudoAI implements Runnable {
 				score = -500;							
 			}
 			else if(Examiner.winPromotion(board, "white")){
-				score = -5000;
+				score = -1000;
 			}
 			else if(Examiner.check(board, "white")){
-				score = -5000;
+				score = -2000;
 			}
 			else{
 				score = evaluator.evaluationMaterial(board, false);

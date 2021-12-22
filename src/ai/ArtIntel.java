@@ -18,19 +18,20 @@ import java.util.LinkedList;
 public class ArtIntel implements Callable<Integer>{
 	
 	private HashTabs hash;
-	private Memorizer memo;
 	
 	private final Generator generator = new Generator();
 	private final Evaluator evaluator = new Evaluator();
-	private Node root;
 	
+	private Node root;	
 	private final int level;
-	private String[][] board; 
+	private String[][] board;
+	private final Memorizer memo;
 
-	public ArtIntel(Node root, String[][] board, int level) {		
+	public ArtIntel(Node root, String[][] board, int level, Memorizer memo) {		
 		this.root = root;
 		this.board = board;
 		this.level = level;
+		this.memo = memo;
 	}
 	
 	private final Integrator integrator = Integrator.getInstance();
@@ -45,7 +46,6 @@ public class ArtIntel implements Callable<Integer>{
 	private void algorithmSelector(){
 
 		hash = new HashTabs();
-		memo = Memorizer.getInstance();
 		
 		switch(level){
 		case 2:
@@ -315,16 +315,17 @@ public class ArtIntel implements Callable<Integer>{
 		
 		for(int i=0; i<legal.size(); i++){
 
-			int r = legal.get(i).getR();
-			int c = legal.get(i).getC();
-			int r2 = legal.get(i).getR2();
-			int c2 = legal.get(i).getC2();
+			Node node = legal.get(i);
+			int r = node.getR();
+			int c = node.getC();
+			int r2 = node.getR2();
+			int c2 = node.getC2();
 			String temp;
 			String prom;
 			int r3;
 			int c3 = 9;
 											
-			if(turn=="black"){					
+			if(turn.equals("black")){					
 				r3 = 0;
 				if(board[r][c].equals("p") & r==2){
 					prom = "p";
@@ -335,7 +336,7 @@ public class ArtIntel implements Callable<Integer>{
 					board[r2][c2] = "q";
 					board[r][c] = " ";
 				}
-				else if(r==0 & c > 2 ){
+				else if(r==0 & c > 2){
 					prom = " ";
 					temp = " ";
 					board[r2][c2] = board[r][c];
@@ -357,16 +358,17 @@ public class ArtIntel implements Callable<Integer>{
 					children = generator.generateMoves(board, "white");
 					sorted = generator.sortMoves(board, children, "white", false);
 					for(Node child: sorted) {
-						child.addParent(legal.get(i));
+						child.addParent(node);
 					}
-					legal.get(i).addChildren(sorted);
+					node.addChildren(sorted);
 				}
 
 				int value = minimaxAB("white", depth+1, alpha, beta, sorted);
 				if(value > alpha){
 					alpha = value;
 					scores.add(value);
-					legal.get(i).setValue(value);
+					node.setValue(value);
+					node.setDepth(depth);
 				}
 				if(depth == 0){
 					root.setValue(value);
@@ -406,19 +408,19 @@ public class ArtIntel implements Callable<Integer>{
 					children = generator.generateMoves(board, "black");
 					sorted = generator.sortMoves(board, children, "black", false);
 					for(Node child: sorted) {
-						child.addParent(legal.get(i));
+						child.addParent(node);
 					}
-					legal.get(i).addChildren(sorted);
+					node.addChildren(sorted);
 				}
 				
 				int value = minimaxAB("black", depth+1, alpha, beta, sorted);
 				if(value < beta){
 					beta = value;
 					scores.add(value);
-					legal.get(i).setValue(value);
+					node.setValue(value);
+					node.setDepth(depth);
 				}
 			}
-			legal.get(i).setDepth(depth);
 			
 			if(prom.equals("p")){
 				board[r][c] = "p";
@@ -459,14 +461,13 @@ public class ArtIntel implements Callable<Integer>{
 			return 0;
 		}
 		
-		if(turn.equals("white")){
-			if(hash.repeat(board, turn, depth)){
-				return 0;
-			}
-			if(memo.has(board, turn)) {
-				return memo.get(board, turn);
-			}
-			hash.add(board, turn, depth);
+		if(hash.repeat(board, turn, depth)){
+			return 0;
+		}		
+		hash.add(board, turn, depth);	
+		
+		if(turn.equals("white") && memo.has(board, "white")) {
+			return memo.get(board, "white");
 		}
 		
 		if(Examiner.winPositionBlack(board, turn)){
@@ -485,7 +486,7 @@ public class ArtIntel implements Callable<Integer>{
 			}
 		}
 
-		if(depth == 5){
+		if(depth == 7){
 			return evaluator.evaluationMaterial(board, false);
 		}
 
@@ -495,11 +496,11 @@ public class ArtIntel implements Callable<Integer>{
 		
 		for(int i=0; i<legal.size(); i++){
 			
-			Node edge = legal.get(i);
-			int r = edge.getR();
-			int c = edge.getC();
-			int r2 = edge.getR2();
-			int c2 = edge.getC2();
+			Node node = legal.get(i);
+			int r = node.getR();
+			int c = node.getC();
+			int r2 = node.getR2();
+			int c2 = node.getC2();
 			String temp;
 			String prom;
 			int r3;
@@ -533,23 +534,23 @@ public class ArtIntel implements Callable<Integer>{
 				}
 				
 				List<Node> children = null;
-				if(temp != "K" & depth < 4) {
+				if(temp != "K" & depth < 6) {
 					children = generator.generateMoves(board, "white");
 					for(Node child: children) {
-						child.addParent(edge);
+						child.addParent(node);
 					}
-					edge.addChildren(children);
+					node.addChildren(children);
 				}
 				
 				int value = minimax("white", depth+1, children);
 					scores.add(value);
-					edge.setValue(value);
-					edge.setDepth(depth);
+					node.setValue(value);
+					node.setDepth(depth);
 					if(memo.has(board, "white")) {
-						memo.update(board, "white", edge);
+						memo.update(board, "white", new Edge(depth, value));
 					}
 					else {
-						memo.add(board, "white", edge);
+						memo.add(board, "white", new Edge(depth, value));
 					}
 				if(depth == 0){
 					root.setValue(value);
@@ -584,25 +585,25 @@ public class ArtIntel implements Callable<Integer>{
 				}
 				
 				List<Node> children = null;
-				if(temp != "k" & depth < 4) {
+				if(temp != "k" & depth < 6) {
 					children = generator.generateMoves(board, "black");
 					for(Node child: children) {
-						child.addParent(edge);
+						child.addParent(node);
 					}
-					edge.addChildren(children);
+					node.addChildren(children);
 				}
 				
 				int value = minimax("black", depth+1, children);
 					scores.add(value);
-					edge.setValue(value);
-					edge.setDepth(depth);
-					if(memo.has(board, "black")) {
-						memo.update(board, "black", edge);
+					node.setValue(value);
+					node.setDepth(depth);
+/*					if(memo.has(board, "black")) {
+						memo.update(board, "black", new Edge(depth, value));
 					}
 					else {
-						memo.add(board, "black", edge);
+						memo.add(board, "black", new Edge(depth, value));
 					}
-			}
+*/			}
 			
 			if(prom.equals("p")){
 				board[r][c] = "p";
@@ -617,12 +618,14 @@ public class ArtIntel implements Callable<Integer>{
 			Capture.undo(board, r3, c3);
 		}
 		
-		if(turn.equals("black")){
-			return evaluator.max(scores);
+		int score;
+		if(turn.equals("black")){			
+			score = evaluator.max(scores);
 		}
-		else{
-			return evaluator.min(scores);
+		else{		
+			score = evaluator.min(scores);	
 		}
+		return score;
 	}
 
 	// gambling (a.k.a. poker) algorithm
@@ -639,12 +642,10 @@ public class ArtIntel implements Callable<Integer>{
 			return 0;
 		}
 		
-		if(turn.equals("white")){
-			if(hash.repeat(board, turn, depth)){
-				return 0;
-			}		
-			hash.add(board, turn, depth);
-		}
+		if(hash.repeat(board, turn, depth)){
+			return 0;
+		}		
+		hash.add(board, turn, depth);
 		
 		if(Examiner.winPositionBlack(board, turn)){
 			return 100*depth;
@@ -913,7 +914,9 @@ public class ArtIntel implements Callable<Integer>{
 							temp = board[r2][c2];
 							board[r2][c2] = board[r][c];
 							board[r][c] = " ";
-						}					
+						}
+						
+						hash.add(board, "white", depth);
 						
 						if(temp.equals("k")){
 							legal.get(i).setValue(-(2000+(100/depth)));
@@ -923,6 +926,9 @@ public class ArtIntel implements Callable<Integer>{
 							legal.get(i).setValue(-(1000+(100/depth)));
 						}
 						else if(MovesList.repeat(board, "white")) {
+							legal.get(i).setValue(0);
+						}
+						else if(hash.repeat(board, "white", depth-4)){
 							legal.get(i).setValue(0);
 						}
 						else if(Examiner.winPromotion(board, "black")){
@@ -1018,12 +1024,10 @@ public class ArtIntel implements Callable<Integer>{
 			return 0;
 		}
 		
-		if(turn.equals("white")){
-			if(hash.repeat(board, turn, depth)){
-				return 0;
-			}		
-			hash.add(board, turn, depth);
-		}
+		if(hash.repeat(board, turn, depth)){
+			return 0;
+		}		
+		hash.add(board, turn, depth);
 		
 		if(Examiner.winPositionBlack(board, turn)){
 			return 2000-(depth*100);

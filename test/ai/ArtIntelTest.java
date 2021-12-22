@@ -25,6 +25,7 @@ public class ArtIntelTest {
 	private static Generator generator;
 	private static int cores;
 	private static ExecutorService es;
+	private static Memorizer memo;
 	
 	@BeforeClass
 	public static void initBoard() {
@@ -40,6 +41,7 @@ public class ArtIntelTest {
 		nodes = new ArrayList<>(legal.size());
 		nodes = generator.sortMoves(board, legal, "black", false);
 		es = Executors.newFixedThreadPool(cores);
+		memo = Memorizer.getInstance();
 	}
 
 
@@ -47,7 +49,7 @@ public class ArtIntelTest {
 	@Test(timeout = 20000)
 	public void performanceLimitAB() {
 		level = 6;
-		nodes.forEach(node-> es.submit(new ArtIntel(node, Copier.deepCopy(board), level)));
+		nodes.forEach(node-> es.submit(new ArtIntel(node, Copier.deepCopy(board), level, memo)));
 		es.shutdown();
 		try {
 			es.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
@@ -61,7 +63,7 @@ public class ArtIntelTest {
 	@Test(timeout = 50000)
 	public void performanceLimitEX() {
 		level = 7;
-		nodes.forEach(node-> es.submit(new ArtIntel(node, Copier.deepCopy(board), level)));
+		nodes.forEach(node-> es.submit(new ArtIntel(node, Copier.deepCopy(board), level, memo)));
 		es.shutdown();
 		try {
 			es.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);

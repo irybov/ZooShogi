@@ -7,7 +7,7 @@ import javax.swing.border.*;
 
 import control.Director;
 
-public class Login extends JFrame {
+class Login extends JFrame {
 	
     private JTextField tfUsername;
     private JPasswordField pfPassword;

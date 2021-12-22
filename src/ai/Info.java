@@ -4,7 +4,7 @@ import sound.Sound;
 import ui.Gui;
 import utilpack.Examiner;
 
-public class Info {
+class Info {
 
 	private Sound sound = Sound.getInstance();
 	private boolean mute = false;	

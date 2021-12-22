@@ -13,6 +13,7 @@ import java.io.*;
 import ai.ArtIntel;
 import ai.Cache;
 import ai.Integrator;
+import ai.Memorizer;
 import ai.MovesList;
 import ai.Node;
 import ai.PseudoAI;
@@ -331,10 +332,11 @@ public class Director{
 					final int cores = Runtime.getRuntime().availableProcessors();
 					ExecutorService es = Executors.newFixedThreadPool(cores);
 					List<Future<Integer>> tasks = new ArrayList<>(nodes.size());
-					Interceptor f117 = new Interceptor(tasks);			
+					Interceptor f117 = new Interceptor(tasks);
+					final Memorizer memo = Memorizer.getInstance();
 					for(Node node: nodes) {					
 						Future<Integer> score = es.submit
-								(new ArtIntel(node, Copier.deepCopy(board), level));
+								(new ArtIntel(node, Copier.deepCopy(board), level, memo));
 						tasks.add(score);
 					}
 					f117.start();

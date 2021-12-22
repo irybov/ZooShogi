@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-public class Interceptor extends Thread{
+class Interceptor extends Thread{
 
 	private List<Future<Integer>> tasks;
 	

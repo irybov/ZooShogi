@@ -5,7 +5,7 @@ import java.util.List;
 import utilpack.Capture;
 import utilpack.Pieces;
 
-public class Evaluator {
+class Evaluator {
 
 	int evaluationMaterial(String[][] board, boolean exp) {
 		

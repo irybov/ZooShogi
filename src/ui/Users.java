@@ -11,7 +11,7 @@ import javax.swing.event.ListSelectionListener;
 import control.Director;
 import data.Player;
 
-public class Users extends JFrame {
+class Users extends JFrame {
 	
 	private Director director = Director.getInstance();
 	private List<Player> players = director.getList();
