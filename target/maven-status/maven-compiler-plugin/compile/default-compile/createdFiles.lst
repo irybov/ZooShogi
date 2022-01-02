@@ -4,7 +4,9 @@ ui\Login$2.class
 ui\Gui$19.class
 utilpack\Capture.class
 ui\Gui$12.class
+control\Scribe.class
 ui\Chooser.class
+ai\MovesList.class
 ui\Table.class
 utilpack\Pieces$3.class
 launch\ZooShogi.class
@@ -38,6 +40,7 @@ ui\Users$1.class
 ui\Gui$20.class
 ui\Gui$10.class
 ui\Gui$5.class
+ai\Evaluator.class
 ui\Gui$18.class
 utilpack\Pieces$1.class
 ui\Gui$8.class

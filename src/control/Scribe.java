@@ -49,8 +49,10 @@ public class Scribe {
 				break;
 			case "white": case "black":
 				if(number == 1 & nova) {
-					scribe.newLine();
-					scribe.newLine();
+					if(file.length() != 0) {
+						scribe.newLine();
+						scribe.newLine();					
+					}
 					LocalDateTime now = LocalDateTime.now();
 					scribe.append(now.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")));
 					scribe.newLine();
