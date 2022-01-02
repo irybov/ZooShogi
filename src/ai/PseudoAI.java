@@ -33,7 +33,7 @@ public class PseudoAI implements Runnable {
 		switch(level){
 		case 0:
 			break;
-		case 2:
+		case 1:
 			greedy();			
 			break;
 		}

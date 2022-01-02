@@ -312,7 +312,7 @@ public class Director{
 			else {
 				switch(level){
 				case 0:
-				case 2:
+				case 1:
 					new PseudoAI(level, board).run();
 					break;
 				case 4:
@@ -323,7 +323,7 @@ public class Director{
 						(generator.sortMoves(board, legal, "black", false));
 						nodes.subList(1, nodes.size()).clear();
 					}
-				case 1:
+				case 2:
 				case 3:
 				case 5:
 				case 6:
