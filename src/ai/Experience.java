@@ -2,18 +2,24 @@ package ai;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipOutputStream;
 
-public class Experience {
+class Experience {
 
 	private Set<String> neg;
 	private Map<String, Node> pos;
@@ -43,26 +49,68 @@ public class Experience {
 			ex.printStackTrace();
 		}
 	    
-		File positive = new File("exp/positive.bin");
+		File positive = new File("exp/positive.zip");
 		if(!positive.exists()) {
 			try {
 				positive.createNewFile();
 				pos = new HashMap<>();
-			    try(ObjectOutputStream oos = new ObjectOutputStream
-			       (new BufferedOutputStream(new FileOutputStream("exp/positive.bin")))){
-			           oos.writeUnshared(pos);
-			           oos.flush();
-			           oos.reset();
+			    try(FileOutputStream fos = new FileOutputStream("exp/positive.zip");
+				    BufferedOutputStream bos = new BufferedOutputStream(fos);
+			    	ZipOutputStream zos = new ZipOutputStream(bos)){
+			    	
+			        // Convert Map to byte array
+			        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			        ObjectOutputStream oos = new ObjectOutputStream(baos);
+			        oos.writeObject(pos);
+			        oos.flush();
+			        byte[] data = baos.toByteArray();
+
+		            ZipEntry entry = new ZipEntry("positive.bin");
+		            zos.putNextEntry(entry);
+		            ByteArrayInputStream bais = new ByteArrayInputStream(data);
+		            byte[] buffer = new byte[8192];
+		            int len;
+		            while ((len = bais.read(buffer)) > 0) {
+		                zos.write(buffer, 0, len);
+		                zos.flush();
+		            }
+		            zos.closeEntry();
+		            oos.close();
+		            baos.close();
+		            bais.close();
 			    }			
 			}
 			catch (IOException ex) {
 				ex.printStackTrace();
 			}
 		}
-		
-	    try(ObjectInputStream ois = new ObjectInputStream
-	       (new BufferedInputStream(new FileInputStream("exp/positive.bin")))){
+
+    	ZipFile zipped = null;
+		try {
+			zipped = new ZipFile("exp/positive.zip");
+		}
+		catch (IOException exc) {
+			exc.printStackTrace();
+		}
+    	ZipEntry entry = zipped.getEntry("positive.bin");   	
+	    try(InputStream fis = zipped.getInputStream(entry);
+	    	BufferedInputStream bis = new BufferedInputStream(fis)){
+
+	        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+	    	int count;
+	        byte[] buffer = new byte[8192];
+	        while ((count = bis.read(buffer, 0, 8192)) > 0) {
+	            baos.write(buffer, 0, count);
+	            baos.flush();
+	        }  
+	        // Parse byte array to Map
+	        ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+	        ObjectInputStream ois = new ObjectInputStream(bais);
 	    	pos = (Map<String, Node>) ois.readObject();
+	    	zipped.close();
+            ois.close();
+            baos.close();
+            bais.close();
 	    }
 	    catch (IOException | ClassNotFoundException ex) {
 			ex.printStackTrace();
@@ -95,12 +143,31 @@ public class Experience {
 	
 	void learn(String note, Node node) {
 		pos.putIfAbsent(note, node);
-	    try(ObjectOutputStream oos = new ObjectOutputStream
-		   (new BufferedOutputStream(new FileOutputStream("exp/positive.bin")))){
-	           oos.writeUnshared(pos);
-	           oos.flush();
-	           oos.reset();
-	    }			
+	    try(FileOutputStream fos = new FileOutputStream("exp/positive.zip");
+		    BufferedOutputStream bos = new BufferedOutputStream(fos);
+	    	ZipOutputStream zos = new ZipOutputStream(bos)){
+	    	
+	        // Convert Map to byte array
+	        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+	        ObjectOutputStream oos = new ObjectOutputStream(baos);
+	        oos.writeObject(pos);
+	        oos.flush();
+	        byte[] data = baos.toByteArray();
+
+            ZipEntry entry = new ZipEntry("positive.bin");
+            zos.putNextEntry(entry);
+            ByteArrayInputStream bais = new ByteArrayInputStream(data);
+            byte[] buffer = new byte[1024];
+            int len;
+            while ((len = bais.read(buffer)) > 0) {
+                zos.write(buffer, 0, len);
+		        zos.flush();
+            }
+            zos.closeEntry();
+            oos.close();
+            baos.close();
+            bais.close();
+	    }	    			
 		catch (IOException ex) {
 			ex.printStackTrace();
 		}
