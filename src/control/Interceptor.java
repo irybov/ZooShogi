@@ -25,6 +25,7 @@ class Interceptor extends Thread{
 					}
 				}
 				catch (InterruptedException | ExecutionException exc) {
+					exc.printStackTrace();
 					Thread.currentThread().interrupt();
 				}
 			}

@@ -20,15 +20,11 @@ public class ArtIntel implements Callable<Integer>{
 	private HashTabs hash;	
 	private final Generator generator = new Generator();
 	private final Evaluator evaluator = new Evaluator();
-	private Node root;
 	
+	private Node root;	
 	private final int level;
 	private String[][] board; 
 
-	public ArtIntel(int level, String[][] board) {		
-		this.level = level;
-		this.board = board;
-	}
 	public ArtIntel(Node root, String[][] board, int level) {		
 		this.root = root;
 		this.board = board;
@@ -113,7 +109,7 @@ public class ArtIntel implements Callable<Integer>{
 
 		count += legal.size();
 		
-		List<Integer> scores = new ArrayList<>();
+		List<Integer> scores = new ArrayList<>(legal.size());
 		
 		for(int i=0; i<legal.size(); i++){
 
@@ -305,7 +301,7 @@ public class ArtIntel implements Callable<Integer>{
 
 		count += legal.size();
 		
-		List<Integer> scores = new ArrayList<>();
+		List<Integer> scores = new ArrayList<>(legal.size());
 		
 		for(int i=0; i<legal.size(); i++){
 
@@ -476,7 +472,7 @@ public class ArtIntel implements Callable<Integer>{
 
 		count += legal.size();
 				
-		List<Integer> scores = new ArrayList<>();
+		List<Integer> scores = new ArrayList<>(legal.size());
 		
 		for(int i=0; i<legal.size(); i++){
 	
@@ -633,7 +629,7 @@ public class ArtIntel implements Callable<Integer>{
 
 		count += legal.size();
 		
-		List<Integer> scores = new ArrayList<>();
+		List<Integer> scores = new ArrayList<>(legal.size());
 		
 		for(int i=0; i<legal.size(); i++){
 	
@@ -1007,7 +1003,7 @@ public class ArtIntel implements Callable<Integer>{
 
 		count += legal.size();
 				
-		ArrayList<Integer> scores = new ArrayList<>();
+		ArrayList<Integer> scores = new ArrayList<>(legal.size());
 		
 		for(int i=0; i<legal.size(); i++){
 
