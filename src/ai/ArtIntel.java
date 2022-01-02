@@ -97,15 +97,13 @@ public class ArtIntel implements Runnable{
 		
 		if(turn.equals("white") && integrator.getNote(board)) {
 			return -500;
-		}
-		
+		}		
 		if(turn.equals("white") && MovesList.repeat(board, "black")){
 			return 0;
 		}
 		if((turn.equals("black") && depth < 6) && MovesList.repeat(board, "white")){
 			return 0;
-		}
-		
+		}		
 		if(hash.repeat(board, turn, depth)){
 			return 0;
 		}		
@@ -116,8 +114,7 @@ public class ArtIntel implements Runnable{
 		}
 		if(Examiner.winPositionWhite(board, turn)){
 			return -(2000+(depth*100));	
-		}	
-		
+		}			
 		if(Examiner.check(board, turn) && depth < 6){
 			if(turn.equals("white")){
 				return -(1000+(depth*100));
@@ -129,8 +126,7 @@ public class ArtIntel implements Runnable{
 	
 		if(node==false & depth < 2){
 			return evaluator.evaluationMaterial(board, false);
-		}
-		
+		}		
 		if(depth == -3){
 			return evaluator.evaluationMaterial(board, false);
 		}
@@ -296,15 +292,13 @@ public class ArtIntel implements Runnable{
 		
 		if(turn.equals("white") && integrator.getNote(board)) {
 			return -500;
-		}
-		
+		}		
 		if(turn.equals("white") && MovesList.repeat(board, "black")){
 			return 0;
 		}
 		if((turn.equals("black") && depth < 8) && MovesList.repeat(board, "white")){
 			return 0;
-		}
-		
+		}		
 		if(hash.repeat(board, turn, depth)){
 			return 0;
 		}		
@@ -315,8 +309,7 @@ public class ArtIntel implements Runnable{
 		}
 		if(Examiner.winPositionWhite(board, turn)){
 			return -(2000+(depth*100));	
-		}	
-		
+		}			
 		if(Examiner.check(board, turn) && depth < 6){
 			if(turn.equals("white")){
 				return -(1000+(depth*100));
@@ -471,15 +464,13 @@ public class ArtIntel implements Runnable{
 		
 		if(turn.equals("white") && integrator.getNote(board)) {
 			return -500;
-		}
-		
+		}		
 		if(turn.equals("white") && MovesList.repeat(board, "black")){
 			return 0;
 		}
 		if((turn.equals("black") && depth < 6) && MovesList.repeat(board, "white")){
 			return 0;
-		}
-		
+		}		
 		if(turn.equals("white")){
 			if(hash.repeat(board, turn, depth)){
 				return 0;
@@ -493,13 +484,9 @@ public class ArtIntel implements Runnable{
 		if(Examiner.winPositionWhite(board, turn)){
 			return -(2000+(depth*100));
 		}
-		
-		if(Examiner.check(board, turn) && depth < 6){
-			if(turn.equals("white")){
+		if(turn.equals("white") && depth < 6){
+			if(Examiner.check(board, turn)){
 				return -(1000+(depth*100));
-			}
-			else {
-				return 1000+(depth*100);				
 			}
 		}
 
@@ -634,15 +621,13 @@ public class ArtIntel implements Runnable{
 		
 		if(turn.equals("white") && integrator.getNote(board)) {
 			return -5000;
-		}
-		
+		}		
 		if(turn.equals("white") && MovesList.repeat(board, "black")){
 			return 0;
 		}
 		if((turn.equals("black") && depth < 6) && MovesList.repeat(board, "white")){
 			return 0;
-		}
-		
+		}		
 		if(turn.equals("white")){
 			if(hash.repeat(board, turn, depth)){
 				return 0;
@@ -655,14 +640,10 @@ public class ArtIntel implements Runnable{
 		}
 		if(Examiner.winPositionWhite(board, turn)){
 			return -(1000*depth);
-		}
-		
-		if(Examiner.check(board, turn) && depth < 6){
-			if(turn.equals("white")){
-				return -(1000+(depth*100));
-			}
-			else {
-				return 1000+(depth*100);				
+		}		
+		if(turn.equals("white") && depth < 6){
+			if(Examiner.check(board, turn)){
+				return -(1000*depth);
 			}
 		}
 		
@@ -1013,15 +994,13 @@ public class ArtIntel implements Runnable{
 		
 		if(turn.equals("white") && integrator.getNote(board)) {
 			return -500;
-		}
-		
+		}		
 		if(turn.equals("white") && MovesList.repeat(board, "black")){
 			return 0;
 		}
 		if((turn.equals("black") && depth < 6) && MovesList.repeat(board, "white")){
 			return 0;
-		}
-		
+		}		
 		if(turn.equals("white")){
 			if(hash.repeat(board, turn, depth)){
 				return 0;
@@ -1034,14 +1013,10 @@ public class ArtIntel implements Runnable{
 		}
 		if(Examiner.winPositionWhite(board, turn)){
 			return -(2000+(depth*100));
-		}
-		
-		if(Examiner.check(board, turn) && depth < 6){
-			if(turn.equals("white")){
+		}		
+		if(turn.equals("white") && depth < 6){
+			if(Examiner.check(board, turn)){
 				return -(1000+(depth*100));
-			}
-			else{
-				return 1000+(depth*100);
 			}
 		}
 	
