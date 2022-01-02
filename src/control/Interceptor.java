@@ -1,0 +1,34 @@
+package control;
+
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+
+class Interceptor extends Thread{
+
+	private List<Future<Integer>> tasks;
+	
+	public Interceptor(List<Future<Integer>> tasks) {
+		this.tasks = tasks;
+	}
+
+	@Override
+	public void run() {
+		
+		while(!Thread.interrupted()) {
+			for(Future<Integer> task: tasks) {
+				try {
+					if(task.isDone() && task.get() > 500) {
+						for(Future<Integer> each: tasks) {
+							each.cancel(true);
+						}
+					}
+				}
+				catch (InterruptedException | ExecutionException exc) {
+					Thread.currentThread().interrupt();
+				}
+			}
+		}		
+	}
+	
+}
