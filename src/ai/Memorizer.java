@@ -32,7 +32,7 @@ public class Memorizer {
 	}
 
 	// checks repetitions while calculating	
-	boolean has(String[][] field,  String side) {
+	boolean has(String[][] field, String side) {
 		
 		String hash = Matrix.keyMaker(field);
 							
@@ -42,6 +42,20 @@ public class Memorizer {
 		else {
 			return(white.containsKey(hash));
 		}	
+	}
+	
+	boolean precise(String[][] field, String side, int depth) {
+		
+		String hash = Matrix.keyMaker(field);
+		Edge entry;
+		
+		if(side.equals("black")) {
+			entry = black.get(hash);
+		}
+		else {
+			entry = white.get(hash);
+		}
+		return depth >= entry.getDepth();
 	}
 	
 	// returns previously calculated results
@@ -61,20 +75,20 @@ public class Memorizer {
 	}
 	
 	// updates previously calculated results	
-	void update(String[][] field,  String side, Edge edge) {
+	void update(String[][] field, String side, Edge edge) {
 		
 		String hash = Matrix.keyMaker(field);		
 		Edge entry;
 		
 		if(side.equals("black")) {
 			entry = black.get(hash);
-			if(edge.getDepth() > entry.getDepth()) {
+			if(edge.getDepth() < entry.getDepth()) {
 				entry.setValue(edge.getValue());
 			}
 		}
 		else {
 			entry = white.get(hash);
-			if(edge.getDepth() > entry.getDepth()) {
+			if(edge.getDepth() < entry.getDepth()) {
 				entry.setValue(edge.getValue());				
 			}
 		}

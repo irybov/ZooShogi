@@ -68,6 +68,7 @@ public class ArtIntel implements Callable<Integer>{
 			break;
 		}
 		Clocks.addNodes(count);
+//		integrator.mergeMoves(root);
 	}
 	
 	// minimax with capture and check extensions
@@ -452,23 +453,17 @@ public class ArtIntel implements Callable<Integer>{
 		
 		if(turn.equals("white") && integrator.getNote(board)) {
 			return -500;
-		}
-		
+		}		
 		if(turn.equals("white") && MovesList.repeat(board, "black")){
 			return 0;
 		}
-		if((turn.equals("black") && depth > 0) && MovesList.repeat(board, "white")){
+		if((depth > 0 && turn.equals("black")) && MovesList.repeat(board, "white")){
 			return 0;
-		}
-		
+		}		
 		if(hash.repeat(board, turn, depth)){
 			return 0;
 		}		
 		hash.add(board, turn, depth);	
-		
-		if(turn.equals("white") && memo.has(board, "white")) {
-			return memo.get(board, "white");
-		}
 		
 		if(Examiner.winPositionBlack(board, turn)){
 			return 2000-(depth*100);
@@ -477,22 +472,31 @@ public class ArtIntel implements Callable<Integer>{
 			return -(2000-(depth*100));
 		}
 		
-		if(Examiner.check(board, turn) && depth > 0){
-			if(turn.equals("white")){
+		if(turn.equals("white")){
+			if(Examiner.check(board, turn)){
 				return -(1500-(depth*100));
-			}
-			else {
-				return 1500-(depth*100);				
 			}
 		}
 
-		if(depth == 7){
+		if(depth == 5){
 			return evaluator.evaluationMaterial(board, false);
+		}
+				
+		if(depth > 0 && memo.has(board, turn)) {
+			if(memo.precise(board, turn, depth)) {
+//				System.out.println("SHT hit at depth " + depth);
+				return memo.get(board, turn);
+			}
 		}
 
 		count += legal.size();
 				
 		List<Integer> scores = new ArrayList<>();
+		
+		String[][] field = new String[][]{{"","","","","","","","",""},
+			   							  {"","",""},
+			   							  {"","",""},
+			   							  {"","","","","","","","",""}};
 		
 		for(int i=0; i<legal.size(); i++){
 			
@@ -534,7 +538,7 @@ public class ArtIntel implements Callable<Integer>{
 				}
 				
 				List<Node> children = null;
-				if(temp != "K" & depth < 6) {
+				if(temp != "K" & depth < 4) {
 					children = generator.generateMoves(board, "white");
 					for(Node child: children) {
 						child.addParent(node);
@@ -544,7 +548,8 @@ public class ArtIntel implements Callable<Integer>{
 				
 				int value = minimax("white", depth+1, children);
 					scores.add(value);
-					node.setValue(value);
+					field = Copier.deepCopy(board);
+/*					node.setValue(value);
 					node.setDepth(depth);
 					if(memo.has(board, "white")) {
 						memo.update(board, "white", new Edge(depth, value));
@@ -552,7 +557,7 @@ public class ArtIntel implements Callable<Integer>{
 					else {
 						memo.add(board, "white", new Edge(depth, value));
 					}
-				if(depth == 0){
+*/				if(depth == 0){
 					root.setValue(value);
 					integrator.mergeMoves(root);
 				}
@@ -585,7 +590,7 @@ public class ArtIntel implements Callable<Integer>{
 				}
 				
 				List<Node> children = null;
-				if(temp != "k" & depth < 6) {
+				if(temp != "k" & depth < 4) {
 					children = generator.generateMoves(board, "black");
 					for(Node child: children) {
 						child.addParent(node);
@@ -595,9 +600,10 @@ public class ArtIntel implements Callable<Integer>{
 				
 				int value = minimax("black", depth+1, children);
 					scores.add(value);
-					node.setValue(value);
+					field = Copier.deepCopy(board);
+/*					node.setValue(value);
 					node.setDepth(depth);
-/*					if(memo.has(board, "black")) {
+					if(memo.has(board, "black")) {
 						memo.update(board, "black", new Edge(depth, value));
 					}
 					else {
@@ -621,9 +627,21 @@ public class ArtIntel implements Callable<Integer>{
 		int score;
 		if(turn.equals("black")){			
 			score = evaluator.max(scores);
+			if(memo.has(field, "white")) {
+				memo.update(field, "white", new Edge(depth, score));
+			}
+			else {
+				memo.add(field, "white", new Edge(depth, score));
+			}
 		}
 		else{		
-			score = evaluator.min(scores);	
+			score = evaluator.min(scores);
+			if(memo.has(field, "black")) {
+				memo.update(field, "black", new Edge(depth, score));
+			}
+			else {
+				memo.add(field, "black", new Edge(depth, score));
+			}
 		}
 		return score;
 	}
