@@ -55,7 +55,7 @@
           </archive>
         </configuration>
       </plugin>
-      <?comment
+
 	  <plugin>
 	    <groupId>com.github.wvengen</groupId>
 	    <artifactId>proguard-maven-plugin</artifactId>
@@ -78,6 +78,8 @@
                 <options>
                 	<!--<option>-dontoptimize</option>-->
                 	<option>-keep public class launch.ZooShogi {public static *;}</option>
+                	<option>-keep class ui.* {*;}</option>
+					<option>-adaptresourcefilenames</option>
                 </options>
                 <libs>
                     <lib>${java.home}/lib/rt.jar</lib>
@@ -93,7 +95,7 @@
 			</dependency>
 		</dependencies>	
 	  </plugin>
-		?>      
+     
 	</plugins>
   </build>
   <dependencies>
@@ -108,7 +110,7 @@
 	    <artifactId>jackson-databind</artifactId>
 	    <version>2.12.5</version>
 	</dependency>
-	<?comment
+
 	<dependency>
 	    <groupId>com.sun</groupId>
 	    <artifactId>tools</artifactId>
@@ -116,6 +118,6 @@
 	    <scope>system</scope>
 	    <systemPath>${JAVA_HOME}/lib/tools.jar</systemPath>
 	</dependency>
-	?>		 	
+	 	
   </dependencies>
 </project>
