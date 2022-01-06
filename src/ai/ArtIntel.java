@@ -4,6 +4,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.Callable;
 
@@ -11,8 +12,10 @@ import control.Clocks;
 import utilpack.Capture;
 import utilpack.Copier;
 import utilpack.Examiner;
+import utilpack.Matrix;
 
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 public class ArtIntel implements Callable<Integer>{
@@ -35,17 +38,57 @@ public class ArtIntel implements Callable<Integer>{
 	
 	private int count = 0;
 
+	private class HashTabs {
+
+		private Map<String, Integer> black = new HashMap<>();
+		private Map<String, Integer> white = new HashMap<>();	
+		
+		// fills calculating hash
+		private void add(String[][] field, String side, int depth) {
+			
+			String hash = Matrix.keyMaker(field);
+			
+			if(side.equals("black")) {
+				black.putIfAbsent(hash, depth);
+			}
+			else {
+				white.putIfAbsent(hash, depth);
+			}
+		}
+		
+		// checks repetitions while calculating	
+		private boolean repeat(String[][] field,  String side, int depth) {
+			
+			String hash = Matrix.keyMaker(field);
+								
+			if(side.equals("black")) {
+				if(black.containsKey(hash))
+					return(black.get(hash) == depth+4);
+			}
+			else {
+				if(white.containsKey(hash))
+					return(white.get(hash) == depth+4);				
+			}
+			return false;
+		}
+		
+	}
+	
 	@Override
 	public Integer call(){		
 		algorithmSelector();
+		if(level == 2) {
+			root.setValue(root.getValue()/10);
+		}
 		return root.getValue();
 	}
 	
 	private void algorithmSelector(){
 
 		hash = new HashTabs();
+		
 		switch(level){
-		case 1:
+		case 2:
 			expectimax("black", 6, Arrays.asList(root));
 			break;		
 		case 3:
@@ -65,6 +108,7 @@ public class ArtIntel implements Callable<Integer>{
 			break;
 		}
 		Clocks.addNodes(count);
+		integrator.mergeMoves(root);
 	}
 	
 	// minimax with capture and check extensions
@@ -176,11 +220,6 @@ public class ArtIntel implements Callable<Integer>{
 					alpha = value;
 					scores.add(value);
 					legal.get(i).setValue(value);
-				}
-				if(depth == 6){
-					root.setValue(value);
-					integrator.mergeMoves(root);
-					hash.clear();
 				}										
 			}				
 			else{
@@ -357,11 +396,6 @@ public class ArtIntel implements Callable<Integer>{
 					alpha = value;
 					scores.add(value);
 					legal.get(i).setValue(value);
-				}
-				if(depth == 8){
-					root.setValue(value);
-					integrator.mergeMoves(root);
-					hash.clear();
 				}										
 			}				
 			else{				
@@ -524,11 +558,6 @@ public class ArtIntel implements Callable<Integer>{
 				int value = minimax("white", depth-1, children);
 					scores.add(value);
 					legal.get(i).setValue(value);
-				if(depth == 6){
-					root.setValue(value);
-					integrator.mergeMoves(root);
-					hash.clear();
-				}
 			}				
 			else{
 				r3 = 3;
@@ -681,11 +710,6 @@ public class ArtIntel implements Callable<Integer>{
 				int value = expectimax("white", depth-1, children);
 					scores.add(value);
 					legal.get(i).setValue(value);
-				if(depth == 6){
-					root.setValue(value/10);
-					integrator.mergeMoves(root);
-					hash.clear();
-				}
 			}				
 			else{
 				r3 = 3;
@@ -961,8 +985,7 @@ public class ArtIntel implements Callable<Integer>{
         		}
         	}
         }        
-		integrator.mergeMoves(root);
-		Clocks.addNodes(stack.size());
+		count = stack.size();
 	}
 	
 	// minimax with vintage forward pruning
@@ -1056,12 +1079,7 @@ public class ArtIntel implements Callable<Integer>{
 
 				int value = forward("white", depth-1, sorted);
 					scores.add(value);
-					legal.get(i).setValue(value);
-				if(depth == 6){
-					root.setValue(value);
-					integrator.mergeMoves(root);
-					hash.clear();
-				}										
+					legal.get(i).setValue(value);										
 			}				
 			else{
 				r3 = 3;

@@ -200,8 +200,9 @@ public class Capture {
 
 	// undo calculated move
 	public static void undo(String[][] field, int r3, int c3){
-		if(c3 != 9)
-		field[r3][c3] = " ";
+		if(c3 != 9) {
+			field[r3][c3] = " ";
+		}
 	}
 	
 }

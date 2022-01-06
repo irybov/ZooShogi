@@ -13,7 +13,6 @@ launch\ZooShogi.class
 ui\Gui$16.class
 ui\Gui$6.class
 utilpack\Pieces$7.class
-ai\HashTabs.class
 ui\Gui$15.class
 utilpack\Pieces$4.class
 ui\Users.class
@@ -51,6 +50,7 @@ ai\Generator.class
 utilpack\Pieces.class
 control\Driver.class
 ui\Gui$12$1.class
+ai\ArtIntel$1.class
 ai\Experience.class
 data\Player.class
 control\Director.class

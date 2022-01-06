@@ -79,7 +79,6 @@
           <outjar>ZooShogi-PG.jar</outjar>
           <options>
             <option>-keep public class launch.ZooShogi {public static *;}</option>
-            <option>-keep class ui.* {*;}</option>
             <option>-adaptresourcefilenames</option>
           </options>
           <libs>
