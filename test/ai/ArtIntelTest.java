@@ -8,14 +8,12 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import ai.ArtIntel;
 import ai.Node;
 import utilpack.Copier;
 
-@Ignore
 public class ArtIntelTest {
 
 	private static String[][] board;
@@ -24,11 +22,12 @@ public class ArtIntelTest {
 	private static int level;
 	private static Generator generator;
 	private static int cores;
-	private static ExecutorService es;
+	private static ExecutorService es1;
+	private static ExecutorService es2;
 	
 	@BeforeClass
 	public static void initBoard() {
-		board = new String[][]{{" "," ","k","b","p","r"," "," "," "},
+		board = new String[][]{{" "," ","k","b","p"," "," "," "," "},
 				  			   {" ","r"," "},
 				  			   {"K"," "," "},
 				  			   {" "," "," ","B","P","R"," "," "," "}};
@@ -39,32 +38,30 @@ public class ArtIntelTest {
 		nodes = generator.sortMoves(board, legal, "black", false);
 		nodes = new ArrayList<>(legal.size());
 		nodes = generator.sortMoves(board, legal, "black", false);
-		es = Executors.newFixedThreadPool(cores);
 	}
 
-
-	@Ignore
 	@Test(timeout = 20000)
 	public void performanceLimitAB() {
+		es1 = Executors.newFixedThreadPool(cores);
 		level = 6;
-		nodes.forEach(node-> es.submit(new ArtIntel(node, Copier.deepCopy(board), level)));
-		es.shutdown();
+		nodes.forEach(node-> es1.submit(new ArtIntel(node, Copier.deepCopy(board), level)));
+		es1.shutdown();
 		try {
-			es.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
+			es1.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
 		}
 		catch (InterruptedException exc) {
 			exc.printStackTrace();
 		}
 	}
 	
-	@Ignore
 	@Test(timeout = 50000)
 	public void performanceLimitEX() {
+		es2 = Executors.newFixedThreadPool(cores);
 		level = 7;
-		nodes.forEach(node-> es.submit(new ArtIntel(node, Copier.deepCopy(board), level)));
-		es.shutdown();
+		nodes.forEach(node-> es2.submit(new ArtIntel(node, Copier.deepCopy(board), level)));
+		es2.shutdown();
 		try {
-			es.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
+			es1.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
 		}
 		catch (InterruptedException exc) {
 			exc.printStackTrace();
@@ -77,7 +74,6 @@ public class ArtIntelTest {
 		nodes = null;
 		legal = null;
 		generator = null;
-		es = null;
 	}
 	
 }
