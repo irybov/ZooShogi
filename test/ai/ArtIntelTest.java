@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import ai.ArtIntel;
@@ -36,11 +37,9 @@ public class ArtIntelTest {
 		cores = Runtime.getRuntime().availableProcessors();
 		nodes = new ArrayList<>(legal.size());
 		nodes = generator.sortMoves(board, legal, "black", false);
-		nodes = new ArrayList<>(legal.size());
-		nodes = generator.sortMoves(board, legal, "black", false);
 	}
 
-	@Test(timeout = 20000)
+	@Test(timeout = 10000)
 	public void performanceLimitAB() {
 		es1 = Executors.newFixedThreadPool(cores);
 		level = 6;
@@ -54,14 +53,14 @@ public class ArtIntelTest {
 		}
 	}
 	
-	@Test(timeout = 50000)
+	@Test(timeout = 15000)
 	public void performanceLimitEX() {
 		es2 = Executors.newFixedThreadPool(cores);
 		level = 7;
 		nodes.forEach(node-> es2.submit(new ArtIntel(node, Copier.deepCopy(board), level)));
 		es2.shutdown();
 		try {
-			es1.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
+			es2.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
 		}
 		catch (InterruptedException exc) {
 			exc.printStackTrace();
