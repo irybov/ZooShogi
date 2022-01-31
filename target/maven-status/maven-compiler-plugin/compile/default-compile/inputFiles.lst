@@ -21,9 +21,12 @@ C:\workspace\ZooShogi\src\ui\Gui.java
 C:\workspace\ZooShogi\src\ai\package-info.java
 C:\workspace\ZooShogi\src\ai\Experience.java
 C:\workspace\ZooShogi\src\utilpack\Examiner.java
+C:\workspace\ZooShogi\src\ai\Memorizer.java
 C:\workspace\ZooShogi\src\ui\package-info.java
 C:\workspace\ZooShogi\src\data\ScoreSheet.java
+C:\workspace\ZooShogi\src\control\Interceptor.java
 C:\workspace\ZooShogi\src\utilpack\package-info.java
+C:\workspace\ZooShogi\src\ai\Edge.java
 C:\workspace\ZooShogi\src\data\GameState.java
 C:\workspace\ZooShogi\src\ai\Evaluator.java
 C:\workspace\ZooShogi\src\ai\Node.java
@@ -31,6 +34,7 @@ C:\workspace\ZooShogi\src\ai\HashTabs.java
 C:\workspace\ZooShogi\src\ai\Integrator.java
 C:\workspace\ZooShogi\src\control\Filter.java
 C:\workspace\ZooShogi\src\ui\Chooser.java
+C:\workspace\ZooShogi\src\ai\PseudoAI.java
 C:\workspace\ZooShogi\src\ai\Generator.java
 C:\workspace\ZooShogi\src\sound\Sound.java
 C:\workspace\ZooShogi\src\ai\MovesList.java

@@ -4,7 +4,12 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 class Interceptor extends Thread{
+	
+    private static final Logger logger = LoggerFactory.getLogger(Interceptor.class);
 
 	private List<Future<Integer>> tasks;
 	
@@ -25,8 +30,7 @@ class Interceptor extends Thread{
 					}
 				}
 				catch (InterruptedException | ExecutionException exc) {
-					exc.printStackTrace();
-					System.out.println(Thread.currentThread().getId());
+					logger.warn(exc.getMessage(), Interceptor.class.getSimpleName());
 					Thread.currentThread().interrupt();
 				}
 			}

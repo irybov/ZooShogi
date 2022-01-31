@@ -118,6 +118,22 @@
 	    <scope>system</scope>
 	    <systemPath>${JAVA_HOME}/lib/tools.jar</systemPath>
 	</dependency>
+
+	<dependency>
+	    <groupId>ch.qos.logback</groupId>
+	    <artifactId>logback-classic</artifactId>
+	    <version>1.2.10</version>
+	</dependency>
+	<dependency>
+	    <groupId>ch.qos.logback</groupId>
+	    <artifactId>logback-core</artifactId>
+	    <version>1.2.10</version>
+	</dependency>
+	<dependency>
+	    <groupId>org.slf4j</groupId>
+	    <artifactId>slf4j-api</artifactId>
+	    <version>1.7.35</version>
+	</dependency>	
 	 	
   </dependencies>
 </project>

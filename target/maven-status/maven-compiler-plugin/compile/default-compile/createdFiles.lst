@@ -63,6 +63,7 @@ ui\Gui$7.class
 ui\Gui$4.class
 utilpack\Examiner.class
 control\Clocks.class
+ai\Memorizer$1.class
 control\Filter.class
 data\GameState.class
 utilpack\Pieces$5.class

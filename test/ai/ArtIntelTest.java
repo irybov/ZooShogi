@@ -29,7 +29,7 @@ public class ArtIntelTest {
 	
 	@BeforeClass
 	public static void initBoard() {
-		board = new String[][]{{" "," ","k","b","p","r"," "," "," "},
+		board = new String[][]{{" "," ","k","b","p"," "," "," "," "},
 				  			   {" ","r"," "},
 				  			   {"K"," "," "},
 				  			   {" "," "," ","B","P","R"," "," "," "}};
