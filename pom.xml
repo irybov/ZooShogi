@@ -55,7 +55,7 @@
           </archive>
         </configuration>
       </plugin>
-
+<?comment
 	  <plugin>
 	    <groupId>com.github.wvengen</groupId>
 	    <artifactId>proguard-maven-plugin</artifactId>
@@ -95,7 +95,7 @@
 			</dependency>
 		</dependencies>	
 	  </plugin>
-     
+comment?>     
 	</plugins>
   </build>
   <dependencies>

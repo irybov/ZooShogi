@@ -7,13 +7,13 @@ import utilpack.Matrix;
 
 public class Memorizer {
 	
-    private Memorizer(){}    
-    private static class SingletonHolder {
-        public static final Memorizer HOLDER_INSTANCE = new Memorizer();
-    }    
-    public static Memorizer getInstance() {
-        return SingletonHolder.HOLDER_INSTANCE;
-    }
+//    private Memorizer(){}    
+//    private static class SingletonHolder {
+//        public static final Memorizer HOLDER_INSTANCE = new Memorizer();
+//    }    
+//    public static Memorizer getInstance() {
+//        return SingletonHolder.HOLDER_INSTANCE;
+//    }
 	
 	private Map<String, Edge> black = new ConcurrentHashMap<>();
 	private Map<String, Edge> white = new ConcurrentHashMap<>();

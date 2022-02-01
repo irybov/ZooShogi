@@ -206,7 +206,7 @@ public class Integrator {
 		String col2 = Message.getColName(c2);
 		
 		info.output(score, field, pieceName, c, col, r, spot, col2, r2);
-		Memorizer.getInstance().clear();
+//		Memorizer.getInstance().clear();
 		return field;		
 	}
 	
