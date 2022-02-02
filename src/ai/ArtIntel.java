@@ -77,15 +77,13 @@ public class ArtIntel implements Callable<Integer>{
 		
 		if(turn.equals("white") && integrator.getNote(board)) {
 			return -500;
-		}
-		
+		}		
 		if(turn.equals("white") && MovesList.repeat(board, "black")){
 			return 0;
 		}
 		if((turn.equals("black") && depth > 0) && MovesList.repeat(board, "white")){
 			return 0;
-		}
-		
+		}		
 		if(hash.repeat(board, turn, depth)){
 			return 0;
 		}		
@@ -114,10 +112,22 @@ public class ArtIntel implements Callable<Integer>{
 		if(depth == 9){
 			return evaluator.evaluationMaterial(board, false);
 		}
+		
+		if(depth > 0 && memo.has(board, turn)) {
+			if(memo.precise(board, turn, depth)) {
+//				System.out.println("SHT hit at depth " + depth);
+				return memo.get(board, turn);
+			}
+		}
 
 		count += legal.size();
 		
 		List<Integer> scores = new ArrayList<>();
+		
+		String[][] field = new String[][]{{"","","","","","","","",""},
+										  {"","",""},
+										  {"","",""},
+										  {"","","","","","","","",""}};
 		
 		for(int i=0; i<legal.size(); i++){
 
@@ -183,6 +193,7 @@ public class ArtIntel implements Callable<Integer>{
 				if(value > alpha){
 					alpha = value;
 					scores.add(value);
+					field = Copier.deepCopy(board);
 					legal.get(i).setValue(value);
 				}
 				if(depth == 0){
@@ -241,6 +252,7 @@ public class ArtIntel implements Callable<Integer>{
 				if(value < beta){
 					beta = value;
 					scores.add(value);
+					field = Copier.deepCopy(board);
 					legal.get(i).setValue(value);
 				}
 			}
@@ -263,12 +275,26 @@ public class ArtIntel implements Callable<Integer>{
 			}
 		}
 		
-		if(turn.equals("black")){
-			return evaluator.alpha(scores, alpha, beta);
+		int score;
+		if(turn.equals("black")){			
+			score = evaluator.max(scores);
+			if(memo.has(field, "white")) {
+				memo.update(field, "white", new Edge(depth, score));
+			}
+			else {
+				memo.add(field, "white", new Edge(depth, score));
+			}
 		}
-		else{
-			return evaluator.beta(scores, alpha, beta);
+		else{		
+			score = evaluator.min(scores);
+			if(memo.has(field, "black")) {
+				memo.update(field, "black", new Edge(depth, score));
+			}
+			else {
+				memo.add(field, "black", new Edge(depth, score));
+			}
 		}
+		return score;
 	}
 
 	// minimax with alpha-beta pruning
@@ -276,15 +302,13 @@ public class ArtIntel implements Callable<Integer>{
 		
 		if(turn.equals("white") && integrator.getNote(board)) {
 			return -500;
-		}
-		
+		}		
 		if(turn.equals("white") && MovesList.repeat(board, "black")){
 			return 0;
 		}
 		if((turn.equals("black") && depth > 0) && MovesList.repeat(board, "white")){
 			return 0;
-		}
-		
+		}		
 		if(hash.repeat(board, turn, depth)){
 			return 0;
 		}		
@@ -309,10 +333,22 @@ public class ArtIntel implements Callable<Integer>{
 		if(depth == 7){
 			return evaluator.evaluationMaterial(board, false);
 		}
+		
+		if(depth > 0 && memo.has(board, turn)) {
+			if(memo.precise(board, turn, depth)) {
+//				System.out.println("SHT hit at depth " + depth);
+				return memo.get(board, turn);
+			}
+		}
 
 		count += legal.size();
 		
 		List<Integer> scores = new ArrayList<>();
+		
+		String[][] field = new String[][]{{"","","","","","","","",""},
+										  {"","",""},
+										  {"","",""},
+										  {"","","","","","","","",""}};
 		
 		for(int i=0; i<legal.size(); i++){
 
@@ -370,6 +406,7 @@ public class ArtIntel implements Callable<Integer>{
 					scores.add(value);
 					node.setValue(value);
 					node.setDepth(depth);
+					field = Copier.deepCopy(board);
 				}
 				if(depth == 0){
 					root.setValue(value);
@@ -420,6 +457,7 @@ public class ArtIntel implements Callable<Integer>{
 					scores.add(value);
 					node.setValue(value);
 					node.setDepth(depth);
+					field = Copier.deepCopy(board);
 				}
 			}
 			
@@ -440,12 +478,26 @@ public class ArtIntel implements Callable<Integer>{
 			}
 		}
 		
-		if(turn.equals("black")){
-			return evaluator.alpha(scores, alpha, beta);
+		int score;
+		if(turn.equals("black")){			
+			score = evaluator.max(scores);
+			if(memo.has(field, "white")) {
+				memo.update(field, "white", new Edge(depth, score));
+			}
+			else {
+				memo.add(field, "white", new Edge(depth, score));
+			}
 		}
-		else{
-			return evaluator.beta(scores, alpha, beta);
+		else{		
+			score = evaluator.min(scores);
+			if(memo.has(field, "black")) {
+				memo.update(field, "black", new Edge(depth, score));
+			}
+			else {
+				memo.add(field, "black", new Edge(depth, score));
+			}
 		}
+		return score;
 	}
 	
 	// basic minimax algorithm
@@ -651,15 +703,13 @@ public class ArtIntel implements Callable<Integer>{
 		
 		if(turn.equals("white") && integrator.getNote(board)) {
 			return -5000;
-		}
-		
+		}		
 		if(turn.equals("white") && MovesList.repeat(board, "black")){
 			return 0;
 		}
 		if((turn.equals("black") && depth > 0) && MovesList.repeat(board, "white")){
 			return 0;
-		}
-		
+		}		
 		if(hash.repeat(board, turn, depth)){
 			return 0;
 		}		
@@ -684,10 +734,22 @@ public class ArtIntel implements Callable<Integer>{
 		if(depth == 5){
 			return evaluator.evaluationMaterial(board, true)/depth;
 		}
+		
+		if(depth > 0 && memo.has(board, turn)) {
+			if(memo.precise(board, turn, depth)) {
+//				System.out.println("SHT hit at depth " + depth);
+				return memo.get(board, turn);
+			}
+		}
 
 		count += legal.size();
 		
 		List<Integer> scores = new ArrayList<>();
+		
+		String[][] field = new String[][]{{"","","","","","","","",""},
+										  {"","",""},
+										  {"","",""},
+										  {"","","","","","","","",""}};
 		
 		for(int i=0; i<legal.size(); i++){
 	
@@ -738,6 +800,7 @@ public class ArtIntel implements Callable<Integer>{
 				
 				int value = expectimax("white", depth+1, children);
 					scores.add(value);
+					field = Copier.deepCopy(board);
 					legal.get(i).setValue(value);
 				if(depth == 0){
 					root.setValue(value/10);
@@ -778,6 +841,7 @@ public class ArtIntel implements Callable<Integer>{
 				
 				int value = expectimax("black", depth+1, children);
 					scores.add(value);
+					field = Copier.deepCopy(board);
 					legal.get(i).setValue(value);
 			}
 			legal.get(i).setDepth(depth);
@@ -795,12 +859,26 @@ public class ArtIntel implements Callable<Integer>{
 			Capture.undo(board, r3, c3);
 		}
 		
-		if(turn.equals("black")){
-			return evaluator.max(scores);
+		int score;
+		if(turn.equals("black")){			
+			score = evaluator.max(scores);
+			if(memo.has(field, "white")) {
+				memo.update(field, "white", new Edge(depth, score));
+			}
+			else {
+				memo.add(field, "white", new Edge(depth, score));
+			}
 		}
-		else{
-			return evaluator.exp(scores);
+		else{		
+			score = evaluator.min(scores);
+			if(memo.has(field, "black")) {
+				memo.update(field, "black", new Edge(depth, score));
+			}
+			else {
+				memo.add(field, "black", new Edge(depth, score));
+			}
 		}
+		return score;
 	}
 
 	// breadth-searching trappy minimax
