@@ -3,14 +3,19 @@ ui\Gui$3.class
 ui\Login$2.class
 ui\Gui$19.class
 utilpack\Capture.class
+ai\Memorizer.class
 ui\Gui$12.class
+control\Scribe.class
 ui\Chooser.class
+ai\MovesList.class
+control\Interceptor.class
 ui\Table.class
 utilpack\Pieces$3.class
 launch\ZooShogi.class
 ui\Gui$16.class
 ui\Gui$6.class
 utilpack\Pieces$7.class
+ai\Edge.class
 ai\HashTabs.class
 ui\Gui$15.class
 utilpack\Pieces$4.class
@@ -38,6 +43,7 @@ ui\Users$1.class
 ui\Gui$20.class
 ui\Gui$10.class
 ui\Gui$5.class
+ai\Evaluator.class
 ui\Gui$18.class
 utilpack\Pieces$1.class
 ui\Gui$8.class
@@ -48,6 +54,7 @@ ai\Generator.class
 utilpack\Pieces.class
 control\Driver.class
 ui\Gui$12$1.class
+ai\PseudoAI.class
 ai\Experience.class
 data\Player.class
 control\Director.class
@@ -63,7 +70,6 @@ ui\Gui$7.class
 ui\Gui$4.class
 utilpack\Examiner.class
 control\Clocks.class
-ai\Memorizer$1.class
 control\Filter.class
 data\GameState.class
 utilpack\Pieces$5.class

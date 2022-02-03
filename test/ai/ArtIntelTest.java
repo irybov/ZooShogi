@@ -15,7 +15,7 @@ import ai.ArtIntel;
 import ai.Node;
 import utilpack.Copier;
 
-@Ignore
+//@Ignore
 public class ArtIntelTest {
 
 	private static String[][] board;
@@ -42,7 +42,7 @@ public class ArtIntelTest {
 		memo = new Memorizer();
 	}
 
-	@Ignore	
+//	@Ignore	
 	@Test(timeout = 20000)
 	public void performanceLimitAB() {
 		es1 = Executors.newFixedThreadPool(cores);
@@ -57,7 +57,7 @@ public class ArtIntelTest {
 		}
 	}
 	
-	@Ignore
+//	@Ignore
 	@Test(timeout = 50000)
 	public void performanceLimitEX() {
 		es2 = Executors.newFixedThreadPool(cores);
