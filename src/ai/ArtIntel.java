@@ -325,7 +325,7 @@ public class ArtIntel implements Callable<Integer>{
 		if(Examiner.winPositionWhite(board, turn)){
 			return -(2000+(depth*100));	
 		}			
-		if(Examiner.check(board, turn) && depth < 6){
+		if(Examiner.check(board, turn) && depth < 8){
 			if(turn.equals("white")){
 				return -(1000+(depth*100));
 			}
