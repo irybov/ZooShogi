@@ -524,9 +524,12 @@ public class ArtIntel implements Callable<Integer>{
 			return -(2000-(depth*100));
 		}
 		
-		if(turn.equals("white")){
-			if(Examiner.check(board, turn)){
+		if(Examiner.check(board, turn) && depth > 0){
+			if(turn.equals("white")){
 				return -(1500-(depth*100));
+			}
+			else{
+				return 1500-(depth*100);
 			}
 		}
 
@@ -719,15 +722,15 @@ public class ArtIntel implements Callable<Integer>{
 			return 100*depth;
 		}
 		if(Examiner.winPositionWhite(board, turn)){
-			return -(1000/depth);
+			return -(5000/depth);
 		}
 		
 		if(Examiner.check(board, turn) && depth > 0){
 			if(turn.equals("white")){
-				return -(1500-(depth*100));
+				return -(5000/depth);
 			}
 			else {
-				return 1500-(depth*100);				
+				return 100*depth;				
 			}
 		}
 		
