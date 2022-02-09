@@ -9,11 +9,11 @@
         <append>true</append>
         <immediateFlush>true</immediateFlush>
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %m%n</pattern>
         </encoder>
     </appender>
 
-    <logger name="logfile" level="warn" additivity="false">
+    <logger name="control" level="warn" additivity="false">
         <appender-ref ref="FILE"/>
     </logger>
 

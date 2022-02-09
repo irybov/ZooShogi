@@ -332,17 +332,17 @@ public class Director{
 					final int cores = Runtime.getRuntime().availableProcessors();
 					final ExecutorService es = Executors.newFixedThreadPool(cores);
 					List<Future<Integer>> tasks = new ArrayList<>(nodes.size());
-					final Interceptor f117 = new Interceptor(tasks);
+					final Interceptor f19 = new Interceptor(tasks);
 					final Memorizer memo = new Memorizer();
 					for(Node node: nodes) {					
 						Future<Integer> score = es.submit
 								(new ArtIntel(node, Copier.deepCopy(board), level, memo));
 						tasks.add(score);
 					}
-					f117.start();
+					f19.start();
 					es.shutdown();			
 					es.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
-					f117.interrupt();
+					f19.interrupt();
 					break;
 				}
 				TimeUnit.SECONDS.sleep(1);

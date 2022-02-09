@@ -41,28 +41,29 @@ public class Cache {
 				
 				List<Node> children = move.getChidren();
 				Node child = children.stream().max(Comparator.comparing(Node::getValue)).get();
-				cache.putIfAbsent(state, child);
-				
-				if(child.hasChildren()) {					
-					r = child.getR();
-					c = child.getC();
-					r2 = child.getR2();
-					c2 = child.getC2();
-								
-					Capture.take(field, r2, c2);
-					if(field[r][c].equals("p")){	
-						if(r==2){
-							field[r2][c2] = "q";
+				if(child.getValue() != Integer.MAX_VALUE) {
+					cache.putIfAbsent(state, child);					
+					if(child.hasChildren()) {					
+						r = child.getR();
+						c = child.getC();
+						r2 = child.getR2();
+						c2 = child.getC2();
+									
+						Capture.take(field, r2, c2);
+						if(field[r][c].equals("p")){	
+							if(r==2){
+								field[r2][c2] = "q";
+							}
+							else {
+								field[r2][c2] = "p";					
+							}
 						}
-						else {
-							field[r2][c2] = "p";					
+						else{
+							field[r2][c2] = field[r][c];
 						}
+						field[r][c] = " ";
+						add(Copier.deepCopy(field), child.getChidren());
 					}
-					else{
-						field[r2][c2] = field[r][c];
-					}
-					field[r][c] = " ";
-					add(Copier.deepCopy(field), child.getChidren());
 				}
 			}
 		}
