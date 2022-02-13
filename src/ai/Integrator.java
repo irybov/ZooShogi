@@ -35,11 +35,11 @@ public class Integrator {
 	private List<Node> moves = new ArrayList<>();
 	
 	private Info info = new Info();
-	public void setWarn(boolean warn){
-		info.setWarn(warn);		
+	public void setCheckWarning(boolean warn){
+		info.setCheckWarning(warn);		
 	}
-	public void setMute(boolean mute){
-		info.setMute(mute);		
+	public void setVolumeMute(boolean mute){
+		info.setVolumeMute(mute);		
 	}
 	
 	private Queue<Node> ring = new LinkedList<>();
@@ -63,8 +63,7 @@ public class Integrator {
 	public String[][] nextBest(String[][] field) {		
 		if(!ring.isEmpty()) {
 			ring.add(ring.poll());
-			Node move = ring.peek();
-			
+			Node move = ring.peek();			
 			return doMove(move, field);
 		}
 		else {
@@ -108,8 +107,8 @@ public class Integrator {
 			int prev = random.get(0).getValue();
 			random.removeIf(e -> e.getValue() < prev);
 			
-			int trap = random.get(0).getTrap();
-			random.removeIf(e -> e.getTrap() < trap);
+			int trap = random.get(0).getTrappiness();
+			random.removeIf(e -> e.getTrappiness() < trap);
 			
 			if(random.size()==1){
 				move = random.get(0);
@@ -126,6 +125,7 @@ public class Integrator {
 		return doMove(move, field);
 	}
 
+	// takes external engine's move
 	public String[][] activate(String[][] field, final int[] args){
 		
 		final int r = args[0];
@@ -142,16 +142,16 @@ public class Integrator {
 	}
 
 	private Scribe scribe = Scribe.getInstance();
-	// do external engine's move
+
 	private String[][] doMove(final Node move, String[][] field){
 		
 		int score = move.getValue();
-		int r = move.getR();
-		int c = move.getC();
-		int r2 = move.getR2();
-		int c2 = move.getC2();
+		int r = move.getRowFrom();
+		int c = move.getColumnFrom();
+		int r2 = move.getRowTo();
+		int c2 = move.getColumnTo();
 		
-		if(score > 500 & Cache.empty()) {
+		if(score > 500 & Cache.isEmpty()) {
 			String state = Matrix.keyMaker(field);
 			if(!exp.has(state)) {
 				exp.learn(state, move);
@@ -163,7 +163,7 @@ public class Integrator {
 		}
 		
 		String edge = Message.getEdge(r, c, r2, c2, field[r][c]);		
-		scribe.writeGame("black", edge);
+		scribe.writeGameNote("black", edge);
 		
 		String spot = field[r2][c2];
 		String pieceName = Message.getPieceName(field[r][c]);
@@ -174,13 +174,13 @@ public class Integrator {
 				field[r][c] = " ";
 			}	
 			else{
-				Capture.take(field, r2, c2);
+				Capture.takenPiecePlacement(field, r2, c2);
 				field[r2][c2] = "q";
 				field[r][c] = " ";
 			}
 		}
 		else{
-			Capture.take(field, r2, c2);
+			Capture.takenPiecePlacement(field, r2, c2);
 			field[r2][c2] = field[r][c];
 			field[r][c] = " ";
 		}
@@ -195,14 +195,14 @@ public class Integrator {
 			game.push(Matrix.keyMaker(field));
 		}
 		
-		if(score > 500 & Cache.empty()) {
+		if(score > 500 & Cache.isEmpty()) {
 			if(move.hasChildren()) {
-				Cache.add(Copier.deepCopy(field), move.getChidren());
+				Cache.addTree(Copier.deepCopy(field), move.getChidren());
 			}
 		}
 		
-		String col = Message.getColName(c);
-		String col2 = Message.getColName(c2);
+		String col = Message.getColumnName(c);
+		String col2 = Message.getColumnName(c2);
 		
 		info.output(score, field, pieceName, c, col, r, spot, col2, r2);
 		return field;		

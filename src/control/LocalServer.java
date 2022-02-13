@@ -43,15 +43,15 @@ class LocalServer extends Thread{
 		return reply;
 	}
 	
-    Properties prop;
+    Properties props;
     int PORT;
     String URL;
 	{
 		try (Reader config = new BufferedReader(new FileReader("config.txt"))) {	
-	        prop = new Properties();
-	        prop.load(config);
-	        PORT = Integer.parseInt(prop.getProperty("port"));
-	        URL = prop.getProperty("url");	
+	        props = new Properties();
+	        props.load(config);
+	        PORT = Integer.parseInt(props.getProperty("port"));
+	        URL = props.getProperty("url");	
 	    }
 		catch (IOException ex) {
 	        ex.printStackTrace();
@@ -67,7 +67,6 @@ class LocalServer extends Thread{
 			try {
 				InetAddress ia = InetAddress.getByName(URL);			
 				server = new ServerSocket(PORT, 1, ia);
-//				System.out.println("Server established");
 				
 				while(!Thread.interrupted()) {
 					Socket socket = server.accept();
@@ -81,8 +80,7 @@ class LocalServer extends Thread{
 		}
 		finally {
 			try {
-				if(server != null) {
-//					System.out.println("Server shutdown");					
+				if(server != null) {				
 					server.close();
 				}
 			}
@@ -93,8 +91,6 @@ class LocalServer extends Thread{
 	}
 	
 	private void operate(Socket socket) {
-
-//		System.out.println("Client connected");
 		
 		InputStream sin = null;
 		OutputStream sout = null;
@@ -120,9 +116,7 @@ class LocalServer extends Thread{
 				}				
 				dos.writeUTF(line);
 				dos.flush();
-//				System.out.println("Sended from server: " + line);
-			    if(line.equals("quit")) {
-//					System.out.println("Client disconnected from server");			    	
+			    if(line.equals("quit")) {		    	
 					line = null;
 			    	break;
 			    }
@@ -133,7 +127,6 @@ class LocalServer extends Thread{
 				catch (InterruptedException exc) {
 					exc.printStackTrace();
 				}			    
-//				System.out.println("Received by server: " + reply);
 			}		
 		}
 		catch(IOException exc) {

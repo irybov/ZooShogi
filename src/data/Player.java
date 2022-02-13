@@ -13,7 +13,7 @@ public class Player implements Externalizable, Comparable<Player> {
 	private String name;
 	private String pass;
 	private Integer score = 0;
-	private String date = setDate();
+	private String date = setRegistrationDate();
 		
 	public Player(String name, String pass) {
 		this.name = name;
@@ -28,18 +28,17 @@ public class Player implements Externalizable, Comparable<Player> {
 	public String getName() {
 		return name;
 	}
-	public String getPass() {
+	public String getPassword() {
 		return pass;
 	}
 	public Integer getScore() {
 		return score;
 	}
-	private String setDate() {
-		
+	private String setRegistrationDate() {		
 		LocalDate now = LocalDate.now();
 		return now.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 	}
-	public String getDate() {
+	public String getRegistrationDate() {
 		return date;
 	}
 	
@@ -50,8 +49,7 @@ public class Player implements Externalizable, Comparable<Player> {
 	@Override
 	public String toString() {
 		return "Player [name=" + name + ", date=" + date + ", score=" + score + "]";
-	}
-	
+	}	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -86,9 +84,9 @@ public class Player implements Externalizable, Comparable<Player> {
 	public void writeExternal(ObjectOutput out) throws IOException {
 
 	       out.writeObject(this.getName());
-	       out.writeObject(this.encryptString(this.getPass()));
+	       out.writeObject(this.encryptString(this.getPassword()));
 	       out.writeObject(this.getScore());
-	       out.writeObject(this.getDate());
+	       out.writeObject(this.getRegistrationDate());
 	}
 	private Object encryptString(String pass2) {
 		return Base64.getEncoder().encodeToString(pass2.getBytes());

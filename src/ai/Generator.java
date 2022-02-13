@@ -36,16 +36,16 @@ public class Generator {
 					if(board[r][c].equals("p")){
 						r2 = r+1;
 						c2 = c;
-						if((Pieces.BPAWN.move(r, c, r2, c2))&&
-						   (Capture.check(board, r2, c2, turn))){
+						if((Pieces.BPAWN.isLegalMove(r, c, r2, c2))&&
+						   (Capture.isCaptureLegal(board, r2, c2, turn))){
 							legal.add(new Node(r, c, r2, c2, turn));
 						}
 					}				
 					else if(board[r][c].equals("r")){					
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
-							if((Pieces.ROOK.move(r, c, r2, c2))&&
-							   (Capture.check(board, r2, c2, turn))){
+							if((Pieces.ROOK.isLegalMove(r, c, r2, c2))&&
+							   (Capture.isCaptureLegal(board, r2, c2, turn))){
 								legal.add(new Node(r, c, r2, c2, turn));
 								}
 							}							
@@ -54,8 +54,8 @@ public class Generator {
 					else if(board[r][c].equals("k")){					
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
-							if((Pieces.KING.move(r, c, r2, c2))&&
-							   (Capture.check(board, r2, c2, turn))){
+							if((Pieces.KING.isLegalMove(r, c, r2, c2))&&
+							   (Capture.isCaptureLegal(board, r2, c2, turn))){
 								legal.add(new Node(r, c, r2, c2, turn));
 								}
 							}							
@@ -64,8 +64,8 @@ public class Generator {
 					else if(board[r][c].equals("b")){					
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
-							if((Pieces.BISHOP.move(r, c, r2, c2))&&
-							   (Capture.check(board, r2, c2, turn))){
+							if((Pieces.BISHOP.isLegalMove(r, c, r2, c2))&&
+							   (Capture.isCaptureLegal(board, r2, c2, turn))){
 								legal.add(new Node(r, c, r2, c2, turn));
 								}
 							}							
@@ -74,8 +74,8 @@ public class Generator {
 					else if(board[r][c].equals("q")){					
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
-							if((Pieces.BQUEEN.move(r, c, r2, c2))&&
-							   (Capture.check(board, r2, c2, turn))){
+							if((Pieces.BQUEEN.isLegalMove(r, c, r2, c2))&&
+							   (Capture.isCaptureLegal(board, r2, c2, turn))){
 								legal.add(new Node(r, c, r2, c2, turn));
 								}
 							}							
@@ -102,16 +102,16 @@ public class Generator {
 					if(board[r][c].equals("P")){
 						r2 = r-1;
 						c2 = c;
-						if((Pieces.WPAWN.move(r, c, r2, c2))&&
-						   (Capture.check(board, r2, c2, turn))){
+						if((Pieces.WPAWN.isLegalMove(r, c, r2, c2))&&
+						   (Capture.isCaptureLegal(board, r2, c2, turn))){
 							legal.add(new Node(r, c, r2, c2, turn));
 						}
 					}
 					else if(board[r][c].equals("R")){					
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
-							if((Pieces.ROOK.move(r, c, r2, c2))&&
-							   (Capture.check(board, r2, c2, turn))){
+							if((Pieces.ROOK.isLegalMove(r, c, r2, c2))&&
+							   (Capture.isCaptureLegal(board, r2, c2, turn))){
 								legal.add(new Node(r, c, r2, c2, turn));
 								}
 							}							
@@ -120,8 +120,8 @@ public class Generator {
 					else if(board[r][c].equals("K")){					
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
-							if((Pieces.KING.move(r, c, r2, c2))&&
-							   (Capture.check(board, r2, c2, turn))){
+							if((Pieces.KING.isLegalMove(r, c, r2, c2))&&
+							   (Capture.isCaptureLegal(board, r2, c2, turn))){
 								legal.add(new Node(r, c, r2, c2, turn));
 								}
 							}							
@@ -130,8 +130,8 @@ public class Generator {
 					else if(board[r][c].equals("B")){					
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
-							if((Pieces.BISHOP.move(r, c, r2, c2))&&
-							   (Capture.check(board, r2, c2, turn))){
+							if((Pieces.BISHOP.isLegalMove(r, c, r2, c2))&&
+							   (Capture.isCaptureLegal(board, r2, c2, turn))){
 								legal.add(new Node(r, c, r2, c2, turn));
 								}
 							}							
@@ -140,8 +140,8 @@ public class Generator {
 					else if(board[r][c].equals("Q")){					
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
-							if((Pieces.WQUEEN.move(r, c, r2, c2))&&
-							   (Capture.check(board, r2, c2, turn))){
+							if((Pieces.WQUEEN.isLegalMove(r, c, r2, c2))&&
+							   (Capture.isCaptureLegal(board, r2, c2, turn))){
 								legal.add(new Node(r, c, r2, c2, turn));
 								}
 							}							
@@ -154,15 +154,15 @@ public class Generator {
 	}
 	
 	public List<Node> sortMoves(String[][] board, List<Node> legal,
-			String turn, boolean prune) {
+								String turn, boolean prune) {
 		
 		List<Node> sorted = new ArrayList<>();
 		
 		int prev;
-			if(Examiner.check(board, "white")){
+			if(Examiner.isCheck(board, "white")){
 				prev = -1000;
 			}
-			else if(Examiner.check(board, "black")){
+			else if(Examiner.isCheck(board, "black")){
 				prev = 1000;
 			}
 			else{
@@ -172,10 +172,10 @@ public class Generator {
 	
 		for(int i=0; i<legal.size(); i++){
 
-			int r = legal.get(i).getR();
-			int c = legal.get(i).getC();
-			int r2 = legal.get(i).getR2();
-			int c2 = legal.get(i).getC2();
+			int r = legal.get(i).getRowFrom();
+			int c = legal.get(i).getColumnFrom();
+			int r2 = legal.get(i).getRowTo();
+			int c2 = legal.get(i).getColumnTo();
 			String temp;
 			String prom;
 			int r3;
@@ -186,7 +186,7 @@ public class Generator {
 				if(board[r][c].equals("p") & r==2){
 					prom = "p";
 					if(!board[r][c].equals(" ")) {
-						c3 = Capture.take(board, r2, c2);
+						c3 = Capture.takenPiecePlacement(board, r2, c2);
 					}
 					temp = board[r2][c2];
 					board[r2][c2] = "q";
@@ -201,7 +201,7 @@ public class Generator {
 				else{
 					prom = " ";
 					if(!board[r][c].equals(" ")) {
-						c3 = Capture.take(board, r2, c2);
+						c3 = Capture.takenPiecePlacement(board, r2, c2);
 					}
 					temp = board[r2][c2];
 					board[r2][c2] = board[r][c];
@@ -212,19 +212,19 @@ public class Generator {
 				if(temp.equals("K")){
 					value = 5000;	
 				}
-				else if(Examiner.winPromotion(board, "black") && !Examiner.check(board, "white")){
+				else if(Examiner.isPromotionWon(board, "black") && !Examiner.isCheck(board, "white")){
 					value = 5000;
 				}
-				else if(Examiner.check(board, "black") && !Examiner.check(board, "white")) {
+				else if(Examiner.isCheck(board, "black") && !Examiner.isCheck(board, "white")) {
 					value = 500;
 				}
-				else if(MovesList.repeat(board, "black")) {
+				else if(MovesList.isRepeated(board, "black")) {
 					value = 0;
 				}
-				else if(Examiner.winPromotion(board, "white")){
+				else if(Examiner.isPromotionWon(board, "white")){
 					value = -5000;
 				}
-				else if(Examiner.check(board, "white")){
+				else if(Examiner.isCheck(board, "white")){
 					value = -5000;
 				}
 				else{
@@ -250,7 +250,7 @@ public class Generator {
 				if(board[r][c].equals("P") & r==1){
 					prom = "P";
 					if(!board[r][c].equals(" ")) {
-						c3 = Capture.take(board, r2, c2);
+						c3 = Capture.takenPiecePlacement(board, r2, c2);
 					}
 					temp = board[r2][c2];
 					board[r2][c2] = "Q";
@@ -265,7 +265,7 @@ public class Generator {
 				else{
 					prom = " ";
 					if(!board[r][c].equals(" ")) {
-						c3 = Capture.take(board, r2, c2);
+						c3 = Capture.takenPiecePlacement(board, r2, c2);
 					}
 					temp = board[r2][c2];
 					board[r2][c2] = board[r][c];
@@ -276,19 +276,19 @@ public class Generator {
 				if(temp.equals("k")){
 					value = -5000;	
 				}
-				else if(Examiner.winPromotion(board, "white") && !Examiner.check(board, "black")){
+				else if(Examiner.isPromotionWon(board, "white") && !Examiner.isCheck(board, "black")){
 						value = -5000;
 				}
-				else if(Examiner.check(board, "white") && !Examiner.check(board, "black")) {
+				else if(Examiner.isCheck(board, "white") && !Examiner.isCheck(board, "black")) {
 					value = -500;
 				}
-				else if(MovesList.repeat(board, "white")) {
+				else if(MovesList.isRepeated(board, "white")) {
 					value = 0;
 				}
-				else if(Examiner.winPromotion(board, "black")){
+				else if(Examiner.isPromotionWon(board, "black")){
 						value = 5000;
 				}
-				else if(Examiner.check(board, "black")){
+				else if(Examiner.isCheck(board, "black")){
 					value = 5000;
 				}				
 				else{
@@ -321,7 +321,7 @@ public class Generator {
 			}
 			board[r2][c2] = temp;
 			if(c3 != 9)
-			Capture.undo(board, r3, c3);
+			Capture.undoMove(board, r3, c3);
 		}	
 		return sorted;
 	}

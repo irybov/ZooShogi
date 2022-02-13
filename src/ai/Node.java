@@ -10,36 +10,36 @@ public class Node implements Comparable<Node>, Serializable{
 	private int value;
 	private List<Node> children;
 	private Node parent;
-	private int trap = Integer.MIN_VALUE;
+	private int trappiness = Integer.MIN_VALUE;
 	
-	private final int R;
-	private final int C;
-	private final int R2;
-	private final int C2;
+	private final int rowFrom;
+	private final int columnFrom;
+	private final int rowTo;
+	private final int columnTo;
 	private final String SIDE;
 
 	public Node(int R, int C, int R2, int C2, String SIDE) {
-		this.R = R;
-		this.C = C;
-		this.R2 = R2;
-		this.C2 = C2;
+		this.rowFrom = R;
+		this.columnFrom = C;
+		this.rowTo = R2;
+		this.columnTo = C2;
 		this.SIDE = SIDE;
 	}
 	
 	@Override
 	public String toString() {
 		return "Node [depth=" + depth + ", value=" + value + ", side=" + SIDE + ", "
-													+ (R) + (C) + (R2) + (C2) + "]";
+										+ (rowFrom) + (columnFrom) + (rowTo) + (columnTo) + "]";
 	}
 
 	@Override
 	public int compareTo(Node node) {
 
 		if(this.value == node.value){
-			if(this.trap == node.trap) {
+			if(this.trappiness == node.trappiness) {
 				return 0;
 			}
-			else if(this.trap < node.trap){
+			else if(this.trappiness < node.trappiness){
 				return -1;			
 			}
 			else{
@@ -54,17 +54,17 @@ public class Node implements Comparable<Node>, Serializable{
 		}
 	}
 
-	public int getR() {
-		return R;
+	public int getRowFrom() {
+		return rowFrom;
 	}
-	public int getC() {
-		return C;
+	public int getColumnFrom() {
+		return columnFrom;
 	}
-	public int getR2() {
-		return R2;
+	public int getRowTo() {
+		return rowTo;
 	}
-	public int getC2() {
-		return C2;
+	public int getColumnTo() {
+		return columnTo;
 	}
 	public String getSide() {
 		return SIDE;
@@ -110,11 +110,11 @@ public class Node implements Comparable<Node>, Serializable{
 		return true;
 	}
 	
-	public int getTrap(){
-		return trap;
+	public int getTrappiness(){
+		return trappiness;
 	}
-	public void setTrap(int newTrap) {
-		trap = newTrap;
+	public void setTrappiness(int newTrap) {
+		trappiness = newTrap;
 	}
 	
 }

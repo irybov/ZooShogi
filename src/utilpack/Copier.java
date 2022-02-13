@@ -38,10 +38,10 @@ public class Copier {
 		
 		if(ceil) {
 			modified = new ArrayList<>(original.size());
-			int c = original.get(0).getC() > 2 ?
-					original.get(0).getC() : getIndex(original.get(0).getC());
-			int c2 = getIndex(original.get(0).getC2());
-			root = new Node(original.get(0).getR(), c, original.get(0).getR2(), c2,
+			int c = original.get(0).getColumnFrom() > 2 ?
+					original.get(0).getColumnFrom() : getIndex(original.get(0).getColumnFrom());
+			int c2 = getIndex(original.get(0).getColumnTo());
+			root = new Node(original.get(0).getRowFrom(), c, original.get(0).getRowTo(), c2,
 					original.get(0).getSide());
 			root.setValue(original.get(0).getValue());
 			modified.add(root);
@@ -55,10 +55,10 @@ public class Copier {
 				List<Node> twins = new ArrayList<>(children.size());
 				
 				for(int j=0; j<children.size(); j++) {
-					int c = children.get(j).getC() > 2 ?
-							children.get(j).getC() : getIndex(children.get(j).getC());
-					int c2 = getIndex(children.get(j).getC2());									
-					twins.add(new Node(children.get(j).getR(), c, children.get(j).getR2(), c2,
+					int c = children.get(j).getColumnFrom() > 2 ?
+							children.get(j).getColumnFrom() : getIndex(children.get(j).getColumnFrom());
+					int c2 = getIndex(children.get(j).getColumnTo());									
+					twins.add(new Node(children.get(j).getRowFrom(), c, children.get(j).getRowTo(), c2,
 							children.get(j).getSide()));
 					twins.get(j).setValue(children.get(j).getValue());
 				}

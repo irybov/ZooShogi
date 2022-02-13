@@ -7,14 +7,14 @@ import utilpack.Examiner;
 public class Info {
 
 	private Sound sound = Sound.getInstance();
-	private boolean mute = false;	
-	private boolean warn = true;
+	private boolean mutedVolume = false;	
+	private boolean checkWarningEnabled = true;
 	
-	public void setMute(boolean mute) {
-		this.mute = mute;
+	public void setVolumeMute(boolean mute) {
+		this.mutedVolume = mute;
 	}
-	public void setWarn(boolean warn) {
-		this.warn = warn;
+	public void setCheckWarning(boolean warn) {
+		this.checkWarningEnabled = warn;
 	}
 
 	void output(int score, String[][] field, String name,
@@ -24,14 +24,14 @@ public class Info {
 		
 		Gui.output.setText(name+" "+(c>2?"drops":"from "+col+(r+1))+
 				(spot.equals(" ")?" to ":" takes on ")+col2+(r2+1));
-		if(!mute){
-		sound.voice(name);
+		if(!mutedVolume){
+		sound.playVoice(name);
 			if(!spot.equals(" ")){
-				sound.voice("takes");			
+				sound.playVoice("takes");			
 			}
-			sound.voice(col2+Integer.toString(r2+1));
-			if(warn & Examiner.check(field, "black")){
-				sound.voice("check");
+			sound.playVoice(col2+Integer.toString(r2+1));
+			if(checkWarningEnabled & Examiner.isCheck(field, "black")){
+				sound.playVoice("check");
 			}
 		}		
 	}

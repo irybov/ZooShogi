@@ -7,10 +7,10 @@ import ui.Gui;
 
 public class Clocks{
 	
-	private static int minB = 0;
-	private static int secB = 0;
-	private static int minW = 0;
-	private static int secW = 0;
+	private static int minutesBlack = 0;
+	private static int secondsBlack = 0;
+	private static int minutesWhite = 0;
+	private static int secondsWhite = 0;
 
 	private volatile String turn = " ";
 	private static AtomicInteger nodes = new AtomicInteger(0);
@@ -39,56 +39,55 @@ public class Clocks{
 		nodes.addAndGet(count);
 	}
 	
-	public void showClock() {
-		
-//		new Thread(new Runnable() {
-//			public void run() {
+	public void showClocks() {
 		
 		while(true) {
 			try {
 				if(turn.equals("black")) {
-					Gui.counter.setText(String.format("%,d", nodes.get()));
-					if(secB < 59) {
-						secB++;
+					Gui.nodes.setText(String.format("%,d", nodes.get()));
+					if(secondsBlack < 59) {
+						secondsBlack++;
 					}
 					else {
-						secB = 0;
-						minB++;
+						secondsBlack = 0;
+						minutesBlack++;
 					}
-				Gui.clockB.setText(String.format("%02d", minB)+":"+String.format("%02d", secB));
+				Gui.clockBlack.setText(String.format("%02d", minutesBlack)+":"
+										+String.format("%02d", secondsBlack));
 				}
 				else if(turn.equals("white")) {
-					if(secW < 59) {
-						secW++;
+					if(secondsWhite < 59) {
+						secondsWhite++;
 					}
 					else {
-						secW = 0;
-						minW++;
+						secondsWhite = 0;
+						minutesWhite++;
 					}
-				Gui.clockW.setText(String.format("%02d", minW)+":"+String.format("%02d", secW));
+				Gui.clockWhite.setText(String.format("%02d", minutesWhite)+":"
+										+String.format("%02d", secondsWhite));
 				}
 			TimeUnit.SECONDS.sleep(1);
 			}
 			catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-		}		
-//			}
-//		}).start();
+		}
 		
 	}
 	
-	public void reset() {
+	public void resetClocks() {
 		
 		nodes.set(0);
-		Gui.counter.setText(" ");
+		Gui.nodes.setText(" ");
 		turn = " ";
-		minB = 0;
-		secB = 0;
-		minW = 0;
-		secW = 0;
-		Gui.clockB.setText(String.format("%02d", minB) + ":" + String.format("%02d", secB));
-		Gui.clockW.setText(String.format("%02d", minW) + ":" + String.format("%02d", secW));
+		minutesBlack = 0;
+		secondsBlack = 0;
+		minutesWhite = 0;
+		secondsWhite = 0;
+		Gui.clockBlack.setText(String.format("%02d", minutesBlack) + ":"
+								+ String.format("%02d", secondsBlack));
+		Gui.clockWhite.setText(String.format("%02d", minutesWhite) + ":"
+								+ String.format("%02d", secondsWhite));
 	}
 	
 }

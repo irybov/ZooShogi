@@ -13,18 +13,18 @@ public class Cache {
 
 	private static Map<String, Node> cache = new HashMap<>();
 	
-	static void add(String[][] board, List<Node> moves) {	
+	static void addTree(String[][] board, List<Node> moves) {	
 		
 		for(Node move: moves) {
 			
 			if(move.hasChildren()) {				
-				int r = move.getR();
-				int c = move.getC();
-				int r2 = move.getR2();
-				int c2 = move.getC2();
+				int r = move.getRowFrom();
+				int c = move.getColumnFrom();
+				int r2 = move.getRowTo();
+				int c2 = move.getColumnTo();
 				
 				String[][] field = Copier.deepCopy(board);	
-				Capture.take(field, r2, c2);
+				Capture.takenPiecePlacement(field, r2, c2);
 				if(field[r][c].equals("P")){	
 					if(r==1){
 						field[r2][c2] = "Q";
@@ -44,12 +44,12 @@ public class Cache {
 				cache.putIfAbsent(state, child);
 				
 				if(child.hasChildren()) {					
-					r = child.getR();
-					c = child.getC();
-					r2 = child.getR2();
-					c2 = child.getC2();
+					r = child.getRowFrom();
+					c = child.getColumnFrom();
+					r2 = child.getRowTo();
+					c2 = child.getColumnTo();
 								
-					Capture.take(field, r2, c2);
+					Capture.takenPiecePlacement(field, r2, c2);
 					if(field[r][c].equals("p")){	
 						if(r==2){
 							field[r2][c2] = "q";
@@ -62,21 +62,21 @@ public class Cache {
 						field[r2][c2] = field[r][c];
 					}
 					field[r][c] = " ";
-					add(Copier.deepCopy(field), child.getChidren());
+					addTree(Copier.deepCopy(field), child.getChidren());
 				}
 			}
 		}
 	}
 	
-	public static boolean has(String move) {
+	public static boolean hasPosition(String move) {
 		return cache.containsKey(move);
 	}
 	
-	public static Node get(String move) {
+	public static Node getMove(String move) {
 		return cache.get(move);
 	}
 	
-	public static boolean empty() {
+	public static boolean isEmpty() {
 		return cache.isEmpty();
 	}
 	

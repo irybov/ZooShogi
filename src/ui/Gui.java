@@ -16,10 +16,10 @@ import utilpack.Pieces;
 public class Gui {
 	
 	private Director director = Director.getInstance();
-	private int click = 1;
-	private boolean drop = false;
-	private boolean warn = true;	
-	boolean mute = false;
+	private int clickNumber = 1;
+	private boolean isMoveDrop = false;
+	private boolean checkWarningEnabled = true;	
+	boolean mutedVolume = false;
 
 	private Clocks clocks = Clocks.getInstance();
 
@@ -28,62 +28,62 @@ public class Gui {
 	
 	//Panels that handle the visual for the board object
 	private static JPanel board = new JPanel(new GridLayout(4,3));
-	private static JPanel handW = new JPanel(new GridLayout(2,3));
-	private static JPanel handB = new JPanel(new GridLayout(2,3));
-	private static JPanel cols = new JPanel(new GridLayout(1,3));
+	private static JPanel handWhite = new JPanel(new GridLayout(2,3));
+	private static JPanel handBlack = new JPanel(new GridLayout(2,3));
+	private static JPanel columns = new JPanel(new GridLayout(1,3));
 	private static JPanel rows = new JPanel(new GridLayout(4,1));
 	
 //	static JPanel sound = new JPanel(new GridLayout(2,1));	
 	
 	//Arrays of JButtons which handle the visual for the Square objects
 	private static JButton[][] squares = new JButton[4][3];
-	private static JButton[] dropW = new JButton[6];
-	private static JButton[] dropB = new JButton[6];
+	private static JButton[] dropAreaWhite = new JButton[6];
+	private static JButton[] dropAreaBlack = new JButton[6];
 	
 	// dialog windows
 	public static JLabel output = new JLabel(" ");
 	public static JLabel score = new JLabel(" ");
 	static JLabel profile = new JLabel("Player");
 
-	public static JLabel clockB = new JLabel("00:00");
-	public static JLabel clockW = new JLabel("00:00");
+	public static JLabel clockBlack = new JLabel("00:00");
+	public static JLabel clockWhite = new JLabel("00:00");
 	
 	// components labels
-	private static JLabel show = new JLabel("Score:");
-	private static JLabel colA = new JLabel("A");
-	private static JLabel colB = new JLabel("B");
-	private static JLabel colC = new JLabel("C");
+	private static JLabel scoreLabel = new JLabel("Score:");
+	private static JLabel columnA = new JLabel("A");
+	private static JLabel columnB = new JLabel("B");
+	private static JLabel columnC = new JLabel("C");
 	private static JLabel row1 = new JLabel("1");
 	private static JLabel row2 = new JLabel("2");
 	private static JLabel row3 = new JLabel("3");
 	private static JLabel row4 = new JLabel("4");
-	private static JLabel white = new JLabel("White's hand");
-	private static JLabel black = new JLabel("Black's hand");
+	private static JLabel whiteHand = new JLabel("White's hand");
+	private static JLabel blackHand = new JLabel("Black's hand");
 	
-	private static JLabel comp = new JLabel("Computer");
-	private static JLabel nodes = new JLabel("Nodes:");
-	public static JLabel counter = new JLabel(" ");
+	private static JLabel computer = new JLabel("Computer");
+	private static JLabel nodesLabel = new JLabel("Nodes:");
+	public static JLabel nodes = new JLabel(" ");
 	
 	// service buttons
 	private static JCheckBox volume = new JCheckBox("Mute volume", false);
 	private static JSlider boost = new JSlider(-10, 10, 0);
 	private static JButton newgame = new JButton("New Game");
-	private static JButton push = new JButton();
-	private static JLabel label1 = new JLabel("Force");
-	private static JLabel label2 = new JLabel("Black");
-	private static JCheckBox check = new JCheckBox("Check warning", true);
+	private static JButton forceBlack = new JButton();
+	private static JLabel pushButtonLabelTop = new JLabel("Force");
+	private static JLabel pushButtonLabelBottom = new JLabel("Black");
+	private static JCheckBox checkWarning = new JCheckBox("Check warning", true);
 	
-	private static JButton next = new JButton();
-	private static JLabel label3 = new JLabel("Next");
-	private static JLabel label4 = new JLabel("Best");
+	private static JButton nextBestMove = new JButton();
+	private static JLabel nextBestMoveButtonLabelTop = new JLabel("Next");
+	private static JLabel nextBestMoveButtonLabelBottom = new JLabel("Best");
 
 	// playing level selection
-	private static JLabel behave = new JLabel("Select AI level / behave:");
-	private static JPanel panel = new JPanel(new GridLayout(2,4));
-	private static ButtonGroup level = new ButtonGroup();	
-	private static String[] levelArray = {"Stupid", "Greedy", "Naive", "Tricky", 
+	private static JLabel behaveLabel = new JLabel("Select AI level / behave:");
+	private static JPanel levelPanel = new JPanel(new GridLayout(2,4));
+	private static ButtonGroup levelButtons = new ButtonGroup();	
+	private static String[] levels = {"Stupid", "Greedy", "Naive", "Tricky", 
 								  "Active", "Clever", "Expert", "Master"};
-	private static JToggleButton[] brain = new JToggleButton[levelArray.length];
+	private static JToggleButton[] brain = new JToggleButton[levels.length];
 	
 	private static JMenuBar menuBar = new JMenuBar();
     
@@ -91,7 +91,7 @@ public class Gui {
 		
 		new Thread(new Runnable() {
 			public void run() {
-				clocks.showClock();
+				clocks.showClocks();
 			}
 		}).start();
 		
@@ -108,55 +108,55 @@ public class Gui {
 		frame.setSize(1600,1000);
 		frame.setTitle("Zoo Shogi");
 		frame.add(board);
-		frame.add(handW);
-		frame.add(handB);		
-		frame.add(cols);		
+		frame.add(handWhite);
+		frame.add(handBlack);		
+		frame.add(columns);		
 		frame.add(rows);		
 		frame.add(output);
-		frame.add(behave);
+		frame.add(behaveLabel);
 		frame.add(score);
-		frame.add(show);		
-		frame.add(white);
-		frame.add(black);		
+		frame.add(scoreLabel);		
+		frame.add(whiteHand);
+		frame.add(blackHand);		
 		frame.add(profile);
 		
-		frame.add(clockB);
-		frame.add(clockW);
+		frame.add(clockBlack);
+		frame.add(clockWhite);
 //		frame.add(sound);
 //		sound.setBounds(100, 500, 300, 100);
-		frame.add(comp);
+		frame.add(computer);
+		frame.add(nodesLabel);
 		frame.add(nodes);
-		frame.add(counter);
 		
 		board.setBounds(500,100,600,800);
-		handB.setBounds(100,100,300,200);
-		handW.setBounds(1200,700,300,200);
-		cols.setBounds(500,50,600,50);
+		handBlack.setBounds(100,100,300,200);
+		handWhite.setBounds(1200,700,300,200);
+		columns.setBounds(500,50,600,50);
 		rows.setBounds(450,100,50,800);		
 		output.setFont(new Font("Dialog", Font.PLAIN, 20));
 		output.setHorizontalAlignment(JLabel.CENTER);
 		output.setBounds(100,475,300,50);
 		output.setOpaque(true);
 		output.setBackground(Color.LIGHT_GRAY);
-		behave.setFont(new Font("Dialog", Font.PLAIN, 25));
-		behave.setHorizontalAlignment(JLabel.CENTER);
-		behave.setBounds(1200,450,300,50);
+		behaveLabel.setFont(new Font("Dialog", Font.PLAIN, 25));
+		behaveLabel.setHorizontalAlignment(JLabel.CENTER);
+		behaveLabel.setBounds(1200,450,300,50);
 		score.setFont(new Font("Dialog", Font.PLAIN, 40));
 		score.setHorizontalAlignment(JLabel.CENTER);
 		score.setBounds(100,825,300,75);
 		score.setOpaque(true);
 		score.setBackground(Color.LIGHT_GRAY);
-		show.setFont(new Font("Dialog", Font.PLAIN, 45));
-		show.setHorizontalAlignment(JLabel.CENTER);
-		show.setBounds(100,750,300,50);
-		colA.setFont(new Font("Dialog", Font.PLAIN, 25));
-		colA.setHorizontalAlignment(JLabel.CENTER);
+		scoreLabel.setFont(new Font("Dialog", Font.PLAIN, 45));
+		scoreLabel.setHorizontalAlignment(JLabel.CENTER);
+		scoreLabel.setBounds(100,750,300,50);
+		columnA.setFont(new Font("Dialog", Font.PLAIN, 25));
+		columnA.setHorizontalAlignment(JLabel.CENTER);
 //		colA.setBounds(500,50,200,50);
-		colB.setFont(new Font("Dialog", Font.PLAIN, 25));
-		colB.setHorizontalAlignment(JLabel.CENTER);
+		columnB.setFont(new Font("Dialog", Font.PLAIN, 25));
+		columnB.setHorizontalAlignment(JLabel.CENTER);
 //		colB.setBounds(700,50,200,50);
-		colC.setFont(new Font("Dialog", Font.PLAIN, 25));
-		colC.setHorizontalAlignment(JLabel.CENTER);
+		columnC.setFont(new Font("Dialog", Font.PLAIN, 25));
+		columnC.setHorizontalAlignment(JLabel.CENTER);
 //		colC.setBounds(900,50,200,50);
 		row1.setFont(new Font("Dialog", Font.PLAIN, 25));
 		row1.setHorizontalAlignment(JLabel.CENTER);
@@ -170,45 +170,45 @@ public class Gui {
 		row4.setFont(new Font("Dialog", Font.PLAIN, 25));
 		row4.setHorizontalAlignment(JLabel.CENTER);
 //		row4.setBounds(450,775,50,50);
-		white.setFont(new Font("Dialog", Font.PLAIN, 25));
-		white.setHorizontalAlignment(JLabel.CENTER);
-		white.setBounds(1200,650,300,50);
-		black.setFont(new Font("Dialog", Font.PLAIN, 25));
-		black.setHorizontalAlignment(JLabel.CENTER);
-		black.setBounds(100,50,300,50);		
+		whiteHand.setFont(new Font("Dialog", Font.PLAIN, 25));
+		whiteHand.setHorizontalAlignment(JLabel.CENTER);
+		whiteHand.setBounds(1200,650,300,50);
+		blackHand.setFont(new Font("Dialog", Font.PLAIN, 25));
+		blackHand.setHorizontalAlignment(JLabel.CENTER);
+		blackHand.setBounds(100,50,300,50);		
 		profile.setFont(new Font("Dialog", Font.PLAIN, 25));
 		profile.setHorizontalAlignment(JLabel.CENTER);
 		profile.setBounds(1200,225,300,50);
-		cols.add(colA);
-		cols.add(colB);
-		cols.add(colC);
+		columns.add(columnA);
+		columns.add(columnB);
+		columns.add(columnC);
 		rows.add(row1);
 		rows.add(row2);
 		rows.add(row3);
 		rows.add(row4);
 		
-		clockB.setBounds(1200,100,300,50);
-		clockB.setFont(new Font("Dialog", Font.PLAIN, 50));
-		clockB.setHorizontalAlignment(JLabel.CENTER);
-		clockB.setOpaque(true);
-		clockB.setBackground(Color.BLACK);
-		clockB.setForeground(Color.WHITE);
-		clockW.setBounds(1200,175,300,50);
-		clockW.setFont(new Font("Dialog", Font.PLAIN, 50));
-		clockW.setHorizontalAlignment(JLabel.CENTER);
-		clockW.setOpaque(true);
-		clockW.setBackground(Color.WHITE);
-		comp.setFont(new Font("Dialog", Font.PLAIN, 25));
-		comp.setHorizontalAlignment(JLabel.CENTER);
-		comp.setBounds(1200,50,300,50);
+		clockBlack.setBounds(1200,100,300,50);
+		clockBlack.setFont(new Font("Dialog", Font.PLAIN, 50));
+		clockBlack.setHorizontalAlignment(JLabel.CENTER);
+		clockBlack.setOpaque(true);
+		clockBlack.setBackground(Color.BLACK);
+		clockBlack.setForeground(Color.WHITE);
+		clockWhite.setBounds(1200,175,300,50);
+		clockWhite.setFont(new Font("Dialog", Font.PLAIN, 50));
+		clockWhite.setHorizontalAlignment(JLabel.CENTER);
+		clockWhite.setOpaque(true);
+		clockWhite.setBackground(Color.WHITE);
+		computer.setFont(new Font("Dialog", Font.PLAIN, 25));
+		computer.setHorizontalAlignment(JLabel.CENTER);
+		computer.setBounds(1200,50,300,50);
+		nodesLabel.setFont(new Font("Dialog", Font.PLAIN, 25));
+		nodesLabel.setHorizontalAlignment(JLabel.LEFT);
+		nodesLabel.setBounds(100,675,100,50);
 		nodes.setFont(new Font("Dialog", Font.PLAIN, 25));
-		nodes.setHorizontalAlignment(JLabel.LEFT);
-		nodes.setBounds(100,675,100,50);
-		counter.setFont(new Font("Dialog", Font.PLAIN, 25));
-		counter.setHorizontalAlignment(JLabel.CENTER);
-		counter.setBounds(200,675,200,50);
-		counter.setOpaque(true);
-		counter.setBackground(Color.LIGHT_GRAY);
+		nodes.setHorizontalAlignment(JLabel.CENTER);
+		nodes.setBounds(200,675,200,50);
+		nodes.setOpaque(true);
+		nodes.setBackground(Color.LIGHT_GRAY);
 		
 		volume.setFont(new Font("Dialog", Font.PLAIN, 20));
 		volume.setHorizontalAlignment(JCheckBox.CENTER);
@@ -217,11 +217,11 @@ public class Gui {
 			public void actionPerformed(ActionEvent e) {
 				volume = (JCheckBox) e.getSource();
 				if(volume.isSelected()){
-					mute = true;
+					mutedVolume = true;
 					director.aiMute(true);
 				}
 				else{
-					mute = false;
+					mutedVolume = false;
 					director.aiMute(false);
 				}
 				return;
@@ -240,7 +240,7 @@ public class Gui {
 				boost = (JSlider) e.getSource();
 				output.setText(boost.getValue()>0?"Gain +"+(float)boost.getValue():
 												  "Gain "+(float)boost.getValue());
-				Sound.setVol((float)boost.getValue());
+				Sound.setVolumeLevel((float)boost.getValue());
 			}
 		});
 		frame.add(boost);
@@ -255,14 +255,14 @@ public class Gui {
 				unlockBoard();
 				unlockButtons();
 				if(director.checkClient() == false) {
-					enable();
+					enableLevels();
 				}
 				output.setText(" ");
 				score.setText(" ");
 				director.initialize();
 				director.newGame();
 				
-				clocks.reset();
+				clocks.resetClocks();
 				
 				updateGui();
 				return;
@@ -271,18 +271,18 @@ public class Gui {
 		frame.add(newgame);
 		
 //		push.setFont(new Font("Dialog", Font.PLAIN, 45));
-		push.setLayout(new GridLayout(2,1));
-		push.add(label1);
-		push.add(label2);
-		label1.setFont(new Font("Dialog", Font.PLAIN, 45));
-		label2.setFont(new Font("Dialog", Font.PLAIN, 45));
-		label1.setHorizontalAlignment(JLabel.CENTER);
-		label2.setHorizontalAlignment(JLabel.CENTER);
-		push.setBounds(250,350,150,100);		
-		push.addActionListener(new ActionListener() {
+		forceBlack.setLayout(new GridLayout(2,1));
+		forceBlack.add(pushButtonLabelTop);
+		forceBlack.add(pushButtonLabelBottom);
+		pushButtonLabelTop.setFont(new Font("Dialog", Font.PLAIN, 45));
+		pushButtonLabelBottom.setFont(new Font("Dialog", Font.PLAIN, 45));
+		pushButtonLabelTop.setHorizontalAlignment(JLabel.CENTER);
+		pushButtonLabelBottom.setHorizontalAlignment(JLabel.CENTER);
+		forceBlack.setBounds(250,350,150,100);		
+		forceBlack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				push = (JButton) e.getSource();
-				disable();
+				forceBlack = (JButton) e.getSource();
+				disableLevels();
 				
 				javax.swing.SwingUtilities.invokeLater(new Runnable() {
 					public void run() {
@@ -297,22 +297,22 @@ public class Gui {
 				return;
 			}
 		});
-		frame.add(push);
+		frame.add(forceBlack);
 
 //		next.setFont(new Font("Dialog", Font.PLAIN, 45));
-		next.setLayout(new GridLayout(2,1));
-		next.add(label3);
-		next.add(label4);
-		label3.setFont(new Font("Dialog", Font.PLAIN, 45));
-		label4.setFont(new Font("Dialog", Font.PLAIN, 45));
-		label3.setHorizontalAlignment(JLabel.CENTER);
-		label4.setHorizontalAlignment(JLabel.CENTER);
-		next.setBounds(100,350,150,100);		
-		next.addActionListener(new ActionListener() {
+		nextBestMove.setLayout(new GridLayout(2,1));
+		nextBestMove.add(nextBestMoveButtonLabelTop);
+		nextBestMove.add(nextBestMoveButtonLabelBottom);
+		nextBestMoveButtonLabelTop.setFont(new Font("Dialog", Font.PLAIN, 45));
+		nextBestMoveButtonLabelBottom.setFont(new Font("Dialog", Font.PLAIN, 45));
+		nextBestMoveButtonLabelTop.setHorizontalAlignment(JLabel.CENTER);
+		nextBestMoveButtonLabelBottom.setHorizontalAlignment(JLabel.CENTER);
+		nextBestMove.setBounds(100,350,150,100);		
+		nextBestMove.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				next = (JButton) e.getSource();
+				nextBestMove = (JButton) e.getSource();
 
-				if(director.beginning() || !Cache.empty()) {
+				if(director.beginning() || !Cache.isEmpty()) {
 					return;
 				}
 				Clocks.setNodes(0);
@@ -321,37 +321,37 @@ public class Gui {
 				return;
 			}
 		});
-		frame.add(next);
+		frame.add(nextBestMove);
 		
-		check.setFont(new Font("Dialog", Font.PLAIN, 25));
-		check.setHorizontalAlignment(JCheckBox.CENTER);
-		check.setBounds(1250,375,200,50);
-		check.addActionListener(new ActionListener() {
+		checkWarning.setFont(new Font("Dialog", Font.PLAIN, 25));
+		checkWarning.setHorizontalAlignment(JCheckBox.CENTER);
+		checkWarning.setBounds(1250,375,200,50);
+		checkWarning.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				check = (JCheckBox) e.getSource();
-				if(check.isSelected()){
-					warn = true;
+				checkWarning = (JCheckBox) e.getSource();
+				if(checkWarning.isSelected()){
+					checkWarningEnabled = true;
 					director.aiWarn(true);
 				}
 				else{
-					warn = false;
+					checkWarningEnabled = false;
 					director.aiWarn(false);
 				}
 				return;
 			}
 		});
-		frame.add(check);
+		frame.add(checkWarning);
 
-		panel.setBounds(1200,500,300,100);
-		for(int i=0; i<levelArray.length; i++){
+		levelPanel.setBounds(1200,500,300,100);
+		for(int i=0; i<levels.length; i++){
 			brain[i] = new JToggleButton();
-			brain[i].setText(levelArray[i]);
-			level.add(brain[i]);
-			panel.add(brain[i]);
+			brain[i].setText(levels[i]);
+			levelButtons.add(brain[i]);
+			levelPanel.add(brain[i]);
 			brain[i].addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					JToggleButton theButton = (JToggleButton) e.getSource();
-					for(int i=0; i<levelArray.length; i++){
+					for(int i=0; i<levels.length; i++){
 						if(theButton.equals(brain[i])){
 							director.setLevel(i);
 							output.setText("Level " + Integer.toString(i)+ " selected");
@@ -364,7 +364,7 @@ public class Gui {
 				}
 			});
 		}
-		frame.getContentPane().add(panel);
+		frame.getContentPane().add(levelPanel);
 		
 		for(int r=0;r<4;r++) {
 			for(int c=0;c<3;c++) {
@@ -378,25 +378,25 @@ public class Gui {
 						JButton theButton = (JButton) e.getSource();						
 						for(int r=0;r<4;r++) {
 							for(int c=0;c<3;c++) {
-						if(theButton.equals(squares[r][c]) & click == 1 & 
+						if(theButton.equals(squares[r][c]) & clickNumber == 1 & 
 								director.list(squares[r][c].getName())){
 							squares[r][c].setBackground(Color.YELLOW);
-							highlight(r, c);
+							highlightSquares(r, c);
 							director.from(r, c, squares[r][c].getName());
-							click = 2;
+							clickNumber = 2;
 							output.setText(Message.getPieceName(squares[r][c].getName())
 																		+" choosen");
-							drop = false;
+							isMoveDrop = false;
 							return;
 							}
-						else if(theButton.equals(squares[r][c]) & click == 2 & 
+						else if(theButton.equals(squares[r][c]) & clickNumber == 2 & 
 								director.list(squares[r][c].getName())==false){
 							if(director.to(r, c)){
-								if(drop & squares[r][c].getName().equals(" ")){
+								if(isMoveDrop & squares[r][c].getName().equals(" ")){
 									director.drop();
 								}
-								else if(drop & !squares[r][c].getName().equals(" ")){
-									drop = false;
+								else if(isMoveDrop & !squares[r][c].getName().equals(" ")){
+									isMoveDrop = false;
 									output.setText("Wrong move!");
 									updateGui();
 									return;
@@ -405,15 +405,15 @@ public class Gui {
 									director.move();
 								}
 								updateGui();
-								click = 1;
-								disable();
-								drop = false;								
+								clickNumber = 1;
+								disableLevels();
+								isMoveDrop = false;								
 								
 									javax.swing.SwingUtilities.invokeLater(new Runnable() {
 										public void run() {
 											try {											
 												Clocks.setNodes(0);
-												Gui.counter.setText(" ");
+												Gui.nodes.setText(" ");
 												director.compute();
 											}
 											catch (InterruptedException e) {
@@ -425,18 +425,18 @@ public class Gui {
 								}
 							else{
 								squares[r][c].setBackground(Color.decode("#db9356"));
-								click = 1;
-								drop = false;
+								clickNumber = 1;
+								isMoveDrop = false;
 								output.setText("Wrong move!");
 								updateGui();
 								return;
 								}
 							}
-						else if(theButton.equals(squares[r][c]) & click == 2 & 
+						else if(theButton.equals(squares[r][c]) & clickNumber == 2 & 
 								director.list(squares[r][c].getName())){
 							squares[r][c].setBackground(Color.decode("#db9356"));
-							click = 1;
-							drop = false;
+							clickNumber = 1;
+							isMoveDrop = false;
 							output.setText("Wrong place!");
 							updateGui();
 							return;
@@ -453,26 +453,26 @@ public class Gui {
 		}
 		for(int c=0;c<6;c++) {
 				//Initialize the button in the board array
-				dropW[c] = new JButton();
-				dropW[c].setSize(100, 100);
-				dropW[c].setBorder(new LineBorder(Color.GRAY));
-				dropW[c].setBackground(Color.decode("#db9356"));
-				dropW[c].addActionListener(new ActionListener() {
+				dropAreaWhite[c] = new JButton();
+				dropAreaWhite[c].setSize(100, 100);
+				dropAreaWhite[c].setBorder(new LineBorder(Color.GRAY));
+				dropAreaWhite[c].setBackground(Color.decode("#db9356"));
+				dropAreaWhite[c].addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						JButton theButton = (JButton) e.getSource();
 						for(int c=0;c<6;c++) {
-						if(theButton.equals(dropW[c])&click==1&director.list(dropW[c].getName())){
-							drop = true;
-							dropW[c].setBackground(Color.YELLOW);
-							highlight();
-							director.from(3, c+3, dropW[c].getName());						
-							click = 2;							
+						if(theButton.equals(dropAreaWhite[c])&clickNumber==1&director.list(dropAreaWhite[c].getName())){
+							isMoveDrop = true;
+							dropAreaWhite[c].setBackground(Color.YELLOW);
+							highlightSquares();
+							director.from(3, c+3, dropAreaWhite[c].getName());						
+							clickNumber = 2;							
 							return;
 							}
-						else if(theButton.equals(dropW[c]) & click == 2){
-							dropW[c].setBackground(Color.decode("#db9356"));
-							click = 1;
-							drop = false;
+						else if(theButton.equals(dropAreaWhite[c]) & clickNumber == 2){
+							dropAreaWhite[c].setBackground(Color.decode("#db9356"));
+							clickNumber = 1;
+							isMoveDrop = false;
 							output.setText("Wrong place!");
 							updateGui();
 							return;
@@ -480,16 +480,16 @@ public class Gui {
 						}
 					});
 				//add each square to the GUI panel
-				handW.add(dropW[c]);
+				handWhite.add(dropAreaWhite[c]);
 		}
 		for(int c=0;c<6;c++) {
 				//Initialize the label in the board array
-				dropB[c] = new JButton();
-				dropB[c].setSize(100, 100);
-				dropB[c].setBorder(new LineBorder(Color.GRAY));
-				dropB[c].setBackground(Color.decode("#db9356"));
+				dropAreaBlack[c] = new JButton();
+				dropAreaBlack[c].setSize(100, 100);
+				dropAreaBlack[c].setBorder(new LineBorder(Color.GRAY));
+				dropAreaBlack[c].setBackground(Color.decode("#db9356"));
 				//add each square to the GUI panel
-				handB.add(dropB[c]);
+				handBlack.add(dropAreaBlack[c]);
 		}
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -507,30 +507,30 @@ public class Gui {
 			for(int c=0;c<3;c++) {
 				squares[r][c].setBackground(Color.decode("#db9356"));
 				squares[r][c].setName(director.refresh(r,c));
-				squares[r][c].setIcon(new ImageIcon(imageLarge(squares[r][c].getName())));
+				squares[r][c].setIcon(new ImageIcon(getLargeImage(squares[r][c].getName())));
 			}
 		}		
 		for(int c=0;c<6;c++) {
-			dropW[c].setBackground(Color.decode("#db9356"));
-			dropW[c].setName(director.refresh(3,c+3));
-			dropW[c].setIcon(new ImageIcon(imageSmall(dropW[c].getName())));
+			dropAreaWhite[c].setBackground(Color.decode("#db9356"));
+			dropAreaWhite[c].setName(director.refresh(3,c+3));
+			dropAreaWhite[c].setIcon(new ImageIcon(getSmallImage(dropAreaWhite[c].getName())));
 		}		
 		for(int c=0;c<6;c++) {
-			dropB[c].setBackground(Color.decode("#db9356"));
-			dropB[c].setName(director.refresh(0,c+3));
-			dropB[c].setIcon(new ImageIcon(imageSmall(dropB[c].getName())));			
+			dropAreaBlack[c].setBackground(Color.decode("#db9356"));
+			dropAreaBlack[c].setName(director.refresh(0,c+3));
+			dropAreaBlack[c].setIcon(new ImageIcon(getSmallImage(dropAreaBlack[c].getName())));			
 		}
 		
-		if(warn){
+		if(checkWarningEnabled){
 			for(int r=0;r<4;r++) {
 				for(int c=0;c<3;c++) {
-					warning();
+					checkWarning();
 				}
 			}	
 		}
 	}
 	
-	private void warning(){
+	private void checkWarning(){
 		
 		int r2, c2;
 		
@@ -539,14 +539,14 @@ public class Gui {
 		if(squares[r][c].getName().equals("p")){
 			r2 = r+1;
 			c2 = c;
-			if((Pieces.BPAWN.move(r, c, r2, c2)&&(squares[r2][c2].getName().equals("K")))){
+			if((Pieces.BPAWN.isLegalMove(r, c, r2, c2)&&(squares[r2][c2].getName().equals("K")))){
 				squares[r2][c2].setBackground(Color.RED);
 			}
 		}
 		else if(squares[r][c].getName().equals("r")){
 			for(r2=r-1; r2<r+2; r2++){
 				for(c2=c-1; c2<c+2; c2++){
-			if((Pieces.ROOK.move(r, c, r2, c2)&&(squares[r2][c2].getName().equals("K")))){
+			if((Pieces.ROOK.isLegalMove(r, c, r2, c2)&&(squares[r2][c2].getName().equals("K")))){
 				squares[r2][c2].setBackground(Color.RED);				
 			}
 				}
@@ -555,7 +555,7 @@ public class Gui {
 		else if(squares[r][c].getName().equals("k")){
 			for(r2=r-1; r2<r+2; r2++){
 				for(c2=c-1; c2<c+2; c2++){
-			if((Pieces.KING.move(r, c, r2, c2)&&(squares[r2][c2].getName().equals("K")))){
+			if((Pieces.KING.isLegalMove(r, c, r2, c2)&&(squares[r2][c2].getName().equals("K")))){
 				squares[r2][c2].setBackground(Color.RED);				
 			}
 				}
@@ -564,7 +564,7 @@ public class Gui {
 		else if(squares[r][c].getName().equals("b")){
 			for(r2=r-1; r2<r+2; r2++){
 				for(c2=c-1; c2<c+2; c2++){
-			if((Pieces.BISHOP.move(r, c, r2, c2)&&(squares[r2][c2].getName().equals("K")))){
+			if((Pieces.BISHOP.isLegalMove(r, c, r2, c2)&&(squares[r2][c2].getName().equals("K")))){
 				squares[r2][c2].setBackground(Color.RED);				
 			}
 				}
@@ -573,7 +573,7 @@ public class Gui {
 		else if(squares[r][c].getName().equals("q")){
 			for(r2=r-1; r2<r+2; r2++){
 				for(c2=c-1; c2<c+2; c2++){
-			if((Pieces.BQUEEN.move(r, c, r2, c2)&&(squares[r2][c2].getName().equals("K")))){
+			if((Pieces.BQUEEN.isLegalMove(r, c, r2, c2)&&(squares[r2][c2].getName().equals("K")))){
 				squares[r2][c2].setBackground(Color.RED);				
 			}
 				}
@@ -583,7 +583,7 @@ public class Gui {
 		}
 	}
 	
-	private String imageLarge(String piece){
+	private String getLargeImage(String piece){
 		
 		String icon = " ";
 		
@@ -622,7 +622,7 @@ public class Gui {
 		return icon;
 	}
 	
-	private String imageSmall(String piece){
+	private String getSmallImage(String piece){
 		
 		String icon = " ";
 		
@@ -661,32 +661,32 @@ public class Gui {
 		return icon;
 	}
 	
-	private void highlight(){
+	private void highlightSquares(){
 		
 		for(int r=0;r<4;r++) {
 			for(int c=0;c<3;c++) {
-				if(drop & squares[r][c].getName().equals(" ")){
+				if(isMoveDrop & squares[r][c].getName().equals(" ")){
 				squares[r][c].setBackground(Color.GREEN);
 				}
 			}
 		}
 	}
 	
-	private void highlight(int r, int c){
+	private void highlightSquares(int r, int c){
 		
 		int r2, c2;
 		
 		if(squares[r][c].getName().equals("P")){
 			r2 = r-1;
 			c2 = c;
-			if((Pieces.WPAWN.move(r, c, r2, c2)&&director.legal(squares[r2][c2].getName()))){
+			if((Pieces.WPAWN.isLegalMove(r, c, r2, c2)&&director.legal(squares[r2][c2].getName()))){
 				squares[r2][c2].setBackground(Color.GREEN);				
 			}
 		}
 		else if(squares[r][c].getName().equals("R")){
 			for(r2=r-1; r2<r+2; r2++){
 				for(c2=c-1; c2<c+2; c2++){
-			if((Pieces.ROOK.move(r, c, r2, c2)&&director.legal(squares[r2][c2].getName()))){
+			if((Pieces.ROOK.isLegalMove(r, c, r2, c2)&&director.legal(squares[r2][c2].getName()))){
 				squares[r2][c2].setBackground(Color.GREEN);				
 			}
 				}
@@ -695,7 +695,7 @@ public class Gui {
 		else if(squares[r][c].getName().equals("K")){
 			for(r2=r-1; r2<r+2; r2++){
 				for(c2=c-1; c2<c+2; c2++){
-			if((Pieces.KING.move(r, c, r2, c2)&&director.legal(squares[r2][c2].getName()))){
+			if((Pieces.KING.isLegalMove(r, c, r2, c2)&&director.legal(squares[r2][c2].getName()))){
 				squares[r2][c2].setBackground(Color.GREEN);				
 			}
 				}
@@ -704,7 +704,7 @@ public class Gui {
 		else if(squares[r][c].getName().equals("B")){
 			for(r2=r-1; r2<r+2; r2++){
 				for(c2=c-1; c2<c+2; c2++){
-			if((Pieces.BISHOP.move(r, c, r2, c2)&&director.legal(squares[r2][c2].getName()))){
+			if((Pieces.BISHOP.isLegalMove(r, c, r2, c2)&&director.legal(squares[r2][c2].getName()))){
 				squares[r2][c2].setBackground(Color.GREEN);				
 			}
 				}
@@ -713,7 +713,7 @@ public class Gui {
 		else if(squares[r][c].getName().equals("Q")){
 			for(r2=r-1; r2<r+2; r2++){
 				for(c2=c-1; c2<c+2; c2++){
-			if((Pieces.WQUEEN.move(r, c, r2, c2)&&director.legal(squares[r2][c2].getName()))){
+			if((Pieces.WQUEEN.isLegalMove(r, c, r2, c2)&&director.legal(squares[r2][c2].getName()))){
 				squares[r2][c2].setBackground(Color.GREEN);				
 			}
 				}
@@ -721,21 +721,22 @@ public class Gui {
 		}
 	}
 	
-	public static void lock(){
+	public static void lockBoard(){
 		
-		next.setEnabled(false);
+		nextBestMove.setEnabled(false);
 		for(int r=0;r<4;r++) {
 			for(int c=0;c<3;c++) {
 				squares[r][c].setEnabled(false);
 			}
 		}
 		for(int c=0;c<6;c++) {
-			dropW[c].setEnabled(false);			
+			dropAreaWhite[c].setEnabled(false);			
 		}
 		for(int c=0;c<6;c++) {
-			dropB[c].setEnabled(false);			
+			dropAreaBlack[c].setEnabled(false);			
 		}
-	}	
+	}
+	
 	private void unlockBoard(){
 		
 		for(int r=0;r<4;r++) {
@@ -744,15 +745,16 @@ public class Gui {
 			}
 		}
 		for(int c=0;c<6;c++) {
-			dropW[c].setEnabled(true);			
+			dropAreaWhite[c].setEnabled(true);			
 		}
 		for(int c=0;c<6;c++) {
-			dropB[c].setEnabled(true);			
+			dropAreaBlack[c].setEnabled(true);			
 		}		
 	}	
+	
 	private void unlockButtons(){				
-		push.setEnabled(true);
-		next.setEnabled(true);		
+		forceBlack.setEnabled(true);
+		nextBestMove.setEnabled(true);		
 	}
 	
 	public static void doClick(){
@@ -772,28 +774,28 @@ public class Gui {
 		brain[i].doClick();
 	}
 	public static String getLevel() {
-		for(int i=0; i<levelArray.length; i++){
+		for(int i=0; i<levels.length; i++){
 			if(brain[i].isSelected()){
 				return brain[i].getText();
 			}
 		}
 		return null;
 	}
-	public static String getHuman() {
+	public static String getPlayerName() {
 		return profile.getText();
 	}
 	
-	private void disable() {
+	private void disableLevels() {
 		
-		push.setEnabled(false);
-		for(int i=0; i<levelArray.length; i++){
+		forceBlack.setEnabled(false);
+		for(int i=0; i<levels.length; i++){
 			brain[i].setEnabled(false);
 		}		
 	}	
-	private void enable() {
+	private void enableLevels() {
 		
-		push.setEnabled(true);
-		for(int i=0; i<levelArray.length; i++){
+		forceBlack.setEnabled(true);
+		for(int i=0; i<levels.length; i++){
 			brain[i].setEnabled(true);
 		}		
 	}
@@ -840,7 +842,7 @@ public class Gui {
 						public void run() {
 							if(director.loadGame()) {
 								Gui.doClick();
-								disable();
+								disableLevels();
 								JOptionPane.showMessageDialog(loadgame,
 										"Last game loaded",
 											"Success!",

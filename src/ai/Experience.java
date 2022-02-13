@@ -21,17 +21,17 @@ import java.util.zip.ZipOutputStream;
 
 class Experience {
 
-	private Set<String> neg;
-	private Map<String, Node> pos;
+	private Set<String> negativeExp;
+	private Map<String, Node> positiveExp;
 	{
 		File negative = new File("exp/negative.bin");
 		if(!negative.exists()) {
 			try {
 				negative.createNewFile();
-				neg = new HashSet<>();
+				negativeExp = new HashSet<>();
 			    try(ObjectOutputStream oos = new ObjectOutputStream
 			       (new BufferedOutputStream(new FileOutputStream("exp/negative.bin")))){
-			           oos.writeUnshared(neg);
+			           oos.writeUnshared(negativeExp);
 			           oos.flush();
 			           oos.reset();
 			    }			
@@ -43,7 +43,7 @@ class Experience {
 		
 	    try(ObjectInputStream ois = new ObjectInputStream
 	       (new BufferedInputStream(new FileInputStream("exp/negative.bin")))){
-	    	neg = (Set<String>) ois.readObject();
+	    	negativeExp = (Set<String>) ois.readObject();
 	    }
 	    catch (IOException | ClassNotFoundException ex) {
 			ex.printStackTrace();
@@ -53,7 +53,7 @@ class Experience {
 		if(!positive.exists()) {
 			try {
 				positive.createNewFile();
-				pos = new HashMap<>();
+				positiveExp = new HashMap<>();
 			    try(FileOutputStream fos = new FileOutputStream("exp/positive.zip");
 				    BufferedOutputStream bos = new BufferedOutputStream(fos);
 			    	ZipOutputStream zos = new ZipOutputStream(bos)){
@@ -61,7 +61,7 @@ class Experience {
 			        // Convert Map to byte array
 			        ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			        ObjectOutputStream oos = new ObjectOutputStream(baos);
-			        oos.writeObject(pos);
+			        oos.writeObject(positiveExp);
 			        oos.flush();
 			        byte[] data = baos.toByteArray();
 
@@ -106,7 +106,7 @@ class Experience {
 	        // Parse byte array to Map
 	        ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
 	        ObjectInputStream ois = new ObjectInputStream(bais);
-	    	pos = (Map<String, Node>) ois.readObject();
+	    	positiveExp = (Map<String, Node>) ois.readObject();
 	    	zipped.close();
             ois.close();
             baos.close();
@@ -118,14 +118,14 @@ class Experience {
 	}
 	
 	boolean bingo(String note) {
-		return neg.contains(note);
+		return negativeExp.contains(note);
 	}
 	
 	void learn(String note) {
-		neg.add(note);
+		negativeExp.add(note);
 	    try(ObjectOutputStream oos = new ObjectOutputStream
 		   (new BufferedOutputStream(new FileOutputStream("exp/negative.bin")))){
-	           oos.writeUnshared(neg);
+	           oos.writeUnshared(negativeExp);
 	           oos.flush();
 	           oos.reset();
 	    }			
@@ -135,14 +135,14 @@ class Experience {
 	}
 	
 	boolean has(String note) {
-		return pos.containsKey(note);		
+		return positiveExp.containsKey(note);		
 	}
 	Node get(String note) {
-		return pos.get(note);		
+		return positiveExp.get(note);		
 	}
 	
 	void learn(String note, Node node) {
-		pos.putIfAbsent(note, node);
+		positiveExp.putIfAbsent(note, node);
 	    try(FileOutputStream fos = new FileOutputStream("exp/positive.zip");
 		    BufferedOutputStream bos = new BufferedOutputStream(fos);
 	    	ZipOutputStream zos = new ZipOutputStream(bos)){
@@ -150,7 +150,7 @@ class Experience {
 	        // Convert Map to byte array
 	        ByteArrayOutputStream baos = new ByteArrayOutputStream();
 	        ObjectOutputStream oos = new ObjectOutputStream(baos);
-	        oos.writeObject(pos);
+	        oos.writeObject(positiveExp);
 	        oos.flush();
 	        byte[] data = baos.toByteArray();
 

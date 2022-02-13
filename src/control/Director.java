@@ -82,10 +82,10 @@ public class Director{
 
 	public void aiMute(boolean mute){
 		this.mute = mute;		
-		integrator.setMute(mute);
+		integrator.setVolumeMute(mute);
 	}
 	public void aiWarn(boolean warn){	
-		integrator.setWarn(warn);
+		integrator.setCheckWarning(warn);
 	}
 	
 	public void setLevel(int level){
@@ -147,15 +147,15 @@ public class Director{
 		else{
 		switch(piece){
 			case "P":
-				return Pieces.WPAWN.move(r, c, r2, c2);
+				return Pieces.WPAWN.isLegalMove(r, c, r2, c2);
 			case "R":
-				return Pieces.ROOK.move(r, c, r2, c2);
+				return Pieces.ROOK.isLegalMove(r, c, r2, c2);
 			case "B":
-				return Pieces.BISHOP.move(r, c, r2, c2);
+				return Pieces.BISHOP.isLegalMove(r, c, r2, c2);
 			case "K":
-				return Pieces.KING.move(r, c, r2, c2);
+				return Pieces.KING.isLegalMove(r, c, r2, c2);
 			case "Q":
-				return Pieces.WQUEEN.move(r, c, r2, c2);
+				return Pieces.WQUEEN.isLegalMove(r, c, r2, c2);
 			default:
 				return false;
 			}
@@ -169,9 +169,9 @@ public class Director{
 	public void move(){
 		
 		edge = Message.getEdge(r, c, r2, c2, board[r][c]);
-		scribe.writeGame("white", edge);
+		scribe.writeGameNote("white", edge);
 		
-		MovesList.add(board, "black");
+		MovesList.addMove(board, "black");
 		
 		switch(board[r2][c2]){
 		case "b":
@@ -216,7 +216,7 @@ public class Director{
 		}
 		board[r][c] = " ";
 		
-		MovesList.add(board, "white");
+		MovesList.addMove(board, "white");
 		
 		state = Matrix.keyMaker(board);
 	}
@@ -224,14 +224,14 @@ public class Director{
 	public void drop(){
 		
 		edge = Message.getEdge(r, c, r2, c2, board[r][c]);
-		scribe.writeGame("white", edge);
+		scribe.writeGameNote("white", edge);
 		
-		MovesList.add(board, "black");
+		MovesList.addMove(board, "black");
 		
 		board[r2][c2] = board[r][c];
 		board[r][c] = " ";
 		
-		MovesList.add(board, "white");
+		MovesList.addMove(board, "white");
 		
 		state = Matrix.keyMaker(board);
 	}
@@ -242,7 +242,7 @@ public class Director{
 	
 	public void undoMove() {
 		
-		scribe.writeGame("undo", null);
+		scribe.writeGameNote("undo", null);
 
 		String hash = Matrix.keyMaker(undo);
 		if(game.containsKey(hash)) {
@@ -284,7 +284,7 @@ public class Director{
 		clocks.setTurn("black");
 		if(endGame("black")){
 			game.clear();
-			Gui.lock();
+			Gui.lockBoard();
 			clocks.setTurn(" ");
 			return;
 		}
@@ -295,8 +295,8 @@ public class Director{
 			integrator.activate(board, move);
 			TimeUnit.SECONDS.sleep(1);
 		}
-		else if(!Cache.empty() && Cache.has(state)) {
-			integrator.nextBest(board, Cache.get(state));
+		else if(!Cache.isEmpty() && Cache.hasPosition(state)) {
+			integrator.nextBest(board, Cache.getMove(state));
 		}
 		else if(integrator.hasNode(board)) {
 			Node node = integrator.getNode(board);
@@ -352,7 +352,7 @@ public class Director{
 		
 		if(endGame("white")){
 			game.clear();
-			Gui.lock();
+			Gui.lockBoard();
 			clocks.setTurn(" ");
 			return;
 		}		
@@ -376,21 +376,21 @@ public class Director{
 		}
 		
 		if(addToList("black")){
-			scribe.writeGame("end", "1/2");
+			scribe.writeGameNote("end", "1/2");
 			output("draw");
 			voice("draw");
 			return true;
 		}
 		else if((a+b==2 & turn.equals("black")) || (a+b==3 & turn.equals("white")) & 
 				(board[0][0].equals("K")||board[0][1].equals("K")||board[0][2].equals("K"))){
-			scribe.writeGame("end", "1-0");
+			scribe.writeGameNote("end", "1-0");
 			output("white");
 			voice("mate");
 			return true;
 		}
 		else if((a+b==1 & turn.equals("white")) || (a+b==3 & turn.equals("black")) & 
 				(board[3][0].equals("k")||board[3][1].equals("k")||board[3][2].equals("k"))){
-			scribe.writeGame("end", "0-1");
+			scribe.writeGameNote("end", "0-1");
 			output("black");
 			voice("mate");
 			return true;
@@ -417,17 +417,17 @@ public class Director{
 		if(!mute){
 			switch(result){
 			case "draw":
-				sound.voice("draw");			
+				sound.playVoice("draw");			
 				break;
 			case "mate":
-				sound.voice("mate");				
+				sound.playVoice("mate");				
 				break;
 			}
 		}		
 	}
 	
 	public void newGame() {
-		scribe.writeGame("new", null);
+		scribe.writeGameNote("new", null);
 		game.clear();
 		integrator.newGame();
 	}
@@ -494,7 +494,7 @@ public class Director{
 	
 	public boolean createPlayer(String name, String pass) {
 		
-		List<Player> players = ss.getList();
+		List<Player> players = ss.getPlayers();
 		Player newPlayer = new Player(name, pass);
 		for(Player current: players) {
 			if(current.getName().equalsIgnoreCase(name)) {
@@ -517,9 +517,9 @@ public class Director{
 	
 	public boolean selectPlayer(String name, String pass) {
 
-		List<Player> players = ss.getList();
+		List<Player> players = ss.getPlayers();
 		for(Player current: players) {
-			if(current.getName().equalsIgnoreCase(name) & current.getPass().equals(pass)) {
+			if(current.getName().equalsIgnoreCase(name) & current.getPassword().equals(pass)) {
 				player = current;
 				return true;
 			}
@@ -529,7 +529,7 @@ public class Director{
 	
 	public void deletePlayer() {
 		
-		List<Player> players = ss.getList();
+		List<Player> players = ss.getPlayers();
 		if(players.contains(player)) {
 			players.remove(player);
 			try(ObjectOutputStream oos = new ObjectOutputStream
@@ -547,7 +547,7 @@ public class Director{
 	
 	private void updateScore(int scale) {
 		
-		List<Player> players = ss.getList();
+		List<Player> players = ss.getPlayers();
 		if(players.contains(player)) {
 			player.setScore(player.getScore() + level*scale);
 			try(ObjectOutputStream oos = new ObjectOutputStream
@@ -563,7 +563,7 @@ public class Director{
 	}
 	
 	public List<Player> getList() {		
-		return ss.getList();
+		return ss.getPlayers();
 	}
 	
 	private LocalServer server;

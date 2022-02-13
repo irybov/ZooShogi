@@ -9,9 +9,9 @@ import utilpack.Message;
 public class MessageTest {
 
 	@Test
-	public void testColName() {
-		assertEquals("A", Message.getColName(0));
-		assertEquals("#", Message.getColName(3));
+	public void testColumnName() {
+		assertEquals("A", Message.getColumnName(0));
+		assertEquals("#", Message.getColumnName(3));
 	}
 	
 	@Test
@@ -22,8 +22,8 @@ public class MessageTest {
 	}
 
 	@Test(expected = NumberFormatException.class)
-	public void testEmptyCol() {
-		assertNull(Message.getColName(new Integer(null)));
+	public void testEmptyColumn() {
+		assertNull(Message.getColumnName(new Integer(null)));
 	}
 	
 	@Test(expected = NullPointerException.class)

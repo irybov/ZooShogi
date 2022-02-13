@@ -25,30 +25,30 @@ public class Scribe {
 		return INSTANCE;
 	}
 	
-	private int number = 1;
-	private boolean nova = true;
-	public void writeGame(String action, String data) {
+	private int moveNumber = 1;
+	private boolean isNewGame = true;
+	public void writeGameNote(String action, String data) {
 
 		try(BufferedWriter scribe = new BufferedWriter(new FileWriter("games.txt", true));
 			RandomAccessFile file = new RandomAccessFile("games.txt", "rw");) {
 			switch(action) {
 			case "new": case "end":
-				if(action.equals("new") & number > 1) {
-					number = 1;
-					nova = true;
+				if(action.equals("new") & moveNumber > 1) {
+					moveNumber = 1;
+					isNewGame = true;
 				}
 				else if(action.equals("end")){
 					scribe.append(data);
-					number = 1;
-					nova = true;
+					moveNumber = 1;
+					isNewGame = true;
 				}
 				break;
 			case "undo":
-				number--;
+				moveNumber--;
 				file.setLength(file.length()-5);
 				break;
 			case "white": case "black":
-				if(number == 1 & nova) {
+				if(moveNumber == 1 & isNewGame) {
 					if(file.length() != 0) {
 						scribe.newLine();
 						scribe.newLine();					
@@ -56,25 +56,25 @@ public class Scribe {
 					LocalDateTime now = LocalDateTime.now();
 					scribe.append(now.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")));
 					scribe.newLine();
-					scribe.append(Gui.getHuman() + " vs AI " + Gui.getLevel());
+					scribe.append(Gui.getPlayerName() + " vs AI " + Gui.getLevel());
 					scribe.newLine();
 					scribe.newLine();
-					scribe.append(number + ". ");
+					scribe.append(moveNumber + ". ");
 					if(action.equals("white")) {
 						scribe.append(data + " ");
 					}
 					else {
 						scribe.append("0000" +  " " + data + " ");
-						number++;
+						moveNumber++;
 					}
-					nova = false;
+					isNewGame = false;
 				}
 				else {
 					if(action.equals("white")) {
-						scribe.append(number + ". ");
+						scribe.append(moveNumber + ". ");
 					}
 					else {
-						number++;						
+						moveNumber++;						
 					}
 					scribe.append(data + " ");
 				}

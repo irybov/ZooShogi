@@ -2,7 +2,7 @@ package utilpack;
 
 public class Examiner {
 	
-	public static boolean check(String[][] board, String turn) {		
+	public static boolean isCheck(String[][] board, String turn) {		
 		
 		int r,c,r2,c2;
 			
@@ -12,7 +12,7 @@ public class Examiner {
 					if(board[r][c].equals("p")){
 						r2 = r+1;
 						c2 = c;
-						if((Pieces.BPAWN.move(r, c, r2, c2))&&
+						if((Pieces.BPAWN.isLegalMove(r, c, r2, c2))&&
 						   (board[r2][c2].equals("K"))){
 							return true;
 						}
@@ -21,7 +21,7 @@ public class Examiner {
 					else if(board[r][c].equals("r")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
-							if((Pieces.ROOK.move(r, c, r2, c2))&&
+							if((Pieces.ROOK.isLegalMove(r, c, r2, c2))&&
 								(board[r2][c2].equals("K"))){
 								return true;
 								}
@@ -32,7 +32,7 @@ public class Examiner {
 					else if(board[r][c].equals("k")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
-							if((Pieces.KING.move(r, c, r2, c2))&&
+							if((Pieces.KING.isLegalMove(r, c, r2, c2))&&
 								(board[r2][c2].equals("K"))){
 								return true;
 								}
@@ -43,7 +43,7 @@ public class Examiner {
 					else if(board[r][c].equals("b")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
-							if((Pieces.BISHOP.move(r, c, r2, c2))&&
+							if((Pieces.BISHOP.isLegalMove(r, c, r2, c2))&&
 								(board[r2][c2].equals("K"))){
 								return true;
 								}
@@ -54,7 +54,7 @@ public class Examiner {
 					else if(board[r][c].equals("q")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
-							if((Pieces.BQUEEN.move(r, c, r2, c2))&&
+							if((Pieces.BQUEEN.isLegalMove(r, c, r2, c2))&&
 								(board[r2][c2].equals("K"))){
 								return true;
 								}
@@ -70,7 +70,7 @@ public class Examiner {
 					if(board[r][c].equals("P")){
 						r2 = r-1;
 						c2 = c;
-						if((Pieces.WPAWN.move(r, c, r2, c2))&&
+						if((Pieces.WPAWN.isLegalMove(r, c, r2, c2))&&
 						   (board[r2][c2].equals("k"))){
 							return true;
 						}
@@ -79,7 +79,7 @@ public class Examiner {
 					else if(board[r][c].equals("R")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
-							if((Pieces.ROOK.move(r, c, r2, c2))&&
+							if((Pieces.ROOK.isLegalMove(r, c, r2, c2))&&
 								(board[r2][c2].equals("k"))){
 								return true;
 								}
@@ -90,7 +90,7 @@ public class Examiner {
 					else if(board[r][c].equals("K")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
-							if((Pieces.KING.move(r, c, r2, c2))&&
+							if((Pieces.KING.isLegalMove(r, c, r2, c2))&&
 								(board[r2][c2].equals("k"))){
 								return true;
 								}
@@ -101,7 +101,7 @@ public class Examiner {
 					else if(board[r][c].equals("B")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
-							if((Pieces.BISHOP.move(r, c, r2, c2))&&
+							if((Pieces.BISHOP.isLegalMove(r, c, r2, c2))&&
 								(board[r2][c2].equals("k"))){
 								return true;
 								}
@@ -112,7 +112,7 @@ public class Examiner {
 					else if(board[r][c].equals("Q")){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
-							if((Pieces.WQUEEN.move(r, c, r2, c2))&&
+							if((Pieces.WQUEEN.isLegalMove(r, c, r2, c2))&&
 								(board[r2][c2].equals("k"))){
 								return true;
 								}
@@ -125,7 +125,7 @@ public class Examiner {
 	return false;
 	}
 	
-	public static boolean winPromotion(String[][] board, String turn) {
+	public static boolean isPromotionWon(String[][] board, String turn) {
 		
 		if(turn.equals("black")) {
 			return (board[3][0].equals("k")||board[3][1].equals("k")||board[3][2].equals("k")) &
@@ -137,7 +137,7 @@ public class Examiner {
 		}
 	}
 
-	public static boolean winPositionBlack(String[][] board, String turn)  {
+	public static boolean isBlackPositionWon(String[][] board, String turn)  {
 		
 		int a = 0;
 		int b = 0;
@@ -156,7 +156,7 @@ public class Examiner {
 			   (board[3][0].equals("k")||board[3][1].equals("k")||board[3][2].equals("k"))));
 	}
 	
-	public static boolean winPositionWhite(String[][] board, String turn)  {
+	public static boolean isWhitePositionWon(String[][] board, String turn)  {
 		
 		int a = 0;
 		int b = 0;

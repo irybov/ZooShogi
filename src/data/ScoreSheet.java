@@ -11,7 +11,7 @@ public class ScoreSheet implements Externalizable {
 	
 	private List<Player> players = new ArrayList<>();
 	
-	public List<Player> getList() {
+	public List<Player> getPlayers() {
 		return players;
 	}
 	
@@ -19,7 +19,7 @@ public class ScoreSheet implements Externalizable {
 
 	@Override
 	public void writeExternal(ObjectOutput out) throws IOException {
-	       out.writeObject(this.getList());
+	       out.writeObject(this.getPlayers());
 	}
 
 	@Override

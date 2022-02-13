@@ -3,7 +3,7 @@ package utilpack;
 public class Capture {
 
 	// checks if capture is possible
-	public static boolean check(String[][] field, int r2, int c2, String side) {
+	public static boolean isCaptureLegal(String[][] field, int r2, int c2, String side) {
 		
 		if(side.equals("white")&(field[r2][c2].equals(" ")||field[r2][c2].equals("p")||
 			field[r2][c2].equals("q")||field[r2][c2].equals("r")||field[r2][c2].equals("b")
@@ -19,7 +19,7 @@ public class Capture {
 	}
 
 	// checks capture extensions
-	public static boolean extend(String piece, String side) {
+	public static boolean isExtension(String piece, String side) {
 		
 		if(side.equals("white")&(piece.equals("p")||piece.equals("q")||piece.equals("r")
 				||piece.equals("b"))) {
@@ -33,7 +33,7 @@ public class Capture {
 	}
 
 	// checks current king's state
-	public static boolean king(String[][] field, int r2, int c2, String side) {
+	public static boolean isKingUnderCheck(String[][] field, int r2, int c2, String side) {
 		
 		if(side.equals("white") & field[r2][c2].equals("k")) {
 			return true;
@@ -45,7 +45,7 @@ public class Capture {
 	}
 
 	// checks king's promotion
-	public static boolean prom(String[][] field, int r2, int c2, String side) {
+	public static boolean isKingPromoted(String[][] field, int r2, int c2, String side) {
 		
 		if((side.equals("white") & field[r2][c2].equals("K")) & (r2==0&(c2==0||c2==1||c2==2))) {
 			return true;
@@ -57,7 +57,7 @@ public class Capture {
 	}
 	
 	// calculates attacking bonuses
-	public static int attack(String[][] field, int r2, int c2, String side) {
+	public static int attackBonusesCount(String[][] field, int r2, int c2, String side) {
 		
 		int value = 0;
 
@@ -109,7 +109,7 @@ public class Capture {
 	}
 
 	// controls piece's capturing
-	public static int take(String[][] field, int r2, int c2) {
+	public static int takenPiecePlacement(String[][] field, int r2, int c2) {
 		
 		int c3 = 9;
 		
@@ -199,7 +199,7 @@ public class Capture {
 	}
 
 	// undo calculated move
-	public static void undo(String[][] field, int r3, int c3){
+	public static void undoMove(String[][] field, int r3, int c3){
 		if(c3 != 9) {
 			field[r3][c3] = " ";
 		}

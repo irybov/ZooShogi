@@ -40,7 +40,7 @@ class Table {
 
 			for(Player player: players) {
 				// Append a row 
-				model.addRow(new Object[]{player.getName(), player.getDate(),
+				model.addRow(new Object[]{player.getName(), player.getRegistrationDate(),
 						Integer.toString(player.getScore())});
 				}
 				table.setRowHeight(table.getRowHeight() + 20);

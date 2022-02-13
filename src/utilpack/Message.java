@@ -2,11 +2,11 @@ package utilpack;
 
 public class Message {
 
-	public static String getColName(final int COL){
+	public static String getColumnName(final int column){
 		
 		String c;
 		
-		switch(COL){
+		switch(column){
 		case 0:
 			c = "A";
 			break;
@@ -23,11 +23,11 @@ public class Message {
 		return c;
  	}
 	
-	public static String getPieceName(final String PIECE){
+	public static String getPieceName(final String piece){
 		
 		String name = "";
 		
-		switch(PIECE){
+		switch(piece){
 		case "P": case "p":
 			name = Pieces.BPAWN.getName();
 			break;
@@ -48,8 +48,8 @@ public class Message {
 	}
 	
 	public static String getEdge(int R, int C, int R2, int C2, String piece) {
-		return (C < 3 ? Message.getColName(C) + (R+1) : piece.toUpperCase()
-				+ Message.getColName(C)) + Message.getColName(C2) + (R2+1);
+		return (C < 3 ? Message.getColumnName(C) + (R+1) : piece.toUpperCase()
+				+ Message.getColumnName(C)) + Message.getColumnName(C2) + (R2+1);
 	}
 	
 }

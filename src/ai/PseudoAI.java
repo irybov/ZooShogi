@@ -49,10 +49,10 @@ public class PseudoAI implements Runnable {
 		
 		for(int i=0; i<legal.size(); i++){
 
-			int r = legal.get(i).getR();
-			int c = legal.get(i).getC();
-			int r2 = legal.get(i).getR2();
-			int c2 = legal.get(i).getC2();
+			int r = legal.get(i).getRowFrom();
+			int c = legal.get(i).getColumnFrom();
+			int r2 = legal.get(i).getRowTo();
+			int c2 = legal.get(i).getColumnTo();
 			String prom;
 			int r3 = 0;
 			int c3 = 9;
@@ -60,7 +60,7 @@ public class PseudoAI implements Runnable {
 				if(board[r][c].equals("p") & r==2){
 					prom = "p";
 					if(!board[r][c].equals(" ")) {
-						c3 = Capture.take(board, r2, c2);
+						c3 = Capture.takenPiecePlacement(board, r2, c2);
 					}
 					temp = board[r2][c2];
 					board[r2][c2] = "q";
@@ -75,7 +75,7 @@ public class PseudoAI implements Runnable {
 				else{
 					prom = " ";
 					if(!board[r][c].equals(" ")) {
-						c3 = Capture.take(board, r2, c2);
+						c3 = Capture.takenPiecePlacement(board, r2, c2);
 					}
 					temp = board[r2][c2];
 					board[r2][c2] = board[r][c];
@@ -85,19 +85,19 @@ public class PseudoAI implements Runnable {
 			if(temp.equals("K")){
 				score = 2000;
 			}
-			else if(Examiner.winPromotion(board, "black") && !Examiner.check(board, "white")){
+			else if(Examiner.isPromotionWon(board, "black") && !Examiner.isCheck(board, "white")){
 				score = 1000;
 			}
-			else if(MovesList.repeat(board, "black")) {
+			else if(MovesList.isRepeated(board, "black")) {
 				score = 0;
 			}
 			else if(integrator.getNote(board)) {
 				score = -500;							
 			}
-			else if(Examiner.winPromotion(board, "white")){
+			else if(Examiner.isPromotionWon(board, "white")){
 				score = -1000;
 			}
-			else if(Examiner.check(board, "white")){
+			else if(Examiner.isCheck(board, "white")){
 				score = -2000;
 			}
 			else{
@@ -112,7 +112,7 @@ public class PseudoAI implements Runnable {
 				board[r][c] = board[r2][c2];
 			}
 			board[r2][c2] = temp;
-			Capture.undo(board, r3, c3);
+			Capture.undoMove(board, r3, c3);
 		}	
 	}
 

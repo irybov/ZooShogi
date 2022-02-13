@@ -19,13 +19,14 @@ public class Sound {
 	
 	static FloatControl volume;
 	static float gain;	
-	public static void setVol(float g){
+	public static void setVolumeLevel(float g){
 		gain = g;
 	}
 	
-	public void voice(String action){
+	public void playVoice(String action){
 
-		try(AudioInputStream ais = AudioSystem.getAudioInputStream(new File(bank(action)))) {
+		try(AudioInputStream ais = AudioSystem.getAudioInputStream
+							(new File(selectSound(action)))) {
 			
 			Clip audioClip = AudioSystem.getClip();
 			audioClip.open(ais);
@@ -38,93 +39,93 @@ public class Sound {
 		}
 	}
 
-	private String bank(String action) throws InterruptedException{
+	private String selectSound(String action) throws InterruptedException{
 		
 		clocks.setTurn(" ");
 		
-		String beep = " ";
+		String bank = " ";
 		
 		switch(action){
 			case "Pawn":
-				beep = "sound/voice/pieces/pawn.wav";
+				bank = "sound/voice/pieces/pawn.wav";
 				break;
 			case "Rook":
-				beep = "sound/voice/pieces/rook.wav";
+				bank = "sound/voice/pieces/rook.wav";
 				break;
 			case "Bishop":
-				beep = "sound/voice/pieces/bishop.wav";
+				bank = "sound/voice/pieces/bishop.wav";
 				break;
 			case "King":
-				beep = "sound/voice/pieces/king.wav";
+				bank = "sound/voice/pieces/king.wav";
 				break;
 			case "Queen":
-				beep = "sound/voice/pieces/queen.wav";
+				bank = "sound/voice/pieces/queen.wav";
 				break;
 			case "check":				
 				TimeUnit.SECONDS.sleep(1);
-				beep = "sound/voice/actions/check.wav";
+				bank = "sound/voice/actions/check.wav";
 				break;
 			case "mate":
 				TimeUnit.SECONDS.sleep(1);
-				beep = "sound/voice/actions/mate.wav";
+				bank = "sound/voice/actions/mate.wav";
 				break;
 			case "draw":
 				TimeUnit.SECONDS.sleep(1);
-				beep = "sound/voice/actions/draw.wav";
+				bank = "sound/voice/actions/draw.wav";
 				break;
 			case "takes":
 				TimeUnit.SECONDS.sleep(1);
-				beep = "sound/voice/actions/takes.wav";
+				bank = "sound/voice/actions/takes.wav";
 				break;
 			case "A1":
 				TimeUnit.SECONDS.sleep(1);
-				beep = "sound/voice/squares/a1.wav";
+				bank = "sound/voice/squares/a1.wav";
 				break;
 			case "A2":
 				TimeUnit.SECONDS.sleep(1);
-				beep = "sound/voice/squares/a2.wav";
+				bank = "sound/voice/squares/a2.wav";
 				break;
 			case "A3":
 				TimeUnit.SECONDS.sleep(1);
-				beep = "sound/voice/squares/a3.wav";
+				bank = "sound/voice/squares/a3.wav";
 				break;
 			case "A4":
 				TimeUnit.SECONDS.sleep(1);
-				beep = "sound/voice/squares/a4.wav";
+				bank = "sound/voice/squares/a4.wav";
 				break;
 			case "B1":
 				TimeUnit.SECONDS.sleep(1);
-				beep = "sound/voice/squares/b1.wav";
+				bank = "sound/voice/squares/b1.wav";
 				break;
 			case "B2":
 				TimeUnit.SECONDS.sleep(1);
-				beep = "sound/voice/squares/b2.wav";
+				bank = "sound/voice/squares/b2.wav";
 				break;
 			case "B3":
 				TimeUnit.SECONDS.sleep(1);
-				beep = "sound/voice/squares/b3.wav";
+				bank = "sound/voice/squares/b3.wav";
 				break;
 			case "B4":
 				TimeUnit.SECONDS.sleep(1);
-				beep = "sound/voice/squares/b4.wav";
+				bank = "sound/voice/squares/b4.wav";
 				break;
 			case "C1":
 				TimeUnit.SECONDS.sleep(1);
-				beep = "sound/voice/squares/c1.wav";
+				bank = "sound/voice/squares/c1.wav";
 				break;
 			case "C2":
 				TimeUnit.SECONDS.sleep(1);
-				beep = "sound/voice/squares/c2.wav";
+				bank = "sound/voice/squares/c2.wav";
 				break;
 			case "C3":
 				TimeUnit.SECONDS.sleep(1);
-				beep = "sound/voice/squares/c3.wav";
+				bank = "sound/voice/squares/c3.wav";
 				break;
 			case "C4":
 				TimeUnit.SECONDS.sleep(1);
-				beep = "sound/voice/squares/c4.wav";
+				bank = "sound/voice/squares/c4.wav";
 				break;
 		}
-		return beep;
+		return bank;
 	}
 }
