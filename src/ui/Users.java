@@ -14,7 +14,7 @@ import data.Player;
 class Users extends JFrame {
 	
 	private Director director = Director.getInstance();
-	private List<Player> players = director.getList();
+	private List<Player> players = director.getPlayers();
 	private String username;
 	private String password;
 	private JLabel label = new JLabel(" ");

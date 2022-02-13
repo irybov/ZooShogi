@@ -16,7 +16,7 @@ class Table {
 	
 	// Create a couple of columns 								
 	private Director director = Director.getInstance();
-	private List<Player> players = director.getList();
+	private List<Player> players = director.getPlayers();
 	private final String[] columns = {"Name", "Joined", "Score"};
 	
 	public Table() {

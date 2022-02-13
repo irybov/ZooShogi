@@ -17,9 +17,9 @@ public class Gui {
 	
 	private Director director = Director.getInstance();
 	private int clickNumber = 1;
-	private boolean isMoveDrop = false;
-	private boolean checkWarningEnabled = true;	
-	boolean mutedVolume = false;
+	private boolean isMoveAsDrop = false;
+	private boolean isCheckWarningEnabled = true;	
+	boolean isVolumeMuted = false;
 
 	private Clocks clocks = Clocks.getInstance();
 
@@ -95,7 +95,7 @@ public class Gui {
 			}
 		}).start();
 		
-		director.initialize();
+		director.initBoard();
 		
         menuBar.add(createFileMenu());
         menuBar.add(createAccountMenu());
@@ -217,12 +217,12 @@ public class Gui {
 			public void actionPerformed(ActionEvent e) {
 				volume = (JCheckBox) e.getSource();
 				if(volume.isSelected()){
-					mutedVolume = true;
-					director.aiMute(true);
+					isVolumeMuted = true;
+					director.setVolumeMute(true);
 				}
 				else{
-					mutedVolume = false;
-					director.aiMute(false);
+					isVolumeMuted = false;
+					director.setVolumeMute(false);
 				}
 				return;
 			}
@@ -254,12 +254,12 @@ public class Gui {
 				
 				unlockBoard();
 				unlockButtons();
-				if(director.checkClient() == false) {
+				if(director.isClientActive() == false) {
 					enableLevels();
 				}
 				output.setText(" ");
 				score.setText(" ");
-				director.initialize();
+				director.initBoard();
 				director.newGame();
 				
 				clocks.resetClocks();
@@ -312,7 +312,7 @@ public class Gui {
 			public void actionPerformed(ActionEvent e) {
 				nextBestMove = (JButton) e.getSource();
 
-				if(director.beginning() || !Cache.isEmpty()) {
+				if(director.isStartOfGame() || !Cache.isEmpty()) {
 					return;
 				}
 				Clocks.setNodes(0);
@@ -330,12 +330,12 @@ public class Gui {
 			public void actionPerformed(ActionEvent e) {
 				checkWarning = (JCheckBox) e.getSource();
 				if(checkWarning.isSelected()){
-					checkWarningEnabled = true;
-					director.aiWarn(true);
+					isCheckWarningEnabled = true;
+					director.setCheckWarning(true);
 				}
 				else{
-					checkWarningEnabled = false;
-					director.aiWarn(false);
+					isCheckWarningEnabled = false;
+					director.setCheckWarning(false);
 				}
 				return;
 			}
@@ -355,8 +355,8 @@ public class Gui {
 						if(theButton.equals(brain[i])){
 							director.setLevel(i);
 							output.setText("Level " + Integer.toString(i)+ " selected");
-							if(director.checkClient()) {
-								director.disconnect();
+							if(director.isClientActive()) {
+								director.disconnectClient();
 							}
 							return;
 						}
@@ -379,35 +379,35 @@ public class Gui {
 						for(int r=0;r<4;r++) {
 							for(int c=0;c<3;c++) {
 						if(theButton.equals(squares[r][c]) & clickNumber == 1 & 
-								director.list(squares[r][c].getName())){
+								director.isPlayerPiece(squares[r][c].getName())){
 							squares[r][c].setBackground(Color.YELLOW);
 							highlightSquares(r, c);
-							director.from(r, c, squares[r][c].getName());
+							director.moveFrom(r, c, squares[r][c].getName());
 							clickNumber = 2;
 							output.setText(Message.getPieceName(squares[r][c].getName())
 																		+" choosen");
-							isMoveDrop = false;
+							isMoveAsDrop = false;
 							return;
 							}
 						else if(theButton.equals(squares[r][c]) & clickNumber == 2 & 
-								director.list(squares[r][c].getName())==false){
-							if(director.to(r, c)){
-								if(isMoveDrop & squares[r][c].getName().equals(" ")){
-									director.drop();
+								director.isPlayerPiece(squares[r][c].getName())==false){
+							if(director.moveTo(r, c)){
+								if(isMoveAsDrop & squares[r][c].getName().equals(" ")){
+									director.doDrop();
 								}
-								else if(isMoveDrop & !squares[r][c].getName().equals(" ")){
-									isMoveDrop = false;
+								else if(isMoveAsDrop & !squares[r][c].getName().equals(" ")){
+									isMoveAsDrop = false;
 									output.setText("Wrong move!");
 									updateGui();
 									return;
 								}
 								else{
-									director.move();
+									director.doMove();
 								}
 								updateGui();
 								clickNumber = 1;
 								disableLevels();
-								isMoveDrop = false;								
+								isMoveAsDrop = false;								
 								
 									javax.swing.SwingUtilities.invokeLater(new Runnable() {
 										public void run() {
@@ -426,17 +426,17 @@ public class Gui {
 							else{
 								squares[r][c].setBackground(Color.decode("#db9356"));
 								clickNumber = 1;
-								isMoveDrop = false;
+								isMoveAsDrop = false;
 								output.setText("Wrong move!");
 								updateGui();
 								return;
 								}
 							}
 						else if(theButton.equals(squares[r][c]) & clickNumber == 2 & 
-								director.list(squares[r][c].getName())){
+								director.isPlayerPiece(squares[r][c].getName())){
 							squares[r][c].setBackground(Color.decode("#db9356"));
 							clickNumber = 1;
-							isMoveDrop = false;
+							isMoveAsDrop = false;
 							output.setText("Wrong place!");
 							updateGui();
 							return;
@@ -461,18 +461,18 @@ public class Gui {
 					public void actionPerformed(ActionEvent e) {
 						JButton theButton = (JButton) e.getSource();
 						for(int c=0;c<6;c++) {
-						if(theButton.equals(dropAreaWhite[c])&clickNumber==1&director.list(dropAreaWhite[c].getName())){
-							isMoveDrop = true;
+						if(theButton.equals(dropAreaWhite[c])&clickNumber==1&director.isPlayerPiece(dropAreaWhite[c].getName())){
+							isMoveAsDrop = true;
 							dropAreaWhite[c].setBackground(Color.YELLOW);
 							highlightSquares();
-							director.from(3, c+3, dropAreaWhite[c].getName());						
+							director.moveFrom(3, c+3, dropAreaWhite[c].getName());						
 							clickNumber = 2;							
 							return;
 							}
 						else if(theButton.equals(dropAreaWhite[c]) & clickNumber == 2){
 							dropAreaWhite[c].setBackground(Color.decode("#db9356"));
 							clickNumber = 1;
-							isMoveDrop = false;
+							isMoveAsDrop = false;
 							output.setText("Wrong place!");
 							updateGui();
 							return;
@@ -506,22 +506,22 @@ public class Gui {
 		for(int r=0;r<4;r++) {
 			for(int c=0;c<3;c++) {
 				squares[r][c].setBackground(Color.decode("#db9356"));
-				squares[r][c].setName(director.refresh(r,c));
+				squares[r][c].setName(director.refreshBoard(r,c));
 				squares[r][c].setIcon(new ImageIcon(getLargeImage(squares[r][c].getName())));
 			}
 		}		
 		for(int c=0;c<6;c++) {
 			dropAreaWhite[c].setBackground(Color.decode("#db9356"));
-			dropAreaWhite[c].setName(director.refresh(3,c+3));
+			dropAreaWhite[c].setName(director.refreshBoard(3,c+3));
 			dropAreaWhite[c].setIcon(new ImageIcon(getSmallImage(dropAreaWhite[c].getName())));
 		}		
 		for(int c=0;c<6;c++) {
 			dropAreaBlack[c].setBackground(Color.decode("#db9356"));
-			dropAreaBlack[c].setName(director.refresh(0,c+3));
+			dropAreaBlack[c].setName(director.refreshBoard(0,c+3));
 			dropAreaBlack[c].setIcon(new ImageIcon(getSmallImage(dropAreaBlack[c].getName())));			
 		}
 		
-		if(checkWarningEnabled){
+		if(isCheckWarningEnabled){
 			for(int r=0;r<4;r++) {
 				for(int c=0;c<3;c++) {
 					checkWarning();
@@ -665,7 +665,7 @@ public class Gui {
 		
 		for(int r=0;r<4;r++) {
 			for(int c=0;c<3;c++) {
-				if(isMoveDrop & squares[r][c].getName().equals(" ")){
+				if(isMoveAsDrop & squares[r][c].getName().equals(" ")){
 				squares[r][c].setBackground(Color.GREEN);
 				}
 			}
@@ -679,14 +679,14 @@ public class Gui {
 		if(squares[r][c].getName().equals("P")){
 			r2 = r-1;
 			c2 = c;
-			if((Pieces.WPAWN.isLegalMove(r, c, r2, c2)&&director.legal(squares[r2][c2].getName()))){
+			if((Pieces.WPAWN.isLegalMove(r, c, r2, c2)&&director.isLegalMove(squares[r2][c2].getName()))){
 				squares[r2][c2].setBackground(Color.GREEN);				
 			}
 		}
 		else if(squares[r][c].getName().equals("R")){
 			for(r2=r-1; r2<r+2; r2++){
 				for(c2=c-1; c2<c+2; c2++){
-			if((Pieces.ROOK.isLegalMove(r, c, r2, c2)&&director.legal(squares[r2][c2].getName()))){
+			if((Pieces.ROOK.isLegalMove(r, c, r2, c2)&&director.isLegalMove(squares[r2][c2].getName()))){
 				squares[r2][c2].setBackground(Color.GREEN);				
 			}
 				}
@@ -695,7 +695,7 @@ public class Gui {
 		else if(squares[r][c].getName().equals("K")){
 			for(r2=r-1; r2<r+2; r2++){
 				for(c2=c-1; c2<c+2; c2++){
-			if((Pieces.KING.isLegalMove(r, c, r2, c2)&&director.legal(squares[r2][c2].getName()))){
+			if((Pieces.KING.isLegalMove(r, c, r2, c2)&&director.isLegalMove(squares[r2][c2].getName()))){
 				squares[r2][c2].setBackground(Color.GREEN);				
 			}
 				}
@@ -704,7 +704,7 @@ public class Gui {
 		else if(squares[r][c].getName().equals("B")){
 			for(r2=r-1; r2<r+2; r2++){
 				for(c2=c-1; c2<c+2; c2++){
-			if((Pieces.BISHOP.isLegalMove(r, c, r2, c2)&&director.legal(squares[r2][c2].getName()))){
+			if((Pieces.BISHOP.isLegalMove(r, c, r2, c2)&&director.isLegalMove(squares[r2][c2].getName()))){
 				squares[r2][c2].setBackground(Color.GREEN);				
 			}
 				}
@@ -713,7 +713,7 @@ public class Gui {
 		else if(squares[r][c].getName().equals("Q")){
 			for(r2=r-1; r2<r+2; r2++){
 				for(c2=c-1; c2<c+2; c2++){
-			if((Pieces.WQUEEN.isLegalMove(r, c, r2, c2)&&director.legal(squares[r2][c2].getName()))){
+			if((Pieces.WQUEEN.isLegalMove(r, c, r2, c2)&&director.isLegalMove(squares[r2][c2].getName()))){
 				squares[r2][c2].setBackground(Color.GREEN);				
 			}
 				}
@@ -957,7 +957,7 @@ public class Gui {
 												JOptionPane.WARNING_MESSAGE);
 					            if (result == JOptionPane.YES_OPTION) {
 									if(director.getServer() != null) {
-										director.shutdown();
+										director.shutdownServer();
 										newgame.doClick();
 									}
 					            }				   

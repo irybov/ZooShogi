@@ -33,15 +33,15 @@ class Chooser {
 			
 			String name = input.getSelectedFile().getName();
 			
-			if(director.checkClient()) {
-				director.disconnect();
+			if(director.isClientActive()) {
+				director.disconnectClient();
 			}
 			
 			if(director.getServer() == null) {
-				director.establish();
+				director.establishServer();
 			}
 			else {
-				director.activate();
+				director.activateClient();
 			}
 			
 			JarFile jarfile = null;

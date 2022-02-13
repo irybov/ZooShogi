@@ -46,16 +46,16 @@ public class Director{
 	private Map<String, Integer> game = new HashMap<>();
 
 	private Player player;
-	private ScoreSheet ss;
+	private ScoreSheet scoresheet;
 	{
 		File file = new File("scoresheet.bin");
 		if(!file.exists()) {
 			try {
 				file.createNewFile();
-				ss = new ScoreSheet();
+				scoresheet = new ScoreSheet();
 			    try(ObjectOutputStream oos = new ObjectOutputStream
 				   (new BufferedOutputStream(new FileOutputStream("scoresheet.bin")))){
-			           oos.writeUnshared(ss);
+			           oos.writeUnshared(scoresheet);
 			           oos.flush();
 			           oos.reset();
 			    }			
@@ -67,7 +67,7 @@ public class Director{
 		
 	    try(ObjectInputStream ois = new ObjectInputStream
 	 	   (new BufferedInputStream(new FileInputStream("scoresheet.bin")))){
-	    	ss = (ScoreSheet) ois.readObject();
+	    	scoresheet = (ScoreSheet) ois.readObject();
 	    }
 	    catch (IOException | ClassNotFoundException ex) {
 			ex.printStackTrace();
@@ -78,13 +78,13 @@ public class Director{
 	private String[][] board;
 	private int level;
 	
-	private String[][] undo;
+	private String[][] undoMove;
 
-	public void aiMute(boolean mute){
+	public void setVolumeMute(boolean mute){
 		this.mute = mute;		
 		integrator.setVolumeMute(mute);
 	}
-	public void aiWarn(boolean warn){	
+	public void setCheckWarning(boolean warn){	
 		integrator.setCheckWarning(warn);
 	}
 	
@@ -104,39 +104,37 @@ public class Director{
 		return Copier.deepCopy(game);
 	}
 	
-	public void initialize() {
+	public void initBoard() {
 
 		board = new String[][]{{"r","k","b"," "," "," "," "," "," "},
 							   {" ","p"," "},
 							   {" ","P"," "},
 							   {"B","K","R"," "," "," "," "," "," "}};
 							   
-		undo = 	Copier.deepCopy(board);
+		undoMove = 	Copier.deepCopy(board);
 	}
 	
-	public String refresh(int r, int c) {				
+	public String refreshBoard(int r, int c) {				
 		return board[r][c];
 	}
 	
-	public boolean list(String probe){		
+	public boolean isPlayerPiece(String probe){		
 		return probe.equals("K") || probe.equals("Q") || probe.equals("R")
 								 || probe.equals("B") || probe.equals("P");
 	}
 	
-	public boolean legal(String probe){		
+	public boolean isLegalMove(String probe){		
 		return probe.equals("k") || probe.equals("q") || probe.equals("r") ||
 			   probe.equals("b") || probe.equals("p") || probe.equals(" ");
 	}
 
 	private String piece;	
-	public void from(int x, int y, String probe) {
-		
+	public void moveFrom(int x, int y, String probe) {		
 		r = x;
 		c = y;
 		piece = probe;
-	}
-	
-	public boolean to(int x2, int y2) {
+	}	
+	public boolean moveTo(int x2, int y2) {
 		
 		r2 = x2;
 		c2 = y2;
@@ -162,11 +160,11 @@ public class Director{
 		}
 	}
 	
-	private String state;
+	private String boardState;
 	private String edge;
 	private Scribe scribe = Scribe.getInstance();
 	
-	public void move(){
+	public void doMove(){
 		
 		edge = Message.getEdge(r, c, r2, c2, board[r][c]);
 		scribe.writeGameNote("white", edge);
@@ -218,10 +216,10 @@ public class Director{
 		
 		MovesList.addMove(board, "white");
 		
-		state = Matrix.keyMaker(board);
+		boardState = Matrix.keyMaker(board);
 	}
 	
-	public void drop(){
+	public void doDrop(){
 		
 		edge = Message.getEdge(r, c, r2, c2, board[r][c]);
 		scribe.writeGameNote("white", edge);
@@ -233,10 +231,10 @@ public class Director{
 		
 		MovesList.addMove(board, "white");
 		
-		state = Matrix.keyMaker(board);
+		boardState = Matrix.keyMaker(board);
 	}
 	
-	public boolean beginning() {
+	public boolean isStartOfGame() {
 		return game.isEmpty();
 	}
 	
@@ -244,7 +242,7 @@ public class Director{
 		
 		scribe.writeGameNote("undo", null);
 
-		String hash = Matrix.keyMaker(undo);
+		String hash = Matrix.keyMaker(undoMove);
 		if(game.containsKey(hash)) {
 			game.merge(hash, -1, (oldVal, newVal) -> oldVal + newVal);
 		}
@@ -252,9 +250,9 @@ public class Director{
 		if(game.containsKey(hash)) {
 			game.merge(hash, -1, (oldVal, newVal) -> oldVal + newVal);
 		}
-		board = Copier.deepCopy(undo);
+		board = Copier.deepCopy(undoMove);
 
-		if(!client) {
+		if(!isClientActivated) {
 			integrator.nextBest(board);
 			try {
 				TimeUnit.MILLISECONDS.sleep(100);
@@ -279,24 +277,24 @@ public class Director{
 
 		Clocks clocks = Clocks.getInstance();
 		
-		undo = Copier.deepCopy(board);
+		undoMove = Copier.deepCopy(board);
 		
 		clocks.setTurn("black");
-		if(endGame("black")){
+		if(isEndOfGame("black")){
 			game.clear();
 			Gui.lockBoard();
 			clocks.setTurn(" ");
 			return;
 		}
 		
-		if(client) {
-			send();
-			int[] move = receive();
+		if(isClientActivated) {
+			sendMoveToClient();
+			int[] move = receiveMoveFromClient();
 			integrator.activate(board, move);
 			TimeUnit.SECONDS.sleep(1);
 		}
-		else if(!Cache.isEmpty() && Cache.hasPosition(state)) {
-			integrator.nextBest(board, Cache.getMove(state));
+		else if(!Cache.isEmpty() && Cache.hasPosition(boardState)) {
+			integrator.nextBest(board, Cache.getMove(boardState));
 		}
 		else if(integrator.hasNode(board)) {
 			Node node = integrator.getNode(board);
@@ -304,8 +302,8 @@ public class Director{
 		}		
 		else {
 			final Generator generator = new Generator();
-			List<Node> legal = generator.generateMoves(board, "black");
-			List<Node> nodes = new ArrayList<>(generator.sortMoves(board, legal, "black", false));
+			List<Node> legalMoves = generator.generateMoves(board, "black");
+			List<Node> nodes = new ArrayList<>(generator.sortMoves(board, legalMoves, "black", false));
 			if(nodes.get(0).getValue() > 999) {
 				integrator.nextBest(board, nodes.get(0));
 			}
@@ -317,10 +315,10 @@ public class Director{
 					break;
 				case 4:
 					nodes = new ArrayList<>
-					(generator.sortMoves(board, legal, "black", true));
+					(generator.sortMoves(board, legalMoves, "black", true));
 					if(nodes.size()==0) {
 						nodes = new ArrayList<>
-						(generator.sortMoves(board, legal, "black", false));
+						(generator.sortMoves(board, legalMoves, "black", false));
 						nodes.subList(1, nodes.size()).clear();
 					}
 				case 2:
@@ -331,16 +329,16 @@ public class Director{
 					final int cores = Runtime.getRuntime().availableProcessors();
 					ExecutorService es = Executors.newFixedThreadPool(cores);
 					List<Future<Integer>> tasks = new ArrayList<>(nodes.size());
-					Interceptor f117 = new Interceptor(tasks);
+					Interceptor f19 = new Interceptor(tasks);
 					for(Node node: nodes) {					
 						Future<Integer> score = es.submit
 								(new ArtIntel(node, Copier.deepCopy(board), level));
 						tasks.add(score);
 					}
-					f117.start();
+					f19.start();
 						es.shutdown();			
 						es.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
-					f117.interrupt();
+					f19.interrupt();
 					break;
 				}
 				TimeUnit.SECONDS.sleep(1);
@@ -350,7 +348,7 @@ public class Director{
 
 		Gui.doClick();
 		
-		if(endGame("white")){
+		if(isEndOfGame("white")){
 			game.clear();
 			Gui.lockBoard();
 			clocks.setTurn(" ");
@@ -359,7 +357,7 @@ public class Director{
 		clocks.setTurn("white");
 	}
 	
-	private boolean endGame(String turn)  {
+	private boolean isEndOfGame(String turn)  {
 		
 		int a = 0;
 		int b = 0;
@@ -375,31 +373,31 @@ public class Director{
 			}
 		}
 		
-		if(addToList("black")){
+		if(addToMoveList("black")){
 			scribe.writeGameNote("end", "1/2");
 			output("draw");
-			voice("draw");
+			chooseVoice("draw");
 			return true;
 		}
 		else if((a+b==2 & turn.equals("black")) || (a+b==3 & turn.equals("white")) & 
 				(board[0][0].equals("K")||board[0][1].equals("K")||board[0][2].equals("K"))){
 			scribe.writeGameNote("end", "1-0");
 			output("white");
-			voice("mate");
+			chooseVoice("mate");
 			return true;
 		}
 		else if((a+b==1 & turn.equals("white")) || (a+b==3 & turn.equals("black")) & 
 				(board[3][0].equals("k")||board[3][1].equals("k")||board[3][2].equals("k"))){
 			scribe.writeGameNote("end", "0-1");
 			output("black");
-			voice("mate");
+			chooseVoice("mate");
 			return true;
 		}		
 		else
 			return false;
 	}
 	
-	private boolean addToList(String turn) {
+	private boolean addToMoveList(String turn) {
 			
 		if(turn.equals("black")) {
 			String hash = Matrix.keyMaker(board);		
@@ -412,7 +410,7 @@ public class Director{
 	
 	private final Sound sound = Sound.getInstance();
 	private boolean mute;	
-	private void voice(String result) {
+	private void chooseVoice(String result) {
 		
 		if(!mute){
 			switch(result){
@@ -494,7 +492,7 @@ public class Director{
 	
 	public boolean createPlayer(String name, String pass) {
 		
-		List<Player> players = ss.getPlayers();
+		List<Player> players = scoresheet.getPlayers();
 		Player newPlayer = new Player(name, pass);
 		for(Player current: players) {
 			if(current.getName().equalsIgnoreCase(name)) {
@@ -505,7 +503,7 @@ public class Director{
     	player = newPlayer;
 	    try(FileOutputStream fos = new FileOutputStream("scoresheet.bin");
 	    		ObjectOutputStream oos = new ObjectOutputStream(fos)){
-	           oos.writeUnshared(ss);
+	           oos.writeUnshared(scoresheet);
 	           oos.flush();
 	           oos.reset();
 	    }
@@ -517,7 +515,7 @@ public class Director{
 	
 	public boolean selectPlayer(String name, String pass) {
 
-		List<Player> players = ss.getPlayers();
+		List<Player> players = scoresheet.getPlayers();
 		for(Player current: players) {
 			if(current.getName().equalsIgnoreCase(name) & current.getPassword().equals(pass)) {
 				player = current;
@@ -529,12 +527,12 @@ public class Director{
 	
 	public void deletePlayer() {
 		
-		List<Player> players = ss.getPlayers();
+		List<Player> players = scoresheet.getPlayers();
 		if(players.contains(player)) {
 			players.remove(player);
 			try(ObjectOutputStream oos = new ObjectOutputStream
 			   (new BufferedOutputStream(new FileOutputStream("scoresheet.bin")))){
-		           oos.writeUnshared(ss);
+		           oos.writeUnshared(scoresheet);
 		           oos.flush();
 		           oos.reset();
 			}			
@@ -547,12 +545,12 @@ public class Director{
 	
 	private void updateScore(int scale) {
 		
-		List<Player> players = ss.getPlayers();
+		List<Player> players = scoresheet.getPlayers();
 		if(players.contains(player)) {
 			player.setScore(player.getScore() + level*scale);
 			try(ObjectOutputStream oos = new ObjectOutputStream
 			   (new BufferedOutputStream(new FileOutputStream("scoresheet.bin")))){
-		           oos.writeUnshared(ss);
+		           oos.writeUnshared(scoresheet);
 		           oos.flush();
 		           oos.reset();
 			}			
@@ -562,28 +560,28 @@ public class Director{
 		}
 	}
 	
-	public List<Player> getList() {		
-		return ss.getPlayers();
+	public List<Player> getPlayers() {		
+		return scoresheet.getPlayers();
 	}
 	
 	private LocalServer server;
 	private Driver driver;
-	private boolean client = false;
+	private boolean isClientActivated = false;
 		
 	public LocalServer getServer() {
 		return server;
 	}
-	public boolean checkClient() {
-		return client;
+	public boolean isClientActive() {
+		return isClientActivated;
 	}	
 
-	public void activate() {
-		client = true;
+	public void activateClient() {
+		isClientActivated = true;
 	}
 	
-	public void establish() {
+	public void establishServer() {
 		setLevel(0);		
-		client = true;
+		isClientActivated = true;
 		if(driver == null) {
 			driver = new Driver();
 		}
@@ -591,17 +589,17 @@ public class Director{
 		server.start();
 	}
 	
-	public void disconnect() {
+	public void disconnectClient() {
 		if(server != null) {
 			server.setLine("quit");
 		}
-		client = false;
+		isClientActivated = false;
 	}
 	
-	public void shutdown() {
-		if(client) {
+	public void shutdownServer() {
+		if(isClientActivated) {
 			server.setLine("quit");
-			client = false;			
+			isClientActivated = false;			
 		}
 		if(server != null) {
 			server.interrupt();
@@ -609,13 +607,13 @@ public class Director{
 		}
 	}
 	
-	public void send() {
+	public void sendMoveToClient() {
 		String line = null;		
 		line = driver.output(getBoard());
 		server.setLine(line);
 	}
 	
-	public int[] receive() {
+	public int[] receiveMoveFromClient() {
 		String reply = null;
 		reply = server.getAnswer();
 		return driver.input(reply);		
