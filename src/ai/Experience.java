@@ -134,10 +134,10 @@ class Experience {
 		}
 	}
 	
-	boolean has(String note) {
+	boolean hasNode(String note) {
 		return positiveExp.containsKey(note);		
 	}
-	Node get(String note) {
+	Node getNode(String note) {
 		return positiveExp.get(note);		
 	}
 	

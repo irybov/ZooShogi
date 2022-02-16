@@ -20,7 +20,7 @@ import java.util.LinkedList;
 
 public class ArtIntel implements Callable<Integer>{
 	
-	private HashTabs hash;	
+	private InternalHash hash;	
 	private final Generator generator = new Generator();
 	private final Evaluator evaluator = new Evaluator();
 	
@@ -38,7 +38,7 @@ public class ArtIntel implements Callable<Integer>{
 	
 	private int nodesCount = 0;
 
-	private class HashTabs {
+	private class InternalHash {
 
 		private Map<String, Integer> blackMoves = new HashMap<>();
 		private Map<String, Integer> whiteMoves = new HashMap<>();	
@@ -85,7 +85,7 @@ public class ArtIntel implements Callable<Integer>{
 	
 	private void algorithmSelector(){
 
-		hash = new HashTabs();
+		hash = new InternalHash();
 		
 		switch(level){
 		case 2:
@@ -108,14 +108,14 @@ public class ArtIntel implements Callable<Integer>{
 			break;
 		}
 		Clocks.addNodes(nodesCount);
-		integrator.mergeMoves(root);
+//		integrator.mergeMoves(root);
 	}
 	
 	// minimax with capture and check extensions
 	private int minimaxEX(String turn, int depth, int alpha, int beta, boolean node,
 			List<Node> legalMoves) {
 		
-		if(turn.equals("white") && integrator.getNote(board)) {
+		if(turn.equals("white") && integrator.isLost(board)) {
 			return -500;
 		}		
 		if(turn.equals("white") && MovesList.isRepeated(board, "black")){
@@ -305,7 +305,7 @@ public class ArtIntel implements Callable<Integer>{
 	// minimax with alpha-beta pruning
 	private int minimaxAB(String turn, int depth, int alpha, int beta, List<Node> legalMoves) {
 		
-		if(turn.equals("white") && integrator.getNote(board)) {
+		if(turn.equals("white") && integrator.isLost(board)) {
 			return -500;
 		}		
 		if(turn.equals("white") && MovesList.isRepeated(board, "black")){
@@ -472,7 +472,7 @@ public class ArtIntel implements Callable<Integer>{
 	// basic minimax algorithm
 	private int minimax(String turn, int depth, List<Node> legalMoves) {
 		
-		if(turn.equals("white") && integrator.getNote(board)) {
+		if(turn.equals("white") && integrator.isLost(board)) {
 			return -500;
 		}		
 		if(turn.equals("white") && MovesList.isRepeated(board, "black")){
@@ -494,9 +494,12 @@ public class ArtIntel implements Callable<Integer>{
 		if(Examiner.isWhitePositionWon(board, turn)){
 			return -(2000+(depth*100));
 		}
-		if(turn.equals("white") && depth < 6){
-			if(Examiner.isCheck(board, turn)){
+		if(Examiner.isCheck(board, turn) && depth < 6){
+			if(turn.equals("white")){
 				return -(1000+(depth*100));
+			}
+			else {
+				return 1000+(depth*100);				
 			}
 		}
 
@@ -624,7 +627,7 @@ public class ArtIntel implements Callable<Integer>{
 	// gambling (a.k.a. poker) algorithm
 	private int expectimax(String turn, int depth, List<Node> legalMoves) {
 		
-		if(turn.equals("white") && integrator.getNote(board)) {
+		if(turn.equals("white") && integrator.isLost(board)) {
 			return -5000;
 		}		
 		if(turn.equals("white") && MovesList.isRepeated(board, "black")){
@@ -646,9 +649,12 @@ public class ArtIntel implements Callable<Integer>{
 		if(Examiner.isWhitePositionWon(board, turn)){
 			return -(1000*depth);
 		}		
-		if(turn.equals("white") && depth < 6){
-			if(Examiner.isCheck(board, turn)){
+		if(Examiner.isCheck(board, turn) && depth < 6){
+			if(turn.equals("white")){
 				return -(1000*depth);
+			}
+			else {
+				return 100/depth;				
 			}
 		}
 		
@@ -852,7 +858,7 @@ public class ArtIntel implements Callable<Integer>{
 						else if(hash.isRepeated(board, "black", depth-4)){
 							legal.get(i).setValue(0);
 						}	
-						else if(integrator.getNote(board)) {
+						else if(integrator.isLost(board)) {
 							legal.get(i).setValue(-500);							
 						}						
 						else if(Examiner.isPromotionWon(board, "white")){
@@ -991,7 +997,7 @@ public class ArtIntel implements Callable<Integer>{
 	// minimax with vintage forward pruning
 	private int forward(String turn, int depth, List<Node> legalMoves) {
 		
-		if(turn.equals("white") && integrator.getNote(board)) {
+		if(turn.equals("white") && integrator.isLost(board)) {
 			return -500;
 		}		
 		if(turn.equals("white") && MovesList.isRepeated(board, "black")){
@@ -1013,9 +1019,12 @@ public class ArtIntel implements Callable<Integer>{
 		if(Examiner.isWhitePositionWon(board, turn)){
 			return -(2000+(depth*100));
 		}		
-		if(turn.equals("white") && depth < 6){
-			if(Examiner.isCheck(board, turn)){
+		if(Examiner.isCheck(board, turn) && depth < 6){
+			if(turn.equals("white")){
 				return -(1000+(depth*100));
+			}
+			else {
+				return 1000+(depth*100);				
 			}
 		}
 	

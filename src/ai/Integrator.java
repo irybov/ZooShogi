@@ -32,8 +32,6 @@ public class Integrator {
 		return INSTANCE;
 	}
 	
-	private List<Node> moves = new ArrayList<>();
-	
 	private Info info = new Info();
 	public void setCheckWarning(boolean warn){
 		info.setCheckWarning(warn);		
@@ -46,14 +44,14 @@ public class Integrator {
 	private Deque<String> game = new ArrayDeque<>();
 	private Experience exp = new Experience();
 	
-	boolean getNote(String[][] field) {
+	boolean isLost(String[][] field) {
 		return exp.bingo(Matrix.keyMaker(field));
 	}
 	public boolean hasNode(String[][] field) {
-		return exp.has(Matrix.keyMaker(field));
+		return exp.hasNode(Matrix.keyMaker(field));
 	}
 	public Node getNode(String[][] field) {
-		return exp.get(Matrix.keyMaker(field));
+		return exp.getNode(Matrix.keyMaker(field));
 	}
 	public void newGame() {
 		game.clear();
@@ -74,17 +72,8 @@ public class Integrator {
 		return doMove(move, field);
 	}
 	
-	// adds results from a single thread
-	void mergeMoves(List<Node> input){		
-		moves.addAll(input);
-	}	
-	// merges results from multiple threads
-	void mergeMoves(Node input){		
-		moves.add(input);
-	}
-	
 	// selects and makes best move
-	public String[][] activate(String[][] field) {
+	public String[][] activate(String[][] field, List<Node> moves) {
 		
 		int score = Integer.MIN_VALUE+1;		
 		Node move;
@@ -153,7 +142,7 @@ public class Integrator {
 		
 		if(score > 500 & Cache.isEmpty()) {
 			String state = Matrix.keyMaker(field);
-			if(!exp.has(state)) {
+			if(!exp.hasNode(state)) {
 				exp.learn(state, move);
 				String mirror = Matrix.keySwapper(state);
 				Copier.deepCopy(Arrays.asList(move), null, true);

@@ -303,7 +303,8 @@ public class Director{
 		else {
 			final Generator generator = new Generator();
 			List<Node> legalMoves = generator.generateMoves(board, "black");
-			List<Node> nodes = new ArrayList<>(generator.sortMoves(board, legalMoves, "black", false));
+			List<Node> nodes = new ArrayList<>(generator.sortMoves
+										(board, legalMoves, "black", false));
 			if(nodes.get(0).getValue() > 999) {
 				integrator.nextBest(board, nodes.get(0));
 			}
@@ -311,7 +312,7 @@ public class Director{
 				switch(level){
 				case 0:
 				case 1:
-					new PseudoAI(level, board).run();
+					new PseudoAI(level, board, nodes).run();
 					break;
 				case 4:
 					nodes = new ArrayList<>
@@ -330,7 +331,7 @@ public class Director{
 					ExecutorService es = Executors.newFixedThreadPool(cores);
 					List<Future<Integer>> tasks = new ArrayList<>(nodes.size());
 					Interceptor f19 = new Interceptor(tasks);
-					for(Node node: nodes) {					
+					for(Node node : nodes) {					
 						Future<Integer> score = es.submit
 								(new ArtIntel(node, Copier.deepCopy(board), level));
 						tasks.add(score);
@@ -342,7 +343,7 @@ public class Director{
 					break;
 				}
 				TimeUnit.SECONDS.sleep(1);
-				integrator.activate(board);
+				integrator.activate(board, nodes);
 			}
 		}
 

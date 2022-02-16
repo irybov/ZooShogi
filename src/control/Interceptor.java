@@ -16,10 +16,10 @@ class Interceptor extends Thread{
 	public void run() {
 		
 		while(!Thread.interrupted()) {
-			for(Future<Integer> task: tasks) {
+			for(Future<Integer> task : tasks) {
 				try {
 					if(task.isDone() && task.get() > 500) {
-						for(Future<Integer> each: tasks) {
+						for(Future<Integer> each : tasks) {
 							each.cancel(true);
 						}
 					}
