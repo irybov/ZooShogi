@@ -80,14 +80,9 @@ public class Director{
 	
 	private String[][] undoMove;
 
-	public void setVolumeMute(boolean mute){
-		this.mute = mute;		
-		integrator.setVolumeMute(mute);
-	}
 	public void setCheckWarning(boolean warn){	
 		integrator.setCheckWarning(warn);
-	}
-	
+	}	
 	public void setLevel(int level){
 		this.level = level;
 	}	
@@ -410,10 +405,14 @@ public class Director{
 	}
 	
 	private final Sound sound = Sound.getInstance();
-	private boolean mute;	
+	private boolean isMuted;	
+	public void setVolumeMute(boolean mute){
+		this.isMuted = mute;		
+		integrator.setVolumeMute(mute);
+	}
 	private void chooseVoice(String result) {
 		
-		if(!mute){
+		if(!isMuted){
 			switch(result){
 			case "draw":
 				sound.playVoice("draw");			

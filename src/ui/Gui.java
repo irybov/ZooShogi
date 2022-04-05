@@ -15,13 +15,14 @@ import utilpack.Pieces;
 
 public class Gui {
 	
-	private Director director = Director.getInstance();
+	private Director director = Director.getInstance();	
+	private Clocks clocks = Clocks.getInstance();
+	private Images images = Images.getInstance();
+	
 	private int clickNumber = 1;
 	private boolean isMoveAsDrop = false;
 	private boolean isCheckWarningEnabled = true;	
 	boolean isVolumeMuted = false;
-
-	private Clocks clocks = Clocks.getInstance();
 
 	//The Frame that's displayed. (Contains the Panels)
 	private static JFrame frame = new JFrame();
@@ -89,11 +90,7 @@ public class Gui {
     
 	public Gui() {
 		
-		new Thread(new Runnable() {
-			public void run() {
-				clocks.showClocks();
-			}
-		}).start();
+		new Thread(() -> clocks.showClocks()).start();
 		
 		director.initBoard();
 		
@@ -461,7 +458,8 @@ public class Gui {
 					public void actionPerformed(ActionEvent e) {
 						JButton theButton = (JButton) e.getSource();
 						for(int c=0;c<6;c++) {
-						if(theButton.equals(dropAreaWhite[c])&clickNumber==1&director.isPlayerPiece(dropAreaWhite[c].getName())){
+						if(theButton.equals(dropAreaWhite[c])&clickNumber==1
+								&director.isPlayerPiece(dropAreaWhite[c].getName())){
 							isMoveAsDrop = true;
 							dropAreaWhite[c].setBackground(Color.YELLOW);
 							highlightSquares();
@@ -507,18 +505,18 @@ public class Gui {
 			for(int c=0;c<3;c++) {
 				squares[r][c].setBackground(Color.decode("#db9356"));
 				squares[r][c].setName(director.refreshBoard(r,c));
-				squares[r][c].setIcon(new ImageIcon(getLargeImage(squares[r][c].getName())));
+				squares[r][c].setIcon(images.getLargeImage(squares[r][c].getName()));
 			}
 		}		
 		for(int c=0;c<6;c++) {
 			dropAreaWhite[c].setBackground(Color.decode("#db9356"));
 			dropAreaWhite[c].setName(director.refreshBoard(3,c+3));
-			dropAreaWhite[c].setIcon(new ImageIcon(getSmallImage(dropAreaWhite[c].getName())));
+			dropAreaWhite[c].setIcon(images.getSmallImage(dropAreaWhite[c].getName()));
 		}		
 		for(int c=0;c<6;c++) {
 			dropAreaBlack[c].setBackground(Color.decode("#db9356"));
 			dropAreaBlack[c].setName(director.refreshBoard(0,c+3));
-			dropAreaBlack[c].setIcon(new ImageIcon(getSmallImage(dropAreaBlack[c].getName())));			
+			dropAreaBlack[c].setIcon(images.getSmallImage(dropAreaBlack[c].getName()));			
 		}
 		
 		if(isCheckWarningEnabled){
@@ -539,14 +537,16 @@ public class Gui {
 		if(squares[r][c].getName().equals("p")){
 			r2 = r+1;
 			c2 = c;
-			if((Pieces.BPAWN.isLegalMove(r, c, r2, c2)&&(squares[r2][c2].getName().equals("K")))){
+			if((Pieces.BPAWN.isLegalMove(r, c, r2, c2)&&
+					(squares[r2][c2].getName().equals("K")))){
 				squares[r2][c2].setBackground(Color.RED);
 			}
 		}
 		else if(squares[r][c].getName().equals("r")){
 			for(r2=r-1; r2<r+2; r2++){
 				for(c2=c-1; c2<c+2; c2++){
-			if((Pieces.ROOK.isLegalMove(r, c, r2, c2)&&(squares[r2][c2].getName().equals("K")))){
+			if((Pieces.ROOK.isLegalMove(r, c, r2, c2)&&
+					(squares[r2][c2].getName().equals("K")))){
 				squares[r2][c2].setBackground(Color.RED);				
 			}
 				}
@@ -555,7 +555,8 @@ public class Gui {
 		else if(squares[r][c].getName().equals("k")){
 			for(r2=r-1; r2<r+2; r2++){
 				for(c2=c-1; c2<c+2; c2++){
-			if((Pieces.KING.isLegalMove(r, c, r2, c2)&&(squares[r2][c2].getName().equals("K")))){
+			if((Pieces.KING.isLegalMove(r, c, r2, c2)&&
+					(squares[r2][c2].getName().equals("K")))){
 				squares[r2][c2].setBackground(Color.RED);				
 			}
 				}
@@ -564,7 +565,8 @@ public class Gui {
 		else if(squares[r][c].getName().equals("b")){
 			for(r2=r-1; r2<r+2; r2++){
 				for(c2=c-1; c2<c+2; c2++){
-			if((Pieces.BISHOP.isLegalMove(r, c, r2, c2)&&(squares[r2][c2].getName().equals("K")))){
+			if((Pieces.BISHOP.isLegalMove(r, c, r2, c2)&&
+					(squares[r2][c2].getName().equals("K")))){
 				squares[r2][c2].setBackground(Color.RED);				
 			}
 				}
@@ -573,7 +575,8 @@ public class Gui {
 		else if(squares[r][c].getName().equals("q")){
 			for(r2=r-1; r2<r+2; r2++){
 				for(c2=c-1; c2<c+2; c2++){
-			if((Pieces.BQUEEN.isLegalMove(r, c, r2, c2)&&(squares[r2][c2].getName().equals("K")))){
+			if((Pieces.BQUEEN.isLegalMove(r, c, r2, c2)&&
+					(squares[r2][c2].getName().equals("K")))){
 				squares[r2][c2].setBackground(Color.RED);				
 			}
 				}
@@ -581,84 +584,6 @@ public class Gui {
 		}
 			}
 		}
-	}
-	
-	private String getLargeImage(String piece){
-		
-		String icon = " ";
-		
-		switch(piece){
-			case "P":
-				icon = "ui/images/large/WP.png";
-				break;
-			case "R":
-				icon = "ui/images/large/WR.png";
-				break;
-			case "B":
-				icon = "ui/images/large/WB.png";
-				break;
-			case "K":
-				icon = "ui/images/large/WK.png";
-				break;
-			case "Q":
-				icon = "ui/images/large/WQ.png";
-				break;
-			case "p":
-				icon = "ui/images/large/BP.png";
-				break;
-			case "r":
-				icon = "ui/images/large/BR.png";
-				break;
-			case "b":
-				icon = "ui/images/large/BB.png";
-				break;
-			case "k":
-				icon = "ui/images/large/BK.png";
-				break;
-			case "q":
-				icon = "ui/images/large/BQ.png";
-				break;
-		}
-		return icon;
-	}
-	
-	private String getSmallImage(String piece){
-		
-		String icon = " ";
-		
-		switch(piece){
-			case "P":
-				icon = "ui/images/small/WP_small.png";
-				break;
-			case "R":
-				icon = "ui/images/small/WR_small.png";
-				break;
-			case "B":
-				icon = "ui/images/small/WB_small.png";
-				break;
-			case "K":
-				icon = "ui/images/small/WK_small.png";
-				break;
-			case "Q":
-				icon = "ui/images/small/WQ_small.png";
-				break;
-			case "p":
-				icon = "ui/images/small/BP_small.png";
-				break;
-			case "r":
-				icon = "ui/images/small/BR_small.png";
-				break;
-			case "b":
-				icon = "ui/images/small/BB_small.png";
-				break;
-			case "k":
-				icon = "ui/images/small/BK_small.png";
-				break;
-			case "q":
-				icon = "ui/images/small/BQ_small.png";
-				break;
-		}
-		return icon;
 	}
 	
 	private void highlightSquares(){
@@ -679,14 +604,16 @@ public class Gui {
 		if(squares[r][c].getName().equals("P")){
 			r2 = r-1;
 			c2 = c;
-			if((Pieces.WPAWN.isLegalMove(r, c, r2, c2)&&director.isLegalMove(squares[r2][c2].getName()))){
+			if((Pieces.WPAWN.isLegalMove(r, c, r2, c2)&&
+					director.isLegalMove(squares[r2][c2].getName()))){
 				squares[r2][c2].setBackground(Color.GREEN);				
 			}
 		}
 		else if(squares[r][c].getName().equals("R")){
 			for(r2=r-1; r2<r+2; r2++){
 				for(c2=c-1; c2<c+2; c2++){
-			if((Pieces.ROOK.isLegalMove(r, c, r2, c2)&&director.isLegalMove(squares[r2][c2].getName()))){
+			if((Pieces.ROOK.isLegalMove(r, c, r2, c2)&&
+					director.isLegalMove(squares[r2][c2].getName()))){
 				squares[r2][c2].setBackground(Color.GREEN);				
 			}
 				}
@@ -695,7 +622,8 @@ public class Gui {
 		else if(squares[r][c].getName().equals("K")){
 			for(r2=r-1; r2<r+2; r2++){
 				for(c2=c-1; c2<c+2; c2++){
-			if((Pieces.KING.isLegalMove(r, c, r2, c2)&&director.isLegalMove(squares[r2][c2].getName()))){
+			if((Pieces.KING.isLegalMove(r, c, r2, c2)&&
+					director.isLegalMove(squares[r2][c2].getName()))){
 				squares[r2][c2].setBackground(Color.GREEN);				
 			}
 				}
@@ -704,7 +632,8 @@ public class Gui {
 		else if(squares[r][c].getName().equals("B")){
 			for(r2=r-1; r2<r+2; r2++){
 				for(c2=c-1; c2<c+2; c2++){
-			if((Pieces.BISHOP.isLegalMove(r, c, r2, c2)&&director.isLegalMove(squares[r2][c2].getName()))){
+			if((Pieces.BISHOP.isLegalMove(r, c, r2, c2)&&
+					director.isLegalMove(squares[r2][c2].getName()))){
 				squares[r2][c2].setBackground(Color.GREEN);				
 			}
 				}
@@ -713,7 +642,8 @@ public class Gui {
 		else if(squares[r][c].getName().equals("Q")){
 			for(r2=r-1; r2<r+2; r2++){
 				for(c2=c-1; c2<c+2; c2++){
-			if((Pieces.WQUEEN.isLegalMove(r, c, r2, c2)&&director.isLegalMove(squares[r2][c2].getName()))){
+			if((Pieces.WQUEEN.isLegalMove(r, c, r2, c2)&&
+					director.isLegalMove(squares[r2][c2].getName()))){
 				squares[r2][c2].setBackground(Color.GREEN);				
 			}
 				}

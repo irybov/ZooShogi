@@ -4,6 +4,7 @@
 /.settings
 /target
 /.classpath
+/.project
 /games.txt
 /exp
-/logs/
+/logs

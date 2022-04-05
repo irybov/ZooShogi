@@ -23,10 +23,31 @@ public class Sound {
 		gain = g;
 	}
 	
+	private static final File PAWN = new File("sound/voice/pieces/pawn.wav");
+	private static final File ROOK = new File("sound/voice/pieces/rook.wav");
+	private static final File BISHOP = new File("sound/voice/pieces/bishop.wav");
+	private static final File KING = new File("sound/voice/pieces/king.wav");
+	private static final File QUEEN = new File("sound/voice/pieces/queen.wav");
+	private static final File CHECK = new File("sound/voice/actions/check.wav");
+	private static final File MATE = new File("sound/voice/actions/mate.wav");
+	private static final File DRAW = new File("sound/voice/actions/draw.wav");
+	private static final File TAKES = new File("sound/voice/actions/takes.wav");
+	private static final File A1 = new File("sound/voice/squares/a1.wav");
+	private static final File A2 = new File("sound/voice/squares/a2.wav");
+	private static final File A3 = new File("sound/voice/squares/a3.wav");
+	private static final File A4 = new File("sound/voice/squares/a4.wav");
+	private static final File B1 = new File("sound/voice/squares/b1.wav");
+	private static final File B2 = new File("sound/voice/squares/b2.wav");
+	private static final File B3 = new File("sound/voice/squares/b3.wav");
+	private static final File B4 = new File("sound/voice/squares/b4.wav");
+	private static final File C1 = new File("sound/voice/squares/c1.wav");
+	private static final File C2 = new File("sound/voice/squares/c2.wav");
+	private static final File C3 = new File("sound/voice/squares/c3.wav");
+	private static final File C4 = new File("sound/voice/squares/c4.wav");
+	
 	public void playVoice(String action){
 
-		try(AudioInputStream ais = AudioSystem.getAudioInputStream
-							(new File(selectSound(action)))) {
+		try(AudioInputStream ais = AudioSystem.getAudioInputStream(selectSound(action))) {
 			
 			Clip audioClip = AudioSystem.getClip();
 			audioClip.open(ais);
@@ -39,93 +60,71 @@ public class Sound {
 		}
 	}
 
-	private String selectSound(String action) throws InterruptedException{
+	private File selectSound(String action) throws InterruptedException{
 		
 		clocks.setTurn(" ");
 		
-		String bank = " ";
-		
 		switch(action){
 			case "Pawn":
-				bank = "sound/voice/pieces/pawn.wav";
-				break;
+				return PAWN;
 			case "Rook":
-				bank = "sound/voice/pieces/rook.wav";
-				break;
+				return ROOK;
 			case "Bishop":
-				bank = "sound/voice/pieces/bishop.wav";
-				break;
+				return BISHOP;
 			case "King":
-				bank = "sound/voice/pieces/king.wav";
-				break;
+				return KING;
 			case "Queen":
-				bank = "sound/voice/pieces/queen.wav";
-				break;
+				return QUEEN;
 			case "check":				
 				TimeUnit.SECONDS.sleep(1);
-				bank = "sound/voice/actions/check.wav";
-				break;
+				return CHECK;
 			case "mate":
 				TimeUnit.SECONDS.sleep(1);
-				bank = "sound/voice/actions/mate.wav";
-				break;
+				return MATE;
 			case "draw":
 				TimeUnit.SECONDS.sleep(1);
-				bank = "sound/voice/actions/draw.wav";
-				break;
+				return DRAW;
 			case "takes":
 				TimeUnit.SECONDS.sleep(1);
-				bank = "sound/voice/actions/takes.wav";
-				break;
+				return TAKES;
 			case "A1":
 				TimeUnit.SECONDS.sleep(1);
-				bank = "sound/voice/squares/a1.wav";
-				break;
+				return A1;
 			case "A2":
 				TimeUnit.SECONDS.sleep(1);
-				bank = "sound/voice/squares/a2.wav";
-				break;
+				return A2;
 			case "A3":
 				TimeUnit.SECONDS.sleep(1);
-				bank = "sound/voice/squares/a3.wav";
-				break;
+				return A3;
 			case "A4":
 				TimeUnit.SECONDS.sleep(1);
-				bank = "sound/voice/squares/a4.wav";
-				break;
+				return A4;
 			case "B1":
 				TimeUnit.SECONDS.sleep(1);
-				bank = "sound/voice/squares/b1.wav";
-				break;
+				return B1;
 			case "B2":
 				TimeUnit.SECONDS.sleep(1);
-				bank = "sound/voice/squares/b2.wav";
-				break;
+				return B2;
 			case "B3":
 				TimeUnit.SECONDS.sleep(1);
-				bank = "sound/voice/squares/b3.wav";
-				break;
+				return B3;
 			case "B4":
 				TimeUnit.SECONDS.sleep(1);
-				bank = "sound/voice/squares/b4.wav";
-				break;
+				return B4;
 			case "C1":
 				TimeUnit.SECONDS.sleep(1);
-				bank = "sound/voice/squares/c1.wav";
-				break;
+				return C1;
 			case "C2":
 				TimeUnit.SECONDS.sleep(1);
-				bank = "sound/voice/squares/c2.wav";
-				break;
+				return C2;
 			case "C3":
 				TimeUnit.SECONDS.sleep(1);
-				bank = "sound/voice/squares/c3.wav";
-				break;
+				return C3;
 			case "C4":
 				TimeUnit.SECONDS.sleep(1);
-				bank = "sound/voice/squares/c4.wav";
-				break;
+				return C4;
+			default:
+				return null;
 		}
-		return bank;
 	}
 }
