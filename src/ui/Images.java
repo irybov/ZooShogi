@@ -4,10 +4,16 @@ import javax.swing.ImageIcon;
 
 public class Images {
 	
-	private static final Images INSTANCE = new Images();
+	private Images() {}
 	
-	public static Images getInstance(){
-		return INSTANCE;
+	private static int count;
+	
+	static synchronized Images getInstance() {
+		if(count == 0) {
+			count = 1;
+			return new Images();
+		}
+		return null;
 	}
 
 	private static final ImageIcon WHITE_PAWN_LARGE = new ImageIcon("ui/images/large/WP.png");

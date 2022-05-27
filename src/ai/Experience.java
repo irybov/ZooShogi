@@ -69,9 +69,9 @@ class Experience {
 		            zos.putNextEntry(entry);
 		            ByteArrayInputStream bais = new ByteArrayInputStream(data);
 		            byte[] buffer = new byte[8192];
-		            int len;
-		            while ((len = bais.read(buffer)) > 0) {
-		                zos.write(buffer, 0, len);
+		            int length;
+		            while ((length = bais.read(buffer)) > 0) {
+		                zos.write(buffer, 0, length);
 		                zos.flush();
 		            }
 		            zos.closeEntry();
@@ -158,9 +158,9 @@ class Experience {
             zos.putNextEntry(entry);
             ByteArrayInputStream bais = new ByteArrayInputStream(data);
             byte[] buffer = new byte[1024];
-            int len;
-            while ((len = bais.read(buffer)) > 0) {
-                zos.write(buffer, 0, len);
+            int length;
+            while ((length = bais.read(buffer)) > 0) {
+                zos.write(buffer, 0, length);
 		        zos.flush();
             }
             zos.closeEntry();
