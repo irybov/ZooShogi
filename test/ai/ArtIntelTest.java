@@ -27,10 +27,10 @@ public class ArtIntelTest {
 	
 	@BeforeClass
 	public static void initBoard() {
-		board = new String[][]{{" "," ","k","b","p"," "," "," "," "},
+		board = new String[][]{{" ","k"," "," ","p"," "," "," "," "},
 				  			   {" ","r"," "},
-				  			   {"K"," "," "},
-				  			   {" "," "," ","B","P","R"," "," "," "}};
+				  			   {" ","b"," "},
+				  			   {" ","K"," ","B","P","R"," "," "," "}};
 		generator = new Generator();
 		legal = generator.generateMoves(board, "black");
 		cores = Runtime.getRuntime().availableProcessors();
@@ -38,7 +38,7 @@ public class ArtIntelTest {
 		nodes = generator.sortMoves(board, legal, "black", false);
 	}
 
-	@Test(timeout = 10000)
+	@Test(timeout = 8000)
 	public void performanceLimitAB() {
 		es1 = Executors.newFixedThreadPool(cores);
 		level = 6;
@@ -52,7 +52,7 @@ public class ArtIntelTest {
 		}
 	}
 	
-	@Test(timeout = 15000)
+	@Test(timeout = 10000)
 	public void performanceLimitEX() {
 		es2 = Executors.newFixedThreadPool(cores);
 		level = 7;
