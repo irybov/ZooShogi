@@ -1,6 +1,5 @@
 package utilpack;
 
-public enum Sides {
-
+public enum Turn {
 	BLACK, WHITE, PAUSE;
 }

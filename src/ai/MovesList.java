@@ -13,7 +13,7 @@ public class MovesList {
 	// fills game moves list
 	public static void addMove(String[][] field, String turn) {
 		
-		String hash = Matrix.keyMaker(field);
+		String hash = Matrix.makeKey(field);
 		
 		if(turn.equals("black")) {
 			blackMoves.add(hash);
@@ -27,7 +27,7 @@ public class MovesList {
 	//checks 3-times repetition
 	static boolean isRepeated(String[][] field, String turn) {
 		
-		String hash = Matrix.keyMaker(field);
+		String hash = Matrix.makeKey(field);
 			
 		if(turn.equals("black")) {
 			return(blackMoves.contains(hash));

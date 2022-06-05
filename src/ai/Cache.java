@@ -37,7 +37,7 @@ public class Cache {
 					field[r2][c2] = field[r][c];
 				}
 				field[r][c] = " ";
-				String state = Matrix.keyMaker(field);
+				String state = Matrix.makeKey(field);
 				
 				List<Node> children = move.getChidren();
 				Node child = children.stream().max(Comparator.comparing(Node::getValue)).get();

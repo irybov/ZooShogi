@@ -31,7 +31,7 @@ public class CopierTest {
 	@Test(expected = NullPointerException.class)
 	public void testEmptyCopy() {		
 		String[][] board = null;		
-		assertNull(Matrix.keyMaker(board));
+		assertNull(Matrix.makeKey(board));
 	}
 	
 	@AfterClass

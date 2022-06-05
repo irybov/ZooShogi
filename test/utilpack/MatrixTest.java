@@ -23,24 +23,24 @@ public class MatrixTest {
 	
 	@Test
 	public void testKeyMakerCreate() {		
-		assertNotNull(Matrix.keyMaker(board));
+		assertNotNull(Matrix.makeKey(board));
 	}
 
 	@Test(expected = NullPointerException.class)
 	public void testKeyMakerEmpty() {		
 		String[][] board = null;		
-		assertNull(Matrix.keyMaker(board));
+		assertNull(Matrix.makeKey(board));
 	}
 	
 	@Test
 	public void testKeyMakerLength() {
-		assertEquals(24, Matrix.keyMaker(board).length());
-		key = Matrix.keyMaker(board);
+		assertEquals(24, Matrix.makeKey(board).length());
+		key = Matrix.makeKey(board);
 	}
 	
 	@Test
 	public void testKeySwapper() {
-		assertEquals("#krp###P##KBb#######R###", Matrix.keySwapper(key));
+		assertEquals("#krp###P##KBb#######R###", Matrix.swapKey(key));
 	}
 	
 	@AfterClass

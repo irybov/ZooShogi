@@ -10,7 +10,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.io.*;
 
-import ai.ArtIntel;
+import ai.ArtIntelFactory;
 import ai.Cache;
 import ai.Integrator;
 import ai.MovesList;
@@ -211,7 +211,7 @@ public class Director{
 		
 		MovesList.addMove(board, "white");
 		
-		boardState = Matrix.keyMaker(board);
+		boardState = Matrix.makeKey(board);
 	}
 	
 	public void doDrop(){
@@ -226,7 +226,7 @@ public class Director{
 		
 		MovesList.addMove(board, "white");
 		
-		boardState = Matrix.keyMaker(board);
+		boardState = Matrix.makeKey(board);
 	}
 	
 	public boolean isStartOfGame() {
@@ -237,11 +237,11 @@ public class Director{
 		
 		scribe.writeGameNote("undo", null);
 
-		String hash = Matrix.keyMaker(undoMove);
+		String hash = Matrix.makeKey(undoMove);
 		if(game.containsKey(hash)) {
 			game.merge(hash, -1, (oldVal, newVal) -> oldVal + newVal);
 		}
-		hash = Matrix.keyMaker(board);		
+		hash = Matrix.makeKey(board);		
 		if(game.containsKey(hash)) {
 			game.merge(hash, -1, (oldVal, newVal) -> oldVal + newVal);
 		}
@@ -326,9 +326,10 @@ public class Director{
 					ExecutorService es = Executors.newFixedThreadPool(cores);
 					List<Future<Integer>> tasks = new ArrayList<>(nodes.size());
 					Interceptor f19 = new Interceptor(tasks);
-					for(Node node : nodes) {					
-						Future<Integer> score = es.submit
-								(new ArtIntel(node, Copier.deepCopy(board), level));
+					ArtIntelFactory factory = new ArtIntelFactory();
+					for(Node node : nodes) {
+						Future<Integer> score = es.submit(factory
+								.createAI(level, node, Copier.deepCopy(board)));
 						tasks.add(score);
 					}
 					f19.start();
@@ -396,7 +397,7 @@ public class Director{
 	private boolean addToMoveList(String turn) {
 			
 		if(turn.equals("black")) {
-			String hash = Matrix.keyMaker(board);		
+			String hash = Matrix.makeKey(board);		
 			game.putIfAbsent(hash, 0);
 			game.merge(hash, 1, (oldVal, newVal) -> oldVal + newVal);
 			return game.get(hash)==3;

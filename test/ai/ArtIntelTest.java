@@ -10,7 +10,6 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import ai.ArtIntel;
 import ai.Node;
 import utilpack.Copier;
 
@@ -24,6 +23,7 @@ public class ArtIntelTest {
 	private static int cores;
 	private static ExecutorService es1;
 	private static ExecutorService es2;
+	private static ArtIntelFactory factory;
 	
 	@BeforeClass
 	public static void initBoard() {
@@ -36,13 +36,14 @@ public class ArtIntelTest {
 		cores = Runtime.getRuntime().availableProcessors();
 		nodes = new ArrayList<>(legal.size());
 		nodes = generator.sortMoves(board, legal, "black", false);
+		factory = new ArtIntelFactory();
 	}
 
 	@Test(timeout = 8000)
 	public void performanceLimitAB() {
 		es1 = Executors.newFixedThreadPool(cores);
 		level = 6;
-		nodes.forEach(node-> es1.submit(new ArtIntel(node, Copier.deepCopy(board), level)));
+		nodes.forEach(node-> es1.submit(factory.createAI(level, node, Copier.deepCopy(board))));
 		es1.shutdown();
 		try {
 			es1.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
@@ -56,7 +57,7 @@ public class ArtIntelTest {
 	public void performanceLimitEX() {
 		es2 = Executors.newFixedThreadPool(cores);
 		level = 7;
-		nodes.forEach(node-> es2.submit(new ArtIntel(node, Copier.deepCopy(board), level)));
+		nodes.forEach(node-> es2.submit(factory.createAI(level, node, Copier.deepCopy(board))));
 		es2.shutdown();
 		try {
 			es2.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
@@ -72,6 +73,7 @@ public class ArtIntelTest {
 		nodes = null;
 		legal = null;
 		generator = null;
+		factory = null;
 	}
 	
 }

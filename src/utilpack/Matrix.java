@@ -2,7 +2,7 @@ package utilpack;
 
 public class Matrix {
 	
-	public static String keyMaker(final String[][] FIELD) {
+	public static String makeKey(final String[][] FIELD) {
 		
 		StringBuilder current = new StringBuilder(24);
 		
@@ -36,7 +36,7 @@ public class Matrix {
 		return HASH;		
 	}
 	
-	public static String keySwapper(final String note) {
+	public static String swapKey(final String note) {
 		
 		char[] temp = note.toCharArray();
 		for(int i=0; i<temp.length/2; i+=3) {

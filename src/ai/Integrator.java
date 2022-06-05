@@ -45,13 +45,13 @@ public class Integrator {
 	private Experience exp = new Experience();
 	
 	boolean isLost(String[][] field) {
-		return exp.bingo(Matrix.keyMaker(field));
+		return exp.bingo(Matrix.makeKey(field));
 	}
 	public boolean hasNode(String[][] field) {
-		return exp.hasNode(Matrix.keyMaker(field));
+		return exp.hasNode(Matrix.makeKey(field));
 	}
 	public Node getNode(String[][] field) {
-		return exp.getNode(Matrix.keyMaker(field));
+		return exp.getNode(Matrix.makeKey(field));
 	}
 	public void newGame() {
 		game.clear();
@@ -141,10 +141,10 @@ public class Integrator {
 		int c2 = move.getColumnTo();
 		
 		if(score > 500 & Cache.isEmpty()) {
-			String state = Matrix.keyMaker(field);
+			String state = Matrix.makeKey(field);
 			if(!exp.hasNode(state)) {
 				exp.learn(state, move);
-				String mirror = Matrix.keySwapper(state);
+				String mirror = Matrix.swapKey(state);
 				Copier.deepCopy(Arrays.asList(move), null, true);
 				Node twin = Copier.getRoot();
 				exp.learn(mirror, twin);
@@ -177,11 +177,11 @@ public class Integrator {
 		if(score < -500) {
 			if(!exp.bingo(game.peek())) {
 				exp.learn(game.peek());
-				exp.learn(Matrix.keySwapper(game.peek()));
+				exp.learn(Matrix.swapKey(game.peek()));
 			}
 		}
 		else {
-			game.push(Matrix.keyMaker(field));
+			game.push(Matrix.makeKey(field));
 		}
 		
 		if(score > 500 & Cache.isEmpty()) {

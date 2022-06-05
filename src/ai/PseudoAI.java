@@ -1,6 +1,5 @@
 package ai;
 
-//import java.util.ArrayList;
 import java.util.List;
 
 import control.Clocks;
@@ -9,7 +8,6 @@ import utilpack.Examiner;
 
 public class PseudoAI implements Runnable {
 	
-//	private final Generator generator = new Generator();
 	private final Evaluator evaluator = new Evaluator();
 	
 	private final int level;
@@ -30,7 +28,6 @@ public class PseudoAI implements Runnable {
 	}	
 	private void algorithmSelector(){
 		
-//		legal = new ArrayList<>(generator.generateMoves(board, "black"));
 		switch(level){
 		case 0:
 			break;
@@ -39,7 +36,6 @@ public class PseudoAI implements Runnable {
 			break;
 		}
 		Clocks.setNodes(legal.size());
-//		integrator.mergeMoves(legal);
 	}
 	
 	// greedy algorithm
