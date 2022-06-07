@@ -17,7 +17,7 @@ import java.util.Properties;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-class LocalServer extends Thread{
+class InternalServer extends Thread{
 	
 	private String line = null;
 	private String reply = null;

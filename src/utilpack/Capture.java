@@ -3,14 +3,14 @@ package utilpack;
 public class Capture {
 
 	// checks if capture is possible
-	public static boolean isCaptureLegal(String[][] field, int r2, int c2, String side) {
+	public static boolean isCaptureLegal(String[][] field, int r2, int c2, Turn turn) {
 		
-		if(side.equals("white")&(field[r2][c2].equals(" ")||field[r2][c2].equals("p")||
+		if(turn.equals(Turn.WHITE)&(field[r2][c2].equals(" ")||field[r2][c2].equals("p")||
 			field[r2][c2].equals("q")||field[r2][c2].equals("r")||field[r2][c2].equals("b")
 			||field[r2][c2].equals("k"))) {
 			return true;
 		}
-		else if(side.equals("black")&(field[r2][c2].equals(" ")||field[r2][c2].equals("P")||
+		else if(turn.equals(Turn.BLACK)&(field[r2][c2].equals(" ")||field[r2][c2].equals("P")||
 				field[r2][c2].equals("Q")||field[r2][c2].equals("R")||field[r2][c2].equals("B")
 				||field[r2][c2].equals("K"))) {
 			return true;
@@ -19,13 +19,13 @@ public class Capture {
 	}
 
 	// checks capture extensions
-	public static boolean isExtension(String piece, String side) {
+	public static boolean isExtension(String piece, Turn side) {
 		
-		if(side.equals("white")&(piece.equals("p")||piece.equals("q")||piece.equals("r")
+		if(side.equals(Turn.WHITE)&(piece.equals("p")||piece.equals("q")||piece.equals("r")
 				||piece.equals("b"))) {
 			return true;
 		}
-		else if(side.equals("black")&(piece.equals("P")||piece.equals("Q")||piece.equals("R")
+		else if(side.equals(Turn.BLACK)&(piece.equals("P")||piece.equals("Q")||piece.equals("R")
 				||piece.equals("B"))) {
 			return true;
 		}
@@ -33,35 +33,35 @@ public class Capture {
 	}
 
 	// checks current king's state
-	public static boolean isKingUnderCheck(String[][] field, int r2, int c2, String side) {
+	public static boolean isKingUnderCheck(String[][] field, int r2, int c2, Turn side) {
 		
-		if(side.equals("white") & field[r2][c2].equals("k")) {
+		if(side.equals(Turn.WHITE) & field[r2][c2].equals("k")) {
 			return true;
 		}
-		else if(side.equals("black") & field[r2][c2].equals("K")) {
+		else if(side.equals(Turn.BLACK) & field[r2][c2].equals("K")) {
 			return true;
 		}
 		return false;
 	}
 
 	// checks king's promotion
-	public static boolean isKingPromoted(String[][] field, int r2, int c2, String side) {
+	public static boolean isKingPromoted(String[][] field, int r2, int c2, Turn side) {
 		
-		if((side.equals("white") & field[r2][c2].equals("K")) & (r2==0&(c2==0||c2==1||c2==2))) {
+		if((side.equals(Turn.WHITE) & field[r2][c2].equals("K")) & (r2==0&(c2==0||c2==1||c2==2))) {
 			return true;
 		}
-		else if((side.equals("black") & field[r2][c2].equals("k"))&(r2==3&(c2==0||c2==1||c2==2))) {
+		else if((side.equals(Turn.BLACK) & field[r2][c2].equals("k"))&(r2==3&(c2==0||c2==1||c2==2))) {
 			return true;
 		}
 		return false;
 	}
 	
 	// calculates attacking bonuses
-	public static int attackBonusesCount(String[][] field, int r2, int c2, String side) {
+	public static int attackBonusesCount(String[][] field, int r2, int c2, Turn side) {
 		
 		int value = 0;
 
-		if(side.equals("black")) {
+		if(side.equals(Turn.BLACK)) {
 			switch(field[r2][c2]){
 			case "P":				
 				value = 2;
@@ -83,7 +83,7 @@ public class Capture {
 				break;
 			}
 		}
-		else {
+		else if(side.equals(Turn.WHITE)){
 			switch(field[r2][c2]){
 			case "p":				
 				value = -2;

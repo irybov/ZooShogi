@@ -11,19 +11,20 @@ import java.util.concurrent.TimeUnit;
 import java.io.*;
 
 import ai.ArtIntelFactory;
-import ai.Cache;
 import ai.Integrator;
-import ai.MovesList;
-import ai.Node;
-import ai.PseudoAI;
-import ai.Generator;
+import ai.component.Cache;
+import ai.component.Generator;
+import ai.component.MovesList;
+import ai.component.Node;
+import ai.type.PseudoAI;
 import data.*;
 import sound.Sound;
 import ui.Gui;
 import utilpack.Copier;
 import utilpack.Matrix;
-import utilpack.Message;
+import utilpack.Expositor;
 import utilpack.Pieces;
+import utilpack.Turn;
 
 public class Director{
 	
@@ -45,7 +46,7 @@ public class Director{
 
 	private Map<String, Integer> game = new HashMap<>();
 
-	private Player player;
+	private PlayerInfo player;
 	private ScoreSheet scoresheet;
 	{
 		File file = new File("scoresheet.bin");
@@ -161,10 +162,10 @@ public class Director{
 	
 	public void doMove(){
 		
-		edge = Message.getEdge(r, c, r2, c2, board[r][c]);
+		edge = Expositor.getEdge(r, c, r2, c2, board[r][c]);
 		scribe.writeGameNote("white", edge);
 		
-		MovesList.addMove(board, "black");
+		MovesList.addMove(board, Turn.BLACK);
 		
 		switch(board[r2][c2]){
 		case "b":
@@ -209,22 +210,22 @@ public class Director{
 		}
 		board[r][c] = " ";
 		
-		MovesList.addMove(board, "white");
+		MovesList.addMove(board, Turn.WHITE);
 		
 		boardState = Matrix.makeKey(board);
 	}
 	
 	public void doDrop(){
 		
-		edge = Message.getEdge(r, c, r2, c2, board[r][c]);
+		edge = Expositor.getEdge(r, c, r2, c2, board[r][c]);
 		scribe.writeGameNote("white", edge);
 		
-		MovesList.addMove(board, "black");
+		MovesList.addMove(board, Turn.BLACK);
 		
 		board[r2][c2] = board[r][c];
 		board[r][c] = " ";
 		
-		MovesList.addMove(board, "white");
+		MovesList.addMove(board, Turn.WHITE);
 		
 		boardState = Matrix.makeKey(board);
 	}
@@ -274,11 +275,11 @@ public class Director{
 		
 		undoMove = Copier.deepCopy(board);
 		
-		clocks.setTurn("black");
-		if(isEndOfGame("black")){
+		clocks.setTurn(Turn.BLACK);
+		if(isEndOfGame(Turn.BLACK)){
 			game.clear();
 			Gui.lockBoard();
-			clocks.setTurn(" ");
+			clocks.setTurn(Turn.PAUSE);
 			return;
 		}
 		
@@ -297,9 +298,9 @@ public class Director{
 		}		
 		else {
 			final Generator generator = new Generator();
-			List<Node> legalMoves = generator.generateMoves(board, "black");
+			List<Node> legalMoves = generator.generateMoves(board, Turn.BLACK);
 			List<Node> nodes = new ArrayList<>(generator.sortMoves
-										(board, legalMoves, "black", false));
+										(board, legalMoves, Turn.BLACK, false));
 			if(nodes.get(0).getValue() > 999) {
 				integrator.nextBest(board, nodes.get(0));
 			}
@@ -311,10 +312,10 @@ public class Director{
 					break;
 				case 4:
 					nodes = new ArrayList<>
-					(generator.sortMoves(board, legalMoves, "black", true));
+					(generator.sortMoves(board, legalMoves, Turn.BLACK, true));
 					if(nodes.size()==0) {
 						nodes = new ArrayList<>
-						(generator.sortMoves(board, legalMoves, "black", false));
+						(generator.sortMoves(board, legalMoves, Turn.BLACK, false));
 						nodes.subList(1, nodes.size()).clear();
 					}
 				case 2:
@@ -325,7 +326,7 @@ public class Director{
 					final int cores = Runtime.getRuntime().availableProcessors();
 					ExecutorService es = Executors.newFixedThreadPool(cores);
 					List<Future<Integer>> tasks = new ArrayList<>(nodes.size());
-					Interceptor f19 = new Interceptor(tasks);
+					TaskInterceptor f19 = new TaskInterceptor(tasks);
 					ArtIntelFactory factory = new ArtIntelFactory();
 					for(Node node : nodes) {
 						Future<Integer> score = es.submit(factory
@@ -345,16 +346,16 @@ public class Director{
 
 		Gui.doClick();
 		
-		if(isEndOfGame("white")){
+		if(isEndOfGame(Turn.WHITE)){
 			game.clear();
 			Gui.lockBoard();
-			clocks.setTurn(" ");
+			clocks.setTurn(Turn.PAUSE);
 			return;
 		}		
-		clocks.setTurn("white");
+		clocks.setTurn(Turn.WHITE);
 	}
 	
-	private boolean isEndOfGame(String turn)  {
+	private boolean isEndOfGame(Turn turn)  {
 		
 		int a = 0;
 		int b = 0;
@@ -370,33 +371,32 @@ public class Director{
 			}
 		}
 		
-		if(addToMoveList("black")){
+		if(addToMoveList(Turn.BLACK)){
 			scribe.writeGameNote("end", "1/2");
 			output("draw");
 			chooseVoice("draw");
 			return true;
 		}
-		else if((a+b==2 & turn.equals("black")) || (a+b==3 & turn.equals("white")) & 
+		else if((a+b==2 & turn.equals(Turn.BLACK)) || (a+b==3 & turn.equals(Turn.WHITE)) & 
 				(board[0][0].equals("K")||board[0][1].equals("K")||board[0][2].equals("K"))){
 			scribe.writeGameNote("end", "1-0");
 			output("white");
 			chooseVoice("mate");
 			return true;
 		}
-		else if((a+b==1 & turn.equals("white")) || (a+b==3 & turn.equals("black")) & 
+		else if((a+b==1 & turn.equals(Turn.WHITE)) || (a+b==3 & turn.equals(Turn.BLACK)) & 
 				(board[3][0].equals("k")||board[3][1].equals("k")||board[3][2].equals("k"))){
 			scribe.writeGameNote("end", "0-1");
 			output("black");
 			chooseVoice("mate");
 			return true;
 		}		
-		else
-			return false;
+		return false;
 	}
 	
-	private boolean addToMoveList(String turn) {
+	private boolean addToMoveList(Turn turn) {
 			
-		if(turn.equals("black")) {
+		if(turn.equals(Turn.BLACK)) {
 			String hash = Matrix.makeKey(board);		
 			game.putIfAbsent(hash, 0);
 			game.merge(hash, 1, (oldVal, newVal) -> oldVal + newVal);
@@ -493,9 +493,9 @@ public class Director{
 	
 	public boolean createPlayer(String name, String pass) {
 		
-		List<Player> players = scoresheet.getPlayers();
-		Player newPlayer = new Player(name, pass);
-		for(Player current: players) {
+		List<PlayerInfo> players = scoresheet.getPlayers();
+		PlayerInfo newPlayer = new PlayerInfo(name, pass);
+		for(PlayerInfo current: players) {
 			if(current.getName().equalsIgnoreCase(name)) {
 				return false;
 			}
@@ -511,13 +511,13 @@ public class Director{
 	    catch (IOException ex) {
 			ex.printStackTrace();
 		}
-    return true;
+	    return true;
 	}
 	
 	public boolean selectPlayer(String name, String pass) {
 
-		List<Player> players = scoresheet.getPlayers();
-		for(Player current: players) {
+		List<PlayerInfo> players = scoresheet.getPlayers();
+		for(PlayerInfo current: players) {
 			if(current.getName().equalsIgnoreCase(name) & current.getPassword().equals(pass)) {
 				player = current;
 				return true;
@@ -528,7 +528,7 @@ public class Director{
 	
 	public void deletePlayer() {
 		
-		List<Player> players = scoresheet.getPlayers();
+		List<PlayerInfo> players = scoresheet.getPlayers();
 		if(players.contains(player)) {
 			players.remove(player);
 			try(ObjectOutputStream oos = new ObjectOutputStream
@@ -546,7 +546,7 @@ public class Director{
 	
 	private void updateScore(int scale) {
 		
-		List<Player> players = scoresheet.getPlayers();
+		List<PlayerInfo> players = scoresheet.getPlayers();
 		if(players.contains(player)) {
 			player.setScore(player.getScore() + level*scale);
 			try(ObjectOutputStream oos = new ObjectOutputStream
@@ -561,15 +561,15 @@ public class Director{
 		}
 	}
 	
-	public List<Player> getPlayers() {		
+	public List<PlayerInfo> getPlayers() {		
 		return scoresheet.getPlayers();
 	}
 	
-	private LocalServer server;
-	private Driver driver;
+	private InternalServer server;
+	private Mapper driver;
 	private boolean isClientActivated = false;
 		
-	public LocalServer getServer() {
+	public InternalServer getServer() {
 		return server;
 	}
 	public boolean isClientActive() {
@@ -584,9 +584,9 @@ public class Director{
 		setLevel(0);		
 		isClientActivated = true;
 		if(driver == null) {
-			driver = new Driver();
+			driver = new Mapper();
 		}
-		server = new LocalServer();
+		server = new InternalServer();
 		server.start();
 	}
 	

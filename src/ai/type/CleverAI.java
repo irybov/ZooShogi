@@ -1,68 +1,73 @@
-package ai;
+package ai.type;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import ai.component.MovesList;
+import ai.component.Node;
 import control.Clocks;
 import utilpack.Capture;
 import utilpack.Examiner;
+import utilpack.Turn;
 
-public class ExpertAI extends ArtIntel{
+public class CleverAI extends ArtIntel{
 
-	public ExpertAI(Node root, String[][] board) {
+	public CleverAI(Node root, String[][] board) {
 		super(root, board);
 	}
 	
 	@Override
 	public Integer call() {
-		calculate("black", 8, Integer.MIN_VALUE+1, Integer.MAX_VALUE, Arrays.asList(root));
+		calculate(Turn.BLACK, 6, Arrays.asList(root));
 		Clocks.addNodes(nodesCount);
 		return root.getValue();
 	}
 
-	// minimax with alpha-beta pruning
-	private int calculate(String turn, int depth, int alpha, int beta, List<Node> legalMoves) {
+	// basic minimax algorithm
+	private int calculate(Turn turn, int depth, List<Node> legalMoves) {
 		
-		if(turn.equals("white") && integrator.isLost(board)) {
+		if(turn.equals(Turn.WHITE) && integrator.isLost(board)) {
 			return -500;
 		}		
-		if(turn.equals("white") && MovesList.isRepeated(board, "black")){
+		if(turn.equals(Turn.WHITE) && MovesList.isRepeated(board, Turn.BLACK)){
 			return 0;
 		}
-		if((turn.equals("black") && depth < 8) && MovesList.isRepeated(board, "white")){
+		if((turn.equals(Turn.BLACK) && depth < 6) && MovesList.isRepeated(board, Turn.WHITE)){
 			return 0;
 		}		
-		if(hash.isRepeated(board, turn, depth)){
-			return 0;
-		}		
-		hash.addMove(board, turn, depth);
+		if(turn.equals(Turn.WHITE)){
+			if(hash.isRepeated(board, turn, depth)){
+				return 0;
+			}		
+			hash.addMove(board, turn, depth);
+		}
 		
 		if(Examiner.isBlackPositionWon(board, turn)){
-			return 2000+(depth*100);	
+			return 2000+(depth*100);
 		}
 		if(Examiner.isWhitePositionWon(board, turn)){
-			return -(2000+(depth*100));	
-		}			
-		if(Examiner.isCheck(board, turn) && depth < 8){
-			if(turn.equals("white")){
+			return -(2000+(depth*100));
+		}
+		if(Examiner.isCheck(board, turn) && depth < 6){
+			if(turn.equals(Turn.WHITE)){
 				return -(1000+(depth*100));
 			}
 			else {
 				return 1000+(depth*100);				
 			}
 		}
-	
+
 		if(depth == 1){
 			return evaluator.evaluationMaterial(board, false);
 		}
 
 		nodesCount += legalMoves.size();
-		
+				
 		List<Integer> scores = new ArrayList<>(legalMoves.size());
 		
 		for(int i=0; i<legalMoves.size(); i++){
-
+	
 			int r = legalMoves.get(i).getRowFrom();
 			int c = legalMoves.get(i).getColumnFrom();
 			int r2 = legalMoves.get(i).getRowTo();
@@ -72,7 +77,7 @@ public class ExpertAI extends ArtIntel{
 			int r3;
 			int c3 = 9;
 											
-			if(turn=="black"){					
+			if(turn.equals(Turn.BLACK)){
 				r3 = 0;
 				if(board[r][c].equals("p") & r==2){
 					promotion = "p";
@@ -81,9 +86,9 @@ public class ExpertAI extends ArtIntel{
 					}
 					temp = board[r2][c2];
 					board[r2][c2] = "q";
-					board[r][c] = " ";
+					board[r][c] = " ";	
 				}
-				else if(r==0 & c > 2 ){
+				else if(r==0 & c > 2){
 					promotion = " ";
 					temp = " ";
 					board[r2][c2] = board[r][c];
@@ -96,28 +101,23 @@ public class ExpertAI extends ArtIntel{
 					}
 					temp = board[r2][c2];
 					board[r2][c2] = board[r][c];
-					board[r][c] = " ";
+					board[r][c] = " ";	
 				}
 				
 				List<Node> children = null;
-				List<Node> sorted = null;
 				if(temp != "K" & depth > 2) {
-					children = generator.generateMoves(board, "white");
-					sorted = generator.sortMoves(board, children, "white", false);
-					for(Node child: sorted) {
+					children = generator.generateMoves(board, Turn.WHITE);
+					for(Node child: children) {
 						child.addParent(legalMoves.get(i));
 					}
-					legalMoves.get(i).addChildren(sorted);
+					legalMoves.get(i).addChildren(children);
 				}
-
-				int value = calculate("white", depth-1, alpha, beta, sorted);
-				if(value > alpha){
-					alpha = value;
+				
+				int value = calculate(Turn.WHITE, depth-1, children);
 					scores.add(value);
 					legalMoves.get(i).setValue(value);
-				}										
 			}				
-			else{				
+			else{
 				r3 = 3;
 				if(board[r][c].equals("P") & r==1){
 					promotion = "P";
@@ -126,7 +126,7 @@ public class ExpertAI extends ArtIntel{
 					}
 					temp = board[r2][c2];
 					board[r2][c2] = "Q";
-					board[r][c] = " ";
+					board[r][c] = " ";	
 				}
 				else if(r==3 & c > 2){
 					promotion = " ";
@@ -141,26 +141,21 @@ public class ExpertAI extends ArtIntel{
 					}
 					temp = board[r2][c2];
 					board[r2][c2] = board[r][c];
-					board[r][c] = " ";
-				}
-			
-				List<Node> children = null;
-				List<Node> sorted = null;
-				if(temp != "k" & depth > 2) {
-					children = generator.generateMoves(board, "black");
-					sorted = generator.sortMoves(board, children, "black", false);
-					for(Node child: sorted) {
-						child.addParent(legalMoves.get(i));
-					}
-					legalMoves.get(i).addChildren(sorted);
+					board[r][c] = " ";	
 				}
 				
-				int value = calculate("black", depth-1, alpha, beta, sorted);
-				if(value < beta){
-					beta = value;
+				List<Node> children = null;
+				if(temp != "k" & depth > 2) {
+					children = generator.generateMoves(board, Turn.BLACK);
+					for(Node child: children) {
+						child.addParent(legalMoves.get(i));
+					}
+					legalMoves.get(i).addChildren(children);
+				}
+				
+				int value = calculate(Turn.BLACK, depth-1, children);
 					scores.add(value);
 					legalMoves.get(i).setValue(value);
-				}
 			}
 			
 			if(promotion.equals("p")){
@@ -174,17 +169,13 @@ public class ExpertAI extends ArtIntel{
 			}
 			board[r2][c2] = temp;
 			Capture.undoMove(board, r3, c3);
-			
-			if(alpha >= beta){
-				break;
-			}
 		}
 		
-		if(turn.equals("black")){
-			return evaluator.alpha(scores, alpha, beta);
+		if(turn.equals(Turn.BLACK)){
+			return evaluator.max(scores);
 		}
 		else{
-			return evaluator.beta(scores, alpha, beta);
+			return evaluator.min(scores);
 		}
 	}
 	

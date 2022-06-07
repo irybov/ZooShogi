@@ -1,4 +1,4 @@
-package ai;
+package ai.type;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -7,10 +7,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import ai.component.MovesList;
+import ai.component.Node;
 import control.Clocks;
 import utilpack.Capture;
 import utilpack.Copier;
 import utilpack.Examiner;
+import utilpack.Turn;
 
 public class TrickyAI extends ArtIntel{
 
@@ -93,35 +96,36 @@ public class TrickyAI extends ArtIntel{
 							board[r][c] = " ";
 						}
 							
-						hash.addMove(board, "black", depth+4);
+						hash.addMove(board, Turn.BLACK, depth+4);
 						
 						if(temp.equals("K")){
 							legal.get(i).setValue(2000+(100/depth));
 						}
-						else if(Examiner.isPromotionWon(board, "black") &&
-								!Examiner.isCheck(board, "white")){
+						else if(Examiner.isPromotionWon(board, Turn.BLACK) &&
+								!Examiner.isCheck(board, Turn.WHITE)){
 							legal.get(i).setValue(1000+(100/depth));
 						}
-						else if(MovesList.isRepeated(board, "black")) {
+						else if(MovesList.isRepeated(board, Turn.BLACK)) {
 							legal.get(i).setValue(0);
 						}
-						else if(hash.isRepeated(board, "black", depth-4)){
+						else if(hash.isRepeated(board, Turn.BLACK, depth-4)){
 							legal.get(i).setValue(0);
 						}	
 						else if(integrator.isLost(board)) {
 							legal.get(i).setValue(-500);							
 						}						
-						else if(Examiner.isPromotionWon(board, "white")){
+						else if(Examiner.isPromotionWon(board, Turn.WHITE)){
 							legal.get(i).setValue(-(1000+(100/depth)));
 						}
-						else if(Examiner.isCheck(board, "white")){
+						else if(Examiner.isCheck(board, Turn.WHITE)){
 							legal.get(i).setValue(-(2000+(100/depth)));
 						}
 						else{
 							legal.get(i).setValue(evaluator.evaluationMaterial(board, false));
 							if(depth < 5) {
 								input.add(Copier.deepCopy(board));
-								legal.get(i).addChildren(generator.generateMoves(board, "white"));
+								legal.get(i).addChildren
+								(generator.generateMoves(board, Turn.WHITE));
 								for(Node child: legal.get(i).getChidren()) {
 									child.addParent(legal.get(i));
 								}
@@ -159,24 +163,25 @@ public class TrickyAI extends ArtIntel{
 						if(temp.equals("k")){
 							legal.get(i).setValue(-(2000+(100/depth)));
 						}
-						else if(Examiner.isPromotionWon(board, "white") &&
-								!Examiner.isCheck(board, "black")){
+						else if(Examiner.isPromotionWon(board, Turn.WHITE) &&
+								!Examiner.isCheck(board, Turn.BLACK)){
 							legal.get(i).setValue(-(1000+(100/depth)));
 						}
-						else if(MovesList.isRepeated(board, "white")) {
+						else if(MovesList.isRepeated(board, Turn.WHITE)) {
 							legal.get(i).setValue(0);
 						}
-						else if(Examiner.isPromotionWon(board, "black")){
+						else if(Examiner.isPromotionWon(board, Turn.BLACK)){
 							legal.get(i).setValue(1000+(100/depth));
 						}
-						else if(Examiner.isCheck(board, "black")){
+						else if(Examiner.isCheck(board, Turn.BLACK)){
 							legal.get(i).setValue(2000+(100/depth));
 						}
 						else{
 							legal.get(i).setValue(evaluator.evaluationMaterial(board, false));
 							if(depth < 5) {
 								input.add(Copier.deepCopy(board));
-								legal.get(i).addChildren(generator.generateMoves(board, "black"));
+								legal.get(i).addChildren
+								(generator.generateMoves(board, Turn.BLACK));
 								for(Node child: legal.get(i).getChidren()) {
 									child.addParent(legal.get(i));
 								}

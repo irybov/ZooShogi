@@ -9,12 +9,12 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import control.Director;
-import data.Player;
+import data.PlayerInfo;
 
 class Users extends JFrame {
 	
 	private Director director = Director.getInstance();
-	private List<Player> players = director.getPlayers();
+	private List<PlayerInfo> players = director.getPlayers();
 	private String username;
 	private String password;
 	private JLabel label = new JLabel(" ");

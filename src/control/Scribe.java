@@ -31,6 +31,7 @@ public class Scribe {
 
 		try(BufferedWriter scribe = new BufferedWriter(new FileWriter("games.txt", true));
 			RandomAccessFile file = new RandomAccessFile("games.txt", "rw");) {
+			
 			switch(action) {
 			case "new": case "end":
 				if(action.equals("new") & moveNumber > 1) {

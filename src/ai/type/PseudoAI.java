@@ -1,10 +1,15 @@
-package ai;
+package ai.type;
 
 import java.util.List;
 
+import ai.Integrator;
+import ai.component.Evaluator;
+import ai.component.MovesList;
+import ai.component.Node;
 import control.Clocks;
 import utilpack.Capture;
 import utilpack.Examiner;
+import utilpack.Turn;
 
 public class PseudoAI implements Runnable {
 	
@@ -82,19 +87,20 @@ public class PseudoAI implements Runnable {
 			if(temp.equals("K")){
 				score = 2000;
 			}
-			else if(Examiner.isPromotionWon(board, "black") && !Examiner.isCheck(board, "white")){
+			else if(Examiner.isPromotionWon(board, Turn.BLACK) &&
+					!Examiner.isCheck(board, Turn.WHITE)){
 				score = 1000;
 			}
-			else if(MovesList.isRepeated(board, "black")) {
+			else if(MovesList.isRepeated(board, Turn.BLACK)) {
 				score = 0;
 			}
 			else if(integrator.isLost(board)) {
 				score = -500;							
 			}
-			else if(Examiner.isPromotionWon(board, "white")){
+			else if(Examiner.isPromotionWon(board, Turn.WHITE)){
 				score = -1000;
 			}
-			else if(Examiner.isCheck(board, "white")){
+			else if(Examiner.isCheck(board, Turn.WHITE)){
 				score = -2000;
 			}
 			else{

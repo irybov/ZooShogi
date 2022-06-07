@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import ai.Node;
+import ai.component.Node;
 
 public class Copier {
 

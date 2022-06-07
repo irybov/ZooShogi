@@ -1,5 +1,14 @@
 package ai;
 
+import ai.component.Node;
+import ai.type.ActiveAI;
+import ai.type.ArtIntel;
+import ai.type.CleverAI;
+import ai.type.ExpertAI;
+import ai.type.MasterAI;
+import ai.type.NaiveAI;
+import ai.type.TrickyAI;
+
 public class ArtIntelFactory {
 
 	public ArtIntel createAI(final int level, Node root, String[][] board) {

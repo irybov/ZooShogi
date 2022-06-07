@@ -7,7 +7,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-class Driver {
+class Mapper {
 
 	public int[] input(String json){
 		

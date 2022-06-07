@@ -3,8 +3,9 @@ package ai;
 import sound.Sound;
 import ui.Gui;
 import utilpack.Examiner;
+import utilpack.Turn;
 
-public class Info {
+public class Messanger {
 
 	private Sound sound = Sound.getInstance();
 	private boolean mutedVolume = false;	
@@ -30,7 +31,7 @@ public class Info {
 				sound.playVoice("takes");			
 			}
 			sound.playVoice(col2+Integer.toString(r2+1));
-			if(checkWarningEnabled & Examiner.isCheck(field, "black")){
+			if(checkWarningEnabled & Examiner.isCheck(field, Turn.BLACK)){
 				sound.playVoice("check");
 			}
 		}		

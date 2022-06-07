@@ -4,6 +4,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import ui.Gui;
+import utilpack.Turn;
 
 public class Clocks{
 	
@@ -12,7 +13,7 @@ public class Clocks{
 	private static int minutesWhite = 0;
 	private static int secondsWhite = 0;
 
-	private volatile String turn = " ";
+	private volatile Turn turn = Turn.PAUSE;
 	private static AtomicInteger nodes = new AtomicInteger(0);
 	
 	private static Clocks INSTANCE;
@@ -29,7 +30,7 @@ public class Clocks{
 		return INSTANCE;
 	}
 	
-	public void setTurn(String turn) {
+	public void setTurn(Turn turn) {
 		this.turn = turn;		
 	}
 	public static void setNodes(int count) {
@@ -43,7 +44,7 @@ public class Clocks{
 		
 		while(true) {
 			try {
-				if(turn.equals("black")) {
+				if(turn.equals(Turn.BLACK)) {
 					Gui.nodes.setText(String.format("%,d", nodes.get()));
 					if(secondsBlack < 59) {
 						secondsBlack++;
@@ -55,7 +56,7 @@ public class Clocks{
 				Gui.clockBlack.setText(String.format("%02d", minutesBlack)+":"
 										+String.format("%02d", secondsBlack));
 				}
-				else if(turn.equals("white")) {
+				else if(turn.equals(Turn.WHITE)) {
 					if(secondsWhite < 59) {
 						secondsWhite++;
 					}
@@ -79,7 +80,7 @@ public class Clocks{
 		
 		nodes.set(0);
 		Gui.nodes.setText(" ");
-		turn = " ";
+		turn = Turn.PAUSE;
 		minutesBlack = 0;
 		secondsBlack = 0;
 		minutesWhite = 0;

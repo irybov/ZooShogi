@@ -4,11 +4,11 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-class Interceptor extends Thread{
+class TaskInterceptor extends Thread{
 
 	private List<Future<Integer>> tasks;
 	
-	public Interceptor(List<Future<Integer>> tasks) {
+	public TaskInterceptor(List<Future<Integer>> tasks) {
 		this.tasks = tasks;
 	}
 

@@ -9,12 +9,16 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import ai.component.Cache;
+import ai.component.MovesList;
+import ai.component.Node;
 import control.Clocks;
 import control.Scribe;
 import utilpack.Capture;
 import utilpack.Copier;
 import utilpack.Matrix;
-import utilpack.Message;
+import utilpack.Turn;
+import utilpack.Expositor;
 
 public class Integrator {
 	
@@ -32,7 +36,7 @@ public class Integrator {
 		return INSTANCE;
 	}
 	
-	private Info info = new Info();
+	private Messanger info = new Messanger();
 	public void setCheckWarning(boolean warn){
 		info.setCheckWarning(warn);		
 	}
@@ -44,7 +48,7 @@ public class Integrator {
 	private Deque<String> game = new ArrayDeque<>();
 	private Experience exp = new Experience();
 	
-	boolean isLost(String[][] field) {
+	public boolean isLost(String[][] field) {
 		return exp.bingo(Matrix.makeKey(field));
 	}
 	public boolean hasNode(String[][] field) {
@@ -123,7 +127,7 @@ public class Integrator {
 		final int c2 = args[3];
 		final int score = args[4];
 		final int nodes = args[5];
-		Node move = new Node(r, c, r2, c2, "black");
+		Node move = new Node(r, c, r2, c2, Turn.BLACK);
 		move.setValue(score);
 		
 		Clocks.setNodes(nodes);	
@@ -151,11 +155,11 @@ public class Integrator {
 			}
 		}
 		
-		String edge = Message.getEdge(r, c, r2, c2, field[r][c]);		
+		String edge = Expositor.getEdge(r, c, r2, c2, field[r][c]);		
 		scribe.writeGameNote("black", edge);
 		
 		String spot = field[r2][c2];
-		String pieceName = Message.getPieceName(field[r][c]);
+		String pieceName = Expositor.getPieceName(field[r][c]);
 
 		if(field[r][c].equals("p") & r==2){
 			if(r==0 & c > 2){
@@ -190,8 +194,8 @@ public class Integrator {
 			}
 		}
 		
-		String col = Message.getColumnName(c);
-		String col2 = Message.getColumnName(c2);
+		String col = Expositor.getColumnName(c);
+		String col2 = Expositor.getColumnName(c2);
 		
 		info.output(score, field, pieceName, c, col, r, spot, col2, r2);
 		return field;		

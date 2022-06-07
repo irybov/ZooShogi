@@ -1,4 +1,4 @@
-package ai;
+package ai.component;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -7,18 +7,19 @@ import java.util.List;
 import utilpack.Capture;
 import utilpack.Examiner;
 import utilpack.Pieces;
+import utilpack.Turn;
 
 public class Generator {
 	
 	private final Evaluator evaluator = new Evaluator();
 
-	public List<Node> generateMoves(String[][] board, String turn) {	
+	public List<Node> generateMoves(String[][] board, Turn turn) {	
 		
 		List<Node> legal = new ArrayList<>();
 		
 		int r2, c2;
 
-		if(turn.equals("black")) {
+		if(turn.equals(Turn.BLACK)) {
 			for(int i=3; i<9; i++) {
 				if(!board[0][i].equals(" ")){
 					for(int r=0; r<4; r++){
@@ -84,7 +85,7 @@ public class Generator {
 				}
 			}
 		}		
-		else {	
+		else{	
 			for(int i=3; i<9; i++) {
 				if(!board[3][i].equals(" ")){
 					for(int r=0; r<4; r++){
@@ -154,15 +155,15 @@ public class Generator {
 	}
 	
 	public List<Node> sortMoves(String[][] board, List<Node> legal,
-								String turn, boolean prune) {
+								Turn turn, boolean prune) {
 		
 		List<Node> sorted = new ArrayList<>();
 		
 		int prev;
-			if(Examiner.isCheck(board, "white")){
+			if(Examiner.isCheck(board, Turn.WHITE)){
 				prev = -1000;
 			}
-			else if(Examiner.isCheck(board, "black")){
+			else if(Examiner.isCheck(board, Turn.BLACK)){
 				prev = 1000;
 			}
 			else{
@@ -176,12 +177,12 @@ public class Generator {
 			int c = legal.get(i).getColumnFrom();
 			int r2 = legal.get(i).getRowTo();
 			int c2 = legal.get(i).getColumnTo();
-			String temp;
-			String prom;
-			int r3;
+			String temp = null;
+			String prom = null;
+			int r3 = -1;
 			int c3 = 9;
 
-			if(turn.equals("black")){						
+			if(turn.equals(Turn.BLACK)){						
 				r3 = 0;
 				if(board[r][c].equals("p") & r==2){
 					prom = "p";
@@ -212,19 +213,21 @@ public class Generator {
 				if(temp.equals("K")){
 					value = 5000;	
 				}
-				else if(Examiner.isPromotionWon(board, "black") && !Examiner.isCheck(board, "white")){
+				else if(Examiner.isPromotionWon(board, Turn.BLACK) &&
+						!Examiner.isCheck(board, Turn.WHITE)){
 					value = 5000;
 				}
-				else if(Examiner.isCheck(board, "black") && !Examiner.isCheck(board, "white")) {
+				else if(Examiner.isCheck(board, Turn.BLACK) &&
+						!Examiner.isCheck(board, Turn.WHITE)) {
 					value = 500;
 				}
-				else if(MovesList.isRepeated(board, "black")) {
+				else if(MovesList.isRepeated(board, Turn.BLACK)) {
 					value = 0;
 				}
-				else if(Examiner.isPromotionWon(board, "white")){
+				else if(Examiner.isPromotionWon(board, Turn.WHITE)){
 					value = -5000;
 				}
-				else if(Examiner.isCheck(board, "white")){
+				else if(Examiner.isCheck(board, Turn.WHITE)){
 					value = -5000;
 				}
 				else{
@@ -276,19 +279,21 @@ public class Generator {
 				if(temp.equals("k")){
 					value = -5000;	
 				}
-				else if(Examiner.isPromotionWon(board, "white") && !Examiner.isCheck(board, "black")){
+				else if(Examiner.isPromotionWon(board, Turn.WHITE) &&
+						!Examiner.isCheck(board, Turn.BLACK)){
 						value = -5000;
 				}
-				else if(Examiner.isCheck(board, "white") && !Examiner.isCheck(board, "black")) {
+				else if(Examiner.isCheck(board, Turn.WHITE) &&
+						!Examiner.isCheck(board, Turn.BLACK)) {
 					value = -500;
 				}
-				else if(MovesList.isRepeated(board, "white")) {
+				else if(MovesList.isRepeated(board, Turn.WHITE)) {
 					value = 0;
 				}
-				else if(Examiner.isPromotionWon(board, "black")){
+				else if(Examiner.isPromotionWon(board, Turn.BLACK)){
 						value = 5000;
 				}
-				else if(Examiner.isCheck(board, "black")){
+				else if(Examiner.isCheck(board, Turn.BLACK)){
 					value = 5000;
 				}				
 				else{

@@ -8,19 +8,19 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 
-public class Player implements Externalizable, Comparable<Player> {
+public class PlayerInfo implements Externalizable, Comparable<PlayerInfo> {
 
 	private String name;
 	private String pass;
 	private Integer score = 0;
 	private String date = setRegistrationDate();
 		
-	public Player(String name, String pass) {
+	public PlayerInfo(String name, String pass) {
 		this.name = name;
 		this.pass = pass;
 	}
 	
-	public Player() {}
+	public PlayerInfo() {}
 	
 	public void setScore(Integer score) {
 		this.score = score;
@@ -43,7 +43,7 @@ public class Player implements Externalizable, Comparable<Player> {
 	}
 	
 	@Override
-	public int compareTo(Player another) {
+	public int compareTo(PlayerInfo another) {
 		return score.compareTo(another.score);
 	}	
 	@Override
@@ -66,7 +66,7 @@ public class Player implements Externalizable, Comparable<Player> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Player other = (Player) obj;
+		PlayerInfo other = (PlayerInfo) obj;
 		if (name == null) {
 			if (other.name != null)
 				return false;

@@ -2,11 +2,11 @@ package utilpack;
 
 public class Examiner {
 	
-	public static boolean isCheck(String[][] board, String turn) {		
+	public static boolean isCheck(String[][] board, Turn turn) {		
 		
 		int r,c,r2,c2;
 			
-		if(turn.equals("black")){	
+		if(turn.equals(Turn.BLACK)){	
 			for(r=0; r<4; r++){
 				for(c=0; c<3; c++){					
 					if(board[r][c].equals("p")){
@@ -64,7 +64,7 @@ public class Examiner {
 				}
 			}
 		}				
-		else{
+		else if(turn.equals(Turn.WHITE)){
 			for(r=0; r<4; r++){
 				for(c=0; c<3; c++){					
 					if(board[r][c].equals("P")){
@@ -125,19 +125,20 @@ public class Examiner {
 	return false;
 	}
 	
-	public static boolean isPromotionWon(String[][] board, String turn) {
+	public static boolean isPromotionWon(String[][] board, Turn turn) {
 		
-		if(turn.equals("black")) {
+		if(turn.equals(Turn.BLACK)) {
 			return (board[3][0].equals("k")||board[3][1].equals("k")||board[3][2].equals("k")) &
 			(!board[0][0].equals("K")&&!board[0][1].equals("K")&&!board[0][2].equals("K"));		
 		}
-		else {
+		else if(turn.equals(Turn.WHITE)){
 			return (board[0][0].equals("K")||board[0][1].equals("K")||board[0][2].equals("K")) & 
 			(!board[3][0].equals("k")&&!board[3][1].equals("k")&&!board[3][2].equals("k"));
 		}
+		return false;
 	}
 
-	public static boolean isBlackPositionWon(String[][] board, String turn)  {
+	public static boolean isBlackPositionWon(String[][] board, Turn turn)  {
 		
 		int a = 0;
 		int b = 0;
@@ -152,11 +153,11 @@ public class Examiner {
 				}
 			}
 		}		
-		return((a+b==1) || ((a+b==3 & turn.equals("black")) & 
+		return((a+b==1) || ((a+b==3 & turn.equals(Turn.BLACK)) & 
 			   (board[3][0].equals("k")||board[3][1].equals("k")||board[3][2].equals("k"))));
 	}
 	
-	public static boolean isWhitePositionWon(String[][] board, String turn)  {
+	public static boolean isWhitePositionWon(String[][] board, Turn turn)  {
 		
 		int a = 0;
 		int b = 0;
@@ -171,7 +172,7 @@ public class Examiner {
 				}
 			}
 		}		
-		return((a+b==2) || ((a+b==3 & turn.equals("white")) & 
+		return((a+b==2) || ((a+b==3 & turn.equals(Turn.WHITE)) & 
 			   (board[0][0].equals("K")||board[0][1].equals("K")||board[0][2].equals("K"))));
 	}	
 	

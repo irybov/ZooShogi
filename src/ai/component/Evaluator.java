@@ -1,13 +1,14 @@
-package ai;
+package ai.component;
 
 import java.util.List;
 
 import utilpack.Capture;
 import utilpack.Pieces;
+import utilpack.Turn;
 
 public class Evaluator {
 
-	int evaluationMaterial(String[][] board, boolean exp) {
+	public int evaluationMaterial(String[][] board, boolean exp) {
 		
 		int score = 0;
 
@@ -46,7 +47,7 @@ public class Evaluator {
 		return score;
 	}
 
-	int evaluationPositional(String[][] board) {		
+	public int evaluationPositional(String[][] board) {		
 		
 		int score = 0;
 		int r,c,r2,c2;
@@ -57,8 +58,8 @@ public class Evaluator {
 					r2 = r+1;
 					c2 = c;
 					if((Pieces.BPAWN.isLegalMove(r, c, r2, c2))&&
-					   (Capture.isCaptureLegal(board, r2, c2, "black"))){
-						score += (Capture.attackBonusesCount(board, r2, c2, "black"));
+					   (Capture.isCaptureLegal(board, r2, c2, Turn.BLACK))){
+						score += (Capture.attackBonusesCount(board, r2, c2, Turn.BLACK));
 					}
 				}
 				
@@ -66,8 +67,8 @@ public class Evaluator {
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
 						if((Pieces.ROOK.isLegalMove(r, c, r2, c2))&&
-						   (Capture.isCaptureLegal(board, r2, c2, "black"))){
-							score += (Capture.attackBonusesCount(board, r2, c2, "black"));
+						   (Capture.isCaptureLegal(board, r2, c2, Turn.BLACK))){
+							score += (Capture.attackBonusesCount(board, r2, c2, Turn.BLACK));
 							}
 						}							
 					}
@@ -77,8 +78,8 @@ public class Evaluator {
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
 						if((Pieces.KING.isLegalMove(r, c, r2, c2))&&
-						   (Capture.isCaptureLegal(board, r2, c2, "black"))){
-							score += (Capture.attackBonusesCount(board, r2, c2, "black"));
+						   (Capture.isCaptureLegal(board, r2, c2, Turn.BLACK))){
+							score += (Capture.attackBonusesCount(board, r2, c2, Turn.BLACK));
 							}
 						}							
 					}
@@ -88,8 +89,8 @@ public class Evaluator {
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
 						if((Pieces.BISHOP.isLegalMove(r, c, r2, c2))&&
-						   (Capture.isCaptureLegal(board, r2, c2, "black"))){
-							score += (Capture.attackBonusesCount(board, r2, c2, "black"));
+						   (Capture.isCaptureLegal(board, r2, c2, Turn.BLACK))){
+							score += (Capture.attackBonusesCount(board, r2, c2, Turn.BLACK));
 							}
 						}							
 					}
@@ -99,8 +100,8 @@ public class Evaluator {
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
 						if((Pieces.BQUEEN.isLegalMove(r, c, r2, c2))&&
-						   (Capture.isCaptureLegal(board, r2, c2, "black"))){
-							score += (Capture.attackBonusesCount(board, r2, c2, "black"));
+						   (Capture.isCaptureLegal(board, r2, c2, Turn.BLACK))){
+							score += (Capture.attackBonusesCount(board, r2, c2, Turn.BLACK));
 							}
 						}							
 					}
@@ -110,8 +111,8 @@ public class Evaluator {
 					r2 = r-1;
 					c2 = c;
 					if((Pieces.WPAWN.isLegalMove(r, c, r2, c2))&&
-					   (Capture.isCaptureLegal(board, r2, c2, "white"))){
-						score += (Capture.attackBonusesCount(board, r2, c2, "white"));
+					   (Capture.isCaptureLegal(board, r2, c2, Turn.WHITE))){
+						score += (Capture.attackBonusesCount(board, r2, c2, Turn.WHITE));
 					}
 				}
 				
@@ -119,8 +120,8 @@ public class Evaluator {
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
 						if((Pieces.ROOK.isLegalMove(r, c, r2, c2))&&
-						   (Capture.isCaptureLegal(board, r2, c2, "white"))){
-							score += (Capture.attackBonusesCount(board, r2, c2, "white"));
+						   (Capture.isCaptureLegal(board, r2, c2, Turn.WHITE))){
+							score += (Capture.attackBonusesCount(board, r2, c2, Turn.WHITE));
 							}
 						}							
 					}
@@ -130,8 +131,8 @@ public class Evaluator {
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
 						if((Pieces.KING.isLegalMove(r, c, r2, c2))&&
-						   (Capture.isCaptureLegal(board, r2, c2, "white"))){
-							score += (Capture.attackBonusesCount(board, r2, c2, "white"));
+						   (Capture.isCaptureLegal(board, r2, c2, Turn.WHITE))){
+							score += (Capture.attackBonusesCount(board, r2, c2, Turn.WHITE));
 							}
 						}							
 					}
@@ -141,8 +142,8 @@ public class Evaluator {
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
 						if((Pieces.BISHOP.isLegalMove(r, c, r2, c2))&&
-						   (Capture.isCaptureLegal(board, r2, c2, "white"))){
-							score += (Capture.attackBonusesCount(board, r2, c2, "white"));
+						   (Capture.isCaptureLegal(board, r2, c2, Turn.WHITE))){
+							score += (Capture.attackBonusesCount(board, r2, c2, Turn.WHITE));
 							}
 						}							
 					}
@@ -152,8 +153,8 @@ public class Evaluator {
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
 						if((Pieces.WQUEEN.isLegalMove(r, c, r2, c2))&&
-						   (Capture.isCaptureLegal(board, r2, c2, "white"))){
-							score += (Capture.attackBonusesCount(board, r2, c2, "white"));
+						   (Capture.isCaptureLegal(board, r2, c2, Turn.WHITE))){
+							score += (Capture.attackBonusesCount(board, r2, c2, Turn.WHITE));
 							}
 						}							
 					}
@@ -163,19 +164,19 @@ public class Evaluator {
 		return score;
 	}
 
-	int max(List<Integer> scores) {		
+	public int max(List<Integer> scores) {		
 		return scores.stream().reduce(Integer.MIN_VALUE+1, Integer::max);
 	}	
 	
-	int min(List<Integer> scores) {		
+	public int min(List<Integer> scores) {		
 		return scores.stream().reduce(Integer.MAX_VALUE, Integer::min);
 	}
 	
-	int expected(List<Integer> scores) {		
+	public int expected(List<Integer> scores) {		
 		return scores.stream().reduce(0, Integer::sum) / scores.size();	
 	}
 	
-	int alpha(List<Integer> scores, int alpha, int beta) {
+	public int alpha(List<Integer> scores, int alpha, int beta) {
 		
 		for(int i=0; i<scores.size(); i++){
 			if (scores.get(i) > alpha){
@@ -188,7 +189,7 @@ public class Evaluator {
 		return alpha;
 	}
 	
-	int beta(List<Integer> scores, int alpha, int beta) {
+	public int beta(List<Integer> scores, int alpha, int beta) {
 		
 		for(int i=0; i<scores.size(); i++){
 			if (scores.get(i) < beta){

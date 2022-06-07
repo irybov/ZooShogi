@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 import javax.sound.sampled.*;
 
 import control.Clocks;
+import utilpack.Turn;
 
 public class Sound {
 	
@@ -62,7 +63,7 @@ public class Sound {
 
 	private File selectSound(String action) throws InterruptedException{
 		
-		clocks.setTurn(" ");
+		clocks.setTurn(Turn.PAUSE);
 		
 		switch(action){
 			case "Pawn":

@@ -7,7 +7,7 @@ import java.util.jar.JarFile;
 import javax.swing.*;
 
 import control.Director;
-import control.Filter;
+import control.FileExtensionFilter;
 
 class Chooser {
 	
@@ -18,7 +18,7 @@ class Chooser {
 	public Chooser(){
 		
 		input = new JFileChooser(new File(System.getProperty("user.dir")));
-		input.setFileFilter(new Filter());
+		input.setFileFilter(new FileExtensionFilter());
 		
 		JFrame frame = new JFrame("File Explorer");
 		frame.setSize(800, 500);

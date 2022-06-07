@@ -1,8 +1,10 @@
-package ai;
+package ai.component;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import utilpack.Turn;
 
 public class Node implements Comparable<Node>, Serializable{
 
@@ -16,9 +18,9 @@ public class Node implements Comparable<Node>, Serializable{
 	private final int columnFrom;
 	private final int rowTo;
 	private final int columnTo;
-	private final String SIDE;
+	private final Turn SIDE;
 
-	public Node(int R, int C, int R2, int C2, String SIDE) {
+	public Node(int R, int C, int R2, int C2, Turn SIDE) {
 		this.rowFrom = R;
 		this.columnFrom = C;
 		this.rowTo = R2;
@@ -28,7 +30,7 @@ public class Node implements Comparable<Node>, Serializable{
 	
 	@Override
 	public String toString() {
-		return "Node [depth=" + depth + ", value=" + value + ", side=" + SIDE + ", "
+		return "Node [depth=" + depth + ", value=" + value + ", side=" + SIDE.name() + ", "
 										+ (rowFrom) + (columnFrom) + (rowTo) + (columnTo) + "]";
 	}
 
@@ -66,7 +68,7 @@ public class Node implements Comparable<Node>, Serializable{
 	public int getColumnTo() {
 		return columnTo;
 	}
-	public String getSide() {
+	public Turn getSide() {
 		return SIDE;
 	}
 

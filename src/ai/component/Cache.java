@@ -1,4 +1,4 @@
-package ai;
+package ai.component;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -13,7 +13,7 @@ public class Cache {
 
 	private static Map<String, Node> cache = new HashMap<>();
 	
-	static void addTree(String[][] board, List<Node> moves) {	
+	public static void addTree(String[][] board, List<Node> moves) {	
 		
 		for(Node move: moves) {
 			
@@ -82,7 +82,7 @@ public class Cache {
 		return cache.isEmpty();
 	}
 	
-	static void clear() {
+	public static void clear() {
 		cache.clear();
 	}
 	

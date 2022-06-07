@@ -19,6 +19,8 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
+import ai.component.Node;
+
 class Experience {
 
 	private Set<String> negativeExp;

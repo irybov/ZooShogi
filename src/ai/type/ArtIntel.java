@@ -1,10 +1,15 @@
-package ai;
+package ai.type;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
+import ai.Integrator;
+import ai.component.Evaluator;
+import ai.component.Generator;
+import ai.component.Node;
 import utilpack.Matrix;
+import utilpack.Turn;
 
 public class ArtIntel implements Callable<Integer>{
 	
@@ -28,28 +33,28 @@ public class ArtIntel implements Callable<Integer>{
 		Map<String, Integer> whiteMoves = new HashMap<>();	
 		
 		// fills calculating hash
-		void addMove(String[][] field, String side, int depth) {
+		void addMove(String[][] field, Turn side, int depth) {
 			
 			String hash = Matrix.makeKey(field);
 			
-			if(side.equals("black")) {
+			if(side.equals(Turn.BLACK)) {
 				blackMoves.putIfAbsent(hash, depth);
 			}
-			else {
+			else if(side.equals(Turn.WHITE)){
 				whiteMoves.putIfAbsent(hash, depth);
 			}
 		}
 		
 		// checks repetitions while calculating	
-		boolean isRepeated(String[][] field,  String side, int depth) {
+		boolean isRepeated(String[][] field,  Turn side, int depth) {
 			
 			String hash = Matrix.makeKey(field);
 								
-			if(side.equals("black")) {
+			if(side.equals(Turn.BLACK)) {
 				if(blackMoves.containsKey(hash))
 					return(blackMoves.get(hash) == depth+4);
 			}
-			else {
+			else{
 				if(whiteMoves.containsKey(hash))
 					return(whiteMoves.get(hash) == depth+4);				
 			}

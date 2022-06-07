@@ -10,8 +10,10 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import ai.Node;
+import ai.component.Generator;
+import ai.component.Node;
 import utilpack.Copier;
+import utilpack.Turn;
 
 public class ArtIntelTest {
 
@@ -32,10 +34,10 @@ public class ArtIntelTest {
 				  			   {" ","b"," "},
 				  			   {" ","K"," ","B","P","R"," "," "," "}};
 		generator = new Generator();
-		legal = generator.generateMoves(board, "black");
+		legal = generator.generateMoves(board, Turn.BLACK);
 		cores = Runtime.getRuntime().availableProcessors();
 		nodes = new ArrayList<>(legal.size());
-		nodes = generator.sortMoves(board, legal, "black", false);
+		nodes = generator.sortMoves(board, legal, Turn.BLACK, false);
 		factory = new ArtIntelFactory();
 	}
 

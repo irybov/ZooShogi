@@ -4,7 +4,7 @@ import java.io.File;
 
 import javax.swing.filechooser.FileFilter;
 
-public class Filter extends FileFilter {
+public class FileExtensionFilter extends FileFilter {
 
 	@Override
 	public boolean accept(File file) {

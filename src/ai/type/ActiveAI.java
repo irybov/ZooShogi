@@ -1,38 +1,42 @@
-package ai;
+package ai.type;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import ai.component.MovesList;
+import ai.component.Node;
 import control.Clocks;
 import utilpack.Capture;
 import utilpack.Examiner;
+import utilpack.Turn;
 
-public class NaiveAI extends ArtIntel{
+public class ActiveAI extends ArtIntel{
 
-	public NaiveAI(Node root, String[][] board) {
+	public ActiveAI(Node root, String[][] board) {
 		super(root, board);
 	}
 	
 	@Override
 	public Integer call() {
-		calculate("black", 6, Arrays.asList(root));
+		calculate(Turn.BLACK, 6, Arrays.asList(root));
 		Clocks.addNodes(nodesCount);
 		return root.getValue();
 	}
 
-	private int calculate(String turn, int depth, List<Node> legalMoves) {
+	// minimax with vintage forward pruning
+	private int calculate(Turn turn, int depth, List<Node> legalMoves) {
 		
-		if(turn.equals("white") && integrator.isLost(board)) {
-			return -5000;
+		if(turn.equals(Turn.WHITE) && integrator.isLost(board)) {
+			return -500;
 		}		
-		if(turn.equals("white") && MovesList.isRepeated(board, "black")){
+		if(turn.equals(Turn.WHITE) && MovesList.isRepeated(board, Turn.BLACK)){
 			return 0;
 		}
-		if((turn.equals("black") && depth < 6) && MovesList.isRepeated(board, "white")){
+		if((turn.equals(Turn.BLACK) && depth < 6) && MovesList.isRepeated(board, Turn.WHITE)){
 			return 0;
 		}		
-		if(turn.equals("white")){
+		if(turn.equals(Turn.WHITE)){
 			if(hash.isRepeated(board, turn, depth)){
 				return 0;
 			}		
@@ -40,30 +44,31 @@ public class NaiveAI extends ArtIntel{
 		}
 		
 		if(Examiner.isBlackPositionWon(board, turn)){
-			return 100/depth;
+			return 2000+(depth*100);
 		}
 		if(Examiner.isWhitePositionWon(board, turn)){
-			return -(1000*depth);
+			return -(2000+(depth*100));
 		}		
 		if(Examiner.isCheck(board, turn) && depth < 6){
-			if(turn.equals("white")){
-				return -(1000*depth);
+			if(turn.equals(Turn.WHITE)){
+				return -(1000+(depth*100));
 			}
 			else {
-				return 100/depth;				
+				return 1000+(depth*100);				
 			}
 		}
-		
+	
 		if(depth == 1){
-			return evaluator.evaluationMaterial(board, true)/depth;
+			return evaluator.evaluationMaterial(board, false)
+					+ evaluator.evaluationPositional(board);
 		}
 
 		nodesCount += legalMoves.size();
-		
-		List<Integer> scores = new ArrayList<>(legalMoves.size());
+				
+		ArrayList<Integer> scores = new ArrayList<>(legalMoves.size());
 		
 		for(int i=0; i<legalMoves.size(); i++){
-	
+
 			int r = legalMoves.get(i).getRowFrom();
 			int c = legalMoves.get(i).getColumnFrom();
 			int r2 = legalMoves.get(i).getRowTo();
@@ -73,7 +78,7 @@ public class NaiveAI extends ArtIntel{
 			int r3;
 			int c3 = 9;
 											
-			if(turn.equals("black")){
+			if(turn.equals(Turn.BLACK)){
 				r3 = 0;
 				if(board[r][c].equals("p") & r==2){
 					promotion = "p";
@@ -101,23 +106,27 @@ public class NaiveAI extends ArtIntel{
 				}
 				
 				List<Node> children = null;
+				List<Node> sorted = null;
 				if(temp != "K" & depth > 2) {
-					children = generator.generateMoves(board, "white");
-					for(Node child: children) {
+					children = generator.generateMoves(board, Turn.WHITE);
+					sorted = generator.sortMoves(board, children, Turn.WHITE, true);
+					for(Node child: sorted) {
 						child.addParent(legalMoves.get(i));
 					}
-					legalMoves.get(i).addChildren(children);
+					legalMoves.get(i).addChildren(sorted);
 				}
-				
-				int value = calculate("white", depth-1, children);
+
+				int value = calculate(Turn.WHITE, depth-1, sorted);
 					scores.add(value);
-					legalMoves.get(i).setValue(value);
+					legalMoves.get(i).setValue(value);										
 			}				
 			else{
 				r3 = 3;
 				if(board[r][c].equals("P") & r==1){
 					promotion = "P";
-					c3 = Capture.takenPiecePlacement(board, r2, c2);
+					if(!board[r][c].equals(" ")) {
+						c3 = Capture.takenPiecePlacement(board, r2, c2);
+					}
 					temp = board[r2][c2];
 					board[r2][c2] = "Q";
 					board[r][c] = " ";	
@@ -130,25 +139,29 @@ public class NaiveAI extends ArtIntel{
 				}
 				else{
 					promotion = " ";
-					c3 = Capture.takenPiecePlacement(board, r2, c2);
+					if(!board[r][c].equals(" ")) {
+						c3 = Capture.takenPiecePlacement(board, r2, c2);
+					}
 					temp = board[r2][c2];
 					board[r2][c2] = board[r][c];
 					board[r][c] = " ";	
 				}
 				
 				List<Node> children = null;
+				List<Node> sorted = null;
 				if(temp != "k" & depth > 2) {
-					children = generator.generateMoves(board, "black");
-					for(Node child: children) {
+					children = generator.generateMoves(board, Turn.WHITE);
+					sorted = generator.sortMoves(board, children, Turn.WHITE, false);
+					for(Node child: sorted) {
 						child.addParent(legalMoves.get(i));
 					}
-					legalMoves.get(i).addChildren(children);
+					legalMoves.get(i).addChildren(sorted);
 				}
 				
-				int value = calculate("black", depth-1, children);
+				int value = calculate(Turn.BLACK, depth-1, sorted);
 					scores.add(value);
 					legalMoves.get(i).setValue(value);
-				}
+			}
 			
 			if(promotion.equals("p")){
 				board[r][c] = "p";
@@ -163,11 +176,11 @@ public class NaiveAI extends ArtIntel{
 			Capture.undoMove(board, r3, c3);
 		}
 		
-		if(turn.equals("black")){
+		if(turn.equals(Turn.BLACK)){
 			return evaluator.max(scores);
 		}
 		else{
-			return evaluator.expected(scores);
+			return evaluator.min(scores);
 		}
 	}
 	

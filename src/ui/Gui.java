@@ -6,11 +6,11 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.event.*;
 
-import ai.Cache;
+import ai.component.Cache;
 import control.Clocks;
 import control.Director;
 import sound.Sound;
-import utilpack.Message;
+import utilpack.Expositor;
 import utilpack.Pieces;
 
 public class Gui {
@@ -381,7 +381,7 @@ public class Gui {
 							highlightSquares(r, c);
 							director.moveFrom(r, c, squares[r][c].getName());
 							clickNumber = 2;
-							output.setText(Message.getPieceName(squares[r][c].getName())
+							output.setText(Expositor.getPieceName(squares[r][c].getName())
 																		+" choosen");
 							isMoveAsDrop = false;
 							return;

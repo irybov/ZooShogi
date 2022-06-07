@@ -1,6 +1,6 @@
 package utilpack;
 
-public class Message {
+public class Expositor {
 
 	public static String getColumnName(final int column){
 		
@@ -48,8 +48,8 @@ public class Message {
 	}
 	
 	public static String getEdge(int R, int C, int R2, int C2, String piece) {
-		return (C < 3 ? Message.getColumnName(C) + (R+1) : piece.toUpperCase()
-				+ Message.getColumnName(C)) + Message.getColumnName(C2) + (R2+1);
+		return (C < 3 ? Expositor.getColumnName(C) + (R+1) : piece.toUpperCase()
+				+ Expositor.getColumnName(C)) + Expositor.getColumnName(C2) + (R2+1);
 	}
 	
 }
