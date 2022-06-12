@@ -2,9 +2,9 @@
 /*.json
 /ZooShogi.*
 /.settings
-/target
+target/
 /.classpath
 /.project
 /games.txt
-/exp
-/logs
+exp/
+logs/
