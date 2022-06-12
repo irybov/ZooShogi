@@ -26,16 +26,16 @@ public class NaiveAI extends ArtIntel{
 
 	private int calculate(Turn turn, int depth, List<Node> legalMoves) {
 		
-		if(turn.equals("white") && integrator.isLost(board)) {
+		if(turn.equals(Turn.WHITE) && integrator.isLost(board)) {
 			return -5000;
 		}		
-		if(turn.equals("white") && MovesList.isRepeated(board, Turn.BLACK)){
+		if(turn.equals(Turn.WHITE) && MovesList.isRepeated(board, Turn.BLACK)){
 			return 0;
 		}
 		if((turn.equals(Turn.BLACK) && depth < 6) && MovesList.isRepeated(board, Turn.WHITE)){
 			return 0;
 		}		
-		if(turn.equals("white")){
+		if(turn.equals(Turn.WHITE)){
 			if(hash.isRepeated(board, turn, depth)){
 				return 0;
 			}		
@@ -49,7 +49,7 @@ public class NaiveAI extends ArtIntel{
 			return -(1000*depth);
 		}		
 		if(Examiner.isCheck(board, turn) && depth < 6){
-			if(turn.equals("white")){
+			if(turn.equals(Turn.WHITE)){
 				return -(1000*depth);
 			}
 			else {
