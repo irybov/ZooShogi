@@ -21,7 +21,7 @@ public class ArtIntel implements Callable<Integer>{
 		this.board = board;
 	}
 		
-	InternalHash hash = new InternalHash();	
+	final InternalHash hash = new InternalHash();	
 	final Generator generator = new Generator();
 	final Evaluator evaluator = new Evaluator();
 	final Integrator integrator = Integrator.getInstance();	

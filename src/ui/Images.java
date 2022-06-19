@@ -15,17 +15,19 @@ public class Images {
 		}
 		return null;
 	}
+	
+	private static final String SLASH = System.getProperty("file.separator");
 
-	private static final ImageIcon WHITE_PAWN_LARGE = new ImageIcon("ui/images/large/WP.png");
-	private static final ImageIcon WHITE_ROOK_LARGE = new ImageIcon("ui/images/large/WR.png");
-	private static final ImageIcon WHITE_BISHOP_LARGE = new ImageIcon("ui/images/large/WB.png");
-	private static final ImageIcon WHITE_KING_LARGE = new ImageIcon("ui/images/large/WK.png");
-	private static final ImageIcon WHITE_QUEEN_LARGE = new ImageIcon("ui/images/large/WQ.png");
-	private static final ImageIcon BLACK_PAWN_LARGE = new ImageIcon("ui/images/large/BP.png");
-	private static final ImageIcon BLACK_ROOK_LARGE = new ImageIcon("ui/images/large/BR.png");
-	private static final ImageIcon BLACK_BISHOP_LARGE = new ImageIcon("ui/images/large/BB.png");
-	private static final ImageIcon BLACK_KING_LARGE = new ImageIcon("ui/images/large/BK.png");
-	private static final ImageIcon BLACK_QUEEN_LARGE = new ImageIcon("ui/images/large/BQ.png");
+	private static final ImageIcon WHITE_PAWN_LARGE = new ImageIcon("ui"+SLASH+"images"+SLASH+"large"+SLASH+"WP.png");
+	private static final ImageIcon WHITE_ROOK_LARGE = new ImageIcon("ui"+SLASH+"images"+SLASH+"large"+SLASH+"WR.png");
+	private static final ImageIcon WHITE_BISHOP_LARGE = new ImageIcon("ui"+SLASH+"images"+SLASH+"large"+SLASH+"WB.png");
+	private static final ImageIcon WHITE_KING_LARGE = new ImageIcon("ui"+SLASH+"images"+SLASH+"large"+SLASH+"WK.png");
+	private static final ImageIcon WHITE_QUEEN_LARGE = new ImageIcon("ui"+SLASH+"images"+SLASH+"large"+SLASH+"WQ.png");
+	private static final ImageIcon BLACK_PAWN_LARGE = new ImageIcon("ui"+SLASH+"images"+SLASH+"large"+SLASH+"BP.png");
+	private static final ImageIcon BLACK_ROOK_LARGE = new ImageIcon("ui"+SLASH+"images"+SLASH+"large"+SLASH+"BR.png");
+	private static final ImageIcon BLACK_BISHOP_LARGE = new ImageIcon("ui"+SLASH+"images"+SLASH+"large"+SLASH+"BB.png");
+	private static final ImageIcon BLACK_KING_LARGE = new ImageIcon("ui"+SLASH+"images"+SLASH+"large"+SLASH+"BK.png");
+	private static final ImageIcon BLACK_QUEEN_LARGE = new ImageIcon("ui"+SLASH+"images"+SLASH+"large"+SLASH+"BQ.png");
 	
 	ImageIcon getLargeImage(String piece) {
 		

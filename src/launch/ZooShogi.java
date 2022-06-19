@@ -13,7 +13,7 @@ public class ZooShogi {
 		setup();
 	}
 
-	static void setup(){		
+	private static void setup(){
 		//Frame and content panel
 		final JFrame launchScreen = new JFrame();	
 		JPanel content = new JPanel();
