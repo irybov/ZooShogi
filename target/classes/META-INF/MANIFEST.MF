@@ -1,8 +1,0 @@
-Manifest-Version: 1.0
-Built-By: Ivan
-Class-Path: jackson-databind-2.12.5.jar jackson-annotations-2.12.5.jar
-  jackson-core-2.12.5.jar .
-Build-Jdk: 1.8.0_131
-Created-By: Maven Integration for Eclipse
-Main-Class: launch.ZooShogi
-
