@@ -26,27 +26,27 @@ public class Sound {
 	
 	private static final String SLASH = System.getProperty("file.separator");
 	
-	private static final File PAWN = new File("sound"+SLASH+"voice"+SLASH+"pieces"+SLASH+"pawn.wav");
-	private static final File ROOK = new File("sound"+SLASH+"voice"+SLASH+"pieces"+SLASH+"rook.wav");
-	private static final File BISHOP = new File("sound"+SLASH+"voice"+SLASH+"pieces"+SLASH+"bishop.wav");
-	private static final File KING = new File("sound"+SLASH+"voice"+SLASH+"pieces"+SLASH+"king.wav");
-	private static final File QUEEN = new File("sound"+SLASH+"voice"+SLASH+"pieces"+SLASH+"queen.wav");
-	private static final File CHECK = new File("sound"+SLASH+"voice"+SLASH+"actions"+SLASH+"check.wav");
-	private static final File MATE = new File("sound"+SLASH+"voice"+SLASH+"actions"+SLASH+"mate.wav");
-	private static final File DRAW = new File("sound"+SLASH+"voice"+SLASH+"actions"+SLASH+"draw.wav");
-	private static final File TAKES = new File("sound"+SLASH+"voice"+SLASH+"actions"+SLASH+"takes.wav");
-	private static final File A1 = new File("sound"+SLASH+"voice"+SLASH+"squares"+SLASH+"a1.wav");
-	private static final File A2 = new File("sound"+SLASH+"voice"+SLASH+"squares"+SLASH+"a2.wav");
-	private static final File A3 = new File("sound"+SLASH+"voice"+SLASH+"squares"+SLASH+"a3.wav");
-	private static final File A4 = new File("sound"+SLASH+"voice"+SLASH+"squares"+SLASH+"a4.wav");
-	private static final File B1 = new File("sound"+SLASH+"voice"+SLASH+"squares"+SLASH+"b1.wav");
-	private static final File B2 = new File("sound"+SLASH+"voice"+SLASH+"squares"+SLASH+"b2.wav");
-	private static final File B3 = new File("sound"+SLASH+"voice"+SLASH+"squares"+SLASH+"b3.wav");
-	private static final File B4 = new File("sound"+SLASH+"voice"+SLASH+"squares"+SLASH+"b4.wav");
-	private static final File C1 = new File("sound"+SLASH+"voice"+SLASH+"squares"+SLASH+"c1.wav");
-	private static final File C2 = new File("sound"+SLASH+"voice"+SLASH+"squares"+SLASH+"c2.wav");
-	private static final File C3 = new File("sound"+SLASH+"voice"+SLASH+"squares"+SLASH+"c3.wav");
-	private static final File C4 = new File("sound"+SLASH+"voice"+SLASH+"squares"+SLASH+"c4.wav");
+	private static final File PAWN = new File(String.join(SLASH, "sound", "voice", "pieces", "pawn.wav"));
+	private static final File ROOK = new File(String.join(SLASH, "sound", "voice", "pieces", "rook.wav"));
+	private static final File BISHOP = new File(String.join(SLASH, "sound", "voice", "pieces", "bishop.wav"));
+	private static final File KING = new File(String.join(SLASH, "sound", "voice", "pieces", "king.wav"));
+	private static final File QUEEN = new File(String.join(SLASH, "sound", "voice", "pieces", "queen.wav"));
+	private static final File CHECK = new File(String.join(SLASH, "sound", "voice", "actions", "check.wav"));
+	private static final File MATE = new File(String.join(SLASH, "sound", "voice", "actions", "mate.wav"));
+	private static final File DRAW = new File(String.join(SLASH, "sound", "voice", "actions", "draw.wav"));
+	private static final File TAKES = new File(String.join(SLASH, "sound", "voice", "actions", "takes.wav"));
+	private static final File A1 = new File(String.join(SLASH, "sound", "voice", "squares", "a1.wav"));
+	private static final File A2 = new File(String.join(SLASH, "sound", "voice", "squares", "a2.wav"));
+	private static final File A3 = new File(String.join(SLASH, "sound", "voice", "squares", "a3.wav"));
+	private static final File A4 = new File(String.join(SLASH, "sound", "voice", "squares", "a4.wav"));
+	private static final File B1 = new File(String.join(SLASH, "sound", "voice", "squares", "b1.wav"));
+	private static final File B2 = new File(String.join(SLASH, "sound", "voice", "squares", "b2.wav"));
+	private static final File B3 = new File(String.join(SLASH, "sound", "voice", "squares", "b3.wav"));
+	private static final File B4 = new File(String.join(SLASH, "sound", "voice", "squares", "b4.wav"));
+	private static final File C1 = new File(String.join(SLASH, "sound", "voice", "squares", "c1.wav"));
+	private static final File C2 = new File(String.join(SLASH, "sound", "voice", "squares", "c2.wav"));
+	private static final File C3 = new File(String.join(SLASH, "sound", "voice", "squares", "c3.wav"));
+	private static final File C4 = new File(String.join(SLASH, "sound", "voice", "squares", "c4.wav"));
 	
 	public void playVoice(String action){
 

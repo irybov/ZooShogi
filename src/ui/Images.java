@@ -18,16 +18,16 @@ public class Images {
 	
 	private static final String SLASH = System.getProperty("file.separator");
 
-	private static final ImageIcon WHITE_PAWN_LARGE = new ImageIcon("ui"+SLASH+"images"+SLASH+"large"+SLASH+"WP.png");
-	private static final ImageIcon WHITE_ROOK_LARGE = new ImageIcon("ui"+SLASH+"images"+SLASH+"large"+SLASH+"WR.png");
-	private static final ImageIcon WHITE_BISHOP_LARGE = new ImageIcon("ui"+SLASH+"images"+SLASH+"large"+SLASH+"WB.png");
-	private static final ImageIcon WHITE_KING_LARGE = new ImageIcon("ui"+SLASH+"images"+SLASH+"large"+SLASH+"WK.png");
-	private static final ImageIcon WHITE_QUEEN_LARGE = new ImageIcon("ui"+SLASH+"images"+SLASH+"large"+SLASH+"WQ.png");
-	private static final ImageIcon BLACK_PAWN_LARGE = new ImageIcon("ui"+SLASH+"images"+SLASH+"large"+SLASH+"BP.png");
-	private static final ImageIcon BLACK_ROOK_LARGE = new ImageIcon("ui"+SLASH+"images"+SLASH+"large"+SLASH+"BR.png");
-	private static final ImageIcon BLACK_BISHOP_LARGE = new ImageIcon("ui"+SLASH+"images"+SLASH+"large"+SLASH+"BB.png");
-	private static final ImageIcon BLACK_KING_LARGE = new ImageIcon("ui"+SLASH+"images"+SLASH+"large"+SLASH+"BK.png");
-	private static final ImageIcon BLACK_QUEEN_LARGE = new ImageIcon("ui"+SLASH+"images"+SLASH+"large"+SLASH+"BQ.png");
+	private static final ImageIcon WHITE_PAWN_LARGE = new ImageIcon(String.join(SLASH, "ui", "images", "large", "WP.png"));
+	private static final ImageIcon WHITE_ROOK_LARGE = new ImageIcon(String.join(SLASH, "ui", "images", "large", "WR.png"));
+	private static final ImageIcon WHITE_BISHOP_LARGE = new ImageIcon(String.join(SLASH, "ui", "images", "large", "WB.png"));
+	private static final ImageIcon WHITE_KING_LARGE = new ImageIcon(String.join(SLASH, "ui", "images", "large", "WK.png"));
+	private static final ImageIcon WHITE_QUEEN_LARGE = new ImageIcon(String.join(SLASH, "ui", "images", "large", "WQ.png"));
+	private static final ImageIcon BLACK_PAWN_LARGE = new ImageIcon(String.join(SLASH, "ui", "images", "large", "BP.png"));
+	private static final ImageIcon BLACK_ROOK_LARGE = new ImageIcon(String.join(SLASH, "ui", "images", "large", "BR.png"));
+	private static final ImageIcon BLACK_BISHOP_LARGE = new ImageIcon(String.join(SLASH, "ui", "images", "large", "BB.png"));
+	private static final ImageIcon BLACK_KING_LARGE = new ImageIcon(String.join(SLASH, "ui", "images", "large", "BK.png"));
+	private static final ImageIcon BLACK_QUEEN_LARGE = new ImageIcon(String.join(SLASH, "ui", "images", "large", "BQ.png"));
 	
 	ImageIcon getLargeImage(String piece) {
 		
@@ -57,16 +57,16 @@ public class Images {
 		}
 	}
 
-	private static final ImageIcon WHITE_PAWN_SMALL = new ImageIcon("ui/images/small/WP.png");
-	private static final ImageIcon WHITE_ROOK_SMALL = new ImageIcon("ui/images/small/WR.png");
-	private static final ImageIcon WHITE_BISHOP_SMALL = new ImageIcon("ui/images/small/WB.png");
-	private static final ImageIcon WHITE_KING_SMALL = new ImageIcon("ui/images/small/WK.png");
-	private static final ImageIcon WHITE_QUEEN_SMALL = new ImageIcon("ui/images/small/WQ.png");
-	private static final ImageIcon BLACK_PAWN_SMALL = new ImageIcon("ui/images/small/BP.png");
-	private static final ImageIcon BLACK_ROOK_SMALL = new ImageIcon("ui/images/small/BR.png");
-	private static final ImageIcon BLACK_BISHOP_SMALL = new ImageIcon("ui/images/small/BB.png");
-	private static final ImageIcon BLACK_KING_SMALL = new ImageIcon("ui/images/small/BK.png");
-	private static final ImageIcon BLACK_QUEEN_SMALL = new ImageIcon("ui/images/small/BQ.png");
+	private static final ImageIcon WHITE_PAWN_SMALL = new ImageIcon(String.join(SLASH, "ui", "images", "small", "WP.png"));
+	private static final ImageIcon WHITE_ROOK_SMALL = new ImageIcon(String.join(SLASH, "ui", "images", "small", "WR.png"));
+	private static final ImageIcon WHITE_BISHOP_SMALL = new ImageIcon(String.join(SLASH, "ui", "images", "small", "WB.png"));
+	private static final ImageIcon WHITE_KING_SMALL = new ImageIcon(String.join(SLASH, "ui", "images", "small", "WK.png"));
+	private static final ImageIcon WHITE_QUEEN_SMALL = new ImageIcon(String.join(SLASH, "ui", "images", "small", "WQ.png"));
+	private static final ImageIcon BLACK_PAWN_SMALL = new ImageIcon(String.join(SLASH, "ui", "images", "small", "BP.png"));
+	private static final ImageIcon BLACK_ROOK_SMALL = new ImageIcon(String.join(SLASH, "ui", "images", "small", "BR.png"));
+	private static final ImageIcon BLACK_BISHOP_SMALL = new ImageIcon(String.join(SLASH, "ui", "images", "small", "BB.png"));
+	private static final ImageIcon BLACK_KING_SMALL = new ImageIcon(String.join(SLASH, "ui", "images", "small", "BK.png"));
+	private static final ImageIcon BLACK_QUEEN_SMALL = new ImageIcon(String.join(SLASH, "ui", "images", "small", "BQ.png"));
 	
 	ImageIcon getSmallImage(String piece) {
 		
