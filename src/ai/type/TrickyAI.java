@@ -45,7 +45,7 @@ public class TrickyAI extends ArtIntel{
 		while(depth < 6) {
 			
 			while(!input.isEmpty()) {
-			poses.add(input.remove());
+				poses.add(input.remove());
 			}
 			
 			while(!poses.isEmpty()) {
@@ -221,12 +221,12 @@ public class TrickyAI extends ArtIntel{
         		for(Node child: move.getChidren()) {
         			scores.add(child.getValue());
         		}
-                	if(move.getDepth() % 2 == 1) {
-                		move.setValue(evaluator.min(scores));
-                	}
-                	else{
-                		move.setValue(evaluator.max(scores));
-                	}
+            	if(move.getDepth() % 2 == 1) {
+            		move.setValue(evaluator.min(scores));
+            	}
+            	else{
+            		move.setValue(evaluator.max(scores));
+            	}
         	}
         }        
         for (Node move: stack) {

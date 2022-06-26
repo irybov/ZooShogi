@@ -14,7 +14,7 @@ public class MatrixTest {
 	private static String key;
 	
 	@BeforeClass
-	public static void initBoard() {
+	public static void init_board() {
 		board = new String[][]{{"r","k"," ","b"," "," "," "," "," "},
 				  			   {" "," ","p"},
 				  			   {" ","P"," "},
@@ -22,29 +22,29 @@ public class MatrixTest {
 	}
 	
 	@Test
-	public void testKeyMakerCreate() {		
+	public void keymaker_create() {		
 		assertNotNull(Matrix.makeKey(board));
 	}
 
 	@Test(expected = NullPointerException.class)
-	public void testKeyMakerEmpty() {		
+	public void keymaker_empty() {		
 		String[][] board = null;		
 		assertNull(Matrix.makeKey(board));
 	}
 	
 	@Test
-	public void testKeyMakerLength() {
+	public void keymaker_length() {
 		assertEquals(24, Matrix.makeKey(board).length());
 		key = Matrix.makeKey(board);
 	}
 	
 	@Test
-	public void testKeySwapper() {
+	public void keyswapper_correct() {
 		assertEquals("#krp###P##KBb#######R###", Matrix.swapKey(key));
 	}
 	
 	@AfterClass
-	public static void clearMemory() {
+	public static void clear_memory() {
 		board = null;
 		key = null;
 	}

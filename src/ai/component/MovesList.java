@@ -19,7 +19,7 @@ public class MovesList {
 		if(turn.equals(Turn.BLACK)) {
 			blackMoves.add(hash);
 		}
-		else{
+		else if(turn.equals(Turn.WHITE)){
 			whiteMoves.add(hash);			
 		}
 		

@@ -1,6 +1,7 @@
 package utilpack;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,15 +12,10 @@ public class Copier {
 
 	public static String[][] deepCopy(final String[][] ORIGINAL) {
 		
-		String[][] copy = new String[][]{{" "," "," "," "," "," "," "," "," "},
-			   							 {" "," "," "},
-			   							 {" "," "," "},
-			   							 {" "," "," "," "," "," "," "," "," "}};
+		String[][] copy = new String[ORIGINAL.length][];
 		
-	    for (int x = 0; x < ORIGINAL.length; x++) {
-	    	for (int y = 0; y < ORIGINAL[x].length; y++) {
-	          copy[x][y] = ORIGINAL[x][y];
-	      	}
+	    for (int i = 0; i < ORIGINAL.length; i++) {
+	          copy[i] = Arrays.copyOf(ORIGINAL[i], ORIGINAL[i].length);
 	    }
 	    return copy;
 	}

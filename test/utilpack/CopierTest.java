@@ -16,7 +16,7 @@ public class CopierTest {
 	private static String[][] board;
 	
 	@BeforeClass
-	public static void initBoard() {
+	public static void init_board() {
 		board = new String[][]{{"r","k","b"," "," "," "," "," "," "},
 				  			   {" ","p"," "},
 				  			   {" ","P"," "},
@@ -24,18 +24,18 @@ public class CopierTest {
 	}
 	
 	@Test
-	public void testDeepCopy() {
+	public void deep_copy() {
 		assertTrue(Arrays.deepEquals(board, Copier.deepCopy(board)));
 	}
 	
 	@Test(expected = NullPointerException.class)
-	public void testEmptyCopy() {		
+	public void empty_copy() {		
 		String[][] board = null;		
 		assertNull(Matrix.makeKey(board));
 	}
 	
 	@AfterClass
-	public static void clearMemory() {
+	public static void clear_memory() {
 		board = null;
 	}
 

@@ -6,7 +6,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -22,13 +24,12 @@ public class ArtIntelTest {
 	private static List<Node> legal;
 	private static int level;
 	private static Generator generator;
-	private static int cores;
-	private static ExecutorService es1;
-	private static ExecutorService es2;
 	private static ArtIntelFactory factory;
+	private static int cores;
+	private ExecutorService es;
 	
 	@BeforeClass
-	public static void initBoard() {
+	public static void init_board_and_env() {
 		board = new String[][]{{" ","k"," "," ","p"," "," "," "," "},
 				  			   {" ","r"," "},
 				  			   {" ","b"," "},
@@ -36,19 +37,23 @@ public class ArtIntelTest {
 		generator = new Generator();
 		legal = generator.generateMoves(board, Turn.BLACK);
 		cores = Runtime.getRuntime().availableProcessors();
+		factory = new ArtIntelFactory();
+	}
+	
+	@Before
+	public void set_up() {
+		es = Executors.newFixedThreadPool(cores);
 		nodes = new ArrayList<>(legal.size());
 		nodes = generator.sortMoves(board, legal, Turn.BLACK, false);
-		factory = new ArtIntelFactory();
 	}
 
 	@Test(timeout = 8000)
-	public void performanceLimitAB() {
-		es1 = Executors.newFixedThreadPool(cores);
+	public void performance_timelimit_AB() {
 		level = 6;
-		nodes.forEach(node-> es1.submit(factory.createAI(level, node, Copier.deepCopy(board))));
-		es1.shutdown();
+		nodes.forEach(node-> es.submit(factory.createAI(level, node, Copier.deepCopy(board))));
+		es.shutdown();
 		try {
-			es1.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
+			es.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
 		}
 		catch (InterruptedException exc) {
 			exc.printStackTrace();
@@ -56,23 +61,27 @@ public class ArtIntelTest {
 	}
 	
 	@Test(timeout = 10000)
-	public void performanceLimitEX() {
-		es2 = Executors.newFixedThreadPool(cores);
+	public void performance_timelimit_EX() {
 		level = 7;
-		nodes.forEach(node-> es2.submit(factory.createAI(level, node, Copier.deepCopy(board))));
-		es2.shutdown();
+		nodes.forEach(node-> es.submit(factory.createAI(level, node, Copier.deepCopy(board))));
+		es.shutdown();
 		try {
-			es2.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
+			es.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
 		}
 		catch (InterruptedException exc) {
 			exc.printStackTrace();
 		}
 	}
 	
-	@AfterClass
-	public static void clearMemory() {
-		board = null;
+	@After
+	public void tear_down() {
+		es = null;
 		nodes = null;
+	}
+	
+	@AfterClass
+	public static void clear_memory() {
+		board = null;
 		legal = null;
 		generator = null;
 		factory = null;

@@ -85,7 +85,7 @@ public class Generator {
 				}
 			}
 		}		
-		else{	
+		else if(turn.equals(Turn.WHITE)){	
 			for(int i=3; i<9; i++) {
 				if(!board[3][i].equals(" ")){
 					for(int r=0; r<4; r++){
@@ -248,7 +248,7 @@ public class Generator {
 					sorted.removeIf(e -> e.getValue() < prev);
 				}
 			}		
-			else{					
+			else if(turn.equals(Turn.WHITE)){					
 				r3 = 3;
 				if(board[r][c].equals("P") & r==1){
 					prom = "P";
