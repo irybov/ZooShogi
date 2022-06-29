@@ -1,6 +1,8 @@
 package utilpack;
 
-public class Matrix {
+public final class Matrix {
+	
+	private Matrix() {}
 	
 	public static String makeKey(final String[][] FIELD) {
 		

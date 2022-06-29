@@ -9,7 +9,9 @@ import utilpack.Capture;
 import utilpack.Copier;
 import utilpack.Matrix;
 
-public class Cache {
+public final class Cache {
+	
+	private Cache() {}
 
 	private static Map<String, Node> cache = new HashMap<>();
 	

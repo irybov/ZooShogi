@@ -43,9 +43,9 @@ class InternalServer extends Thread{
 		return reply;
 	}
 	
-    Properties props;
-    int PORT;
-    String URL;
+    private Properties props;
+    private int PORT;
+    private String URL;
 	{
 		try (Reader config = new BufferedReader(new FileReader("config.txt"))) {	
 	        props = new Properties();

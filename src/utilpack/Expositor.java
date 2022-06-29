@@ -1,6 +1,8 @@
 package utilpack;
 
-public class Expositor {
+public final class Expositor {
+	
+	private Expositor() {}
 
 	public static String getColumnName(final int column){
 		

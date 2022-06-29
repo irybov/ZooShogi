@@ -8,7 +8,9 @@ import java.util.Map;
 
 import ai.component.Node;
 
-public class Copier {
+public final class Copier {
+	
+	private Copier() {}
 
 	public static String[][] deepCopy(final String[][] ORIGINAL) {
 		

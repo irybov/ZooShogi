@@ -1,6 +1,8 @@
 package utilpack;
 
-public class Capture {
+public final class Capture {
+
+	private Capture() {}
 
 	// checks if capture is possible
 	public static boolean isCaptureLegal(String[][] field, int r2, int c2, Turn turn) {

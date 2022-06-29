@@ -6,7 +6,9 @@ import java.util.Set;
 import utilpack.Matrix;
 import utilpack.Turn;
 
-public class MovesList {
+public final class MovesList {
+	
+	private MovesList() {}
 	
 	private static Set<String> blackMoves = new HashSet<>();
 	private static Set<String> whiteMoves = new HashSet<>();

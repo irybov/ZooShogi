@@ -1,6 +1,8 @@
 package utilpack;
 
-public class Examiner {
+public final class Examiner {
+	
+	private Examiner() {}
 	
 	public static boolean isCheck(String[][] board, Turn turn) {		
 		
