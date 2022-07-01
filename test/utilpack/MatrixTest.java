@@ -35,11 +35,11 @@ public class MatrixTest {
 	@Test
 	public void keymaker_length() {
 		assertEquals(24, Matrix.makeKey(board).length());
-		key = Matrix.makeKey(board);
 	}
 	
 	@Test
 	public void keyswapper_correct() {
+		key = Matrix.makeKey(board);
 		assertEquals("#krp###P##KBb#######R###", Matrix.swapKey(key));
 	}
 	
