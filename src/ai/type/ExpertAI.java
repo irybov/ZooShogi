@@ -19,7 +19,7 @@ public class ExpertAI extends ArtIntel{
 	
 	@Override
 	public Integer call() {
-		calculate(Turn.BLACK, 8, Integer.MIN_VALUE+1, Integer.MAX_VALUE, Arrays.asList(root));
+		calculate(Turn.BLACK, 1, Integer.MIN_VALUE+1, Integer.MAX_VALUE, Arrays.asList(root));
 		Clocks.addNodes(nodesCount);
 		return root.getValue();
 	}
@@ -33,7 +33,7 @@ public class ExpertAI extends ArtIntel{
 		if(turn.equals(Turn.WHITE) && MovesList.isRepeated(board, Turn.BLACK)){
 			return 0;
 		}
-		if((turn.equals(Turn.BLACK) && depth < 8) && MovesList.isRepeated(board, Turn.WHITE)){
+		if((turn.equals(Turn.BLACK) && depth > 1) && MovesList.isRepeated(board, Turn.WHITE)){
 			return 0;
 		}		
 		if(hash.isRepeated(board, turn, depth)){
@@ -42,21 +42,21 @@ public class ExpertAI extends ArtIntel{
 		hash.addMove(board, turn, depth);
 		
 		if(Examiner.isBlackPositionWon(board, turn)){
-			return 2000+(depth*100);	
+			return 2000+(100/depth);	
 		}
 		if(Examiner.isWhitePositionWon(board, turn)){
-			return -(2000+(depth*100));	
+			return -(2000+(100/depth));	
 		}			
-		if(Examiner.isCheck(board, turn) && depth < 8){
+		if(Examiner.isCheck(board, turn) && depth > 1){
 			if(turn.equals(Turn.WHITE)){
-				return -(1000+(depth*100));
+				return -(1000+(100/depth));
 			}
 			else {
-				return 1000+(depth*100);				
+				return 1000+(100/depth);				
 			}
 		}
 	
-		if(depth == 1){
+		if(depth == 8){
 			return evaluator.evaluationMaterial(board, false);
 		}
 
@@ -104,7 +104,7 @@ public class ExpertAI extends ArtIntel{
 				
 				List<Node> children = null;
 				List<Node> sorted = null;
-				if(temp != "K" & depth > 2) {
+				if(temp != "K" & depth < 7) {
 					children = generator.generateMoves(board, Turn.WHITE);
 					sorted = generator.sortMoves(board, children, Turn.WHITE, false);
 					for(Node child: sorted) {
@@ -113,7 +113,7 @@ public class ExpertAI extends ArtIntel{
 					legalMoves.get(i).addChildren(sorted);
 				}
 
-				int value = calculate(Turn.WHITE, depth-1, alpha, beta, sorted);
+				int value = calculate(Turn.WHITE, depth+1, alpha, beta, sorted);
 				if(value > alpha){
 					alpha = value;
 					scores.add(value);
@@ -149,7 +149,7 @@ public class ExpertAI extends ArtIntel{
 			
 				List<Node> children = null;
 				List<Node> sorted = null;
-				if(temp != "k" & depth > 2) {
+				if(temp != "k" & depth < 7) {
 					children = generator.generateMoves(board, Turn.BLACK);
 					sorted = generator.sortMoves(board, children, Turn.BLACK, false);
 					for(Node child: sorted) {
@@ -158,7 +158,7 @@ public class ExpertAI extends ArtIntel{
 					legalMoves.get(i).addChildren(sorted);
 				}
 				
-				int value = calculate(Turn.BLACK, depth-1, alpha, beta, sorted);
+				int value = calculate(Turn.BLACK, depth+1, alpha, beta, sorted);
 				if(value < beta){
 					beta = value;
 					scores.add(value);

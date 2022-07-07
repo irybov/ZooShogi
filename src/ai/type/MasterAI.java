@@ -19,7 +19,7 @@ public class MasterAI extends ArtIntel{
 	
 	@Override
 	public Integer call() {
-		calculate(Turn.BLACK,6,Integer.MIN_VALUE+1,Integer.MAX_VALUE,false,Arrays.asList(root));
+		calculate(Turn.BLACK,1,Integer.MIN_VALUE+1,Integer.MAX_VALUE,false,Arrays.asList(root));
 		Clocks.addNodes(nodesCount);
 		return root.getValue();
 	}
@@ -34,7 +34,7 @@ public class MasterAI extends ArtIntel{
 		if(turn.equals(Turn.WHITE) && MovesList.isRepeated(board, Turn.BLACK)){
 			return 0;
 		}
-		if((turn.equals(Turn.BLACK) && depth < 6) && MovesList.isRepeated(board, Turn.WHITE)){
+		if((turn.equals(Turn.BLACK) && depth > 1) && MovesList.isRepeated(board, Turn.WHITE)){
 			return 0;
 		}		
 		if(hash.isRepeated(board, turn, depth)){
@@ -43,24 +43,24 @@ public class MasterAI extends ArtIntel{
 		hash.addMove(board, turn, depth);
 		
 		if(Examiner.isBlackPositionWon(board, turn)){
-			return 2000+(depth*100);	
+			return 2000+(100/depth);	
 		}
 		if(Examiner.isWhitePositionWon(board, turn)){
-			return -(2000+(depth*100));	
+			return -(2000+(100/depth));	
 		}			
-		if(Examiner.isCheck(board, turn) && depth < 6){
+		if(Examiner.isCheck(board, turn) && depth > 1){
 			if(turn.equals(Turn.WHITE)){
-				return -(1000+(depth*100));
+				return -(1000+(100/depth));
 			}
 			else {
-				return 1000+(depth*100);				
+				return 1000+(100/depth);				
 			}
 		}
 	
-		if(node==false & depth < 2){
+		if(node==false & depth > 5){
 			return evaluator.evaluationMaterial(board, false);
 		}		
-		if(depth == -3){
+		if(depth == 10){
 			return evaluator.evaluationMaterial(board, false);
 		}
 
@@ -120,7 +120,7 @@ public class MasterAI extends ArtIntel{
 				}		
 				List<Node> children = null;
 				List<Node> sorted = null;
-				if(temp != "K" & (node ? depth > -2 : depth > 2)) {
+				if(temp != "K" & (node ? depth < 9 : depth < 5)) {
 					children = generator.generateMoves(board, Turn.WHITE);
 					sorted = generator.sortMoves(board, children, Turn.WHITE, false);
 					for(Node child: sorted) {
@@ -129,7 +129,7 @@ public class MasterAI extends ArtIntel{
 					legalMoves.get(i).addChildren(sorted);
 				}
 				
-				int value = calculate(Turn.WHITE, depth-1, alpha, beta, node, sorted);
+				int value = calculate(Turn.WHITE, depth+1, alpha, beta, node, sorted);
 				if(value > alpha){
 					alpha = value;
 					scores.add(value);
@@ -175,7 +175,7 @@ public class MasterAI extends ArtIntel{
 				}
 				List<Node> children = null;
 				List<Node> sorted = null;
-				if(temp != "k" & (node ? depth > -2 : depth > 2)) {
+				if(temp != "k" & (node ? depth < 9 : depth < 5)) {
 					children = generator.generateMoves(board, Turn.BLACK);
 					sorted = generator.sortMoves(board, children, Turn.BLACK, false);
 					for(Node child: sorted) {
@@ -184,7 +184,7 @@ public class MasterAI extends ArtIntel{
 					legalMoves.get(i).addChildren(sorted);
 				}
 				
-				int value = calculate(Turn.BLACK, depth-1, alpha, beta, node, sorted);
+				int value = calculate(Turn.BLACK, depth+1, alpha, beta, node, sorted);
 				if(value < beta){
 					beta = value;
 					scores.add(value);

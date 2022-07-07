@@ -20,8 +20,8 @@ public class Gui {
 	private Images images = Images.getInstance();
 	
 	private int clickNumber = 1;
-	private boolean isMoveAsDrop = false;
-	private boolean isCheckWarningEnabled = true;	
+	private boolean moveIsDrop = false;
+	private boolean checkWarningEnabled = true;	
 	boolean isVolumeMuted = false;
 
 	//The Frame that's displayed. (Contains the Panels)
@@ -46,8 +46,11 @@ public class Gui {
 	public static JLabel score = new JLabel(" ");
 	static JLabel profile = new JLabel("Player");
 
+	private static JLabel computer = new JLabel("Computer");
 	public static JLabel clockBlack = new JLabel("00:00");
 	public static JLabel clockWhite = new JLabel("00:00");
+	private static JLabel nodesLabel = new JLabel("Nodes:");
+	public static JLabel nodes = new JLabel(" ");
 	
 	// components labels
 	private static JLabel scoreLabel = new JLabel("Score:");
@@ -60,11 +63,7 @@ public class Gui {
 	private static JLabel row4 = new JLabel("4");
 	private static JLabel whiteHand = new JLabel("White's hand");
 	private static JLabel blackHand = new JLabel("Black's hand");
-	
-	private static JLabel computer = new JLabel("Computer");
-	private static JLabel nodesLabel = new JLabel("Nodes:");
-	public static JLabel nodes = new JLabel(" ");
-	
+		
 	// service buttons
 	private static JCheckBox volume = new JCheckBox("Mute volume", false);
 	private static JSlider boost = new JSlider(-10, 10, 0);
@@ -327,11 +326,11 @@ public class Gui {
 			public void actionPerformed(ActionEvent e) {
 				checkWarning = (JCheckBox) e.getSource();
 				if(checkWarning.isSelected()){
-					isCheckWarningEnabled = true;
+					checkWarningEnabled = true;
 					director.setCheckWarning(true);
 				}
 				else{
-					isCheckWarningEnabled = false;
+					checkWarningEnabled = false;
 					director.setCheckWarning(false);
 				}
 				return;
@@ -383,17 +382,17 @@ public class Gui {
 							clickNumber = 2;
 							output.setText(Expositor.getPieceName(squares[r][c].getName())
 																		+" choosen");
-							isMoveAsDrop = false;
+							moveIsDrop = false;
 							return;
 							}
 						else if(theButton.equals(squares[r][c]) & clickNumber == 2 & 
 								director.isPlayerPiece(squares[r][c].getName())==false){
 							if(director.moveTo(r, c)){
-								if(isMoveAsDrop & squares[r][c].getName().equals(" ")){
+								if(moveIsDrop & squares[r][c].getName().equals(" ")){
 									director.doDrop();
 								}
-								else if(isMoveAsDrop & !squares[r][c].getName().equals(" ")){
-									isMoveAsDrop = false;
+								else if(moveIsDrop & !squares[r][c].getName().equals(" ")){
+									moveIsDrop = false;
 									output.setText("Wrong move!");
 									updateGui();
 									return;
@@ -404,7 +403,7 @@ public class Gui {
 								updateGui();
 								clickNumber = 1;
 								disableLevels();
-								isMoveAsDrop = false;								
+								moveIsDrop = false;								
 								
 									javax.swing.SwingUtilities.invokeLater(new Runnable() {
 										public void run() {
@@ -423,7 +422,7 @@ public class Gui {
 							else{
 								squares[r][c].setBackground(Color.decode("#db9356"));
 								clickNumber = 1;
-								isMoveAsDrop = false;
+								moveIsDrop = false;
 								output.setText("Wrong move!");
 								updateGui();
 								return;
@@ -433,7 +432,7 @@ public class Gui {
 								director.isPlayerPiece(squares[r][c].getName())){
 							squares[r][c].setBackground(Color.decode("#db9356"));
 							clickNumber = 1;
-							isMoveAsDrop = false;
+							moveIsDrop = false;
 							output.setText("Wrong place!");
 							updateGui();
 							return;
@@ -460,7 +459,7 @@ public class Gui {
 						for(int c=0;c<6;c++) {
 						if(theButton.equals(dropAreaWhite[c])&clickNumber==1
 								&director.isPlayerPiece(dropAreaWhite[c].getName())){
-							isMoveAsDrop = true;
+							moveIsDrop = true;
 							dropAreaWhite[c].setBackground(Color.YELLOW);
 							highlightSquares();
 							director.moveFrom(3, c+3, dropAreaWhite[c].getName());						
@@ -470,7 +469,7 @@ public class Gui {
 						else if(theButton.equals(dropAreaWhite[c]) & clickNumber == 2){
 							dropAreaWhite[c].setBackground(Color.decode("#db9356"));
 							clickNumber = 1;
-							isMoveAsDrop = false;
+							moveIsDrop = false;
 							output.setText("Wrong place!");
 							updateGui();
 							return;
@@ -519,7 +518,7 @@ public class Gui {
 			dropAreaBlack[c].setIcon(images.getSmallImage(dropAreaBlack[c].getName()));			
 		}
 		
-		if(isCheckWarningEnabled){
+		if(checkWarningEnabled){
 			for(int r=0;r<4;r++) {
 				for(int c=0;c<3;c++) {
 					checkWarning();
@@ -590,7 +589,7 @@ public class Gui {
 		
 		for(int r=0;r<4;r++) {
 			for(int c=0;c<3;c++) {
-				if(isMoveAsDrop & squares[r][c].getName().equals(" ")){
+				if(moveIsDrop & squares[r][c].getName().equals(" ")){
 				squares[r][c].setBackground(Color.GREEN);
 				}
 			}

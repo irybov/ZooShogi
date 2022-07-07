@@ -51,6 +51,7 @@ public class ZooShogi {
 							launchScreen.dispose();
 						}
 					});
+				Thread.currentThread().interrupt();
 			}
 		});
 /*

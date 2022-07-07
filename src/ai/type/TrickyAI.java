@@ -96,7 +96,7 @@ public class TrickyAI extends ArtIntel{
 							board[r][c] = " ";
 						}
 							
-						hash.addMove(board, Turn.BLACK, depth+4);
+						hash.addMove(board, Turn.BLACK, depth);
 						
 						if(temp.equals("K")){
 							legal.get(i).setValue(2000+(100/depth));
@@ -108,7 +108,7 @@ public class TrickyAI extends ArtIntel{
 						else if(MovesList.isRepeated(board, Turn.BLACK)) {
 							legal.get(i).setValue(0);
 						}
-						else if(hash.isRepeated(board, Turn.BLACK, depth-4)){
+						else if(hash.isRepeated(board, Turn.BLACK, depth)){
 							legal.get(i).setValue(0);
 						}	
 						else if(integrator.isLost(board)) {

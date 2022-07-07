@@ -8,15 +8,15 @@ import utilpack.Turn;
 
 public class Clocks{
 	
-	private static int minutesBlack = 0;
-	private static int secondsBlack = 0;
-	private static int minutesWhite = 0;
-	private static int secondsWhite = 0;
+	private static volatile int minutesBlack = 0;
+	private static volatile int secondsBlack = 0;
+	private static volatile int minutesWhite = 0;
+	private static volatile int secondsWhite = 0;
 
-	private volatile Turn turn = Turn.PAUSE;
-	private static AtomicInteger nodes = new AtomicInteger(0);
+	private static volatile Turn turn = Turn.PAUSE;
+	private static volatile AtomicInteger nodes = new AtomicInteger(0);
 	
-	private static Clocks INSTANCE;
+	private static volatile Clocks INSTANCE;
 	
 	public static Clocks getInstance() {
 		
@@ -30,8 +30,8 @@ public class Clocks{
 		return INSTANCE;
 	}
 	
-	public void setTurn(Turn turn) {
-		this.turn = turn;		
+	public static void setTurn(Turn turn) {
+		Clocks.turn = turn;		
 	}
 	public static void setNodes(int count) {
 		nodes.set(count);

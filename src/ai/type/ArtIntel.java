@@ -52,11 +52,11 @@ public class ArtIntel implements Callable<Integer>{
 								
 			if(side.equals(Turn.BLACK)) {
 				if(blackMoves.containsKey(hash))
-					return(blackMoves.get(hash) == depth+4);
+					return(blackMoves.get(hash) == depth-4);
 			}
 			else if(side.equals(Turn.WHITE)){
 				if(whiteMoves.containsKey(hash))
-					return(whiteMoves.get(hash) == depth+4);
+					return(whiteMoves.get(hash) == depth-4);
 			}
 			return false;
 		}

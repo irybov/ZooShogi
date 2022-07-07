@@ -19,7 +19,7 @@ public class NaiveAI extends ArtIntel{
 	
 	@Override
 	public Integer call() {
-		calculate(Turn.BLACK, 6, Arrays.asList(root));
+		calculate(Turn.BLACK, 1, Arrays.asList(root));
 		Clocks.addNodes(nodesCount);
 		return root.getValue()/10;
 	}
@@ -27,12 +27,12 @@ public class NaiveAI extends ArtIntel{
 	private int calculate(Turn turn, int depth, List<Node> legalMoves) {
 		
 		if(turn.equals(Turn.WHITE) && integrator.isLost(board)) {
-			return -5000;
+			return -6000;
 		}		
 		if(turn.equals(Turn.WHITE) && MovesList.isRepeated(board, Turn.BLACK)){
 			return 0;
 		}
-		if((turn.equals(Turn.BLACK) && depth < 6) && MovesList.isRepeated(board, Turn.WHITE)){
+		if((turn.equals(Turn.BLACK) && depth > 1) && MovesList.isRepeated(board, Turn.WHITE)){
 			return 0;
 		}		
 		if(turn.equals(Turn.WHITE)){
@@ -43,21 +43,21 @@ public class NaiveAI extends ArtIntel{
 		}
 		
 		if(Examiner.isBlackPositionWon(board, turn)){
-			return 100/depth;
+			return 100*depth;
 		}
 		if(Examiner.isWhitePositionWon(board, turn)){
-			return -(1000*depth);
+			return -(1000/depth);
 		}		
-		if(Examiner.isCheck(board, turn) && depth < 6){
+		if(Examiner.isCheck(board, turn) && depth > 1){
 			if(turn.equals(Turn.WHITE)){
-				return -(1000*depth);
+				return -(1000/depth);
 			}
 			else {
-				return 100/depth;				
+				return 100*depth;				
 			}
 		}
 		
-		if(depth == 1){
+		if(depth == 6){
 			return evaluator.evaluationMaterial(board, true)/depth;
 		}
 
@@ -104,7 +104,7 @@ public class NaiveAI extends ArtIntel{
 				}
 				
 				List<Node> children = null;
-				if(temp != "K" & depth > 2) {
+				if(temp != "K" & depth < 5) {
 					children = generator.generateMoves(board, Turn.WHITE);
 					for(Node child: children) {
 						child.addParent(legalMoves.get(i));
@@ -112,7 +112,7 @@ public class NaiveAI extends ArtIntel{
 					legalMoves.get(i).addChildren(children);
 				}
 				
-				int value = calculate(Turn.WHITE, depth-1, children);
+				int value = calculate(Turn.WHITE, depth+1, children);
 					scores.add(value);
 					legalMoves.get(i).setValue(value);
 			}				
@@ -140,7 +140,7 @@ public class NaiveAI extends ArtIntel{
 				}
 				
 				List<Node> children = null;
-				if(temp != "k" & depth > 2) {
+				if(temp != "k" & depth < 5) {
 					children = generator.generateMoves(board, Turn.BLACK);
 					for(Node child: children) {
 						child.addParent(legalMoves.get(i));
@@ -148,7 +148,7 @@ public class NaiveAI extends ArtIntel{
 					legalMoves.get(i).addChildren(children);
 				}
 				
-				int value = calculate(Turn.BLACK, depth-1, children);
+				int value = calculate(Turn.BLACK, depth+1, children);
 					scores.add(value);
 					legalMoves.get(i).setValue(value);
 				}

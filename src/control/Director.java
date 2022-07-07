@@ -271,15 +271,15 @@ public class Director{
 
 	public void compute() throws InterruptedException{
 
-		Clocks clocks = Clocks.getInstance();
+//		Clocks clocks = Clocks.getInstance();
 		
 		undoMove = Copier.deepCopy(board);
 		
-		clocks.setTurn(Turn.BLACK);
+		Clocks.setTurn(Turn.BLACK);
 		if(isEndOfGame(Turn.BLACK)){
 			game.clear();
 			Gui.lockBoard();
-			clocks.setTurn(Turn.PAUSE);
+			Clocks.setTurn(Turn.PAUSE);
 			return;
 		}
 		
@@ -349,10 +349,10 @@ public class Director{
 		if(isEndOfGame(Turn.WHITE)){
 			game.clear();
 			Gui.lockBoard();
-			clocks.setTurn(Turn.PAUSE);
+			Clocks.setTurn(Turn.PAUSE);
 			return;
 		}		
-		clocks.setTurn(Turn.WHITE);
+		Clocks.setTurn(Turn.WHITE);
 	}
 	
 	private boolean isEndOfGame(Turn turn)  {
