@@ -29,38 +29,48 @@ public class MasterAI extends ArtIntel{
 			List<Node> legalMoves) {
 		
 		if(turn.equals(Turn.WHITE) && integrator.isLost(board)) {
+			legalMoves = null;
 			return -500;
 		}		
 		if(turn.equals(Turn.WHITE) && MovesList.isRepeated(board, Turn.BLACK)){
+			legalMoves = null;
 			return 0;
 		}
 		if((turn.equals(Turn.BLACK) && depth > 1) && MovesList.isRepeated(board, Turn.WHITE)){
+			legalMoves = null;
 			return 0;
 		}		
 		if(hash.isRepeated(board, turn, depth)){
+			legalMoves = null;
 			return 0;
 		}		
 		hash.addMove(board, turn, depth);
 		
 		if(Examiner.isBlackPositionWon(board, turn)){
+			legalMoves = null;
 			return 2000+(100/depth);	
 		}
 		if(Examiner.isWhitePositionWon(board, turn)){
+			legalMoves = null;
 			return -(2000+(100/depth));	
 		}			
 		if(Examiner.isCheck(board, turn) && depth > 1){
 			if(turn.equals(Turn.WHITE)){
+				legalMoves = null;
 				return -(1000+(100/depth));
 			}
 			else {
+				legalMoves = null;
 				return 1000+(100/depth);				
 			}
 		}
 	
 		if(node==false & depth > 5){
+			legalMoves = null;
 			return evaluator.evaluationMaterial(board, false);
 		}		
 		if(depth == 10){
+			legalMoves = null;
 			return evaluator.evaluationMaterial(board, false);
 		}
 

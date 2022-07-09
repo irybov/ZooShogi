@@ -28,44 +28,53 @@ public class ActiveAI extends ArtIntel{
 	private int calculate(Turn turn, int depth, List<Node> legalMoves) {
 		
 		if(turn.equals(Turn.WHITE) && integrator.isLost(board)) {
+			legalMoves = null;
 			return -500;
 		}		
 		if(turn.equals(Turn.WHITE) && MovesList.isRepeated(board, Turn.BLACK)){
+			legalMoves = null;
 			return 0;
 		}
 		if((turn.equals(Turn.BLACK) && depth > 1) && MovesList.isRepeated(board, Turn.WHITE)){
+			legalMoves = null;
 			return 0;
 		}		
 		if(turn.equals(Turn.WHITE)){
 			if(hash.isRepeated(board, turn, depth)){
+				legalMoves = null;
 				return 0;
 			}		
 			hash.addMove(board, turn, depth);
 		}
 		
 		if(Examiner.isBlackPositionWon(board, turn)){
+			legalMoves = null;
 			return 2000+(100/depth);
 		}
 		if(Examiner.isWhitePositionWon(board, turn)){
+			legalMoves = null;
 			return -(2000+(100/depth));
 		}		
 		if(Examiner.isCheck(board, turn) && depth > 1){
 			if(turn.equals(Turn.WHITE)){
+				legalMoves = null;
 				return -(1000+(100/depth));
 			}
 			else {
+				legalMoves = null;
 				return 1000+(100/depth);				
 			}
 		}
 	
 		if(depth == 6){
+			legalMoves = null;
 			return evaluator.evaluationMaterial(board, false)
 					+ evaluator.evaluationPositional(board);
 		}
 
 		nodesCount += legalMoves.size();
 				
-		ArrayList<Integer> scores = new ArrayList<>(legalMoves.size());
+		List<Integer> scores = new ArrayList<>(legalMoves.size());
 		
 		for(int i=0; i<legalMoves.size(); i++){
 
@@ -150,8 +159,8 @@ public class ActiveAI extends ArtIntel{
 				List<Node> children = null;
 				List<Node> sorted = null;
 				if(temp != "k" & depth < 5) {
-					children = generator.generateMoves(board, Turn.WHITE);
-					sorted = generator.sortMoves(board, children, Turn.WHITE, false);
+					children = generator.generateMoves(board, Turn.BLACK);
+					sorted = generator.sortMoves(board, children, Turn.BLACK, false);
 					for(Node child: sorted) {
 						child.addParent(legalMoves.get(i));
 					}

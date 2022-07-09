@@ -154,10 +154,9 @@ public class Generator {
 		return legal;
 	}
 	
-	public List<Node> sortMoves(String[][] board, List<Node> legal,
-								Turn turn, boolean prune) {
+	public List<Node> sortMoves(String[][] board, List<Node> legalMoves, Turn turn, boolean prune){
 		
-		List<Node> sorted = new ArrayList<>();
+		List<Node> sortedMoves = new ArrayList<>();
 		
 		int prev;
 			if(Examiner.isCheck(board, Turn.WHITE)){
@@ -171,12 +170,12 @@ public class Generator {
 						+ evaluator.evaluationPositional(board);
 			}
 	
-		for(int i=0; i<legal.size(); i++){
+		for(int i=0; i<legalMoves.size(); i++){
 
-			int r = legal.get(i).getRowFrom();
-			int c = legal.get(i).getColumnFrom();
-			int r2 = legal.get(i).getRowTo();
-			int c2 = legal.get(i).getColumnTo();
+			int r = legalMoves.get(i).getRowFrom();
+			int c = legalMoves.get(i).getColumnFrom();
+			int r2 = legalMoves.get(i).getRowTo();
+			int c2 = legalMoves.get(i).getColumnTo();
 			String temp = null;
 			String prom = null;
 			int r3 = -1;
@@ -217,10 +216,10 @@ public class Generator {
 						!Examiner.isCheck(board, Turn.WHITE)){
 					value = 4000;
 				}
-				else if(Examiner.isCheck(board, Turn.BLACK) &&
+/*				else if(Examiner.isCheck(board, Turn.BLACK) &&
 						!Examiner.isCheck(board, Turn.WHITE)) {
 					value = 500;
-				}
+				}*/
 				else if(MovesList.isRepeated(board, Turn.BLACK)) {
 					value = 0;
 				}
@@ -231,21 +230,23 @@ public class Generator {
 					value = -5000;
 				}
 				else{
-					if(prune) {
+/*					if(prune) {
 						value = evaluator.evaluationMaterial(board, false)
 								+ evaluator.evaluationPositional(board);
 					}
 					else {
 						value = evaluator.evaluationMaterial(board, false);
-					}
+					}*/
+					value = evaluator.evaluationMaterial(board, false)
+							+ evaluator.evaluationPositional(board);
 				}
 				
-				legal.get(i).setValue(value);
-				sorted.add(legal.get(i));			
+				legalMoves.get(i).setValue(value);
+				sortedMoves.add(legalMoves.get(i));
 	
-				Collections.sort(sorted, Collections.reverseOrder());			
+				Collections.sort(sortedMoves, Collections.reverseOrder());
 				if(prune){
-					sorted.removeIf(e -> e.getValue() < prev);
+					sortedMoves.removeIf(e -> e.getValue() < prev);
 				}
 			}		
 			else if(turn.equals(Turn.WHITE)){					
@@ -283,10 +284,10 @@ public class Generator {
 						!Examiner.isCheck(board, Turn.BLACK)){
 						value = -4000;
 				}
-				else if(Examiner.isCheck(board, Turn.WHITE) &&
+/*				else if(Examiner.isCheck(board, Turn.WHITE) &&
 						!Examiner.isCheck(board, Turn.BLACK)) {
 					value = -500;
-				}
+				}*/
 				else if(MovesList.isRepeated(board, Turn.WHITE)) {
 					value = 0;
 				}
@@ -297,21 +298,23 @@ public class Generator {
 					value = 5000;
 				}				
 				else{
-					if(prune) {
+/*					if(prune) {
 						value = evaluator.evaluationMaterial(board, false)
 								+ evaluator.evaluationPositional(board);
 					}
 					else {
 						value = evaluator.evaluationMaterial(board, false);
-					}
+					}*/
+					value = evaluator.evaluationMaterial(board, false)
+							+ evaluator.evaluationPositional(board);
 				}
 				
-				legal.get(i).setValue(value);
-				sorted.add(legal.get(i));
+				legalMoves.get(i).setValue(value);
+				sortedMoves.add(legalMoves.get(i));
 		
-				Collections.sort(sorted);			
+				Collections.sort(sortedMoves);
 				if(prune){
-					sorted.removeIf(e -> e.getValue() > prev);
+					sortedMoves.removeIf(e -> e.getValue() > prev);
 				}
 			}
 			
@@ -328,7 +331,20 @@ public class Generator {
 			if(c3 != 9)
 			Capture.undoMove(board, r3, c3);
 		}	
-		return sorted;
+		return sortedMoves;
+	}
+	
+	public List<Node> filterMoves(List<Node> sortedMoves, Turn turn){
+		
+		int limit = sortedMoves.get(0).getValue();
+		
+		if(turn.equals(Turn.BLACK)){
+			sortedMoves.removeIf(e -> e.getValue() < limit);			
+		}
+		else {
+			sortedMoves.removeIf(e -> e.getValue() > limit);			
+		}		
+		return sortedMoves;
 	}
 	
 }

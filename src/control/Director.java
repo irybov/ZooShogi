@@ -270,8 +270,6 @@ public class Director{
 	
 
 	public void compute() throws InterruptedException{
-
-//		Clocks clocks = Clocks.getInstance();
 		
 		undoMove = Copier.deepCopy(board);
 		
@@ -311,12 +309,11 @@ public class Director{
 					new PseudoAI(level, board, nodes).run();
 					break;
 				case 4:
-					nodes = new ArrayList<>
-					(generator.sortMoves(board, legalMoves, Turn.BLACK, true));
+					nodes = generator.sortMoves(board, legalMoves, Turn.BLACK, true);
 					if(nodes.size()==0) {
-						nodes = new ArrayList<>
-						(generator.sortMoves(board, legalMoves, Turn.BLACK, false));
-						nodes.subList(1, nodes.size()).clear();
+						nodes = generator.sortMoves(board, legalMoves, Turn.BLACK, false);
+//						nodes.subList(1, nodes.size()).clear();
+						nodes = generator.filterMoves(nodes, Turn.BLACK);
 					}
 				case 2:
 				case 3:
