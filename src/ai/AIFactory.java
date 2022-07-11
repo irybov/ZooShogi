@@ -2,22 +2,24 @@ package ai;
 
 import ai.component.Node;
 import ai.type.ActiveAI;
-import ai.type.ArtIntel;
+import ai.type.AI;
 import ai.type.CleverAI;
+import ai.type.DiceyAI;
 import ai.type.ExpertAI;
 import ai.type.MasterAI;
 import ai.type.NaiveAI;
 import ai.type.TrickyAI;
 
-public class ArtIntelFactory {
+public class AIFactory {
 
-	public ArtIntel createAI(final int level, Node root, String[][] board) {
+	public AI createAI(final int level, Node root, String[][] board) {
 		
-		ArtIntel ai = null;
+		AI ai = null;
 		
 		switch(level) {
 		case 2:
 			ai = new NaiveAI(root, board);
+//			ai = new DiceyAI(root, board);
 			break;
 		case 3:
 			ai = new TrickyAI(root, board);

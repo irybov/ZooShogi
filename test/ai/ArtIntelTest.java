@@ -24,7 +24,7 @@ public class ArtIntelTest {
 	private static List<Node> legal;
 	private static int level;
 	private static Generator generator;
-	private static ArtIntelFactory factory;
+	private static AIFactory factory;
 	private static int cores;
 	private ExecutorService es;
 	
@@ -37,7 +37,7 @@ public class ArtIntelTest {
 		generator = new Generator();
 		legal = generator.generateMoves(board, Turn.BLACK);
 		cores = Runtime.getRuntime().availableProcessors();
-		factory = new ArtIntelFactory();
+		factory = new AIFactory();
 	}
 	
 	@Before

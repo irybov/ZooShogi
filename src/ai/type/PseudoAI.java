@@ -3,12 +3,13 @@ package ai.type;
 import java.util.List;
 
 import ai.Integrator;
+import ai.component.Board;
 import ai.component.Evaluator;
 import ai.component.MovesList;
 import ai.component.Node;
 import control.Clocks;
-import utilpack.Capture;
 import utilpack.Examiner;
+import utilpack.MoveMaker;
 import utilpack.Turn;
 
 public class PseudoAI implements Runnable {
@@ -55,34 +56,14 @@ public class PseudoAI implements Runnable {
 			int c = legal.get(i).getColumnFrom();
 			int r2 = legal.get(i).getRowTo();
 			int c2 = legal.get(i).getColumnTo();
-			String prom;
+			String promotion;
 			int r3 = 0;
 			int c3 = 9;
-
-				if(board[r][c].equals("p") & r==2){
-					prom = "p";
-					if(!board[r][c].equals(" ")) {
-						c3 = Capture.takenPiecePlacement(board, r2, c2);
-					}
-					temp = board[r2][c2];
-					board[r2][c2] = "q";
-					board[r][c] = " ";	
-				}
-				else if(r==0 & c > 2){
-					prom = " ";
-					temp = " ";
-					board[r2][c2] = board[r][c];
-					board[r][c] = " ";
-				}
-				else{
-					prom = " ";
-					if(!board[r][c].equals(" ")) {
-						c3 = Capture.takenPiecePlacement(board, r2, c2);
-					}
-					temp = board[r2][c2];
-					board[r2][c2] = board[r][c];
-					board[r][c] = " ";	
-				}
+			Board state;
+			
+			state = MoveMaker.doBlackMove(board, r, c, r2, c2);
+			board = state.getBoard();
+			temp = state.getTemp();
 			
 			if(temp.equals("K")){
 				score = 2000;
@@ -95,7 +76,7 @@ public class PseudoAI implements Runnable {
 				score = 0;
 			}
 			else if(integrator.isLost(board)) {
-				score = -500;							
+				score = -1000;							
 			}
 			else if(Examiner.isPromotionWon(board, Turn.WHITE)){
 				score = -1000;
@@ -108,14 +89,9 @@ public class PseudoAI implements Runnable {
 			}
 			legal.get(i).setValue(score);
 			
-			if(prom.equals("p")){
-				board[r][c] = "p";
-			}
-			else{
-				board[r][c] = board[r2][c2];
-			}
-			board[r2][c2] = temp;
-			Capture.undoMove(board, r3, c3);
+			c3 = state.getC3();
+			promotion = state.getPromotion();
+			MoveMaker.undo(board, temp, promotion, r, c, r2, c2, r3, c3);
 		}	
 	}
 

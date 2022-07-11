@@ -4,14 +4,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import ai.component.Board;
 import ai.component.MovesList;
 import ai.component.Node;
 import control.Clocks;
-import utilpack.Capture;
 import utilpack.Examiner;
+import utilpack.MoveMaker;
 import utilpack.Turn;
 
-public class ActiveAI extends ArtIntel{
+public class ActiveAI extends AI{
 
 	public ActiveAI(Node root, String[][] board) {
 		super(root, board);
@@ -85,34 +86,13 @@ public class ActiveAI extends ArtIntel{
 			String temp;
 			String promotion;
 			int r3;
-			int c3 = 9;
+			Board state;
 											
 			if(turn.equals(Turn.BLACK)){
 				r3 = 0;
-				if(board[r][c].equals("p") & r==2){
-					promotion = "p";
-					if(!board[r][c].equals(" ")) {
-						c3 = Capture.takenPiecePlacement(board, r2, c2);
-					}
-					temp = board[r2][c2];
-					board[r2][c2] = "q";
-					board[r][c] = " ";	
-				}
-				else if(r==0 & c > 2){
-					promotion = " ";
-					temp = " ";
-					board[r2][c2] = board[r][c];
-					board[r][c] = " ";
-				}
-				else{
-					promotion = " ";
-					if(!board[r][c].equals(" ")) {
-						c3 = Capture.takenPiecePlacement(board, r2, c2);
-					}
-					temp = board[r2][c2];
-					board[r2][c2] = board[r][c];
-					board[r][c] = " ";	
-				}
+				state = MoveMaker.doBlackMove(board, r, c, r2, c2);
+				board = state.getBoard();
+				temp = state.getTemp();
 				
 				List<Node> children = null;
 				List<Node> sorted = null;
@@ -131,30 +111,9 @@ public class ActiveAI extends ArtIntel{
 			}				
 			else{
 				r3 = 3;
-				if(board[r][c].equals("P") & r==1){
-					promotion = "P";
-					if(!board[r][c].equals(" ")) {
-						c3 = Capture.takenPiecePlacement(board, r2, c2);
-					}
-					temp = board[r2][c2];
-					board[r2][c2] = "Q";
-					board[r][c] = " ";	
-				}
-				else if(r==3 & c > 2){
-					promotion = " ";
-					temp = " ";
-					board[r2][c2] = board[r][c];
-					board[r][c] = " ";
-				}
-				else{
-					promotion = " ";
-					if(!board[r][c].equals(" ")) {
-						c3 = Capture.takenPiecePlacement(board, r2, c2);
-					}
-					temp = board[r2][c2];
-					board[r2][c2] = board[r][c];
-					board[r][c] = " ";	
-				}
+				state = MoveMaker.doWhiteMove(board, r, c, r2, c2);
+				board = state.getBoard();
+				temp = state.getTemp();
 				
 				List<Node> children = null;
 				List<Node> sorted = null;
@@ -172,17 +131,9 @@ public class ActiveAI extends ArtIntel{
 					legalMoves.get(i).setValue(value);
 			}
 			
-			if(promotion.equals("p")){
-				board[r][c] = "p";
-			}
-			else if(promotion.equals("P")){
-				board[r][c] = "P";
-			}
-			else{
-				board[r][c] = board[r2][c2];
-			}
-			board[r2][c2] = temp;
-			Capture.undoMove(board, r3, c3);
+			int c3 = state.getC3();
+			promotion = state.getPromotion();
+			MoveMaker.undo(board, temp, promotion, r, c, r2, c2, r3, c3);
 		}
 		
 		if(turn.equals(Turn.BLACK)){

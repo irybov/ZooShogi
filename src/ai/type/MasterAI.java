@@ -4,14 +4,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import ai.component.Board;
 import ai.component.MovesList;
 import ai.component.Node;
 import control.Clocks;
 import utilpack.Capture;
 import utilpack.Examiner;
+import utilpack.MoveMaker;
 import utilpack.Turn;
 
-public class MasterAI extends ArtIntel{
+public class MasterAI extends AI{
 
 	public MasterAI(Node root, String[][] board) {
 		super(root, board);
@@ -25,7 +27,7 @@ public class MasterAI extends ArtIntel{
 	}
 
 	// minimax with capture and check extensions
-	private int calculate(Turn turn, int depth, int alpha, int beta, boolean node,
+	private int calculate(Turn turn, int depth, int alpha, int beta, boolean extend,
 			List<Node> legalMoves) {
 		
 		if(turn.equals(Turn.WHITE) && integrator.isLost(board)) {
@@ -65,7 +67,7 @@ public class MasterAI extends ArtIntel{
 			}
 		}
 	
-		if(node==false & depth > 5){
+		if(extend==false & depth > 5){
 			legalMoves = null;
 			return evaluator.evaluationMaterial(board, false);
 		}		
@@ -87,50 +89,24 @@ public class MasterAI extends ArtIntel{
 			String temp;
 			String promotion;
 			int r3;
-			int c3 = 9;
+			Board state;
 			
-			node = false;
+			extend = false;
 											
 			if(turn.equals(Turn.BLACK)){
 				r3 = 0;
+				state = MoveMaker.doBlackMove(board, r, c, r2, c2);
+				board = state.getBoard();
+				temp = state.getTemp();
 				
-				if(board[r][c].equals("k")){
-					node = Examiner.isCheck(board, Turn.WHITE);
-				}
-				
-				if(board[r][c].equals("p") & r==2){
-					promotion = "p";
-					if(!board[r][c].equals(" ")) {
-						c3 = Capture.takenPiecePlacement(board, r2, c2);
-					}
-					temp = board[r2][c2];
-					board[r2][c2] = "q";
-					board[r][c] = " ";
-				}
-				else if(r==0 & c > 2){
-					promotion = " ";
-					temp = " ";
-					board[r2][c2] = board[r][c];
-					board[r][c] = " ";
-				}
-				else{
-					promotion = " ";
-					if(!board[r][c].equals(" ")) {
-						c3 = Capture.takenPiecePlacement(board, r2, c2);
-					}
-					temp = board[r2][c2];
-					board[r2][c2] = board[r][c];
-					board[r][c] = " ";
-				}
-				
-				if(node==false){
-					node = (Capture.isExtension(temp, turn)
+				if(extend==false){
+					extend = (Capture.isExtension(temp, turn)
 							||Capture.isKingPromoted(board, r2, c2, turn)
 							||Examiner.isCheck(board, turn));
 				}		
 				List<Node> children = null;
 				List<Node> sorted = null;
-				if(temp != "K" & (node ? depth < 9 : depth < 5)) {
+				if(temp != "K" & (extend ? depth < 9 : depth < 5)) {
 					children = generator.generateMoves(board, Turn.WHITE);
 					sorted = generator.sortMoves(board, children, Turn.WHITE, false);
 					for(Node child: sorted) {
@@ -139,7 +115,7 @@ public class MasterAI extends ArtIntel{
 					legalMoves.get(i).addChildren(sorted);
 				}
 				
-				int value = calculate(Turn.WHITE, depth+1, alpha, beta, node, sorted);
+				int value = calculate(Turn.WHITE, depth+1, alpha, beta, extend, sorted);
 				if(value > alpha){
 					alpha = value;
 					scores.add(value);
@@ -148,44 +124,18 @@ public class MasterAI extends ArtIntel{
 			}				
 			else{
 				r3 = 3;
+				state = MoveMaker.doWhiteMove(board, r, c, r2, c2);
+				board = state.getBoard();
+				temp = state.getTemp();
 				
-				if(board[r][c].equals("K")){
-					node = Examiner.isCheck(board, Turn.BLACK);
-				}
-				
-				if(board[r][c].equals("P") & r==1){
-					promotion = "P";
-					if(!board[r][c].equals(" ")) {
-						c3 = Capture.takenPiecePlacement(board, r2, c2);
-					}
-					temp = board[r2][c2];
-					board[r2][c2] = "Q";
-					board[r][c] = " ";
-				}
-				else if(r==3 & c > 2){
-					promotion = " ";
-					temp = " ";
-					board[r2][c2] = board[r][c];
-					board[r][c] = " ";
-				}
-				else{
-					promotion = " ";
-					if(!board[r][c].equals(" ")) {
-						c3 = Capture.takenPiecePlacement(board, r2, c2);
-					}
-					temp = board[r2][c2];
-					board[r2][c2] = board[r][c];
-					board[r][c] = " ";
-				}
-				
-				if(node==false){
-				node = (Capture.isExtension(temp, turn)
+				if(extend==false){
+				extend = (Capture.isExtension(temp, turn)
 						||Capture.isKingPromoted(board, r2, c2, turn)
 						||Examiner.isCheck(board, turn));
 				}
 				List<Node> children = null;
 				List<Node> sorted = null;
-				if(temp != "k" & (node ? depth < 9 : depth < 5)) {
+				if(temp != "k" & (extend ? depth < 9 : depth < 5)) {
 					children = generator.generateMoves(board, Turn.BLACK);
 					sorted = generator.sortMoves(board, children, Turn.BLACK, false);
 					for(Node child: sorted) {
@@ -194,30 +144,22 @@ public class MasterAI extends ArtIntel{
 					legalMoves.get(i).addChildren(sorted);
 				}
 				
-				int value = calculate(Turn.BLACK, depth+1, alpha, beta, node, sorted);
+				int value = calculate(Turn.BLACK, depth+1, alpha, beta, extend, sorted);
 				if(value < beta){
 					beta = value;
 					scores.add(value);
 					legalMoves.get(i).setValue(value);
 				}
 			}
+			
+			int c3 = state.getC3();
+			promotion = state.getPromotion();
+			MoveMaker.undo(board, temp, promotion, r, c, r2, c2, r3, c3);
 				
-				if(promotion.equals("p")){
-					board[r][c] = "p";
-				}
-				else if(promotion.equals("P")){
-					board[r][c] = "P";
-				}
-				else{
-					board[r][c] = board[r2][c2];
-				}
-				board[r2][c2] = temp;
-				Capture.undoMove(board, r3, c3);
-				
-				if(alpha >= beta){
-					break;
-				}
+			if(alpha >= beta){
+				break;
 			}
+		}
 		
 		if(turn.equals(Turn.BLACK)){
 			return evaluator.alpha(scores, alpha, beta);

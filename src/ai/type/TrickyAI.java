@@ -7,15 +7,16 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import ai.component.Board;
 import ai.component.MovesList;
 import ai.component.Node;
 import control.Clocks;
-import utilpack.Capture;
 import utilpack.Copier;
 import utilpack.Examiner;
+import utilpack.MoveMaker;
 import utilpack.Turn;
 
-public class TrickyAI extends ArtIntel{
+public class TrickyAI extends AI{
 
 	public TrickyAI(Node root, String[][] board) {
 		super(root, board);
@@ -59,7 +60,8 @@ public class TrickyAI extends ArtIntel{
 					legal = new ArrayList<>(moves.remove());
 				}
 			
-				for(int i=0; i<legal.size(); i++){	
+				for(int i=0; i<legal.size(); i++){
+					
 					int r = legal.get(i).getRowFrom();
 					int c = legal.get(i).getColumnFrom();
 					int r2 = legal.get(i).getRowTo();
@@ -67,34 +69,13 @@ public class TrickyAI extends ArtIntel{
 					String temp = null;
 					String promotion = null;
 					int r3;
-					int c3 = 9;
+					Board state;
 					
 					if(depth % 2 == 1){
 						r3 = 0;
-						if(board[r][c].equals("p") & r==2){
-							promotion = "p";
-							if(!board[r][c].equals(" ")) {
-								c3 = Capture.takenPiecePlacement(board, r2, c2);
-							}
-							temp = board[r2][c2];
-							board[r2][c2] = "q";
-							board[r][c] = " ";	
-						}
-						else if(r==0 & c > 2){
-							promotion = " ";
-							temp = " ";
-							board[r2][c2] = board[r][c];
-							board[r][c] = " ";
-						}
-						else{
-							promotion = " ";
-							if(!board[r][c].equals(" ")) {
-								c3 = Capture.takenPiecePlacement(board, r2, c2);
-							}
-							temp = board[r2][c2];
-							board[r2][c2] = board[r][c];
-							board[r][c] = " ";
-						}
+						state = MoveMaker.doBlackMove(board, r, c, r2, c2);
+						board = state.getBoard();
+						temp = state.getTemp();
 							
 						hash.addMove(board, Turn.BLACK, depth);
 						
@@ -135,30 +116,9 @@ public class TrickyAI extends ArtIntel{
 					}				
 					else{
 						r3 = 3;
-						if(board[r][c].equals("P") & r==1){
-							promotion = "P";
-							if(!board[r][c].equals(" ")) {
-								c3 = Capture.takenPiecePlacement(board, r2, c2);
-							}
-							temp = board[r2][c2];
-							board[r2][c2] = "Q";
-							board[r][c] = " ";	
-						}
-						else if(r==3 & c > 2){
-							promotion = " ";
-							temp = " ";
-							board[r2][c2] = board[r][c];
-							board[r][c] = " ";
-						}
-						else{
-							promotion = " ";
-							if(!board[r][c].equals(" ")) {
-								c3 = Capture.takenPiecePlacement(board, r2, c2);
-							}
-							temp = board[r2][c2];
-							board[r2][c2] = board[r][c];
-							board[r][c] = " ";
-						}					
+						state = MoveMaker.doWhiteMove(board, r, c, r2, c2);
+						board = state.getBoard();
+						temp = state.getTemp();					
 						
 						if(temp.equals("k")){
 							legal.get(i).setValue(-(2000+(100/depth)));
@@ -192,17 +152,9 @@ public class TrickyAI extends ArtIntel{
 					legal.get(i).setDepth(depth);
 					stack.push(legal.get(i));
 					
-					if(promotion.equals("p")){
-						board[r][c] = "p";
-					}
-					else if(promotion.equals("P")){
-						board[r][c] = "P";
-					}
-					else{
-						board[r][c] = board[r2][c2];
-					}
-					board[r2][c2] = temp;
-					Capture.undoMove(board, r3, c3);
+					int c3 = state.getC3();
+					promotion = state.getPromotion();
+					MoveMaker.undo(board, temp, promotion, r, c, r2, c2, r3, c3);
 				}
 				legal = null;
 			}		

@@ -10,7 +10,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.io.*;
 
-import ai.ArtIntelFactory;
+import ai.AIFactory;
 import ai.Integrator;
 import ai.component.Cache;
 import ai.component.Generator;
@@ -324,7 +324,7 @@ public class Director{
 					ExecutorService es = Executors.newFixedThreadPool(cores);
 					List<Future<Integer>> tasks = new ArrayList<>(nodes.size());
 					TaskInterceptor f19 = new TaskInterceptor(tasks);
-					ArtIntelFactory factory = new ArtIntelFactory();
+					AIFactory factory = new AIFactory();
 					for(Node node : nodes) {
 						Future<Integer> score = es.submit(factory
 								.createAI(level, node, Copier.deepCopy(board)));

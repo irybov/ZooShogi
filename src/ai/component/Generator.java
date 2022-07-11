@@ -6,6 +6,7 @@ import java.util.List;
 
 import utilpack.Capture;
 import utilpack.Examiner;
+import utilpack.MoveMaker;
 import utilpack.Pieces;
 import utilpack.Turn;
 
@@ -176,37 +177,16 @@ public class Generator {
 			int c = legalMoves.get(i).getColumnFrom();
 			int r2 = legalMoves.get(i).getRowTo();
 			int c2 = legalMoves.get(i).getColumnTo();
-			String temp = null;
-			String prom = null;
-			int r3 = -1;
-			int c3 = 9;
+			String temp;
+			String promotion;
+			int r3;
+			Board state;
 
 			if(turn.equals(Turn.BLACK)){						
 				r3 = 0;
-				if(board[r][c].equals("p") & r==2){
-					prom = "p";
-					if(!board[r][c].equals(" ")) {
-						c3 = Capture.takenPiecePlacement(board, r2, c2);
-					}
-					temp = board[r2][c2];
-					board[r2][c2] = "q";
-					board[r][c] = " ";
-				}
-				else if(r==0 & c > 2){
-					prom = " ";
-					temp = " ";
-					board[r2][c2] = board[r][c];
-					board[r][c] = " ";
-				}
-				else{
-					prom = " ";
-					if(!board[r][c].equals(" ")) {
-						c3 = Capture.takenPiecePlacement(board, r2, c2);
-					}
-					temp = board[r2][c2];
-					board[r2][c2] = board[r][c];
-					board[r][c] = " ";
-				}
+				state = MoveMaker.doBlackMove(board, r, c, r2, c2);
+				board = state.getBoard();
+				temp = state.getTemp();
 				
 				int value;				
 				if(temp.equals("K")){
@@ -249,32 +229,11 @@ public class Generator {
 					sortedMoves.removeIf(e -> e.getValue() < prev);
 				}
 			}		
-			else if(turn.equals(Turn.WHITE)){					
+			else{					
 				r3 = 3;
-				if(board[r][c].equals("P") & r==1){
-					prom = "P";
-					if(!board[r][c].equals(" ")) {
-						c3 = Capture.takenPiecePlacement(board, r2, c2);
-					}
-					temp = board[r2][c2];
-					board[r2][c2] = "Q";
-					board[r][c] = " ";
-				}
-				else if(r==3 & c > 2){
-					prom = " ";
-					temp = " ";
-					board[r2][c2] = board[r][c];
-					board[r][c] = " ";
-				}
-				else{
-					prom = " ";
-					if(!board[r][c].equals(" ")) {
-						c3 = Capture.takenPiecePlacement(board, r2, c2);
-					}
-					temp = board[r2][c2];
-					board[r2][c2] = board[r][c];
-					board[r][c] = " ";
-				}
+				state = MoveMaker.doWhiteMove(board, r, c, r2, c2);
+				board = state.getBoard();
+				temp = state.getTemp();
 		
 				int value;				
 				if(temp.equals("k")){
@@ -318,18 +277,9 @@ public class Generator {
 				}
 			}
 			
-			if(prom.equals("p")){
-				board[r][c] = "p";
-			}
-			else if(prom.equals("P")){
-				board[r][c] = "P";
-			}
-			else{
-				board[r][c] = board[r2][c2];
-			}
-			board[r2][c2] = temp;
-			if(c3 != 9)
-			Capture.undoMove(board, r3, c3);
+			int c3 = state.getC3();
+			promotion = state.getPromotion();
+			MoveMaker.undo(board, temp, promotion, r, c, r2, c2, r3, c3);
 		}	
 		return sortedMoves;
 	}

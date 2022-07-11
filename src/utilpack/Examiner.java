@@ -4,7 +4,7 @@ public final class Examiner {
 	
 	private Examiner() {}
 	
-	public static boolean isCheck(String[][] board, Turn turn) {		
+	public static boolean isCheck(String[][] board, Turn turn) {
 		
 		int r,c,r2,c2;
 			

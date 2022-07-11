@@ -11,12 +11,12 @@ import ai.component.Node;
 import utilpack.Matrix;
 import utilpack.Turn;
 
-public class ArtIntel implements Callable<Integer>{
+public abstract class AI implements Callable<Integer>{
 	
 	Node root;
 	String[][] board;
 
-	public ArtIntel(Node root, String[][] board) {		
+	public AI(Node root, String[][] board) {		
 		this.root = root;
 		this.board = board;
 	}
