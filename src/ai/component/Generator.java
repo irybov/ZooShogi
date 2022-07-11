@@ -157,7 +157,7 @@ public class Generator {
 	
 	public List<Node> sortMoves(String[][] board, List<Node> legalMoves, Turn turn, boolean prune){
 		
-		List<Node> sortedMoves = new ArrayList<>();
+		List<Node> sortedMoves = new ArrayList<>(legalMoves.size());
 		
 		int prev;
 			if(Examiner.isCheck(board, Turn.WHITE)){
@@ -219,15 +219,9 @@ public class Generator {
 					}*/
 					value = evaluator.evaluationMaterial(board, false)
 							+ evaluator.evaluationPositional(board);
-				}
-				
+				}				
 				legalMoves.get(i).setValue(value);
 				sortedMoves.add(legalMoves.get(i));
-	
-				Collections.sort(sortedMoves, Collections.reverseOrder());
-				if(prune){
-					sortedMoves.removeIf(e -> e.getValue() < prev);
-				}
 			}		
 			else{					
 				r3 = 3;
@@ -266,21 +260,27 @@ public class Generator {
 					}*/
 					value = evaluator.evaluationMaterial(board, false)
 							+ evaluator.evaluationPositional(board);
-				}
-				
+				}				
 				legalMoves.get(i).setValue(value);
-				sortedMoves.add(legalMoves.get(i));
-		
-				Collections.sort(sortedMoves);
-				if(prune){
-					sortedMoves.removeIf(e -> e.getValue() > prev);
-				}
-			}
-			
+				sortedMoves.add(legalMoves.get(i));		
+			}			
 			int c3 = state.getC3();
 			promotion = state.getPromotion();
 			MoveMaker.undo(board, temp, promotion, r, c, r2, c2, r3, c3);
-		}	
+		}
+				
+		if(turn.equals(Turn.BLACK)){
+			Collections.sort(sortedMoves, Collections.reverseOrder());
+			if(prune){
+				sortedMoves.removeIf(e -> e.getValue() < prev);
+			}
+		}
+		else{
+			Collections.sort(sortedMoves);
+			if(prune){
+				sortedMoves.removeIf(e -> e.getValue() > prev);
+			}
+		}
 		return sortedMoves;
 	}
 	

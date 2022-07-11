@@ -124,7 +124,7 @@ public class NaiveAI extends AI{
 				int value = calculate(Turn.BLACK, depth+1, children);
 					scores.add(value);
 					legalMoves.get(i).setValue(value);
-				}
+			}
 			
 			int c3 = state.getC3();
 			promotion = state.getPromotion();

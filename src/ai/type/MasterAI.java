@@ -67,7 +67,7 @@ public class MasterAI extends AI{
 			}
 		}
 	
-		if(extend==false & depth > 5){
+		if(extend == false & depth > 5){
 			legalMoves = null;
 			return evaluator.evaluationMaterial(board, false);
 		}		
@@ -93,16 +93,20 @@ public class MasterAI extends AI{
 			
 			extend = false;
 											
-			if(turn.equals(Turn.BLACK)){
+			if(turn.equals(Turn.BLACK)){				
+				if(board[r][c].equals("k")){
+					extend = Examiner.isCheck(board, Turn.WHITE);
+				}
+				
 				r3 = 0;
 				state = MoveMaker.doBlackMove(board, r, c, r2, c2);
 				board = state.getBoard();
 				temp = state.getTemp();
 				
-				if(extend==false){
+				if(extend == false){
 					extend = (Capture.isExtension(temp, turn)
-							||Capture.isKingPromoted(board, r2, c2, turn)
-							||Examiner.isCheck(board, turn));
+							|| Capture.isKingPromoted(board, r2, c2, turn)
+							|| Examiner.isCheck(board, turn));
 				}		
 				List<Node> children = null;
 				List<Node> sorted = null;
@@ -122,16 +126,20 @@ public class MasterAI extends AI{
 					legalMoves.get(i).setValue(value);
 				}										
 			}				
-			else{
+			else{				
+				if(board[r][c].equals("K")){
+					extend = Examiner.isCheck(board, Turn.BLACK);
+				}
+				
 				r3 = 3;
 				state = MoveMaker.doWhiteMove(board, r, c, r2, c2);
 				board = state.getBoard();
 				temp = state.getTemp();
-				
-				if(extend==false){
+
+				if(extend == false){
 				extend = (Capture.isExtension(temp, turn)
-						||Capture.isKingPromoted(board, r2, c2, turn)
-						||Examiner.isCheck(board, turn));
+						|| Capture.isKingPromoted(board, r2, c2, turn)
+						|| Examiner.isCheck(board, turn));
 				}
 				List<Node> children = null;
 				List<Node> sorted = null;

@@ -121,8 +121,7 @@ class Experience {
 	
 	boolean bingo(String note) {
 		return negativeExp.contains(note);
-	}
-	
+	}	
 	void learn(String note) {
 		negativeExp.add(note);
 	    try(ObjectOutputStream oos = new ObjectOutputStream
@@ -134,8 +133,7 @@ class Experience {
 		catch (IOException ex) {
 			ex.printStackTrace();
 		}
-	}
-	
+	}	
 	boolean hasNode(String note) {
 		return positiveExp.containsKey(note);		
 	}
