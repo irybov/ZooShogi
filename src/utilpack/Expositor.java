@@ -25,32 +25,34 @@ public final class Expositor {
 		return c;
  	}
 	
-	public static String getPieceName(final String piece){
+	public static String getPieceName(final char piece){
 		
-		String name = "";
+		String name;
 		
 		switch(piece){
-		case "P": case "p":
+		case 'P': case 'p':
 			name = Pieces.BPAWN.getName();
 			break;
-		case "R": case "r":
+		case 'R': case 'r':
 			name = Pieces.ROOK.getName();
 			break;
-		case "B": case "b":
+		case 'B': case 'b':
 			name = Pieces.BISHOP.getName();
 			break;
-		case "K": case "k":
+		case 'K': case 'k':
 			name = Pieces.KING.getName();
 			break;
-		case "Q": case "q":
+		case 'Q': case 'q':
 			name = Pieces.BQUEEN.getName();
 			break;
+		default:
+			name = null;
 		}
 		return name;
 	}
 	
-	public static String getEdge(int R, int C, int R2, int C2, String piece) {
-		return (C < 3 ? Expositor.getColumnName(C) + (R+1) : piece.toUpperCase()
+	public static String getEdge(int R, int C, int R2, int C2, char board) {
+		return (C < 3 ? Expositor.getColumnName(C) + (R+1) : Character.toUpperCase(board)
 				+ Expositor.getColumnName(C)) + Expositor.getColumnName(C2) + (R2+1);
 	}
 	

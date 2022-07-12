@@ -14,9 +14,9 @@ import utilpack.Turn;
 public abstract class AI implements Callable<Integer>{
 	
 	Node root;
-	String[][] board;
+	char[][] board;
 
-	public AI(Node root, String[][] board) {		
+	public AI(Node root, char[][] board) {		
 		this.root = root;
 		this.board = board;
 	}
@@ -33,7 +33,7 @@ public abstract class AI implements Callable<Integer>{
 		Map<String, Integer> whiteMoves = new HashMap<>();	
 		
 		// fills calculating hash
-		void addMove(String[][] field, Turn side, int depth) {
+		void addMove(char[][] field, Turn side, int depth) {
 			
 			String hash = Matrix.makeKey(field);
 			
@@ -46,7 +46,7 @@ public abstract class AI implements Callable<Integer>{
 		}
 		
 		// checks repetitions while calculating	
-		boolean isRepeated(String[][] field,  Turn side, int depth) {
+		boolean isRepeated(char[][] field,  Turn side, int depth) {
 			
 			String hash = Matrix.makeKey(field);
 								

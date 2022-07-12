@@ -76,10 +76,10 @@ public class Director{
 	}
 	
 	private int r, c, r2, c2;
-	private String[][] board;
+	private char[][] board;
 	private int level;
 	
-	private String[][] undoMove;
+	private char[][] undoMove;
 
 	public void setCheckWarning(boolean warn){	
 		integrator.setCheckWarning(warn);
@@ -87,10 +87,10 @@ public class Director{
 	public void setLevel(int level){
 		this.level = level;
 	}	
-	private void setBoard(String[][] field){
+	private void setBoard(char[][] field){
 		board = Copier.deepCopy(field);
 	}
-	private String[][] getBoard(){
+	private char[][] getBoard(){
 		return Copier.deepCopy(board);
 	}
 	private void setMoves(Map<String, Integer> moves) {		
@@ -102,15 +102,15 @@ public class Director{
 	
 	public void initBoard() {
 
-		board = new String[][]{{"r","k","b"," "," "," "," "," "," "},
-							   {" ","p"," "},
-							   {" ","P"," "},
-							   {"B","K","R"," "," "," "," "," "," "}};
+		board = new char[][]{{'r','k','b',' ',' ',' ',' ',' ',' '},
+							 {' ','p',' '},
+							 {' ','P',' '},
+							 {'B','K','R',' ',' ',' ',' ',' ',' '}};
 							   
 		undoMove = 	Copier.deepCopy(board);
 	}
 	
-	public String refreshBoard(int r, int c) {				
+	public char refreshBoard(int r, int c) {				
 		return board[r][c];
 	}
 	
@@ -168,47 +168,47 @@ public class Director{
 		MovesList.addMove(board, Turn.BLACK);
 		
 		switch(board[r2][c2]){
-		case "b":
-			if(board[3][3].equals(" ")){
-				board[3][3] = "B";
+		case 'b':
+			if(board[3][3]==(' ')){
+				board[3][3] = 'B';
 			}
-			else if(!board[3][3].equals(" ")){
-				board[3][6] = "B";
-			}
-			break;
-		case "p":
-			if(board[3][4].equals(" ")){
-				board[3][4] = "P";
-			}
-			else if(!board[3][4].equals(" ")){
-				board[3][7] = "P";
+			else if(board[3][3]!=(' ')){
+				board[3][6] = 'B';
 			}
 			break;
-		case "r":
-			if(board[3][5].equals(" ")){
-				board[3][5] = "R";
+		case 'p':
+			if(board[3][4]==(' ')){
+				board[3][4] = 'P';
 			}
-			else if(!board[3][5].equals(" ")){
-				board[3][8] = "R";
+			else if(board[3][4]!=(' ')){
+				board[3][7] = 'P';
 			}
 			break;
-		case "q":
-			if(board[3][4].equals(" ")){
-				board[3][4] = "P";
+		case 'r':
+			if(board[3][5]==(' ')){
+				board[3][5] = 'R';
 			}
-			else if(!board[3][4].equals(" ")){
-				board[3][7] = "P";
+			else if(board[3][5]!=(' ')){
+				board[3][8] = 'R';
+			}
+			break;
+		case 'q':
+			if(board[3][4]==(' ')){
+				board[3][4] = 'P';
+			}
+			else if(board[3][4]!=(' ')){
+				board[3][7] = 'P';
 			}
 			break;
 		}
 			
-		if(board[r][c].equals("P") & r2==0){
-			board[r2][c2] = "Q";
+		if(board[r][c]==('P') & r2==0){
+			board[r2][c2] = 'Q';
 		}
 		else{
 			board[r2][c2] = board[r][c];
 		}
-		board[r][c] = " ";
+		board[r][c] = ' ';
 		
 		MovesList.addMove(board, Turn.WHITE);
 		
@@ -223,7 +223,7 @@ public class Director{
 		MovesList.addMove(board, Turn.BLACK);
 		
 		board[r2][c2] = board[r][c];
-		board[r][c] = " ";
+		board[r][c] = ' ';
 		
 		MovesList.addMove(board, Turn.WHITE);
 		
@@ -359,10 +359,10 @@ public class Director{
 		
 		for(int r=0; r<4; r++){
 			for(int c=0; c<3; c++){
-				if(board[r][c].equals("K")){
+				if(board[r][c]==('K')){
 					a = 2;
 				}
-				else if(board[r][c].equals("k")){
+				else if(board[r][c]==('k')){
 					b = 1;
 				}
 			}
@@ -375,14 +375,14 @@ public class Director{
 			return true;
 		}
 		else if((a+b==2 & turn.equals(Turn.BLACK)) || (a+b==3 & turn.equals(Turn.WHITE)) & 
-				(board[0][0].equals("K")||board[0][1].equals("K")||board[0][2].equals("K"))){
+				(board[0][0]==('K')||board[0][1]==('K')||board[0][2]==('K'))){
 			scribe.writeGameNote("end", "1-0");
 			output("white");
 			chooseVoice("mate");
 			return true;
 		}
 		else if((a+b==1 & turn.equals(Turn.WHITE)) || (a+b==3 & turn.equals(Turn.BLACK)) & 
-				(board[3][0].equals("k")||board[3][1].equals("k")||board[3][2].equals("k"))){
+				(board[3][0]==('k')||board[3][1]==('k')||board[3][2]==('k'))){
 			scribe.writeGameNote("end", "0-1");
 			output("black");
 			chooseVoice("mate");

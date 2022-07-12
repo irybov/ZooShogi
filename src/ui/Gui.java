@@ -380,8 +380,8 @@ public class Gui {
 							highlightSquares(r, c);
 							director.moveFrom(r, c, squares[r][c].getName());
 							clickNumber = 2;
-							output.setText(Expositor.getPieceName(squares[r][c].getName())
-																		+" choosen");
+							output.setText(Expositor.getPieceName
+									(squares[r][c].getName().charAt(0)) +" choosen");
 							moveIsDrop = false;
 							return;
 							}
@@ -503,18 +503,18 @@ public class Gui {
 		for(int r=0;r<4;r++) {
 			for(int c=0;c<3;c++) {
 				squares[r][c].setBackground(Color.decode("#db9356"));
-				squares[r][c].setName(director.refreshBoard(r,c));
+				squares[r][c].setName(Character.toString(director.refreshBoard(r,c)));
 				squares[r][c].setIcon(images.getLargeImage(squares[r][c].getName()));
 			}
 		}		
 		for(int c=0;c<6;c++) {
 			dropAreaWhite[c].setBackground(Color.decode("#db9356"));
-			dropAreaWhite[c].setName(director.refreshBoard(3,c+3));
+			dropAreaWhite[c].setName(Character.toString(director.refreshBoard(3,c+3)));
 			dropAreaWhite[c].setIcon(images.getSmallImage(dropAreaWhite[c].getName()));
 		}		
 		for(int c=0;c<6;c++) {
 			dropAreaBlack[c].setBackground(Color.decode("#db9356"));
-			dropAreaBlack[c].setName(director.refreshBoard(0,c+3));
+			dropAreaBlack[c].setName(Character.toString(director.refreshBoard(0,c+3)));
 			dropAreaBlack[c].setIcon(images.getSmallImage(dropAreaBlack[c].getName()));			
 		}
 		

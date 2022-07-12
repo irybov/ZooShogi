@@ -14,8 +14,8 @@ import utilpack.Turn;
 
 public class NaiveAI extends AI{
 
-	public NaiveAI(Node root, String[][] board) {
-		super(root, board);
+	public NaiveAI(Node root, char[][] cs) {
+		super(root, cs);
 	}
 	
 	@Override
@@ -82,8 +82,8 @@ public class NaiveAI extends AI{
 			int c = legalMoves.get(i).getColumnFrom();
 			int r2 = legalMoves.get(i).getRowTo();
 			int c2 = legalMoves.get(i).getColumnTo();
-			String temp;
-			String promotion;
+			char temp;
+			char promotion;
 			int r3;			
 			Board state;
 											
@@ -94,7 +94,7 @@ public class NaiveAI extends AI{
 				temp = state.getTemp();
 				
 				List<Node> children = null;
-				if(temp != "K" & depth < 5) {
+				if(temp != 'K' & depth < 5) {
 					children = generator.generateMoves(board, Turn.WHITE);
 					for(Node child: children) {
 						child.addParent(legalMoves.get(i));
@@ -113,7 +113,7 @@ public class NaiveAI extends AI{
 				temp = state.getTemp();
 				
 				List<Node> children = null;
-				if(temp != "k" & depth < 5) {
+				if(temp != 'k' & depth < 5) {
 					children = generator.generateMoves(board, Turn.BLACK);
 					for(Node child: children) {
 						child.addParent(legalMoves.get(i));

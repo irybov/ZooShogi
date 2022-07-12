@@ -17,7 +17,7 @@ import utilpack.Turn;
 
 public class DiceyAI extends AI {
 
-	public DiceyAI(Node root, String[][] board) {
+	public DiceyAI(Node root, char[][] board) {
 		super(root, board);
 	}
 	
@@ -30,7 +30,7 @@ public class DiceyAI extends AI {
 		Set<String> whiteMoves = new HashSet<>();	
 		
 		// fills game moves list
-		private void addMove(String[][] field, Turn turn) {
+		private void addMove(char[][] field, Turn turn) {
 			
 			String hash = Matrix.makeKey(field);
 			
@@ -44,7 +44,7 @@ public class DiceyAI extends AI {
 		}
 
 		//checks 3-times repetition
-		private boolean isRepeated(String[][] field, Turn white) {
+		private boolean isRepeated(char[][] field, Turn white) {
 			
 			String hash = Matrix.makeKey(field);
 				
@@ -78,17 +78,17 @@ public class DiceyAI extends AI {
 		int r2 = root.getRowTo();
 		int c2 = root.getColumnTo();
 
-		if(board[r][c].equals("p") & r==2){
-			board[r2][c2] = "q";
-			board[r][c] = " ";	
+		if(board[r][c]==('p') & r==2){
+			board[r2][c2] = 'q';
+			board[r][c] = ' ';	
 		}
 		else if(r==0 & c > 2){
 			board[r2][c2] = board[r][c];
-			board[r][c] = " ";
+			board[r][c] = ' ';
 		}
 		else{
 			board[r2][c2] = board[r][c];
-			board[r][c] = " ";	
+			board[r][c] = ' ';	
 		}
 		
 		List<Node> children = generator.generateMoves(board, Turn.WHITE);
@@ -174,8 +174,8 @@ public class DiceyAI extends AI {
 		int c = move.getColumnFrom();
 		int r2 = move.getRowTo();
 		int c2 = move.getColumnTo();
-		String temp;
-		String promotion;
+		char temp;
+		char promotion;
 		int r3;
 		Board state;
 										
@@ -189,7 +189,7 @@ public class DiceyAI extends AI {
 			List<Node> sorted = null;
 			List<Node> filtered = null;
 			Node child = null;
-			if(temp != "K") {
+			if(temp != 'K') {
 				children = generator.generateMoves(board, Turn.WHITE);
 				sorted = generator.sortMoves(board, children, Turn.WHITE, false);
 				filtered = generator.filterMoves(sorted, Turn.WHITE);
@@ -211,7 +211,7 @@ public class DiceyAI extends AI {
 			List<Node> sorted = null;
 			List<Node> filtered = null;
 			Node child = null;
-			if(temp != "k") {
+			if(temp != 'k') {
 				children = generator.generateMoves(board, Turn.BLACK);
 				sorted = generator.sortMoves(board, children, Turn.BLACK, false);
 				filtered = generator.filterMoves(sorted, Turn.BLACK);

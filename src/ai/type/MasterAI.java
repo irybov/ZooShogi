@@ -15,8 +15,8 @@ import utilpack.Turn;
 
 public class MasterAI extends AI{
 
-	public MasterAI(Node root, String[][] board) {
-		super(root, board);
+	public MasterAI(Node root, char[][] cs) {
+		super(root, cs);
 	}
 	
 	@Override
@@ -86,15 +86,15 @@ public class MasterAI extends AI{
 			int c = legalMoves.get(i).getColumnFrom();
 			int r2 = legalMoves.get(i).getRowTo();
 			int c2 = legalMoves.get(i).getColumnTo();
-			String temp;
-			String promotion;
+			char temp;
+			char promotion;
 			int r3;
 			Board state;
 			
 			extend = false;
 											
 			if(turn.equals(Turn.BLACK)){				
-				if(board[r][c].equals("k")){
+				if(board[r][c]==('k')){
 					extend = Examiner.isCheck(board, Turn.WHITE);
 				}
 				
@@ -110,7 +110,7 @@ public class MasterAI extends AI{
 				}		
 				List<Node> children = null;
 				List<Node> sorted = null;
-				if(temp != "K" & (extend ? depth < 9 : depth < 5)) {
+				if(temp != 'K' & (extend ? depth < 9 : depth < 5)) {
 					children = generator.generateMoves(board, Turn.WHITE);
 					sorted = generator.sortMoves(board, children, Turn.WHITE, false);
 					for(Node child: sorted) {
@@ -127,7 +127,7 @@ public class MasterAI extends AI{
 				}										
 			}				
 			else{				
-				if(board[r][c].equals("K")){
+				if(board[r][c]==('K')){
 					extend = Examiner.isCheck(board, Turn.BLACK);
 				}
 				
@@ -143,7 +143,7 @@ public class MasterAI extends AI{
 				}
 				List<Node> children = null;
 				List<Node> sorted = null;
-				if(temp != "k" & (extend ? depth < 9 : depth < 5)) {
+				if(temp != 'k' & (extend ? depth < 9 : depth < 5)) {
 					children = generator.generateMoves(board, Turn.BLACK);
 					sorted = generator.sortMoves(board, children, Turn.BLACK, false);
 					for(Node child: sorted) {

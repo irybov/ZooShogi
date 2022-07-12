@@ -16,9 +16,8 @@ public class ExpositorTest {
 	
 	@Test
 	public void piece_name() {
-		assertEquals("King", Expositor.getPieceName("K"));
-		assertEquals("King", Expositor.getPieceName("k"));
-		assertEquals("", Expositor.getPieceName(" "));
+		assertEquals("King", Expositor.getPieceName('K'));
+		assertEquals("King", Expositor.getPieceName('k'));
 	}
 
 	@Test(expected = NumberFormatException.class)
@@ -26,9 +25,9 @@ public class ExpositorTest {
 		assertNull(Expositor.getColumnName(new Integer(null)));
 	}
 	
-	@Test(expected = NullPointerException.class)
+	@Test()
 	public void empty_piece() {
-		assertNull(Expositor.getPieceName(null));
+		assertNull(Expositor.getPieceName(' '));
 	}
 	
 }

@@ -12,29 +12,29 @@ import ai.type.TrickyAI;
 
 public class AIFactory {
 
-	public AI createAI(final int level, Node root, String[][] board) {
+	public AI createAI(final int level, Node root, char[][] cs) {
 		
 		AI ai = null;
 		
 		switch(level) {
 		case 2:
-			ai = new NaiveAI(root, board);
+			ai = new NaiveAI(root, cs);
 //			ai = new DiceyAI(root, board);
 			break;
 		case 3:
-			ai = new TrickyAI(root, board);
+			ai = new TrickyAI(root, cs);
 			break;
 		case 4:
-			ai = new ActiveAI(root, board);
+			ai = new ActiveAI(root, cs);
 			break;	
 		case 5:
-			ai = new CleverAI(root, board);
+			ai = new CleverAI(root, cs);
 			break;
 		case 6:
-			ai = new ExpertAI(root, board);
+			ai = new ExpertAI(root, cs);
 			break;
 		case 7:
-			ai = new MasterAI(root, board);
+			ai = new MasterAI(root, cs);
 			break;	
 		}
 		return ai;

@@ -48,36 +48,36 @@ public class Integrator {
 	private Deque<String> game = new ArrayDeque<>();
 	private Experience exp = new Experience();
 	
-	public boolean isLost(String[][] field) {
+	public boolean isLost(char[][] field) {
 		return exp.bingo(Matrix.makeKey(field));
 	}
-	public boolean hasNode(String[][] field) {
-		return exp.hasNode(Matrix.makeKey(field));
+	public boolean hasNode(char[][] board) {
+		return exp.hasNode(Matrix.makeKey(board));
 	}
-	public Node getNode(String[][] field) {
-		return exp.getNode(Matrix.makeKey(field));
+	public Node getNode(char[][] board) {
+		return exp.getNode(Matrix.makeKey(board));
 	}
 	public void newGame() {
 		game.clear();
 		MovesList.clear();
 		Cache.clear();
 	}
-	public String[][] nextBest(String[][] field) {		
+	public char[][] nextBest(char[][] board) {		
 		if(!ring.isEmpty()) {
 			ring.add(ring.poll());
 			Node move = ring.peek();			
-			return doMove(move, field);
+			return doMove(move, board);
 		}
 		else {
-			return field;
+			return board;
 		}
 	}
-	public String[][] nextBest(String[][] field, Node move) {
-		return doMove(move, field);
+	public char[][] nextBest(char[][] board, Node move) {
+		return doMove(move, board);
 	}
 	
 	// selects and makes best move
-	public String[][] activate(String[][] field, List<Node> moves) {
+	public char[][] activate(char[][] board, List<Node> moves) {
 		
 		int score = Integer.MIN_VALUE+1;		
 		Node move;
@@ -115,11 +115,11 @@ public class Integrator {
 		ring.addAll(random);
 
 		moves.clear();
-		return doMove(move, field);
+		return doMove(move, board);
 	}
 
 	// takes external engine's move
-	public String[][] activate(String[][] field, final int[] args){
+	public char[][] activate(char[][] field, final int[] args){
 		
 		final int r = args[0];
 		final int c = args[1];
@@ -136,7 +136,7 @@ public class Integrator {
 
 	private Scribe scribe = Scribe.getInstance();
 
-	private String[][] doMove(final Node move, String[][] field){
+	private char[][] doMove(final Node move, char[][] board){
 		
 		int score = move.getValue();
 		int r = move.getRowFrom();
@@ -145,7 +145,7 @@ public class Integrator {
 		int c2 = move.getColumnTo();
 		
 		if(score > 500 & Cache.isEmpty()) {
-			String state = Matrix.makeKey(field);
+			String state = Matrix.makeKey(board);
 			if(!exp.hasNode(state)) {
 				exp.learn(state, move);
 				String mirror = Matrix.swapKey(state);
@@ -155,27 +155,27 @@ public class Integrator {
 			}
 		}
 		
-		String edge = Expositor.getEdge(r, c, r2, c2, field[r][c]);		
+		String edge = Expositor.getEdge(r, c, r2, c2, board[r][c]);		
 		scribe.writeGameNote("black", edge);
 		
-		String spot = field[r2][c2];
-		String pieceName = Expositor.getPieceName(field[r][c]);
+		char spot = board[r2][c2];
+		String pieceName = Expositor.getPieceName(board[r][c]);
 
-		if(field[r][c].equals("p") & r==2){
+		if(board[r][c]==('p') & r==2){
 			if(r==0 & c > 2){
-				field[r2][c2] = "p";
-				field[r][c] = " ";
+				board[r2][c2] = 'p';
+				board[r][c] = ' ';
 			}	
 			else{
-				Capture.takenPiecePlacement(field, r2, c2);
-				field[r2][c2] = "q";
-				field[r][c] = " ";
+				Capture.takenPiecePlacement(board, r2, c2);
+				board[r2][c2] = 'q';
+				board[r][c] = ' ';
 			}
 		}
 		else{
-			Capture.takenPiecePlacement(field, r2, c2);
-			field[r2][c2] = field[r][c];
-			field[r][c] = " ";
+			Capture.takenPiecePlacement(board, r2, c2);
+			board[r2][c2] = board[r][c];
+			board[r][c] = ' ';
 		}
 		
 		if(score < -500) {
@@ -185,20 +185,20 @@ public class Integrator {
 			}
 		}
 		else {
-			game.push(Matrix.makeKey(field));
+			game.push(Matrix.makeKey(board));
 		}
 		
 		if(score > 500 & Cache.isEmpty()) {
 			if(move.hasChildren()) {
-				Cache.addTree(Copier.deepCopy(field), move.getChidren());
+				Cache.addTree(Copier.deepCopy(board), move.getChidren());
 			}
 		}
 		
 		String col = Expositor.getColumnName(c);
 		String col2 = Expositor.getColumnName(c2);
 		
-		info.output(score, field, pieceName, c, col, r, spot, col2, r2);
-		return field;		
+		info.output(score, board, pieceName, c, col, r, spot, col2, r2);
+		return board;		
 	}
 	
 }

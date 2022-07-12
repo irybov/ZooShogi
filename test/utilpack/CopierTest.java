@@ -13,14 +13,14 @@ import utilpack.Matrix;
 
 public class CopierTest {
 
-	private static String[][] board;
+	private static char[][] board;
 	
 	@BeforeClass
 	public static void init_board() {
-		board = new String[][]{{"r","k","b"," "," "," "," "," "," "},
-				  			   {" ","p"," "},
-				  			   {" ","P"," "},
-				  			   {"B","K","R"," "," "," "," "," "," "}};				
+		board = new char[][]{{'r','k','b',' ',' ',' ',' ',' ',' '},
+			   				 {' ','p',' '},
+			   				 {' ','P',' '},
+			   				 {'B','K','R',' ',' ',' ',' ',' ',' '}};				
 	}
 	
 	@Test
@@ -30,7 +30,7 @@ public class CopierTest {
 	
 	@Test(expected = NullPointerException.class)
 	public void empty_copy() {		
-		String[][] board = null;		
+		char[][] board = null;		
 		assertNull(Matrix.makeKey(board));
 	}
 	

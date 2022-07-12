@@ -10,15 +10,15 @@ import utilpack.Matrix;
 
 public class MatrixTest {
 
-	private static String[][] board;
+	private static char[][] board;
 	private static String key;
 	
 	@BeforeClass
 	public static void init_board() {
-		board = new String[][]{{"r","k"," ","b"," "," "," "," "," "},
-				  			   {" "," ","p"},
-				  			   {" ","P"," "},
-				  			   {"B","K"," "," "," ","R"," "," "," "}};				  			   
+		board = new char[][]{{'r','k',' ','b',' ',' ',' ',' ',' '},
+				  			 {' ',' ','p'},
+				  			 {' ','P',' '},
+				  			 {'B','K',' ',' ',' ','R',' ',' ',' '}};				  			   
 	}
 	
 	@Test
@@ -28,7 +28,7 @@ public class MatrixTest {
 
 	@Test(expected = NullPointerException.class)
 	public void keymaker_empty() {		
-		String[][] board = null;		
+		char[][] board = null;		
 		assertNull(Matrix.makeKey(board));
 	}
 	

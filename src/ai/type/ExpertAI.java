@@ -14,8 +14,8 @@ import utilpack.Turn;
 
 public class ExpertAI extends AI{
 
-	public ExpertAI(Node root, String[][] board) {
-		super(root, board);
+	public ExpertAI(Node root, char[][] cs) {
+		super(root, cs);
 	}
 	
 	@Override
@@ -80,8 +80,8 @@ public class ExpertAI extends AI{
 			int c = legalMoves.get(i).getColumnFrom();
 			int r2 = legalMoves.get(i).getRowTo();
 			int c2 = legalMoves.get(i).getColumnTo();
-			String temp;
-			String promotion;
+			char temp;
+			char promotion;
 			int r3;
 			Board state;
 											
@@ -93,7 +93,7 @@ public class ExpertAI extends AI{
 				
 				List<Node> children = null;
 				List<Node> sorted = null;
-				if(temp != "K" & depth < 7) {
+				if(temp != 'K' & depth < 7) {
 					children = generator.generateMoves(board, Turn.WHITE);
 					sorted = generator.sortMoves(board, children, Turn.WHITE, false);
 					for(Node child: sorted) {
@@ -117,7 +117,7 @@ public class ExpertAI extends AI{
 			
 				List<Node> children = null;
 				List<Node> sorted = null;
-				if(temp != "k" & depth < 7) {
+				if(temp != 'k' & depth < 7) {
 					children = generator.generateMoves(board, Turn.BLACK);
 					sorted = generator.sortMoves(board, children, Turn.BLACK, false);
 					for(Node child: sorted) {

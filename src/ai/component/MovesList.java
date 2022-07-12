@@ -14,9 +14,9 @@ public final class MovesList {
 	private static Set<String> whiteMoves = new HashSet<>();
 	
 	// fills game moves list
-	public static void addMove(String[][] field, Turn turn) {
+	public static void addMove(char[][] board, Turn turn) {
 		
-		String hash = Matrix.makeKey(field);
+		String hash = Matrix.makeKey(board);
 		
 		if(turn.equals(Turn.BLACK)) {
 			blackMoves.add(hash);
@@ -28,7 +28,7 @@ public final class MovesList {
 	}
 
 	//checks 3-times repetition
-	public static boolean isRepeated(String[][] field, Turn white) {
+	public static boolean isRepeated(char[][] field, Turn white) {
 		
 		String hash = Matrix.makeKey(field);
 			

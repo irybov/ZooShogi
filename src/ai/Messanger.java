@@ -18,16 +18,16 @@ public class Messanger {
 		this.checkWarningEnabled = warn;
 	}
 
-	void output(int score, String[][] field, String name,
-			int c, String col, int r, String spot, String col2, int r2){
+	void output(int score, char[][] field, String name,
+			int c, String col, int r, char spot, String col2, int r2){
 
 		Gui.score.setText(score > 0 ? "+" + Integer.toString(score) : Integer.toString(score));
 		
 		Gui.output.setText(name+" "+(c>2?"drops":"from "+col+(r+1))+
-				(spot.equals(" ")?" to ":" takes on ")+col2+(r2+1));
+				(spot==(' ')?" to ":" takes on ")+col2+(r2+1));
 		if(!mutedVolume){
 		sound.playVoice(name);
-			if(!spot.equals(" ")){
+			if(spot!=(' ')){
 				sound.playVoice("takes");			
 			}
 			sound.playVoice(col2+Integer.toString(r2+1));

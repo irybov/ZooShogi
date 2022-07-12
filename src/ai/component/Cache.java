@@ -15,7 +15,7 @@ public final class Cache {
 
 	private static Map<String, Node> cache = new HashMap<>();
 	
-	public static void addTree(String[][] board, List<Node> moves) {	
+	public static void addTree(char[][] board, List<Node> moves) {	
 		
 		for(Node move: moves) {
 			
@@ -25,20 +25,20 @@ public final class Cache {
 				int r2 = move.getRowTo();
 				int c2 = move.getColumnTo();
 				
-				String[][] field = Copier.deepCopy(board);	
+				char[][] field = Copier.deepCopy(board);	
 				Capture.takenPiecePlacement(field, r2, c2);
-				if(field[r][c].equals("P")){	
+				if(field[r][c]==('P')){	
 					if(r==1){
-						field[r2][c2] = "Q";
+						field[r2][c2] = 'Q';
 					}
 					else {
-						field[r2][c2] = "P";					
+						field[r2][c2] = 'P';					
 					}
 				}
 				else{
 					field[r2][c2] = field[r][c];
 				}
-				field[r][c] = " ";
+				field[r][c] = ' ';
 				String state = Matrix.makeKey(field);
 				
 				List<Node> children = move.getChidren();
@@ -53,18 +53,18 @@ public final class Cache {
 						c2 = child.getColumnTo();
 									
 						Capture.takenPiecePlacement(field, r2, c2);
-						if(field[r][c].equals("p")){	
+						if(field[r][c]==('p')){	
 							if(r==2){
-								field[r2][c2] = "q";
+								field[r2][c2] = 'q';
 							}
 							else {
-								field[r2][c2] = "p";					
+								field[r2][c2] = 'p';					
 							}
 						}
 						else{
 							field[r2][c2] = field[r][c];
 						}
-						field[r][c] = " ";
+						field[r][c] = ' ';
 						addTree(Copier.deepCopy(field), child.getChidren());
 					}
 				}

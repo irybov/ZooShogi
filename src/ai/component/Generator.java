@@ -14,7 +14,7 @@ public class Generator {
 	
 	private final Evaluator evaluator = new Evaluator();
 
-	public List<Node> generateMoves(String[][] board, Turn turn) {	
+	public List<Node> generateMoves(char[][] board, Turn turn) {	
 		
 		List<Node> legal = new ArrayList<>();
 		
@@ -22,10 +22,10 @@ public class Generator {
 
 		if(turn.equals(Turn.BLACK)) {
 			for(int i=3; i<9; i++) {
-				if(!board[0][i].equals(" ")){
+				if(board[0][i]!=(' ')){
 					for(int r=0; r<4; r++){
 						for(int c=0; c<3; c++){
-							if(board[r][c].equals(" ")){
+							if(board[r][c]==(' ')){
 								legal.add(new Node(0, i, r, c, turn));
 							}
 						}
@@ -35,7 +35,7 @@ public class Generator {
 				
 			for(int r=0; r<4; r++){
 				for(int c=0; c<3; c++){					
-					if(board[r][c].equals("p")){
+					if(board[r][c]==('p')){
 						r2 = r+1;
 						c2 = c;
 						if((Pieces.BPAWN.isLegalMove(r, c, r2, c2))&&
@@ -43,7 +43,7 @@ public class Generator {
 							legal.add(new Node(r, c, r2, c2, turn));
 						}
 					}				
-					else if(board[r][c].equals("r")){					
+					else if(board[r][c]==('r')){					
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((Pieces.ROOK.isLegalMove(r, c, r2, c2))&&
@@ -53,7 +53,7 @@ public class Generator {
 							}							
 						}
 					}				
-					else if(board[r][c].equals("k")){					
+					else if(board[r][c]==('k')){					
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((Pieces.KING.isLegalMove(r, c, r2, c2))&&
@@ -63,7 +63,7 @@ public class Generator {
 							}							
 						}
 					}				
-					else if(board[r][c].equals("b")){					
+					else if(board[r][c]==('b')){					
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((Pieces.BISHOP.isLegalMove(r, c, r2, c2))&&
@@ -73,7 +73,7 @@ public class Generator {
 							}							
 						}
 					}				
-					else if(board[r][c].equals("q")){					
+					else if(board[r][c]==('q')){					
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((Pieces.BQUEEN.isLegalMove(r, c, r2, c2))&&
@@ -88,10 +88,10 @@ public class Generator {
 		}		
 		else if(turn.equals(Turn.WHITE)){	
 			for(int i=3; i<9; i++) {
-				if(!board[3][i].equals(" ")){
+				if(board[3][i]!=(' ')){
 					for(int r=0; r<4; r++){
 						for(int c=0; c<3; c++){
-							if(board[r][c].equals(" ")){
+							if(board[r][c]==(' ')){
 								legal.add(new Node(3, i, r, c, turn));
 							}
 						}
@@ -101,7 +101,7 @@ public class Generator {
 				
 			for(int r=0; r<4; r++){
 				for(int c=0; c<3; c++){					
-					if(board[r][c].equals("P")){
+					if(board[r][c]==('P')){
 						r2 = r-1;
 						c2 = c;
 						if((Pieces.WPAWN.isLegalMove(r, c, r2, c2))&&
@@ -109,7 +109,7 @@ public class Generator {
 							legal.add(new Node(r, c, r2, c2, turn));
 						}
 					}
-					else if(board[r][c].equals("R")){					
+					else if(board[r][c]==('R')){					
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((Pieces.ROOK.isLegalMove(r, c, r2, c2))&&
@@ -119,7 +119,7 @@ public class Generator {
 							}							
 						}
 					}
-					else if(board[r][c].equals("K")){					
+					else if(board[r][c]==('K')){					
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((Pieces.KING.isLegalMove(r, c, r2, c2))&&
@@ -129,7 +129,7 @@ public class Generator {
 							}							
 						}
 					}				
-					else if(board[r][c].equals("B")){					
+					else if(board[r][c]==('B')){					
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((Pieces.BISHOP.isLegalMove(r, c, r2, c2))&&
@@ -139,7 +139,7 @@ public class Generator {
 							}							
 						}
 					}				
-					else if(board[r][c].equals("Q")){					
+					else if(board[r][c]==('Q')){					
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((Pieces.WQUEEN.isLegalMove(r, c, r2, c2))&&
@@ -155,7 +155,7 @@ public class Generator {
 		return legal;
 	}
 	
-	public List<Node> sortMoves(String[][] board, List<Node> legalMoves, Turn turn, boolean prune){
+	public List<Node> sortMoves(char[][] board, List<Node> legalMoves, Turn turn, boolean prune){
 		
 		List<Node> sortedMoves = new ArrayList<>(legalMoves.size());
 		
@@ -177,8 +177,8 @@ public class Generator {
 			int c = legalMoves.get(i).getColumnFrom();
 			int r2 = legalMoves.get(i).getRowTo();
 			int c2 = legalMoves.get(i).getColumnTo();
-			String temp;
-			String promotion;
+			char temp;
+			char promotion;
 			int r3;
 			Board state;
 
@@ -189,7 +189,7 @@ public class Generator {
 				temp = state.getTemp();
 				
 				int value;				
-				if(temp.equals("K")){
+				if(temp==('K')){
 					value = 5000;	
 				}
 				else if(Examiner.isPromotionWon(board, Turn.BLACK) &&
@@ -230,7 +230,7 @@ public class Generator {
 				temp = state.getTemp();
 		
 				int value;				
-				if(temp.equals("k")){
+				if(temp==('k')){
 					value = -5000;	
 				}
 				else if(Examiner.isPromotionWon(board, Turn.WHITE) &&

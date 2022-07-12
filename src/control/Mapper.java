@@ -26,13 +26,13 @@ class Mapper {
 	return move;
 	}
 	
-	public String output(String[][] position) {
+	public String output(char[][] cs) {
 		
 		String reply = null;		
 		ObjectMapper mapper = new ObjectMapper();
 		
 		try {
-			reply = mapper.writeValueAsString(position);
+			reply = mapper.writeValueAsString(cs);
 		}
 		catch (JsonGenerationException | JsonMappingException exc) {
 			exc.printStackTrace();

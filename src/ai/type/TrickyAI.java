@@ -18,8 +18,8 @@ import utilpack.Turn;
 
 public class TrickyAI extends AI{
 
-	public TrickyAI(Node root, String[][] board) {
-		super(root, board);
+	public TrickyAI(Node root, char[][] cs) {
+		super(root, cs);
 	}
 	
 	@Override
@@ -30,13 +30,13 @@ public class TrickyAI extends AI{
 	}
 
 	// breadth-searching trappy minimax
-	private void calculate(String[][] field, int depth) {
+	private void calculate(char[][] board2, int depth) {
 
-		String[][] board = Copier.deepCopy(field);
+		char[][] board = Copier.deepCopy(board2);
 		
-		Queue<String[][]> input = new LinkedList<>();
+		Queue<char[][]> input = new LinkedList<>();
 		input.add(board);		
-		Queue<String[][]> poses = new LinkedList<>();
+		Queue<char[][]> poses = new LinkedList<>();
 		List<Node> legal;
 		
 		Deque<Node> stack = new ArrayDeque<>();
@@ -66,8 +66,8 @@ public class TrickyAI extends AI{
 					int c = legal.get(i).getColumnFrom();
 					int r2 = legal.get(i).getRowTo();
 					int c2 = legal.get(i).getColumnTo();
-					String temp = null;
-					String promotion = null;
+					char temp;
+					char promotion;
 					int r3;
 					Board state;
 					
@@ -79,7 +79,7 @@ public class TrickyAI extends AI{
 							
 						hash.addMove(board, Turn.BLACK, depth);
 						
-						if(temp.equals("K")){
+						if(temp==('K')){
 							legal.get(i).setValue(2000+(100/depth));
 						}
 						else if(Examiner.isPromotionWon(board, Turn.BLACK) &&
@@ -120,7 +120,7 @@ public class TrickyAI extends AI{
 						board = state.getBoard();
 						temp = state.getTemp();					
 						
-						if(temp.equals("k")){
+						if(temp==('k')){
 							legal.get(i).setValue(-(2000+(100/depth)));
 						}
 						else if(Examiner.isPromotionWon(board, Turn.WHITE) &&

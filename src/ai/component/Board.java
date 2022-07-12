@@ -2,25 +2,25 @@ package ai.component;
 
 public class Board {
 
-	private final String[][] board;
-	private final String temp;
-	private final String promotion;
+	private final char[][] board;
+	private final char temp;
+	private final char promotion;
 	private final int c3;
 	
-	public Board(String[][] board, String temp, String promotion, int c3) {
-		this.board = board;
-		this.temp = temp;
-		this.promotion = promotion;
+	public Board(char[][] board2, char temp2, char promotion2, int c3) {
+		this.board = board2;
+		this.temp = temp2;
+		this.promotion = promotion2;
 		this.c3 = c3;
 	}
 
-	public String[][] getBoard() {
+	public char[][] getBoard() {
 		return this.board;
 	}
-	public String getTemp() {
+	public char getTemp() {
 		return this.temp;
 	}
-	public String getPromotion() {
+	public char getPromotion() {
 		return this.promotion;
 	}
 	public int getC3() {

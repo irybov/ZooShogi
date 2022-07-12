@@ -4,60 +4,60 @@ public final class Examiner {
 	
 	private Examiner() {}
 	
-	public static boolean isCheck(String[][] board, Turn turn) {
+	public static boolean isCheck(char[][] board, Turn turn) {
 		
 		int r,c,r2,c2;
 			
 		if(turn.equals(Turn.BLACK)){	
 			for(r=0; r<4; r++){
 				for(c=0; c<3; c++){					
-					if(board[r][c].equals("p")){
+					if(board[r][c]==('p')){
 						r2 = r+1;
 						c2 = c;
 						if((Pieces.BPAWN.isLegalMove(r, c, r2, c2))&&
-						   (board[r2][c2].equals("K"))){
+						   (board[r2][c2]==('K'))){
 							return true;
 						}
 					}
 					
-					else if(board[r][c].equals("r")){						
+					else if(board[r][c]==('r')){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((Pieces.ROOK.isLegalMove(r, c, r2, c2))&&
-								(board[r2][c2].equals("K"))){
+								(board[r2][c2]==('K'))){
 								return true;
 								}
 							}							
 						}
 					}
 
-					else if(board[r][c].equals("k")){						
+					else if(board[r][c]==('k')){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((Pieces.KING.isLegalMove(r, c, r2, c2))&&
-								(board[r2][c2].equals("K"))){
+								(board[r2][c2]==('K'))){
 								return true;
 								}
 							}							
 						}
 					}
 					
-					else if(board[r][c].equals("b")){						
+					else if(board[r][c]==('b')){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((Pieces.BISHOP.isLegalMove(r, c, r2, c2))&&
-								(board[r2][c2].equals("K"))){
+								(board[r2][c2]==('K'))){
 								return true;
 								}
 							}							
 						}
 					}
 					
-					else if(board[r][c].equals("q")){						
+					else if(board[r][c]==('q')){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((Pieces.BQUEEN.isLegalMove(r, c, r2, c2))&&
-								(board[r2][c2].equals("K"))){
+								(board[r2][c2]==('K'))){
 								return true;
 								}
 							}							
@@ -69,53 +69,53 @@ public final class Examiner {
 		else if(turn.equals(Turn.WHITE)){
 			for(r=0; r<4; r++){
 				for(c=0; c<3; c++){					
-					if(board[r][c].equals("P")){
+					if(board[r][c]==('P')){
 						r2 = r-1;
 						c2 = c;
 						if((Pieces.WPAWN.isLegalMove(r, c, r2, c2))&&
-						   (board[r2][c2].equals("k"))){
+						   (board[r2][c2]==('k'))){
 							return true;
 						}
 					}
 					
-					else if(board[r][c].equals("R")){						
+					else if(board[r][c]==('R')){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((Pieces.ROOK.isLegalMove(r, c, r2, c2))&&
-								(board[r2][c2].equals("k"))){
+								(board[r2][c2]==('k'))){
 								return true;
 								}
 							}							
 						}
 					}
 					
-					else if(board[r][c].equals("K")){						
+					else if(board[r][c]==('K')){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((Pieces.KING.isLegalMove(r, c, r2, c2))&&
-								(board[r2][c2].equals("k"))){
+								(board[r2][c2]==('k'))){
 								return true;
 								}
 							}							
 						}
 					}
 
-					else if(board[r][c].equals("B")){						
+					else if(board[r][c]==('B')){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((Pieces.BISHOP.isLegalMove(r, c, r2, c2))&&
-								(board[r2][c2].equals("k"))){
+								(board[r2][c2]==('k'))){
 								return true;
 								}
 							}							
 						}
 					}
 					
-					else if(board[r][c].equals("Q")){						
+					else if(board[r][c]==('Q')){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
 							if((Pieces.WQUEEN.isLegalMove(r, c, r2, c2))&&
-								(board[r2][c2].equals("k"))){
+								(board[r2][c2]==('k'))){
 								return true;
 								}
 							}							
@@ -127,55 +127,55 @@ public final class Examiner {
 	return false;
 	}
 	
-	public static boolean isPromotionWon(String[][] board, Turn turn) {
+	public static boolean isPromotionWon(char[][] board, Turn turn) {
 		
 		if(turn.equals(Turn.BLACK)) {
-			return (board[3][0].equals("k")||board[3][1].equals("k")||board[3][2].equals("k")) &
-			(!board[0][0].equals("K")&&!board[0][1].equals("K")&&!board[0][2].equals("K"));		
+			return (board[3][0]==('k')||board[3][1]==('k')||board[3][2]==('k')) &
+			(board[0][0]!=('K')&&board[0][1]!=('K')&&board[0][2]!=('K'));		
 		}
 		else if(turn.equals(Turn.WHITE)){
-			return (board[0][0].equals("K")||board[0][1].equals("K")||board[0][2].equals("K")) & 
-			(!board[3][0].equals("k")&&!board[3][1].equals("k")&&!board[3][2].equals("k"));
+			return (board[0][0]==('K')||board[0][1]==('K')||board[0][2]==('K')) & 
+			(board[3][0]!=('k')&&board[3][1]!=('k')&&board[3][2]!=('k'));
 		}
 		return false;
 	}
 
-	public static boolean isBlackPositionWon(String[][] board, Turn turn)  {
+	public static boolean isBlackPositionWon(char[][] board, Turn turn)  {
 		
 		int a = 0;
 		int b = 0;
 		
 		for(int r=0; r<4; r++){
 			for(int c=0; c<3; c++){
-				if(board[r][c].equals("K")){
+				if(board[r][c]==('K')){
 					a = 2;
 				}
-				if(board[r][c].equals("k")){
+				if(board[r][c]==('k')){
 					b = 1;
 				}
 			}
 		}		
 		return((a+b==1) || ((a+b==3 & turn.equals(Turn.BLACK)) & 
-			   (board[3][0].equals("k")||board[3][1].equals("k")||board[3][2].equals("k"))));
+			   (board[3][0]==('k')||board[3][1]==('k')||board[3][2]==('k'))));
 	}
 	
-	public static boolean isWhitePositionWon(String[][] board, Turn turn)  {
+	public static boolean isWhitePositionWon(char[][] board, Turn turn)  {
 		
 		int a = 0;
 		int b = 0;
 		
 		for(int r=0; r<4; r++){
 			for(int c=0; c<3; c++){
-				if(board[r][c].equals("K")){
+				if(board[r][c]==('K')){
 					a = 2;
 				}
-				if(board[r][c].equals("k")){
+				if(board[r][c]==('k')){
 					b = 1;
 				}
 			}
 		}		
 		return((a+b==2) || ((a+b==3 & turn.equals(Turn.WHITE)) & 
-			   (board[0][0].equals("K")||board[0][1].equals("K")||board[0][2].equals("K"))));
+			   (board[0][0]==('K')||board[0][1]==('K')||board[0][2]==('K'))));
 	}	
 	
 }

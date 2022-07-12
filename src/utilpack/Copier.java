@@ -12,9 +12,9 @@ public final class Copier {
 	
 	private Copier() {}
 
-	public static String[][] deepCopy(final String[][] ORIGINAL) {
+	public static char[][] deepCopy(final char[][] ORIGINAL) {
 		
-		String[][] copy = new String[ORIGINAL.length][];
+		char[][] copy = new char[ORIGINAL.length][];
 		
 	    for (int i = 0; i < ORIGINAL.length; i++) {
 	          copy[i] = Arrays.copyOf(ORIGINAL[i], ORIGINAL[i].length);

@@ -17,12 +17,12 @@ public class PseudoAI implements Runnable {
 	private final Evaluator evaluator = new Evaluator();
 	
 	private final int level;
-	private String[][] board; 
+	private char[][] board; 
 	private List<Node> legal;
 	
-	public PseudoAI(int level, String[][] board, List<Node> legal) {		
+	public PseudoAI(int level, char[][] board2, List<Node> legal) {		
 		this.level = level;
-		this.board = board;
+		this.board = board2;
 		this.legal = legal;
 	}
 	
@@ -48,7 +48,7 @@ public class PseudoAI implements Runnable {
 	private void greedy() {
 		
 		int score;
-		String temp;
+		char temp;
 		
 		for(int i=0; i<legal.size(); i++){
 
@@ -56,7 +56,7 @@ public class PseudoAI implements Runnable {
 			int c = legal.get(i).getColumnFrom();
 			int r2 = legal.get(i).getRowTo();
 			int c2 = legal.get(i).getColumnTo();
-			String promotion;
+			char promotion;
 			int r3 = 0;
 			int c3 = 9;
 			Board state;
@@ -65,7 +65,7 @@ public class PseudoAI implements Runnable {
 			board = state.getBoard();
 			temp = state.getTemp();
 			
-			if(temp.equals("K")){
+			if(temp==('K')){
 				score = 2000;
 			}
 			else if(Examiner.isPromotionWon(board, Turn.BLACK) &&

@@ -12,7 +12,7 @@ public class Memorizer {
 	private Map<String, Edge> white = new ConcurrentHashMap<>();
 	
 	// fills calculating hash
-	public void add(String[][] field, Turn side, Edge edge) {
+	public void add(char[][] field, Turn side, Edge edge) {
 		
 		String hash = Matrix.makeKey(field);
 		
@@ -25,7 +25,7 @@ public class Memorizer {
 	}
 
 	// checks repetitions while calculating	
-	public boolean has(String[][] field, Turn side) {
+	public boolean has(char[][] field, Turn side) {
 		
 		String hash = Matrix.makeKey(field);
 							
@@ -37,7 +37,7 @@ public class Memorizer {
 		}	
 	}
 	
-	public boolean precise(String[][] field, Turn side, int depth) {
+	public boolean precise(char[][] field, Turn side, int depth) {
 		
 		String hash = Matrix.makeKey(field);
 		Edge entry;
@@ -52,7 +52,7 @@ public class Memorizer {
 	}
 	
 	// returns previously calculated results
-	public int get(String[][] field,  Turn side) {
+	public int get(char[][] field,  Turn side) {
 		
 		String hash = Matrix.makeKey(field);
 		Edge entry;
@@ -68,7 +68,7 @@ public class Memorizer {
 	}
 	
 	// updates previously calculated results	
-	public void update(String[][] field, Turn side, Edge edge) {
+	public void update(char[][] field, Turn side, Edge edge) {
 		
 		String hash = Matrix.makeKey(field);		
 		Edge entry;

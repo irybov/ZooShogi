@@ -4,34 +4,34 @@ public final class Matrix {
 	
 	private Matrix() {}
 	
-	public static String makeKey(final String[][] FIELD) {
+	public static String makeKey(final char[][] board) {
 		
 		StringBuilder current = new StringBuilder(24);
 		
 		for(int r=0; r<4 ; r++){
 			for(int c=0; c<3 ; c++){
-				if(FIELD[r][c].equals(" ")) {
-					current.append("#");
+				if(board[r][c]==(' ')) {
+					current.append('#');
 				}
 				else {
-					current.append(FIELD[r][c]);
+					current.append(board[r][c]);
 				}				
 			}
 		}
 		for(int i=3; i<9; i++) {
-			if(FIELD[0][i].equals(" ")) {
-				current.append("#");
+			if(board[0][i]==(' ')) {
+				current.append('#');
 			}
 			else {
-				current.append(FIELD[0][i]);
+				current.append(board[0][i]);
 			}	
 		}
 		for(int i=3; i<9; i++) {
-			if(FIELD[3][i].equals(" ")) {
-				current.append("#");
+			if(board[3][i]==(' ')) {
+				current.append('#');
 			}
 			else {
-				current.append(FIELD[3][i]);
+				current.append(board[3][i]);
 			}	
 		}
 		final String HASH = current.toString();

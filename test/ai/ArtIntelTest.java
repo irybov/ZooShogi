@@ -1,5 +1,6 @@
 package ai;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -19,7 +20,7 @@ import utilpack.Turn;
 
 public class ArtIntelTest {
 
-	private static String[][] board;
+	private static char[][] board;
 	private static List<Node> nodes;
 	private static List<Node> legal;
 	private static int level;
@@ -30,10 +31,14 @@ public class ArtIntelTest {
 	
 	@BeforeClass
 	public static void init_board_and_env() {
-		board = new String[][]{{" ","k"," "," ","p"," "," "," "," "},
-				  			   {" ","r"," "},
-				  			   {" ","b"," "},
-				  			   {" ","K"," ","B","P","R"," "," "," "}};
+		
+		new File(System.getProperty("user.dir") +
+				 System.getProperty("file.separator") + "exp").mkdir();
+		
+		board = new char[][]{{' ','k',' ',' ','p',' ',' ',' ',' '},
+				  			 {' ','r',' '},
+				  			 {' ','b',' '},
+				  			 {' ','K',' ','B','P','R',' ',' ',' '}};
 		generator = new Generator();
 		legal = generator.generateMoves(board, Turn.BLACK);
 		cores = Runtime.getRuntime().availableProcessors();
