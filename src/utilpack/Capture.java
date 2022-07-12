@@ -1,20 +1,25 @@
 package utilpack;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 public final class Capture {
 
 	private Capture() {}
+	
+	private static Set<Character> blackPieces = new HashSet<>(Arrays.asList('b','k','p','q','r'));
+	private static Set<Character> whitePieces = new HashSet<>(Arrays.asList('B','K','P','Q','R'));
 
 	// checks if capture is possible
 	public static boolean isCaptureLegal(char[][] board, int r2, int c2, Turn turn) {
 		
-		if(turn.equals(Turn.WHITE)&(board[r2][c2]==(' ')||board[r2][c2]==('p')||
-			board[r2][c2]==('q')||board[r2][c2]==('r')||board[r2][c2]==('b')
-			||board[r2][c2]==('k'))) {
+		if(turn.equals(Turn.WHITE)&(blackPieces.contains(board[r2][c2])
+				|| (board[r2][c2]==(' ')))) {
 			return true;
 		}
-		else if(turn.equals(Turn.BLACK)&(board[r2][c2]==(' ')||board[r2][c2]==('P')||
-				board[r2][c2]==('Q')||board[r2][c2]==('R')||board[r2][c2]==('B')
-				||board[r2][c2]==('K'))) {
+		else if(turn.equals(Turn.BLACK)&(whitePieces.contains(board[r2][c2])
+				|| (board[r2][c2]==(' ')))) {
 			return true;
 		}
 		return false;
@@ -23,24 +28,22 @@ public final class Capture {
 	// checks capture extensions
 	public static boolean isExtension(char piece, Turn side) {
 		
-		if(side.equals(Turn.WHITE)&(piece==('p')||piece==('q')||piece==('r')
-				||piece==('b'))) {
+		if(side.equals(Turn.WHITE) & blackPieces.contains(piece)) {
 			return true;
 		}
-		else if(side.equals(Turn.BLACK)&(piece==('P')||piece==('Q')||piece==('R')
-				||piece==('B'))) {
+		else if(side.equals(Turn.BLACK) & whitePieces.contains(piece)) {
 			return true;
 		}
 		return false;
 	}
 
 	// checks current king's state
-	public static boolean isKingUnderCheck(String[][] field, int r2, int c2, Turn side) {
+	public static boolean isKingUnderCheck(char[][] field, int r2, int c2, Turn side) {
 		
-		if(side.equals(Turn.WHITE) & field[r2][c2].equals("k")) {
+		if(side.equals(Turn.WHITE) & field[r2][c2]==('k')) {
 			return true;
 		}
-		else if(side.equals(Turn.BLACK) & field[r2][c2].equals("K")) {
+		else if(side.equals(Turn.BLACK) & field[r2][c2]==('K')) {
 			return true;
 		}
 		return false;

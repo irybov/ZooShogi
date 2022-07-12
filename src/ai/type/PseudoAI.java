@@ -56,7 +56,7 @@ public class PseudoAI implements Runnable {
 			int c = legal.get(i).getColumnFrom();
 			int r2 = legal.get(i).getRowTo();
 			int c2 = legal.get(i).getColumnTo();
-			char promotion;
+			char promoted;
 			int r3 = 0;
 			int c3 = 9;
 			Board state;
@@ -90,8 +90,8 @@ public class PseudoAI implements Runnable {
 			legal.get(i).setValue(score);
 			
 			c3 = state.getC3();
-			promotion = state.getPromotion();
-			MoveMaker.undo(board, temp, promotion, r, c, r2, c2, r3, c3);
+			promoted = state.getPromotion();
+			MoveMaker.undo(board, temp, promoted, r, c, r2, c2, r3, c3);
 		}	
 	}
 

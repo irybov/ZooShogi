@@ -30,12 +30,12 @@ public class TrickyAI extends AI{
 	}
 
 	// breadth-searching trappy minimax
-	private void calculate(char[][] board2, int depth) {
+	private void calculate(char[][] field, int depth) {
 
-		char[][] board = Copier.deepCopy(board2);
+		char[][] board = Copier.deepCopy(field);
 		
 		Queue<char[][]> input = new LinkedList<>();
-		input.add(board);		
+		input.add(board);
 		Queue<char[][]> poses = new LinkedList<>();
 		List<Node> legal;
 		
@@ -67,7 +67,7 @@ public class TrickyAI extends AI{
 					int r2 = legal.get(i).getRowTo();
 					int c2 = legal.get(i).getColumnTo();
 					char temp;
-					char promotion;
+					char promoted;
 					int r3;
 					Board state;
 					
@@ -153,8 +153,8 @@ public class TrickyAI extends AI{
 					stack.push(legal.get(i));
 					
 					int c3 = state.getC3();
-					promotion = state.getPromotion();
-					MoveMaker.undo(board, temp, promotion, r, c, r2, c2, r3, c3);
+					promoted = state.getPromotion();
+					MoveMaker.undo(board, temp, promoted, r, c, r2, c2, r3, c3);
 				}
 				legal = null;
 			}		

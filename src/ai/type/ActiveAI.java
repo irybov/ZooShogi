@@ -84,7 +84,7 @@ public class ActiveAI extends AI{
 			int r2 = legalMoves.get(i).getRowTo();
 			int c2 = legalMoves.get(i).getColumnTo();
 			char temp;
-			char promotion;
+			char promoted;
 			int r3;
 			Board state;
 											
@@ -132,8 +132,8 @@ public class ActiveAI extends AI{
 			}
 			
 			int c3 = state.getC3();
-			promotion = state.getPromotion();
-			MoveMaker.undo(board, temp, promotion, r, c, r2, c2, r3, c3);
+			promoted = state.getPromotion();
+			MoveMaker.undo(board, temp, promoted, r, c, r2, c2, r3, c3);
 		}
 		
 		if(turn.equals(Turn.BLACK)){

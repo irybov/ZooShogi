@@ -110,7 +110,7 @@ public class Director{
 		undoMove = 	Copier.deepCopy(board);
 	}
 	
-	public char refreshBoard(int r, int c) {				
+	public char refreshBoard(int r, int c) {
 		return board[r][c];
 	}
 	
