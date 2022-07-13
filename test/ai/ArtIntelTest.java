@@ -22,7 +22,7 @@ public class ArtIntelTest {
 
 	private static char[][] board;
 	private static List<Node> nodes;
-	private static List<Node> legal;
+	private static List<Node> legalMoves;
 	private static int level;
 	private static Generator generator;
 	private static AIFactory factory;
@@ -40,7 +40,7 @@ public class ArtIntelTest {
 				  			 {' ','b',' '},
 				  			 {' ','K',' ','B','P','R',' ',' ',' '}};
 		generator = new Generator();
-		legal = generator.generateMoves(board, Turn.BLACK);
+		legalMoves = generator.generateMoves(board, Turn.BLACK);
 		cores = Runtime.getRuntime().availableProcessors();
 		factory = new AIFactory();
 	}
@@ -48,8 +48,8 @@ public class ArtIntelTest {
 	@Before
 	public void set_up() {
 		es = Executors.newFixedThreadPool(cores);
-		nodes = new ArrayList<>(legal.size());
-		nodes = generator.sortMoves(board, legal, Turn.BLACK, false);
+		nodes = new ArrayList<>(legalMoves.size());
+		nodes = generator.sortMoves(board, legalMoves, Turn.BLACK, false);
 	}
 
 	@Test(timeout = 8000)
@@ -87,7 +87,7 @@ public class ArtIntelTest {
 	@AfterClass
 	public static void clear_memory() {
 		board = null;
-		legal = null;
+		legalMoves = null;
 		generator = null;
 		factory = null;
 	}

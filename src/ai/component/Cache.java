@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import utilpack.Capture;
+import utilpack.Verifier;
 import utilpack.Copier;
 import utilpack.Matrix;
 
@@ -26,7 +26,7 @@ public final class Cache {
 				int c2 = move.getColumnTo();
 				
 				char[][] field = Copier.deepCopy(board);	
-				Capture.takenPiecePlacement(field, r2, c2);
+				Verifier.takenPiecePlacement(field, r2, c2);
 				if(field[r][c]==('P')){	
 					if(r==1){
 						field[r2][c2] = 'Q';
@@ -52,7 +52,7 @@ public final class Cache {
 						r2 = child.getRowTo();
 						c2 = child.getColumnTo();
 									
-						Capture.takenPiecePlacement(field, r2, c2);
+						Verifier.takenPiecePlacement(field, r2, c2);
 						if(field[r][c]==('p')){	
 							if(r==2){
 								field[r2][c2] = 'q';

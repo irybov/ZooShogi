@@ -2,8 +2,9 @@ package ai.component;
 
 import java.util.List;
 
-import utilpack.Capture;
-import utilpack.Pieces;
+import utilpack.Verifier;
+import utilpack.Direction;
+import utilpack.Piece;
 import utilpack.Turn;
 
 public class Evaluator {
@@ -17,28 +18,28 @@ public class Evaluator {
 				if(board[r][c]!=(' ')){
 					switch(board[r][c]){
 					case 'p':
-						score += exp ? Pieces.BPAWN.getValue()*10 : Pieces.BPAWN.getValue();
+						score += exp ? Piece.BPAWN.getValue()*10 : Piece.BPAWN.getValue();
 						break;
 					case 'r':
-						score += exp ? Pieces.ROOK.getValue()*10 : Pieces.ROOK.getValue();
+						score += exp ? Piece.ROOK.getValue()*10 : Piece.ROOK.getValue();
 						break;
 					case 'b':
-						score += exp ? Pieces.BISHOP.getValue()*10 : Pieces.BISHOP.getValue();
+						score += exp ? Piece.BISHOP.getValue()*10 : Piece.BISHOP.getValue();
 						break;
 					case 'q':
-						score += exp ? Pieces.BQUEEN.getValue()*10 : Pieces.BQUEEN.getValue();
+						score += exp ? Piece.BQUEEN.getValue()*10 : Piece.BQUEEN.getValue();
 						break;
 					case 'P':
-						score += -Pieces.WPAWN.getValue();
+						score += -Piece.WPAWN.getValue();
 						break;
 					case 'R':
-						score += -Pieces.ROOK.getValue();
+						score += -Piece.ROOK.getValue();
 						break;
 					case 'B':
-						score += -Pieces.BISHOP.getValue();
+						score += -Piece.BISHOP.getValue();
 						break;
 					case 'Q':
-						score += -Pieces.WQUEEN.getValue();
+						score += -Piece.WQUEEN.getValue();
 						break;
 					}
 				}
@@ -47,7 +48,9 @@ public class Evaluator {
 		return score;
 	}
 
-	public int evaluationPositional(char[][] board) {		
+	public int evaluationPositional(char[][] board) {
+		
+		List<Direction> directions;
 		
 		int score = 0;
 		int r,c,r2,c2;
@@ -57,19 +60,20 @@ public class Evaluator {
 				if(board[r][c]==('p')){
 					r2 = r+1;
 					c2 = c;
-					if((Pieces.BPAWN.isLegalMove(r, c, r2, c2))&&
-					   (Capture.isCaptureLegal(board, r2, c2, Turn.BLACK))){
-						score += (Capture.attackBonusesCount(board, r2, c2, Turn.BLACK));
+					if((Piece.BPAWN.isLegalMove(r, c, r2, c2))&&
+					   (Verifier.isCaptureLegal(board, r2, c2, Turn.BLACK))){
+						score += (Verifier.attackBonusesCount(board, r2, c2, Turn.BLACK));
 					}
 				}
 				
 				else if(board[r][c]==('r')){					
-					for(r2=r-1; r2<r+2; r2++){
-						for(c2=c-1; c2<c+2; c2++){
-						if((Pieces.ROOK.isLegalMove(r, c, r2, c2))&&
-						   (Capture.isCaptureLegal(board, r2, c2, Turn.BLACK))){
-							score += (Capture.attackBonusesCount(board, r2, c2, Turn.BLACK));
-							}
+					directions = Verifier.getDirections('r');
+					for(Direction point : directions){
+						r2 = r + point.getX();
+						c2 = c + point.getY();
+						if((Piece.ROOK.isLegalMove(r, c, r2, c2))&&
+						   (Verifier.isCaptureLegal(board, r2, c2, Turn.BLACK))){
+							score += (Verifier.attackBonusesCount(board, r2, c2, Turn.BLACK));
 						}							
 					}
 				}
@@ -77,32 +81,35 @@ public class Evaluator {
 				else if(board[r][c]==('k')){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
-						if((Pieces.KING.isLegalMove(r, c, r2, c2))&&
-						   (Capture.isCaptureLegal(board, r2, c2, Turn.BLACK))){
-							score += (Capture.attackBonusesCount(board, r2, c2, Turn.BLACK));
+							if(r2==0 && c2==0) {}
+						if((Piece.KING.isLegalMove(r, c, r2, c2))&&
+						   (Verifier.isCaptureLegal(board, r2, c2, Turn.BLACK))){
+							score += (Verifier.attackBonusesCount(board, r2, c2, Turn.BLACK));
 							}
 						}							
 					}
 				}
 				
 				else if(board[r][c]==('b')){					
-					for(r2=r-1; r2<r+2; r2++){
-						for(c2=c-1; c2<c+2; c2++){
-						if((Pieces.BISHOP.isLegalMove(r, c, r2, c2))&&
-						   (Capture.isCaptureLegal(board, r2, c2, Turn.BLACK))){
-							score += (Capture.attackBonusesCount(board, r2, c2, Turn.BLACK));
-							}
+					directions = Verifier.getDirections('b');
+					for(Direction point : directions){
+						r2 = r + point.getX();
+						c2 = c + point.getY();
+						if((Piece.BISHOP.isLegalMove(r, c, r2, c2))&&
+						   (Verifier.isCaptureLegal(board, r2, c2, Turn.BLACK))){
+							score += (Verifier.attackBonusesCount(board, r2, c2, Turn.BLACK));
 						}							
 					}
 				}
 				
 				else if(board[r][c]==('q')){					
-					for(r2=r-1; r2<r+2; r2++){
-						for(c2=c-1; c2<c+2; c2++){
-						if((Pieces.BQUEEN.isLegalMove(r, c, r2, c2))&&
-						   (Capture.isCaptureLegal(board, r2, c2, Turn.BLACK))){
-							score += (Capture.attackBonusesCount(board, r2, c2, Turn.BLACK));
-							}
+					directions = Verifier.getDirections('q');
+					for(Direction point : directions){
+						r2 = r + point.getX();
+						c2 = c + point.getY();
+						if((Piece.BQUEEN.isLegalMove(r, c, r2, c2))&&
+						   (Verifier.isCaptureLegal(board, r2, c2, Turn.BLACK))){
+							score += (Verifier.attackBonusesCount(board, r2, c2, Turn.BLACK));
 						}							
 					}
 				}
@@ -110,19 +117,20 @@ public class Evaluator {
 				else if(board[r][c]==('P')){
 					r2 = r-1;
 					c2 = c;
-					if((Pieces.WPAWN.isLegalMove(r, c, r2, c2))&&
-					   (Capture.isCaptureLegal(board, r2, c2, Turn.WHITE))){
-						score += (Capture.attackBonusesCount(board, r2, c2, Turn.WHITE));
+					if((Piece.WPAWN.isLegalMove(r, c, r2, c2))&&
+					   (Verifier.isCaptureLegal(board, r2, c2, Turn.WHITE))){
+						score += (Verifier.attackBonusesCount(board, r2, c2, Turn.WHITE));
 					}
 				}
 				
 				else if(board[r][c]==('R')){				
-					for(r2=r-1; r2<r+2; r2++){
-						for(c2=c-1; c2<c+2; c2++){
-						if((Pieces.ROOK.isLegalMove(r, c, r2, c2))&&
-						   (Capture.isCaptureLegal(board, r2, c2, Turn.WHITE))){
-							score += (Capture.attackBonusesCount(board, r2, c2, Turn.WHITE));
-							}
+					directions = Verifier.getDirections('R');
+					for(Direction point : directions){
+						r2 = r + point.getX();
+						c2 = c + point.getY();
+						if((Piece.ROOK.isLegalMove(r, c, r2, c2))&&
+						   (Verifier.isCaptureLegal(board, r2, c2, Turn.WHITE))){
+							score += (Verifier.attackBonusesCount(board, r2, c2, Turn.WHITE));
 						}							
 					}
 				}
@@ -130,32 +138,35 @@ public class Evaluator {
 				else if(board[r][c]==('K')){					
 					for(r2=r-1; r2<r+2; r2++){
 						for(c2=c-1; c2<c+2; c2++){
-						if((Pieces.KING.isLegalMove(r, c, r2, c2))&&
-						   (Capture.isCaptureLegal(board, r2, c2, Turn.WHITE))){
-							score += (Capture.attackBonusesCount(board, r2, c2, Turn.WHITE));
+							if(r2==0 && c2==0) {}
+						if((Piece.KING.isLegalMove(r, c, r2, c2))&&
+						   (Verifier.isCaptureLegal(board, r2, c2, Turn.WHITE))){
+							score += (Verifier.attackBonusesCount(board, r2, c2, Turn.WHITE));
 							}
 						}							
 					}
 				}
 				
 				else if(board[r][c]==('B')){					
-					for(r2=r-1; r2<r+2; r2++){
-						for(c2=c-1; c2<c+2; c2++){
-						if((Pieces.BISHOP.isLegalMove(r, c, r2, c2))&&
-						   (Capture.isCaptureLegal(board, r2, c2, Turn.WHITE))){
-							score += (Capture.attackBonusesCount(board, r2, c2, Turn.WHITE));
-							}
+					directions = Verifier.getDirections('B');
+					for(Direction point : directions){
+						r2 = r + point.getX();
+						c2 = c + point.getY();
+						if((Piece.BISHOP.isLegalMove(r, c, r2, c2))&&
+						   (Verifier.isCaptureLegal(board, r2, c2, Turn.WHITE))){
+							score += (Verifier.attackBonusesCount(board, r2, c2, Turn.WHITE));
 						}							
 					}
 				}
 	
 				else if(board[r][c]==('Q')){					
-					for(r2=r-1; r2<r+2; r2++){
-						for(c2=c-1; c2<c+2; c2++){
-						if((Pieces.WQUEEN.isLegalMove(r, c, r2, c2))&&
-						   (Capture.isCaptureLegal(board, r2, c2, Turn.WHITE))){
-							score += (Capture.attackBonusesCount(board, r2, c2, Turn.WHITE));
-							}
+					directions = Verifier.getDirections('Q');
+					for(Direction point : directions){
+						r2 = r + point.getX();
+						c2 = c + point.getY();
+						if((Piece.WQUEEN.isLegalMove(r, c, r2, c2))&&
+						   (Verifier.isCaptureLegal(board, r2, c2, Turn.WHITE))){
+							score += (Verifier.attackBonusesCount(board, r2, c2, Turn.WHITE));
 						}							
 					}
 				}

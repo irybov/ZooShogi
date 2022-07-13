@@ -1,10 +1,14 @@
 package utilpack;
 
+import java.util.List;
+
 public final class Examiner {
 	
 	private Examiner() {}
 	
 	public static boolean isCheck(char[][] board, Turn turn) {
+		
+		List<Direction> directions;
 		
 		int r,c,r2,c2;
 			
@@ -14,19 +18,20 @@ public final class Examiner {
 					if(board[r][c]==('p')){
 						r2 = r+1;
 						c2 = c;
-						if((Pieces.BPAWN.isLegalMove(r, c, r2, c2))&&
+						if((Piece.BPAWN.isLegalMove(r, c, r2, c2))&&
 						   (board[r2][c2]==('K'))){
 							return true;
 						}
 					}
 					
 					else if(board[r][c]==('r')){						
-						for(r2=r-1; r2<r+2; r2++){
-							for(c2=c-1; c2<c+2; c2++){
-							if((Pieces.ROOK.isLegalMove(r, c, r2, c2))&&
+						directions = Verifier.getDirections('r');
+						for(Direction point : directions){
+							r2 = r + point.getX();
+							c2 = c + point.getY();
+							if((Piece.ROOK.isLegalMove(r, c, r2, c2))&&
 								(board[r2][c2]==('K'))){
 								return true;
-								}
 							}							
 						}
 					}
@@ -34,7 +39,8 @@ public final class Examiner {
 					else if(board[r][c]==('k')){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
-							if((Pieces.KING.isLegalMove(r, c, r2, c2))&&
+								if(r2==0 && c2==0) {}
+							if((Piece.KING.isLegalMove(r, c, r2, c2))&&
 								(board[r2][c2]==('K'))){
 								return true;
 								}
@@ -43,23 +49,25 @@ public final class Examiner {
 					}
 					
 					else if(board[r][c]==('b')){						
-						for(r2=r-1; r2<r+2; r2++){
-							for(c2=c-1; c2<c+2; c2++){
-							if((Pieces.BISHOP.isLegalMove(r, c, r2, c2))&&
+						directions = Verifier.getDirections('b');
+						for(Direction point : directions){
+							r2 = r + point.getX();
+							c2 = c + point.getY();
+							if((Piece.BISHOP.isLegalMove(r, c, r2, c2))&&
 								(board[r2][c2]==('K'))){
 								return true;
-								}
 							}							
 						}
 					}
 					
 					else if(board[r][c]==('q')){						
-						for(r2=r-1; r2<r+2; r2++){
-							for(c2=c-1; c2<c+2; c2++){
-							if((Pieces.BQUEEN.isLegalMove(r, c, r2, c2))&&
+						directions = Verifier.getDirections('q');
+						for(Direction point : directions){
+							r2 = r + point.getX();
+							c2 = c + point.getY();
+							if((Piece.BQUEEN.isLegalMove(r, c, r2, c2))&&
 								(board[r2][c2]==('K'))){
 								return true;
-								}
 							}							
 						}
 					}
@@ -72,19 +80,20 @@ public final class Examiner {
 					if(board[r][c]==('P')){
 						r2 = r-1;
 						c2 = c;
-						if((Pieces.WPAWN.isLegalMove(r, c, r2, c2))&&
+						if((Piece.WPAWN.isLegalMove(r, c, r2, c2))&&
 						   (board[r2][c2]==('k'))){
 							return true;
 						}
 					}
 					
 					else if(board[r][c]==('R')){						
-						for(r2=r-1; r2<r+2; r2++){
-							for(c2=c-1; c2<c+2; c2++){
-							if((Pieces.ROOK.isLegalMove(r, c, r2, c2))&&
+						directions = Verifier.getDirections('R');
+						for(Direction point : directions){
+							r2 = r + point.getX();
+							c2 = c + point.getY();
+							if((Piece.ROOK.isLegalMove(r, c, r2, c2))&&
 								(board[r2][c2]==('k'))){
 								return true;
-								}
 							}							
 						}
 					}
@@ -92,7 +101,8 @@ public final class Examiner {
 					else if(board[r][c]==('K')){						
 						for(r2=r-1; r2<r+2; r2++){
 							for(c2=c-1; c2<c+2; c2++){
-							if((Pieces.KING.isLegalMove(r, c, r2, c2))&&
+								if(r2==0 && c2==0) {}
+							if((Piece.KING.isLegalMove(r, c, r2, c2))&&
 								(board[r2][c2]==('k'))){
 								return true;
 								}
@@ -101,23 +111,25 @@ public final class Examiner {
 					}
 
 					else if(board[r][c]==('B')){						
-						for(r2=r-1; r2<r+2; r2++){
-							for(c2=c-1; c2<c+2; c2++){
-							if((Pieces.BISHOP.isLegalMove(r, c, r2, c2))&&
+						directions = Verifier.getDirections('B');
+						for(Direction point : directions){
+							r2 = r + point.getX();
+							c2 = c + point.getY();
+							if((Piece.BISHOP.isLegalMove(r, c, r2, c2))&&
 								(board[r2][c2]==('k'))){
 								return true;
-								}
 							}							
 						}
 					}
 					
 					else if(board[r][c]==('Q')){						
-						for(r2=r-1; r2<r+2; r2++){
-							for(c2=c-1; c2<c+2; c2++){
-							if((Pieces.WQUEEN.isLegalMove(r, c, r2, c2))&&
+						directions = Verifier.getDirections('Q');
+						for(Direction point : directions){
+							r2 = r + point.getX();
+							c2 = c + point.getY();
+							if((Piece.WQUEEN.isLegalMove(r, c, r2, c2))&&
 								(board[r2][c2]==('k'))){
 								return true;
-								}
 							}							
 						}
 					}

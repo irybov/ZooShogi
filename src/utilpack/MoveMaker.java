@@ -19,7 +19,7 @@ public final class MoveMaker {
 		if(board[r][c]==('p') & r==2){
 			promotion = 'p';
 			if(board[r][c]!=(' ')) {
-				c3 = Capture.takenPiecePlacement(board, r2, c2);
+				c3 = Verifier.takenPiecePlacement(board, r2, c2);
 			}
 			temp = board[r2][c2];
 			board[r2][c2] = 'q';
@@ -34,7 +34,7 @@ public final class MoveMaker {
 		else{
 			promotion = ' ';
 			if(board[r][c]!=(' ')) {
-				c3 = Capture.takenPiecePlacement(board, r2, c2);
+				c3 = Verifier.takenPiecePlacement(board, r2, c2);
 			}
 			temp = board[r2][c2];
 			board[r2][c2] = board[r][c];
@@ -57,7 +57,7 @@ public final class MoveMaker {
 		if(board[r][c]==('P') & r==1){
 			promotion = 'P';
 			if(board[r][c]!=(' ')) {
-				c3 = Capture.takenPiecePlacement(board, r2, c2);
+				c3 = Verifier.takenPiecePlacement(board, r2, c2);
 			}
 			temp = board[r2][c2];
 			board[r2][c2] = 'Q';
@@ -72,7 +72,7 @@ public final class MoveMaker {
 		else{
 			promotion = ' ';
 			if(board[r][c]!=(' ')) {
-				c3 = Capture.takenPiecePlacement(board, r2, c2);
+				c3 = Verifier.takenPiecePlacement(board, r2, c2);
 			}
 			temp = board[r2][c2];
 			board[r2][c2] = board[r][c];
@@ -101,7 +101,7 @@ public final class MoveMaker {
 			board[r][c] = board[r2][c2];
 		}
 		board[r2][c2] = temp;
-		Capture.undoMove(board, r3, c3);
+		Verifier.undoMove(board, r3, c3);
 	}
 	
 }

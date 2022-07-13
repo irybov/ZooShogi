@@ -1,15 +1,38 @@
 package utilpack;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
-public final class Capture {
+public final class Verifier {
 
-	private Capture() {}
+	private Verifier() {}
 	
 	private static Set<Character> blackPieces = new HashSet<>(Arrays.asList('b','k','p','q','r'));
 	private static Set<Character> whitePieces = new HashSet<>(Arrays.asList('B','K','P','Q','R'));
+	
+	private static Map<Character, List<Direction>> pieces;
+	static{
+		pieces = new HashMap<>();
+		pieces.put('b', Arrays.asList(Direction.NW, Direction.NE, Direction.SW, Direction.SE));
+		pieces.put('p', Arrays.asList(Direction.SOUTH));
+		pieces.put('r', Arrays.asList(Direction.NORTH, Direction.WEST,
+									  Direction.SOUTH, Direction.EAST));
+		pieces.put('q', Arrays.asList(Direction.NORTH, Direction.WEST,
+					 				  Direction.SOUTH, Direction.EAST, Direction.SW, Direction.SE));
+		pieces.put('B', Arrays.asList(Direction.NW, Direction.NE, Direction.SW, Direction.SE));
+		pieces.put('P', Arrays.asList(Direction.NORTH));		
+		pieces.put('R', Arrays.asList(Direction.NORTH, Direction.WEST,
+									  Direction.SOUTH, Direction.EAST));
+		pieces.put('Q', Arrays.asList(Direction.NORTH, Direction.WEST,
+					 				  Direction.SOUTH, Direction.EAST, Direction.NW, Direction.NE));
+	}
+	public static List<Direction> getDirections(char piece){
+		return pieces.get(piece);
+	}
 
 	// checks if capture is possible
 	public static boolean isCaptureLegal(char[][] board, int r2, int c2, Turn turn) {

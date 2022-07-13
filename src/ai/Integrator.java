@@ -14,7 +14,7 @@ import ai.component.MovesList;
 import ai.component.Node;
 import control.Clocks;
 import control.Scribe;
-import utilpack.Capture;
+import utilpack.Verifier;
 import utilpack.Copier;
 import utilpack.Matrix;
 import utilpack.Turn;
@@ -167,13 +167,13 @@ public class Integrator {
 				board[r][c] = ' ';
 			}	
 			else{
-				Capture.takenPiecePlacement(board, r2, c2);
+				Verifier.takenPiecePlacement(board, r2, c2);
 				board[r2][c2] = 'q';
 				board[r][c] = ' ';
 			}
 		}
 		else{
-			Capture.takenPiecePlacement(board, r2, c2);
+			Verifier.takenPiecePlacement(board, r2, c2);
 			board[r2][c2] = board[r][c];
 			board[r][c] = ' ';
 		}

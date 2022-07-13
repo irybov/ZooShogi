@@ -23,7 +23,7 @@ import ui.Gui;
 import utilpack.Copier;
 import utilpack.Matrix;
 import utilpack.Expositor;
-import utilpack.Pieces;
+import utilpack.Piece;
 import utilpack.Turn;
 
 public class Director{
@@ -141,15 +141,15 @@ public class Director{
 		else{
 		switch(piece){
 			case "P":
-				return Pieces.WPAWN.isLegalMove(r, c, r2, c2);
+				return Piece.WPAWN.isLegalMove(r, c, r2, c2);
 			case "R":
-				return Pieces.ROOK.isLegalMove(r, c, r2, c2);
+				return Piece.ROOK.isLegalMove(r, c, r2, c2);
 			case "B":
-				return Pieces.BISHOP.isLegalMove(r, c, r2, c2);
+				return Piece.BISHOP.isLegalMove(r, c, r2, c2);
 			case "K":
-				return Pieces.KING.isLegalMove(r, c, r2, c2);
+				return Piece.KING.isLegalMove(r, c, r2, c2);
 			case "Q":
-				return Pieces.WQUEEN.isLegalMove(r, c, r2, c2);
+				return Piece.WQUEEN.isLegalMove(r, c, r2, c2);
 			default:
 				return false;
 			}

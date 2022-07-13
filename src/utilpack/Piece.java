@@ -1,6 +1,6 @@
 package utilpack;
 
-public enum Pieces {
+public enum Piece {
 
 	WPAWN("Pawn", 20) {
 		@Override
@@ -75,7 +75,7 @@ public enum Pieces {
 	private final String name;
 	private final int value;
 	
-	Pieces(String name, int value){
+	Piece(String name, int value){
 		this.name = name;
 		this.value = value;
 	}

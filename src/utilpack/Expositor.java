@@ -31,19 +31,19 @@ public final class Expositor {
 		
 		switch(piece){
 		case 'P': case 'p':
-			name = Pieces.BPAWN.getName();
+			name = Piece.BPAWN.getName();
 			break;
 		case 'R': case 'r':
-			name = Pieces.ROOK.getName();
+			name = Piece.ROOK.getName();
 			break;
 		case 'B': case 'b':
-			name = Pieces.BISHOP.getName();
+			name = Piece.BISHOP.getName();
 			break;
 		case 'K': case 'k':
-			name = Pieces.KING.getName();
+			name = Piece.KING.getName();
 			break;
 		case 'Q': case 'q':
-			name = Pieces.BQUEEN.getName();
+			name = Piece.BQUEEN.getName();
 			break;
 		default:
 			name = null;

@@ -8,7 +8,7 @@ import ai.component.Board;
 import ai.component.MovesList;
 import ai.component.Node;
 import control.Clocks;
-import utilpack.Capture;
+import utilpack.Verifier;
 import utilpack.Examiner;
 import utilpack.MoveMaker;
 import utilpack.Turn;
@@ -104,8 +104,8 @@ public class MasterAI extends AI{
 				temp = state.getTemp();
 				
 				if(extend == false){
-					extend = (Capture.isExtension(temp, turn)
-							|| Capture.isKingPromoted(board, r2, c2, turn)
+					extend = (Verifier.isExtension(temp, turn)
+							|| Verifier.isKingPromoted(board, r2, c2, turn)
 							|| Examiner.isCheck(board, turn));
 				}		
 				List<Node> children = null;
@@ -137,8 +137,8 @@ public class MasterAI extends AI{
 				temp = state.getTemp();
 
 				if(extend == false){
-				extend = (Capture.isExtension(temp, turn)
-						|| Capture.isKingPromoted(board, r2, c2, turn)
+				extend = (Verifier.isExtension(temp, turn)
+						|| Verifier.isKingPromoted(board, r2, c2, turn)
 						|| Examiner.isCheck(board, turn));
 				}
 				List<Node> children = null;
