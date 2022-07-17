@@ -93,7 +93,7 @@ public class TrickyAI extends AI{
 							legal.get(i).setValue(0);
 						}	
 						else if(integrator.isLost(board)) {
-							legal.get(i).setValue(-500);							
+							legal.get(i).setValue(-(1000+(100/depth)));							
 						}						
 						else if(Examiner.isPromotionWon(board, Turn.WHITE)){
 							legal.get(i).setValue(-(1000+(100/depth)));

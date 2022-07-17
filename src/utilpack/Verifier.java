@@ -11,31 +11,31 @@ public final class Verifier {
 
 	private Verifier() {}
 	
-	private static Set<Character> blackPieces = new HashSet<>(Arrays.asList('b','k','p','q','r'));
-	private static Set<Character> whitePieces = new HashSet<>(Arrays.asList('B','K','P','Q','R'));
+	private final static Set<Character> blackPieces = new HashSet<>(Arrays.asList('b','k','p','q','r'));
+	private final static Set<Character> whitePieces = new HashSet<>(Arrays.asList('B','K','P','Q','R'));
 	
-	private static Map<Character, List<Direction>> pieces;
+	private final static Map<Character, List<Direction>> DIRECTIONS;
 	static{
-		pieces = new HashMap<>();
-		pieces.put('b', Arrays.asList(Direction.NW, Direction.NE, Direction.SW, Direction.SE));
-		pieces.put('p', Arrays.asList(Direction.SOUTH));
-		pieces.put('r', Arrays.asList(Direction.NORTH, Direction.WEST,
+		DIRECTIONS = new HashMap<>(8);
+		DIRECTIONS.put('b', Arrays.asList(Direction.NW, Direction.NE, Direction.SW, Direction.SE));
+		DIRECTIONS.put('p', Arrays.asList(Direction.SOUTH));
+		DIRECTIONS.put('r', Arrays.asList(Direction.NORTH, Direction.WEST,
 									  Direction.SOUTH, Direction.EAST));
-		pieces.put('q', Arrays.asList(Direction.NORTH, Direction.WEST,
+		DIRECTIONS.put('q', Arrays.asList(Direction.NORTH, Direction.WEST,
 					 				  Direction.SOUTH, Direction.EAST, Direction.SW, Direction.SE));
-		pieces.put('B', Arrays.asList(Direction.NW, Direction.NE, Direction.SW, Direction.SE));
-		pieces.put('P', Arrays.asList(Direction.NORTH));		
-		pieces.put('R', Arrays.asList(Direction.NORTH, Direction.WEST,
+		DIRECTIONS.put('B', Arrays.asList(Direction.NW, Direction.NE, Direction.SW, Direction.SE));
+		DIRECTIONS.put('P', Arrays.asList(Direction.NORTH));		
+		DIRECTIONS.put('R', Arrays.asList(Direction.NORTH, Direction.WEST,
 									  Direction.SOUTH, Direction.EAST));
-		pieces.put('Q', Arrays.asList(Direction.NORTH, Direction.WEST,
+		DIRECTIONS.put('Q', Arrays.asList(Direction.NORTH, Direction.WEST,
 					 				  Direction.SOUTH, Direction.EAST, Direction.NW, Direction.NE));
 	}
 	public static List<Direction> getDirections(char piece){
-		return pieces.get(piece);
+		return DIRECTIONS.get(piece);
 	}
 
 	// checks if capture is possible
-	public static boolean isCaptureLegal(char[][] board, int r2, int c2, Turn turn) {
+	public static boolean isMoveLegal(char[][] board, int r2, int c2, Turn turn) {
 		
 		if(turn.equals(Turn.WHITE)&(blackPieces.contains(board[r2][c2])
 				|| (board[r2][c2]==(' ')))) {
@@ -49,7 +49,7 @@ public final class Verifier {
 	}
 
 	// checks capture extensions
-	public static boolean isExtension(char piece, Turn side) {
+	public static boolean isCapture(char piece, Turn side) {
 		
 		if(side.equals(Turn.WHITE) & blackPieces.contains(piece)) {
 			return true;

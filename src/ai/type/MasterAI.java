@@ -32,7 +32,7 @@ public class MasterAI extends AI{
 		
 		if(turn.equals(Turn.WHITE) && integrator.isLost(board)) {
 			legalMoves = null;
-			return -500;
+			return -(1000+(100/depth));
 		}		
 		if(turn.equals(Turn.WHITE) && MovesList.isRepeated(board, Turn.BLACK)){
 			legalMoves = null;
@@ -104,7 +104,7 @@ public class MasterAI extends AI{
 				temp = state.getTemp();
 				
 				if(extend == false){
-					extend = (Verifier.isExtension(temp, turn)
+					extend = (Verifier.isCapture(temp, turn)
 							|| Verifier.isKingPromoted(board, r2, c2, turn)
 							|| Examiner.isCheck(board, turn));
 				}		
@@ -137,7 +137,7 @@ public class MasterAI extends AI{
 				temp = state.getTemp();
 
 				if(extend == false){
-				extend = (Verifier.isExtension(temp, turn)
+				extend = (Verifier.isCapture(temp, turn)
 						|| Verifier.isKingPromoted(board, r2, c2, turn)
 						|| Examiner.isCheck(board, turn));
 				}

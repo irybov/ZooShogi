@@ -30,7 +30,7 @@ public class ActiveAI extends AI{
 		
 		if(turn.equals(Turn.WHITE) && integrator.isLost(board)) {
 			legalMoves = null;
-			return -500;
+			return -(1000+(100/depth));
 		}		
 		if(turn.equals(Turn.WHITE) && MovesList.isRepeated(board, Turn.BLACK)){
 			legalMoves = null;

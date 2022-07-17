@@ -41,7 +41,7 @@ public class Generator {
 						r2 = r+1;
 						c2 = c;
 						if((Piece.BPAWN.isLegalMove(r, c, r2, c2))&&
-						   (Verifier.isCaptureLegal(board, r2, c2, turn))){
+						   (Verifier.isMoveLegal(board, r2, c2, turn))){
 							legalMoves.add(new Node(r, c, r2, c2, turn));
 						}
 					}				
@@ -51,7 +51,7 @@ public class Generator {
 							r2 = r + point.getX();
 							c2 = c + point.getY();
 							if((Piece.ROOK.isLegalMove(r, c, r2, c2))&&
-							   (Verifier.isCaptureLegal(board, r2, c2, turn))){
+							   (Verifier.isMoveLegal(board, r2, c2, turn))){
 								legalMoves.add(new Node(r, c, r2, c2, turn));
 							}							
 						}
@@ -61,7 +61,7 @@ public class Generator {
 							for(c2=c-1; c2<c+2; c2++){
 								if(r2==0 && c2==0) {}
 							if((Piece.KING.isLegalMove(r, c, r2, c2))&&
-							   (Verifier.isCaptureLegal(board, r2, c2, turn))){
+							   (Verifier.isMoveLegal(board, r2, c2, turn))){
 								legalMoves.add(new Node(r, c, r2, c2, turn));
 								}
 							}							
@@ -73,7 +73,7 @@ public class Generator {
 							r2 = r + point.getX();
 							c2 = c + point.getY();
 							if((Piece.BISHOP.isLegalMove(r, c, r2, c2))&&
-							   (Verifier.isCaptureLegal(board, r2, c2, turn))){
+							   (Verifier.isMoveLegal(board, r2, c2, turn))){
 								legalMoves.add(new Node(r, c, r2, c2, turn));
 							}							
 						}
@@ -84,7 +84,7 @@ public class Generator {
 							r2 = r + point.getX();
 							c2 = c + point.getY();
 							if((Piece.BQUEEN.isLegalMove(r, c, r2, c2))&&
-							   (Verifier.isCaptureLegal(board, r2, c2, turn))){
+							   (Verifier.isMoveLegal(board, r2, c2, turn))){
 								legalMoves.add(new Node(r, c, r2, c2, turn));
 							}							
 						}
@@ -111,7 +111,7 @@ public class Generator {
 						r2 = r-1;
 						c2 = c;
 						if((Piece.WPAWN.isLegalMove(r, c, r2, c2))&&
-						   (Verifier.isCaptureLegal(board, r2, c2, turn))){
+						   (Verifier.isMoveLegal(board, r2, c2, turn))){
 							legalMoves.add(new Node(r, c, r2, c2, turn));
 						}
 					}
@@ -121,7 +121,7 @@ public class Generator {
 							r2 = r + point.getX();
 							c2 = c + point.getY();
 							if((Piece.ROOK.isLegalMove(r, c, r2, c2))&&
-							   (Verifier.isCaptureLegal(board, r2, c2, turn))){
+							   (Verifier.isMoveLegal(board, r2, c2, turn))){
 								legalMoves.add(new Node(r, c, r2, c2, turn));
 //								}
 							}							
@@ -132,7 +132,7 @@ public class Generator {
 							for(c2=c-1; c2<c+2; c2++){
 								if(r2==0 && c2==0) {}
 							if((Piece.KING.isLegalMove(r, c, r2, c2))&&
-							   (Verifier.isCaptureLegal(board, r2, c2, turn))){
+							   (Verifier.isMoveLegal(board, r2, c2, turn))){
 								legalMoves.add(new Node(r, c, r2, c2, turn));
 								}
 							}							
@@ -144,7 +144,7 @@ public class Generator {
 							r2 = r + point.getX();
 							c2 = c + point.getY();
 							if((Piece.BISHOP.isLegalMove(r, c, r2, c2))&&
-							   (Verifier.isCaptureLegal(board, r2, c2, turn))){
+							   (Verifier.isMoveLegal(board, r2, c2, turn))){
 								legalMoves.add(new Node(r, c, r2, c2, turn));
 							}							
 						}
@@ -155,7 +155,7 @@ public class Generator {
 							r2 = r + point.getX();
 							c2 = c + point.getY();
 							if((Piece.WQUEEN.isLegalMove(r, c, r2, c2))&&
-							   (Verifier.isCaptureLegal(board, r2, c2, turn))){
+							   (Verifier.isMoveLegal(board, r2, c2, turn))){
 								legalMoves.add(new Node(r, c, r2, c2, turn));
 							}							
 						}
