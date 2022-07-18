@@ -12,9 +12,7 @@ public class Memorizer {
 	private Map<String, Edge> white = new ConcurrentHashMap<>();
 	
 	// fills calculating hash
-	public void add(char[][] field, Turn side, Edge edge) {
-		
-		String hash = Matrix.makeKey(field);
+	public void add(String hash, Turn side, Edge edge) {
 		
 		if(side.equals(Turn.BLACK)) {
 			black.putIfAbsent(hash, edge);
@@ -25,9 +23,7 @@ public class Memorizer {
 	}
 
 	// checks repetitions while calculating	
-	public boolean has(char[][] field, Turn side) {
-		
-		String hash = Matrix.makeKey(field);
+	public boolean has(String hash, Turn side) {
 							
 		if(side.equals(Turn.BLACK)) {
 			return(black.containsKey(hash));
@@ -37,9 +33,8 @@ public class Memorizer {
 		}	
 	}
 	
-	public boolean precise(char[][] field, Turn side, int depth) {
-		
-		String hash = Matrix.makeKey(field);
+	public boolean precise(String hash, Turn side, int depth) {
+
 		Edge entry;
 		
 		if(side.equals(Turn.BLACK)) {
@@ -52,9 +47,8 @@ public class Memorizer {
 	}
 	
 	// returns previously calculated results
-	public int get(char[][] field,  Turn side) {
-		
-		String hash = Matrix.makeKey(field);
+	public int get(String hash,  Turn side) {
+
 		Edge entry;
 		
 		if(side.equals(Turn.BLACK)) {
@@ -68,20 +62,19 @@ public class Memorizer {
 	}
 	
 	// updates previously calculated results	
-	public void update(char[][] field, Turn side, Edge edge) {
+	public void update(String hash, Turn side, Edge edge) {
 		
-		String hash = Matrix.makeKey(field);		
 		Edge entry;
 		
 		if(side.equals(Turn.BLACK)) {
 			entry = black.get(hash);
-			if(edge.getDepth() < entry.getDepth()) {
+			if(edge.getDepth() > entry.getDepth()) {
 				entry.setValue(edge.getValue());
 			}
 		}
 		else {
 			entry = white.get(hash);
-			if(edge.getDepth() < entry.getDepth()) {
+			if(edge.getDepth() > entry.getDepth()) {
 				entry.setValue(edge.getValue());				
 			}
 		}

@@ -21,7 +21,7 @@ public class DiceyAI extends AI {
 		super(root, board);
 	}
 	
-	private final InternalHash hash = new InternalHash();
+	private final InternalHash threadHash = new InternalHash();
 	private final Random random = new Random();
 	
 	private class InternalHash {
@@ -30,9 +30,7 @@ public class DiceyAI extends AI {
 		Set<String> whiteMoves = new HashSet<>();	
 		
 		// fills game moves list
-		private void addMove(char[][] field, Turn turn) {
-			
-			String hash = Matrix.makeKey(field);
+		private void addPosition(String hash, Turn turn) {
 			
 			if(turn.equals(Turn.BLACK)) {
 				blackMoves.add(hash);
@@ -44,9 +42,7 @@ public class DiceyAI extends AI {
 		}
 
 		//checks 3-times repetition
-		private boolean isRepeated(char[][] field, Turn white) {
-			
-			String hash = Matrix.makeKey(field);
+		private boolean isRepeated(String hash, Turn white) {
 				
 			if(white.equals(Turn.BLACK)) {
 				return(blackMoves.contains(hash));
@@ -97,7 +93,7 @@ public class DiceyAI extends AI {
 		for(Node child : children) {
 			child.addParent(root);
 			child.setValue(calculate(Turn.WHITE, 2, child));
-			hash.clear();
+			threadHash.clear();
 		}
 		root.addChildren(children);
 		
@@ -108,25 +104,27 @@ public class DiceyAI extends AI {
 	// monte-carlo algorithm
 	private int calculate(Turn turn, int depth, Node move) {
 		
-		if(turn.equals(Turn.WHITE) && integrator.isLost(board)) {
+		String hash = Matrix.makeKey(board);
+		
+		if(turn.equals(Turn.WHITE) && integrator.isLost(hash)) {
 			if(depth>2) {
 				move = null;
 			}
 			return -1000;
 		}		
-		if(turn.equals(Turn.WHITE) && MovesList.isRepeated(board, Turn.BLACK)){
+		if(turn.equals(Turn.WHITE) && MovesList.isRepeated(hash, Turn.BLACK)){
 			if(depth>2) {
 				move = null;
 			}
 			return 0;
 		}
-		if(turn.equals(Turn.BLACK) && MovesList.isRepeated(board, Turn.WHITE)){
+		if(turn.equals(Turn.BLACK) && MovesList.isRepeated(hash, Turn.WHITE)){
 			if(depth>2) {
 				move = null;
 			}
 			return 0;
 		}		
-		if(hash.isRepeated(board, turn)){
+		if(threadHash.isRepeated(hash, turn)){
 			if(depth>2) {
 				move = null;
 			}
@@ -160,7 +158,7 @@ public class DiceyAI extends AI {
 			}
 		}
 
-		hash.addMove(board, turn);
+		threadHash.addPosition(hash, turn);
 		
 /*		if(depth == 100){
 			move = null;

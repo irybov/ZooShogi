@@ -13,6 +13,7 @@ import ai.component.Node;
 import control.Clocks;
 import utilpack.Copier;
 import utilpack.Examiner;
+import utilpack.Matrix;
 import utilpack.MoveMaker;
 import utilpack.Turn;
 
@@ -76,8 +77,9 @@ public class TrickyAI extends AI{
 						state = MoveMaker.doBlackMove(board, r, c, r2, c2);
 						board = state.getBoard();
 						temp = state.getTemp();
+						String hash = Matrix.makeKey(board);
 							
-						hash.addMove(board, Turn.BLACK, depth);
+						threadHash.addPosition(hash, Turn.BLACK, depth);
 						
 						if(temp==('K')){
 							legal.get(i).setValue(2000+(100/depth));
@@ -86,13 +88,13 @@ public class TrickyAI extends AI{
 								!Examiner.isCheck(board, Turn.WHITE)){
 							legal.get(i).setValue(1000+(100/depth));
 						}
-						else if(MovesList.isRepeated(board, Turn.BLACK)) {
+						else if(MovesList.isRepeated(hash, Turn.BLACK)) {
 							legal.get(i).setValue(0);
 						}
-						else if(hash.isRepeated(board, Turn.BLACK, depth)){
+						else if(threadHash.isRepeated(hash, Turn.BLACK, depth)){
 							legal.get(i).setValue(0);
 						}	
-						else if(integrator.isLost(board)) {
+						else if(integrator.isLost(hash)) {
 							legal.get(i).setValue(-(1000+(100/depth)));							
 						}						
 						else if(Examiner.isPromotionWon(board, Turn.WHITE)){
@@ -118,7 +120,8 @@ public class TrickyAI extends AI{
 						r3 = 3;
 						state = MoveMaker.doWhiteMove(board, r, c, r2, c2);
 						board = state.getBoard();
-						temp = state.getTemp();					
+						temp = state.getTemp();
+						String hash = Matrix.makeKey(board);
 						
 						if(temp==('k')){
 							legal.get(i).setValue(-(2000+(100/depth)));
@@ -127,7 +130,7 @@ public class TrickyAI extends AI{
 								!Examiner.isCheck(board, Turn.BLACK)){
 							legal.get(i).setValue(-(1000+(100/depth)));
 						}
-						else if(MovesList.isRepeated(board, Turn.WHITE)) {
+						else if(MovesList.isRepeated(hash, Turn.WHITE)) {
 							legal.get(i).setValue(0);
 						}
 						else if(Examiner.isPromotionWon(board, Turn.BLACK)){

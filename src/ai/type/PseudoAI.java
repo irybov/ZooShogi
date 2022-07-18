@@ -9,6 +9,7 @@ import ai.component.MovesList;
 import ai.component.Node;
 import control.Clocks;
 import utilpack.Examiner;
+import utilpack.Matrix;
 import utilpack.MoveMaker;
 import utilpack.Turn;
 
@@ -64,6 +65,7 @@ public class PseudoAI implements Runnable {
 			state = MoveMaker.doBlackMove(board, r, c, r2, c2);
 			board = state.getBoard();
 			temp = state.getTemp();
+			String hash = Matrix.makeKey(board);
 			
 			if(temp==('K')){
 				score = 2000;
@@ -72,10 +74,10 @@ public class PseudoAI implements Runnable {
 					!Examiner.isCheck(board, Turn.WHITE)){
 				score = 1000;
 			}
-			else if(MovesList.isRepeated(board, Turn.BLACK)) {
+			else if(MovesList.isRepeated(hash, Turn.BLACK)) {
 				score = 0;
 			}
-			else if(integrator.isLost(board)) {
+			else if(integrator.isLost(hash)) {
 				score = -1000;							
 			}
 			else if(Examiner.isPromotionWon(board, Turn.WHITE)){

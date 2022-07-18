@@ -7,6 +7,7 @@ import java.util.List;
 import utilpack.Verifier;
 import utilpack.Direction;
 import utilpack.Examiner;
+import utilpack.Matrix;
 import utilpack.MoveMaker;
 import utilpack.Piece;
 import utilpack.Turn;
@@ -211,7 +212,7 @@ public class Generator {
 						!Examiner.isCheck(board, Turn.WHITE)) {
 					value = 500;
 				}*/
-				else if(MovesList.isRepeated(board, Turn.BLACK)) {
+				else if(MovesList.isRepeated(Matrix.makeKey(board), Turn.BLACK)) {
 					value = 0;
 				}
 				else if(Examiner.isPromotionWon(board, Turn.WHITE)){
@@ -252,7 +253,7 @@ public class Generator {
 						!Examiner.isCheck(board, Turn.BLACK)) {
 					value = -500;
 				}*/
-				else if(MovesList.isRepeated(board, Turn.WHITE)) {
+				else if(MovesList.isRepeated(Matrix.makeKey(board), Turn.WHITE)) {
 					value = 0;
 				}
 				else if(Examiner.isPromotionWon(board, Turn.BLACK)){

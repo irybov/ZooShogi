@@ -48,8 +48,8 @@ public class Integrator {
 	private Deque<String> game = new ArrayDeque<>();
 	private Experience exp = new Experience();
 	
-	public boolean isLost(char[][] field) {
-		return exp.bingo(Matrix.makeKey(field));
+	public boolean isLost(String hash) {
+		return exp.bingo(hash);
 	}
 	public boolean hasNode(char[][] board) {
 		return exp.hasNode(Matrix.makeKey(board));

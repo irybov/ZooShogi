@@ -28,9 +28,7 @@ public final class MovesList {
 	}
 
 	//checks 3-times repetition
-	public static boolean isRepeated(char[][] field, Turn white) {
-		
-		String hash = Matrix.makeKey(field);
+	public static boolean isRepeated(String hash, Turn white) {
 			
 		if(white.equals(Turn.BLACK)) {
 			return(blackMoves.contains(hash));

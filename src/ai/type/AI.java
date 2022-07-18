@@ -8,7 +8,6 @@ import ai.Integrator;
 import ai.component.Evaluator;
 import ai.component.Generator;
 import ai.component.Node;
-import utilpack.Matrix;
 import utilpack.Turn;
 
 public abstract class AI implements Callable<Integer>{
@@ -21,21 +20,19 @@ public abstract class AI implements Callable<Integer>{
 		this.board = board;
 	}
 		
-	final InternalHash hash = new InternalHash();	
+	final ThreadHash threadHash = new ThreadHash();	
 	final Generator generator = new Generator();
 	final Evaluator evaluator = new Evaluator();
 	final Integrator integrator = Integrator.getInstance();	
 	int nodesCount = 0;
 
-	class InternalHash {
+	class ThreadHash {
 
 		Map<String, Integer> blackMoves = new HashMap<>();
 		Map<String, Integer> whiteMoves = new HashMap<>();	
 		
 		// fills calculating hash
-		void addMove(char[][] field, Turn side, int depth) {
-			
-			String hash = Matrix.makeKey(field);
+		void addPosition(String hash, Turn side, int depth) {
 			
 			if(side.equals(Turn.BLACK)) {
 				blackMoves.putIfAbsent(hash, depth);
@@ -46,9 +43,7 @@ public abstract class AI implements Callable<Integer>{
 		}
 		
 		// checks repetitions while calculating	
-		boolean isRepeated(char[][] field,  Turn side, int depth) {
-			
-			String hash = Matrix.makeKey(field);
+		boolean isRepeated(String hash,  Turn side, int depth) {
 								
 			if(side.equals(Turn.BLACK)) {
 				if(blackMoves.containsKey(hash))

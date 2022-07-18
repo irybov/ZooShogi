@@ -9,6 +9,7 @@ import ai.component.MovesList;
 import ai.component.Node;
 import control.Clocks;
 import utilpack.Examiner;
+import utilpack.Matrix;
 import utilpack.MoveMaker;
 import utilpack.Turn;
 
@@ -28,24 +29,26 @@ public class CleverAI extends AI{
 	// basic minimax algorithm
 	private int calculate(Turn turn, int depth, List<Node> legalMoves) {
 		
-		if(turn.equals(Turn.WHITE) && integrator.isLost(board)) {
+		String hash = Matrix.makeKey(board);
+		
+		if(turn.equals(Turn.WHITE) && integrator.isLost(hash)) {
 			legalMoves = null;
 			return -(1000+(100/depth));
 		}		
-		if(turn.equals(Turn.WHITE) && MovesList.isRepeated(board, Turn.BLACK)){
+		if(turn.equals(Turn.WHITE) && MovesList.isRepeated(hash, Turn.BLACK)){
 			legalMoves = null;
 			return 0;
 		}
-		if((turn.equals(Turn.BLACK) && depth > 1) && MovesList.isRepeated(board, Turn.WHITE)){
+		if((turn.equals(Turn.BLACK) && depth > 1) && MovesList.isRepeated(hash, Turn.WHITE)){
 			legalMoves = null;
 			return 0;
 		}		
 		if(turn.equals(Turn.WHITE)){
-			if(hash.isRepeated(board, turn, depth)){
+			if(threadHash.isRepeated(hash, turn, depth)){
 				legalMoves = null;
 				return 0;
 			}		
-			hash.addMove(board, turn, depth);
+			threadHash.addPosition(hash, turn, depth);
 		}
 		
 		if(Examiner.isBlackPositionWon(board, turn)){
@@ -71,6 +74,12 @@ public class CleverAI extends AI{
 			legalMoves = null;
 			return evaluator.evaluationMaterial(board, false);
 		}
+		
+/*		if(depth > 1) {
+			if(memo.has(hash, turn) && memo.precise(hash, turn, depth)) {
+				return memo.get(hash, turn);
+			}
+		}*/
 
 		nodesCount += legalMoves.size();
 				
@@ -137,6 +146,26 @@ public class CleverAI extends AI{
 		else{
 			return evaluator.min(scores);
 		}
+/*		int score;
+		if(turn.equals(Turn.BLACK)){			
+			score = evaluator.max(scores);
+			if(memo.has(board, Turn.WHITE)) {
+				memo.update(board, Turn.WHITE, new Edge(depth, score));
+			}
+			else {
+				memo.add(board, Turn.WHITE, new Edge(depth, score));
+			}
+		}
+		else{		
+			score = evaluator.min(scores);
+			if(memo.has(board, Turn.BLACK)) {
+				memo.update(board, Turn.BLACK, new Edge(depth, score));
+			}
+			else {
+				memo.add(board, Turn.BLACK, new Edge(depth, score));
+			}
+		}
+		return score;	*/	
 	}
 	
 }

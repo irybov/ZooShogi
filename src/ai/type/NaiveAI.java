@@ -9,6 +9,7 @@ import ai.component.MovesList;
 import ai.component.Node;
 import control.Clocks;
 import utilpack.Examiner;
+import utilpack.Matrix;
 import utilpack.MoveMaker;
 import utilpack.Turn;
 
@@ -28,24 +29,26 @@ public class NaiveAI extends AI{
 	// expectimax gambling algorithm
 	private int calculate(Turn turn, int depth, List<Node> legalMoves) {
 		
-		if(turn.equals(Turn.WHITE) && integrator.isLost(board)) {
+		String hash = Matrix.makeKey(board);
+		
+		if(turn.equals(Turn.WHITE) && integrator.isLost(hash)) {
 			legalMoves = null;
 			return -6000/depth;
 		}		
-		if(turn.equals(Turn.WHITE) && MovesList.isRepeated(board, Turn.BLACK)){
+		if(turn.equals(Turn.WHITE) && MovesList.isRepeated(hash, Turn.BLACK)){
 			legalMoves = null;
 			return 0;
 		}
-		if((turn.equals(Turn.BLACK) && depth > 1) && MovesList.isRepeated(board, Turn.WHITE)){
+		if((turn.equals(Turn.BLACK) && depth > 1) && MovesList.isRepeated(hash, Turn.WHITE)){
 			legalMoves = null;
 			return 0;
 		}		
 		if(turn.equals(Turn.WHITE)){
-			if(hash.isRepeated(board, turn, depth)){
+			if(threadHash.isRepeated(hash, turn, depth)){
 				legalMoves = null;
 				return 0;
 			}		
-			hash.addMove(board, turn, depth);
+			threadHash.addPosition(hash, turn, depth);
 		}
 		
 		if(Examiner.isBlackPositionWon(board, turn)){
