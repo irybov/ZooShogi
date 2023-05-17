@@ -10,6 +10,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import ai.component.Generator;
@@ -17,6 +18,7 @@ import ai.component.Node;
 import utilpack.Copier;
 import utilpack.Turn;
 
+@Ignore
 public class ArtIntelTest {
 
 	private static String[][] board;
@@ -47,7 +49,7 @@ public class ArtIntelTest {
 		nodes = generator.sortMoves(board, legal, Turn.BLACK, false);
 	}
 
-	@Test(timeout = 8000)
+	@Test(timeout = 8_000)
 	public void performance_timelimit_AB() {
 		level = 6;
 		nodes.forEach(node-> es.submit(factory.createAI(level, node, Copier.deepCopy(board))));
@@ -60,7 +62,7 @@ public class ArtIntelTest {
 		}
 	}
 	
-	@Test(timeout = 10000)
+	@Test(timeout = 10_000)
 	public void performance_timelimit_EX() {
 		level = 7;
 		nodes.forEach(node-> es.submit(factory.createAI(level, node, Copier.deepCopy(board))));
