@@ -18,7 +18,7 @@
     </fileSets>
     <files>
         <file>
-            <source> ${project.build.directory}/ZooShogi-SS.jar</source>
+            <source> ${project.build.directory}/ZooShogi.jar</source>
             <outputDirectory>/</outputDirectory>
         </file>
         <file>

@@ -5,6 +5,7 @@
   <artifactId>ZooShogi</artifactId>
   <name>ZooShogi</name>
   <version>SS</version>
+  <description>Java Core desktop game</description>
   <contributors>
     <contributor>
       <name>Ivan Ryabov</name>
@@ -25,6 +26,7 @@
         </excludes>
       </resource>
     </resources>
+    <finalName>${project.name}</finalName>
     <plugins>
       <plugin>
         <artifactId>maven-resources-plugin</artifactId>
@@ -58,15 +60,15 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.8.0</version>
         <configuration>
-          <source>${java.version}</source>
-          <target>${java.version}</target>
+          <source>1.8</source>
+          <target>1.8</target>
           <fork>true</fork>
           <executable>C:\java\jdk8\bin\javac</executable>
         </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>3.2.4</version>
+        <version>3.2.3</version>
         <executions>
           <execution>
             <phase>package</phase>
@@ -97,7 +99,7 @@
         <executions>
           <execution>
             <id>make-assembly</id>
-            <phase>package</phase>
+            <phase>assembly</phase>
             <goals>
               <goal>single</goal>
             </goals>
@@ -128,12 +130,9 @@
     <dependency>
       <groupId>com.sun</groupId>
       <artifactId>tools</artifactId>
-      <version>${java.version}</version>
+      <version>1.8</version>
       <scope>system</scope>
       <systemPath>${JAVA_HOME}/lib/tools.jar</systemPath>
     </dependency>
   </dependencies>
-  <properties>
-    <java.version>1.8</java.version>
-  </properties>
 </project>

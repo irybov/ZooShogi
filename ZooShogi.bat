@@ -1,3 +1,3 @@
 echo off
 
-start javaw -jar ZooShogi-SS.jar launch.ZooShogi
+start javaw -jar ZooShogi.jar launch.ZooShogi

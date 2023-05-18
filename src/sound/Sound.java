@@ -16,8 +16,6 @@ public class Sound {
 		return INSTANCE;
 	}
 	
-	private Clocks clocks = Clocks.getInstance();
-	
 	static FloatControl volume;
 	static float gain;	
 	public static void setVolumeLevel(float g){
@@ -65,7 +63,7 @@ public class Sound {
 
 	private File selectSound(String action) throws InterruptedException{
 		
-		clocks.setTurn(Turn.PAUSE);
+		Clocks.setTurn(Turn.PAUSE);
 		
 		switch(action){
 			case "Pawn":
