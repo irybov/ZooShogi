@@ -32,7 +32,7 @@ public class MasterAI extends AI{
 		
 		if(turn.equals(Turn.WHITE) && integrator.isLost(board)) {
 			legalMoves = null;
-			return -500;
+			return -1000;
 		}		
 		if(turn.equals(Turn.WHITE) && MovesList.isRepeated(board, Turn.BLACK)){
 			legalMoves = null;
@@ -112,7 +112,7 @@ public class MasterAI extends AI{
 				List<Node> sorted = null;
 				if(temp != "K" & (extend ? depth < 9 : depth < 5)) {
 					children = generator.generateMoves(board, Turn.WHITE);
-					sorted = generator.sortMoves(board, children, Turn.WHITE, false);
+					sorted = generator.sortMoves(board, children, Turn.WHITE);
 					for(Node child: sorted) {
 						child.addParent(legalMoves.get(i));
 					}
@@ -145,7 +145,7 @@ public class MasterAI extends AI{
 				List<Node> sorted = null;
 				if(temp != "k" & (extend ? depth < 9 : depth < 5)) {
 					children = generator.generateMoves(board, Turn.BLACK);
-					sorted = generator.sortMoves(board, children, Turn.BLACK, false);
+					sorted = generator.sortMoves(board, children, Turn.BLACK);
 					for(Node child: sorted) {
 						child.addParent(legalMoves.get(i));
 					}
@@ -162,7 +162,7 @@ public class MasterAI extends AI{
 			
 			int c3 = state.getC3();
 			promotion = state.getPromotion();
-			MoveMaker.undo(board, temp, promotion, r, c, r2, c2, r3, c3);
+			MoveMaker.undoAnyMove(board, temp, promotion, r, c, r2, c2, r3, c3);
 				
 			if(alpha >= beta){
 				break;

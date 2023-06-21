@@ -91,7 +91,7 @@ public class PseudoAI implements Runnable {
 			
 			c3 = state.getC3();
 			promotion = state.getPromotion();
-			MoveMaker.undo(board, temp, promotion, r, c, r2, c2, r3, c3);
+			MoveMaker.undoAnyMove(board, temp, promotion, r, c, r2, c2, r3, c3);
 		}	
 	}
 

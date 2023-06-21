@@ -144,7 +144,7 @@ public class Integrator {
 		int r2 = move.getRowTo();
 		int c2 = move.getColumnTo();
 		
-		if(score > 500 & Cache.isEmpty()) {
+		if(score > 999 & Cache.isEmpty()) {
 			String state = Matrix.makeKey(field);
 			if(!exp.hasNode(state)) {
 				exp.learn(state, move);
@@ -178,7 +178,7 @@ public class Integrator {
 			field[r][c] = " ";
 		}
 		
-		if(score < -500) {
+		if(score < -999) {
 			if(!exp.bingo(game.peek())) {
 				exp.learn(game.peek());
 				exp.learn(Matrix.swapKey(game.peek()));
@@ -188,7 +188,7 @@ public class Integrator {
 			game.push(Matrix.makeKey(field));
 		}
 		
-		if(score > 500 & Cache.isEmpty()) {
+		if(score > 999 & Cache.isEmpty()) {
 			if(move.hasChildren()) {
 				Cache.addTree(Copier.deepCopy(field), move.getChidren());
 			}

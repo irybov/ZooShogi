@@ -82,7 +82,7 @@ public final class MoveMaker {
 		return new Board(board, temp, promotion, c3);
 	}
 	
-	public static void undo(String[][] board, String temp, String promotion, int ... args) {
+	public static void undoAnyMove(String[][] board, String temp, String promotion, int ... args) {
 		
 		int r = args[0];
 		int c = args[1];

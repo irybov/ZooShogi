@@ -30,7 +30,7 @@ public class CleverAI extends AI{
 		
 		if(turn.equals(Turn.WHITE) && integrator.isLost(board)) {
 			legalMoves = null;
-			return -500;
+			return -1000;
 		}		
 		if(turn.equals(Turn.WHITE) && MovesList.isRepeated(board, Turn.BLACK)){
 			legalMoves = null;
@@ -128,7 +128,7 @@ public class CleverAI extends AI{
 			
 			int c3 = state.getC3();
 			promotion = state.getPromotion();
-			MoveMaker.undo(board, temp, promotion, r, c, r2, c2, r3, c3);
+			MoveMaker.undoAnyMove(board, temp, promotion, r, c, r2, c2, r3, c3);
 		}
 		
 		if(turn.equals(Turn.BLACK)){

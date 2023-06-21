@@ -93,7 +93,7 @@ public class TrickyAI extends AI{
 							legal.get(i).setValue(0);
 						}	
 						else if(integrator.isLost(board)) {
-							legal.get(i).setValue(-500);							
+							legal.get(i).setValue(-1000);
 						}						
 						else if(Examiner.isPromotionWon(board, Turn.WHITE)){
 							legal.get(i).setValue(-(1000+(100/depth)));
@@ -154,7 +154,7 @@ public class TrickyAI extends AI{
 					
 					int c3 = state.getC3();
 					promotion = state.getPromotion();
-					MoveMaker.undo(board, temp, promotion, r, c, r2, c2, r3, c3);
+					MoveMaker.undoAnyMove(board, temp, promotion, r, c, r2, c2, r3, c3);
 				}
 				legal = null;
 			}		

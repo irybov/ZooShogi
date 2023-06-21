@@ -18,7 +18,7 @@ class TaskInterceptor extends Thread{
 		while(!Thread.interrupted()) {
 			for(Future<Integer> task : tasks) {
 				try {
-					if(task.isDone() && task.get() > 500) {
+					if(task.isDone() && task.get() > 999) {
 						for(Future<Integer> each : tasks) {
 							each.cancel(true);
 						}

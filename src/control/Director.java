@@ -268,7 +268,10 @@ public class Director{
 		}
 	}
 	
-
+	final int cores = Runtime.getRuntime().availableProcessors();
+	final AIFactory factory = new AIFactory();
+	final Generator generator = new Generator();
+	
 	public void compute() throws InterruptedException{
 		
 		undoMove = Copier.deepCopy(board);
@@ -295,36 +298,26 @@ public class Director{
 			integrator.nextBest(board, node);
 		}		
 		else {
-			final Generator generator = new Generator();
 			List<Node> legalMoves = generator.generateMoves(board, Turn.BLACK);
-			List<Node> nodes = new ArrayList<>(generator.sortMoves
-										(board, legalMoves, Turn.BLACK, false));
+			List<Node> nodes = new ArrayList<>(generator.sortMoves(board, legalMoves, Turn.BLACK));
 			if(nodes.get(0).getValue() > 999) {
 				integrator.nextBest(board, nodes.get(0));
 			}
 			else {
 				switch(level){
-				case 0:
-				case 1:
+				case 0: case 1:
 					new PseudoAI(level, board, nodes).run();
 					break;
 				case 4:
-					nodes = generator.sortMoves(board, legalMoves, Turn.BLACK, true);
-					if(nodes.size()==0) {
-						nodes = generator.sortMoves(board, legalMoves, Turn.BLACK, false);
-//						nodes.subList(1, nodes.size()).clear();
+					nodes = generator.filterMoves(board, nodes, Turn.BLACK);
+					if(nodes.isEmpty()) {
+						nodes = generator.sortMoves(board, legalMoves, Turn.BLACK);
 						nodes = generator.filterMoves(nodes, Turn.BLACK);
 					}
-				case 2:
-				case 3:
-				case 5:
-				case 6:
-				case 7:
-					final int cores = Runtime.getRuntime().availableProcessors();
-					ExecutorService es = Executors.newFixedThreadPool(cores);
+				case 2: case 3: case 5: case 6: case 7:
 					List<Future<Integer>> tasks = new ArrayList<>(nodes.size());
 					TaskInterceptor f19 = new TaskInterceptor(tasks);
-					AIFactory factory = new AIFactory();
+					ExecutorService es = Executors.newFixedThreadPool(cores);
 					for(Node node : nodes) {
 						Future<Integer> score = es.submit(factory
 								.createAI(level, node, Copier.deepCopy(board)));

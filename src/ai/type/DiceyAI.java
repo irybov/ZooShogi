@@ -1,10 +1,12 @@
 package ai.type;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import ai.component.Board;
 import ai.component.MovesList;
@@ -44,11 +46,11 @@ public class DiceyAI extends AI {
 		}
 
 		//checks 3-times repetition
-		private boolean isRepeated(String[][] field, Turn white) {
+		private boolean isRepeated(String[][] field, Turn turn) {
 			
 			String hash = Matrix.makeKey(field);
 				
-			if(white.equals(Turn.BLACK)) {
+			if(turn.equals(Turn.BLACK)) {
 				return(blackMoves.contains(hash));
 			}
 			else{
@@ -109,53 +111,38 @@ public class DiceyAI extends AI {
 	private int calculate(Turn turn, int depth, Node move) {
 		
 		if(turn.equals(Turn.WHITE) && integrator.isLost(board)) {
-			if(depth>2) {
-				move = null;
-			}
+//			if(depth>2) {move=null;}
 			return -1000;
 		}		
 		if(turn.equals(Turn.WHITE) && MovesList.isRepeated(board, Turn.BLACK)){
-			if(depth>2) {
-				move = null;
-			}
+//			if(depth>2) {move=null;}
 			return 0;
 		}
 		if(turn.equals(Turn.BLACK) && MovesList.isRepeated(board, Turn.WHITE)){
-			if(depth>2) {
-				move = null;
-			}
+//			if(depth>2) {move=null;}
 			return 0;
 		}		
 		if(hash.isRepeated(board, turn)){
-			if(depth>2) {
-				move = null;
-			}
+//			if(depth>2) {move=null;}
 			return 0;
 		}		
 		
 		if(Examiner.isBlackPositionWon(board, turn)){
-			if(depth>2) {
-				move = null;
-			}
+//			if(depth>2) {move=null;}
 			return 1000;
 		}
 		if(Examiner.isWhitePositionWon(board, turn)){
-			if(depth>2) {
-				move = null;
-			}
+//			if(depth>2) {move=null;}
 			return -1000;
 		}
+		
 		if(Examiner.isCheck(board, turn)){
 			if(turn.equals(Turn.WHITE)){
-				if(depth>2) {
-					move = null;
-				}
+//				if(depth>2) {move=null;}
 				return -1000;
 			}
 			else {
-				if(depth>2) {
-					move = null;
-				}
+//				if(depth>2) {move=null;}
 				return 1000;
 			}
 		}
@@ -178,55 +165,104 @@ public class DiceyAI extends AI {
 		String promotion;
 		int r3;
 		Board state;
-										
+/*				
+		List<Node> children = null;
+		List<Node> sorted = null;
+		List<Node> filtered = null;
+		List<Node> leaves = null;
+		List<Integer> scores = null;
+		Node child = null;
+*/
 		if(turn.equals(Turn.BLACK)){
 			r3 = 0;
 			state = MoveMaker.doBlackMove(board, r, c, r2, c2);
 			board = state.getBoard();
 			temp = state.getTemp();
-			
-			List<Node> children = null;
-			List<Node> sorted = null;
-			List<Node> filtered = null;
+
 			Node child = null;
 			if(temp != "K") {
-				children = generator.generateMoves(board, Turn.WHITE);
-				sorted = generator.sortMoves(board, children, Turn.WHITE, false);
-				filtered = generator.filterMoves(sorted, Turn.WHITE);
+				List<Node> children = generator.generateMoves(board, Turn.WHITE);
+				nodesCount += children.size();
+				
+				for(Node current : children) {
+					
+					int y = current.getRowFrom();
+					int x = current.getColumnFrom();
+					int y2 = current.getRowTo();
+					int x2 = current.getColumnTo();
+					
+					int y3 = 3;
+					Board state0 = MoveMaker.doWhiteMove(board, y, x, y2, x2);
+					board = state0.getBoard();
+					String temp0 = state0.getTemp();
+					
+					List<Node> leaves = generator.generateMoves(board, Turn.BLACK);
+					nodesCount += leaves.size();
+					List<Integer> scores = leaves.stream().map(Node::getValue).collect(Collectors.toList());
+					current.setValue(evaluator.max(scores));
+					
+					int x3 = state.getC3();
+					String promotion0 = state0.getPromotion();
+					MoveMaker.undoAnyMove(board, temp0, promotion0, y, x, y2, x2, y3, x3);
+				}				
+
+				Collections.sort(children);
+				List<Node> filtered = generator.filterMoves(children, Turn.WHITE);
 				child = filtered.get(random.nextInt(filtered.size()));
 				child.addParent(move);
 				move.addChildren(Arrays.asList(child));
 			}
-			
+//			else {child = new Node(-1, -1, -1, -1, Turn.PAUSE);}			
 			int value = calculate(Turn.WHITE, depth+1, child);
 				move.setValue(value);
-		}				
+		}
 		else{
 			r3 = 3;
 			state = MoveMaker.doWhiteMove(board, r, c, r2, c2);
 			board = state.getBoard();
 			temp = state.getTemp();
-			
-			List<Node> children = null;
-			List<Node> sorted = null;
-			List<Node> filtered = null;
+
 			Node child = null;
 			if(temp != "k") {
-				children = generator.generateMoves(board, Turn.BLACK);
-				sorted = generator.sortMoves(board, children, Turn.BLACK, false);
-				filtered = generator.filterMoves(sorted, Turn.BLACK);
+				List<Node> children = generator.generateMoves(board, Turn.BLACK);
+				nodesCount += children.size();
+				
+				for(Node current : children) {
+					
+					int y = current.getRowFrom();
+					int x = current.getColumnFrom();
+					int y2 = current.getRowTo();
+					int x2 = current.getColumnTo();
+					
+					int y3 = 0;
+					Board state0 = MoveMaker.doBlackMove(board, y, x, y2, x2);
+					board = state0.getBoard();
+					String temp0 = state0.getTemp();
+					
+					List<Node> leaves = generator.generateMoves(board, Turn.WHITE);
+					nodesCount += leaves.size();
+					List<Integer> scores = leaves.stream().map(Node::getValue).collect(Collectors.toList());
+					current.setValue(evaluator.min(scores));
+					
+					int x3 = state.getC3();
+					String promotion0 = state0.getPromotion();
+					MoveMaker.undoAnyMove(board, temp0, promotion0, y, x, y2, x2, y3, x3);
+				}				
+				
+				Collections.sort(children, Collections.reverseOrder());
+				List<Node> filtered = generator.filterMoves(children, Turn.BLACK);
 				child = filtered.get(random.nextInt(filtered.size()));
 				child.addParent(move);
 				move.addChildren(Arrays.asList(child));
 			}
-			
+//			else {child = new Node(-1, -1, -1, -1, Turn.PAUSE);}
 			int value = calculate(Turn.BLACK, depth+1, child);
 				move.setValue(value);
 		}
 			
 		int c3 = state.getC3();
 		promotion = state.getPromotion();
-		MoveMaker.undo(board, temp, promotion, r, c, r2, c2, r3, c3);
+		MoveMaker.undoAnyMove(board, temp, promotion, r, c, r2, c2, r3, c3);
 		
 		return move.getValue();
 	}
