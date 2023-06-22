@@ -86,6 +86,10 @@ public class Director{
 	}	
 	public void setLevel(int level){
 		this.level = level;
+		if(level < 3) {
+			integrator.setLearning(false);
+		}
+		else {integrator.setLearning(true);}
 	}	
 	private void setBoard(String[][] field){
 		board = Copier.deepCopy(field);

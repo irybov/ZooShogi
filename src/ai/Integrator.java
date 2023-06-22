@@ -135,6 +135,8 @@ public class Integrator {
 	}
 
 	private Scribe scribe = Scribe.getInstance();
+	private boolean selfLearning = false;
+	public void setLearning(boolean selfLearning) {this.selfLearning = selfLearning;}
 
 	private String[][] doMove(final Node move, String[][] field){
 		
@@ -144,14 +146,16 @@ public class Integrator {
 		int r2 = move.getRowTo();
 		int c2 = move.getColumnTo();
 		
-		if(score > 999 & Cache.isEmpty()) {
-			String state = Matrix.makeKey(field);
-			if(!exp.hasNode(state)) {
-				exp.learn(state, move);
-				String mirror = Matrix.swapKey(state);
-				Copier.deepCopy(Arrays.asList(move), null, true);
-				Node twin = Copier.getRoot();
-				exp.learn(mirror, twin);
+		if(selfLearning) {
+			if(score > 999 & Cache.isEmpty()) {
+				String state = Matrix.makeKey(field);
+				if(!exp.hasNode(state)) {
+					exp.learn(state, move);
+					String mirror = Matrix.swapKey(state);
+					Copier.deepCopy(Arrays.asList(move), null, true);
+					Node twin = Copier.getRoot();
+					exp.learn(mirror, twin);
+				}
 			}
 		}
 		
@@ -188,9 +192,11 @@ public class Integrator {
 			game.push(Matrix.makeKey(field));
 		}
 		
-		if(score > 999 & Cache.isEmpty()) {
-			if(move.hasChildren()) {
-				Cache.addTree(Copier.deepCopy(field), move.getChidren());
+		if(selfLearning) {
+			if(score > 999 & Cache.isEmpty()) {
+				if(move.hasChildren()) {
+					Cache.addTree(Copier.deepCopy(field), move.getChidren());
+				}
 			}
 		}
 		

@@ -21,10 +21,10 @@ public abstract class AI implements Callable<Integer>{
 		this.board = board;
 	}
 		
-	final InternalHash hash = new InternalHash();	
+	final InternalHash hash = new InternalHash();
 	final Generator generator = new Generator();
 	final Evaluator evaluator = new Evaluator();
-	final Integrator integrator = Integrator.getInstance();	
+	final Integrator integrator = Integrator.getInstance();
 	int nodesCount = 0;
 
 	class InternalHash {

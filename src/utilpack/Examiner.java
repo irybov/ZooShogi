@@ -127,7 +127,7 @@ public final class Examiner {
 	return false;
 	}
 	
-	public static boolean isPromotionWon(String[][] board, Turn turn) {
+	public static boolean isPromotionWins(String[][] board, Turn turn) {
 		
 		if(turn.equals(Turn.BLACK)) {
 			return (board[3][0].equals("k")||board[3][1].equals("k")||board[3][2].equals("k")) &
@@ -140,7 +140,7 @@ public final class Examiner {
 		return false;
 	}
 
-	public static boolean isBlackPositionWon(String[][] board, Turn turn)  {
+	public static boolean isBlackPositionWin(String[][] board, Turn turn)  {
 		
 		int a = 0;
 		int b = 0;
@@ -159,7 +159,7 @@ public final class Examiner {
 			   (board[3][0].equals("k")||board[3][1].equals("k")||board[3][2].equals("k"))));
 	}
 	
-	public static boolean isWhitePositionWon(String[][] board, Turn turn)  {
+	public static boolean isWhitePositionWin(String[][] board, Turn turn)  {
 		
 		int a = 0;
 		int b = 0;

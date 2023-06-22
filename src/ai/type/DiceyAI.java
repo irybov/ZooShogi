@@ -94,177 +94,141 @@ public class DiceyAI extends AI {
 		}
 		
 		List<Node> children = generator.generateMoves(board, Turn.WHITE);
-		nodesCount += children.size();		
+		nodesCount += children.size();
+		root.addChildren(children);
 		
 		for(Node child : children) {
 			child.addParent(root);
-			child.setValue(calculate(Turn.WHITE, 2, child));
+			child.setValue(calculate(child));
 			hash.clear();
 		}
-		root.addChildren(children);
 		
 		int sum = children.stream().mapToInt(Node::getValue).sum();		
 		return sum / children.size();
 	}
 	
 	// monte-carlo algorithm
-	private int calculate(Turn turn, int depth, Node move) {
+	private int calculate(Node vertex) {
+
+		int depth = 1;
+		Turn turn;
+		Node move = new Node(vertex.getRowFrom(), 
+							 vertex.getColumnFrom(), 
+							 vertex.getRowTo(), 
+							 vertex.getColumnTo(), 
+							 vertex.getSide());		
+		while(true) {
 		
-		if(turn.equals(Turn.WHITE) && integrator.isLost(board)) {
-//			if(depth>2) {move=null;}
-			return -1000;
-		}		
-		if(turn.equals(Turn.WHITE) && MovesList.isRepeated(board, Turn.BLACK)){
-//			if(depth>2) {move=null;}
-			return 0;
-		}
-		if(turn.equals(Turn.BLACK) && MovesList.isRepeated(board, Turn.WHITE)){
-//			if(depth>2) {move=null;}
-			return 0;
-		}		
-		if(hash.isRepeated(board, turn)){
-//			if(depth>2) {move=null;}
-			return 0;
-		}		
-		
-		if(Examiner.isBlackPositionWon(board, turn)){
-//			if(depth>2) {move=null;}
-			return 1000;
-		}
-		if(Examiner.isWhitePositionWon(board, turn)){
-//			if(depth>2) {move=null;}
-			return -1000;
-		}
-		
-		if(Examiner.isCheck(board, turn)){
-			if(turn.equals(Turn.WHITE)){
-//				if(depth>2) {move=null;}
-				return -1000;
-			}
-			else {
-//				if(depth>2) {move=null;}
-				return 1000;
-			}
-		}
-
-		hash.addMove(board, turn);
-		
-/*		if(depth == 100){
-			move = null;
-			return evaluator.evaluationMaterial(board, false)
-					+ evaluator.evaluationPositional(board);
-		}*/
-
-		nodesCount++;
-	
-		int r = move.getRowFrom();
-		int c = move.getColumnFrom();
-		int r2 = move.getRowTo();
-		int c2 = move.getColumnTo();
-		String temp;
-		String promotion;
-		int r3;
-		Board state;
-/*				
-		List<Node> children = null;
-		List<Node> sorted = null;
-		List<Node> filtered = null;
-		List<Node> leaves = null;
-		List<Integer> scores = null;
-		Node child = null;
-*/
-		if(turn.equals(Turn.BLACK)){
-			r3 = 0;
-			state = MoveMaker.doBlackMove(board, r, c, r2, c2);
-			board = state.getBoard();
-			temp = state.getTemp();
-
-			Node child = null;
-			if(temp != "K") {
-				List<Node> children = generator.generateMoves(board, Turn.WHITE);
-				nodesCount += children.size();
-				
-				for(Node current : children) {
-					
-					int y = current.getRowFrom();
-					int x = current.getColumnFrom();
-					int y2 = current.getRowTo();
-					int x2 = current.getColumnTo();
-					
-					int y3 = 3;
-					Board state0 = MoveMaker.doWhiteMove(board, y, x, y2, x2);
-					board = state0.getBoard();
-					String temp0 = state0.getTemp();
-					
-					List<Node> leaves = generator.generateMoves(board, Turn.BLACK);
-					nodesCount += leaves.size();
-					List<Integer> scores = leaves.stream().map(Node::getValue).collect(Collectors.toList());
-					current.setValue(evaluator.max(scores));
-					
-					int x3 = state.getC3();
-					String promotion0 = state0.getPromotion();
-					MoveMaker.undoAnyMove(board, temp0, promotion0, y, x, y2, x2, y3, x3);
-				}				
-
-				Collections.sort(children);
-				List<Node> filtered = generator.filterMoves(children, Turn.WHITE);
-				child = filtered.get(random.nextInt(filtered.size()));
-				child.addParent(move);
-				move.addChildren(Arrays.asList(child));
-			}
-//			else {child = new Node(-1, -1, -1, -1, Turn.PAUSE);}			
-			int value = calculate(Turn.WHITE, depth+1, child);
-				move.setValue(value);
-		}
-		else{
-			r3 = 3;
-			state = MoveMaker.doWhiteMove(board, r, c, r2, c2);
-			board = state.getBoard();
-			temp = state.getTemp();
-
-			Node child = null;
-			if(temp != "k") {
-				List<Node> children = generator.generateMoves(board, Turn.BLACK);
-				nodesCount += children.size();
-				
-				for(Node current : children) {
-					
-					int y = current.getRowFrom();
-					int x = current.getColumnFrom();
-					int y2 = current.getRowTo();
-					int x2 = current.getColumnTo();
-					
-					int y3 = 0;
-					Board state0 = MoveMaker.doBlackMove(board, y, x, y2, x2);
-					board = state0.getBoard();
-					String temp0 = state0.getTemp();
-					
-					List<Node> leaves = generator.generateMoves(board, Turn.WHITE);
-					nodesCount += leaves.size();
-					List<Integer> scores = leaves.stream().map(Node::getValue).collect(Collectors.toList());
-					current.setValue(evaluator.min(scores));
-					
-					int x3 = state.getC3();
-					String promotion0 = state0.getPromotion();
-					MoveMaker.undoAnyMove(board, temp0, promotion0, y, x, y2, x2, y3, x3);
-				}				
-				
-				Collections.sort(children, Collections.reverseOrder());
-				List<Node> filtered = generator.filterMoves(children, Turn.BLACK);
-				child = filtered.get(random.nextInt(filtered.size()));
-				child.addParent(move);
-				move.addChildren(Arrays.asList(child));
-			}
-//			else {child = new Node(-1, -1, -1, -1, Turn.PAUSE);}
-			int value = calculate(Turn.BLACK, depth+1, child);
-				move.setValue(value);
-		}
+			turn = move.getSide();
 			
-		int c3 = state.getC3();
-		promotion = state.getPromotion();
-		MoveMaker.undoAnyMove(board, temp, promotion, r, c, r2, c2, r3, c3);
-		
-		return move.getValue();
+			if(turn.equals(Turn.WHITE) && integrator.isLost(board)) {return -1000/depth;}
+			if(turn.equals(Turn.WHITE) && MovesList.isRepeated(board, Turn.BLACK)){return 0;}
+			if(turn.equals(Turn.BLACK) && MovesList.isRepeated(board, Turn.WHITE)){return 0;}
+			if(hash.isRepeated(board, turn)){return 0;}
+			if(Examiner.isBlackPositionWin(board, turn)){return 1000/depth;}
+			if(Examiner.isWhitePositionWin(board, turn)){return -1000/depth;}
+			
+			if(Examiner.isCheck(board, turn)){
+				if(turn.equals(Turn.WHITE)){return -1000/depth;}
+				else {return 1000/depth;}
+			}	
+			hash.addMove(board, turn);
+			nodesCount++;
+	
+			int r = move.getRowFrom();
+			int c = move.getColumnFrom();
+			int r2 = move.getRowTo();
+			int c2 = move.getColumnTo();
+			String temp;
+			Board state;
+			Node child = null;
+	
+			if(turn.equals(Turn.BLACK)){
+
+				state = MoveMaker.doBlackMove(board, r, c, r2, c2);
+				board = state.getBoard();
+				temp = state.getTemp();
+	
+				if(temp != "K") {
+					List<Node> children = generator.generateMoves(board, Turn.WHITE);
+					nodesCount += children.size();
+					
+					for(Node current : children) {
+						
+						int y = current.getRowFrom();
+						int x = current.getColumnFrom();
+						int y2 = current.getRowTo();
+						int x2 = current.getColumnTo();
+						
+						int y3 = 3;
+						Board state0 = MoveMaker.doWhiteMove(board, y, x, y2, x2);
+						board = state0.getBoard();
+						String temp0 = state0.getTemp();
+						
+						List<Node> leaves = generator.generateMoves(board, Turn.BLACK);
+						nodesCount += leaves.size();
+						List<Integer> scores = leaves.stream().map(Node::getValue)
+													 .collect(Collectors.toList());
+						current.setValue(evaluator.max(scores));
+						
+						int x3 = state.getC3();
+						String promotion0 = state0.getPromotion();
+						MoveMaker.undoAnyMove(board, temp0, promotion0, y, x, y2, x2, y3, x3);
+					}				
+	
+					Collections.sort(children);
+					List<Node> filtered = generator.filterMoves(children, Turn.WHITE);
+					child = filtered.get(random.nextInt(filtered.size()));
+					child.addParent(move);
+					move.addChildren(Arrays.asList(child));
+				}
+				else {return 1000/depth;}
+				move = child;
+			}
+			else{
+
+				state = MoveMaker.doWhiteMove(board, r, c, r2, c2);
+				board = state.getBoard();
+				temp = state.getTemp();
+
+				if(temp != "k") {
+					List<Node> children = generator.generateMoves(board, Turn.BLACK);
+					nodesCount += children.size();
+					
+					for(Node current : children) {
+						
+						int y = current.getRowFrom();
+						int x = current.getColumnFrom();
+						int y2 = current.getRowTo();
+						int x2 = current.getColumnTo();
+						
+						int y3 = 0;
+						Board state0 = MoveMaker.doBlackMove(board, y, x, y2, x2);
+						board = state0.getBoard();
+						String temp0 = state0.getTemp();
+						
+						List<Node> leaves = generator.generateMoves(board, Turn.WHITE);
+						nodesCount += leaves.size();
+						List<Integer> scores = leaves.stream().map(Node::getValue)
+													 .collect(Collectors.toList());
+						current.setValue(evaluator.min(scores));
+						
+						int x3 = state.getC3();
+						String promotion0 = state0.getPromotion();
+						MoveMaker.undoAnyMove(board, temp0, promotion0, y, x, y2, x2, y3, x3);
+					}				
+					
+					Collections.sort(children, Collections.reverseOrder());
+					List<Node> filtered = generator.filterMoves(children, Turn.BLACK);
+					child = filtered.get(random.nextInt(filtered.size()));
+					child.addParent(move);
+					move.addChildren(Arrays.asList(child));
+				}
+				else {return -1000/depth;}
+				move = child;
+			}
+			if(turn.equals(Turn.BLACK)){depth++;}
+		}
 	}
 	
 }

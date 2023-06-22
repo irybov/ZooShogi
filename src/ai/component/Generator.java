@@ -180,7 +180,7 @@ public class Generator {
 				if(temp.equals("K")){
 					value = 5000;	
 				}
-				else if(Examiner.isPromotionWon(board, Turn.BLACK) &&
+				else if(Examiner.isPromotionWins(board, Turn.BLACK) &&
 						!Examiner.isCheck(board, Turn.WHITE)){
 					value = 4000;
 				}
@@ -191,7 +191,7 @@ public class Generator {
 				else if(MovesList.isRepeated(board, Turn.BLACK)) {
 					value = 0;
 				}
-				else if(Examiner.isPromotionWon(board, Turn.WHITE)){
+				else if(Examiner.isPromotionWins(board, Turn.WHITE)){
 					value = -4000;
 				}
 				else if(Examiner.isCheck(board, Turn.WHITE)){
@@ -214,7 +214,7 @@ public class Generator {
 				if(temp.equals("k")){
 					value = -5000;	
 				}
-				else if(Examiner.isPromotionWon(board, Turn.WHITE) &&
+				else if(Examiner.isPromotionWins(board, Turn.WHITE) &&
 						!Examiner.isCheck(board, Turn.BLACK)){
 						value = -4000;
 				}
@@ -225,7 +225,7 @@ public class Generator {
 				else if(MovesList.isRepeated(board, Turn.WHITE)) {
 					value = 0;
 				}
-				else if(Examiner.isPromotionWon(board, Turn.BLACK)){
+				else if(Examiner.isPromotionWins(board, Turn.BLACK)){
 						value = 4000;
 				}
 				else if(Examiner.isCheck(board, Turn.BLACK)){

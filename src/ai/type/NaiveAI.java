@@ -48,11 +48,11 @@ public class NaiveAI extends AI{
 			hash.addMove(board, turn, depth);
 		}
 		
-		if(Examiner.isBlackPositionWon(board, turn)){
+		if(Examiner.isBlackPositionWin(board, turn)){
 			legalMoves = null;
 			return 100*depth;
 		}
-		if(Examiner.isWhitePositionWon(board, turn)){
+		if(Examiner.isWhitePositionWin(board, turn)){
 			legalMoves = null;
 			return -6000/depth;
 		}		

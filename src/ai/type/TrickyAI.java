@@ -82,7 +82,7 @@ public class TrickyAI extends AI{
 						if(temp.equals("K")){
 							legal.get(i).setValue(2000+(100/depth));
 						}
-						else if(Examiner.isPromotionWon(board, Turn.BLACK) &&
+						else if(Examiner.isPromotionWins(board, Turn.BLACK) &&
 								!Examiner.isCheck(board, Turn.WHITE)){
 							legal.get(i).setValue(1000+(100/depth));
 						}
@@ -95,7 +95,7 @@ public class TrickyAI extends AI{
 						else if(integrator.isLost(board)) {
 							legal.get(i).setValue(-1000);
 						}						
-						else if(Examiner.isPromotionWon(board, Turn.WHITE)){
+						else if(Examiner.isPromotionWins(board, Turn.WHITE)){
 							legal.get(i).setValue(-(1000+(100/depth)));
 						}
 						else if(Examiner.isCheck(board, Turn.WHITE)){
@@ -123,14 +123,14 @@ public class TrickyAI extends AI{
 						if(temp.equals("k")){
 							legal.get(i).setValue(-(2000+(100/depth)));
 						}
-						else if(Examiner.isPromotionWon(board, Turn.WHITE) &&
+						else if(Examiner.isPromotionWins(board, Turn.WHITE) &&
 								!Examiner.isCheck(board, Turn.BLACK)){
 							legal.get(i).setValue(-(1000+(100/depth)));
 						}
 						else if(MovesList.isRepeated(board, Turn.WHITE)) {
 							legal.get(i).setValue(0);
 						}
-						else if(Examiner.isPromotionWon(board, Turn.BLACK)){
+						else if(Examiner.isPromotionWins(board, Turn.BLACK)){
 							legal.get(i).setValue(1000+(100/depth));
 						}
 						else if(Examiner.isCheck(board, Turn.BLACK)){

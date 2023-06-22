@@ -68,7 +68,7 @@ public class PseudoAI implements Runnable {
 			if(temp.equals("K")){
 				score = 2000;
 			}
-			else if(Examiner.isPromotionWon(board, Turn.BLACK) &&
+			else if(Examiner.isPromotionWins(board, Turn.BLACK) &&
 					!Examiner.isCheck(board, Turn.WHITE)){
 				score = 1000;
 			}
@@ -78,7 +78,7 @@ public class PseudoAI implements Runnable {
 			else if(integrator.isLost(board)) {
 				score = -1000;							
 			}
-			else if(Examiner.isPromotionWon(board, Turn.WHITE)){
+			else if(Examiner.isPromotionWins(board, Turn.WHITE)){
 				score = -1000;
 			}
 			else if(Examiner.isCheck(board, Turn.WHITE)){
