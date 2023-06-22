@@ -5,15 +5,19 @@ import java.util.Arrays;
 import java.util.List;
 
 import ai.component.Board;
+import ai.component.Edge;
+import ai.component.Memorizer;
 import ai.component.MovesList;
 import ai.component.Node;
 import control.Clocks;
+import utilpack.Copier;
 import utilpack.Examiner;
 import utilpack.MoveMaker;
 import utilpack.Turn;
 
 public class CleverAI extends AI{
 
+	private final Memorizer memo = Memorizer.getInstance();
 	public CleverAI(Node root, String[][] board) {
 		super(root, board);
 	}
@@ -71,10 +75,18 @@ public class CleverAI extends AI{
 			legalMoves = null;
 			return evaluator.evaluationMaterial(board, false);
 		}
+		
+		if(memo.has(board, turn)) {
+			if(memo.precise(board, turn, depth)) {return memo.get(board, turn);}
+		}
 
 		nodesCount += legalMoves.size();
 				
 		List<Integer> scores = new ArrayList<>(legalMoves.size());
+		String[][] field = new String[][]{{"","","","","","","","",""},
+			   							  {"","",""},
+			   							  {"","",""},
+			   							  {"","","","","","","","",""}};
 		
 		for(int i=0; i<legalMoves.size(); i++){
 	
@@ -105,6 +117,7 @@ public class CleverAI extends AI{
 				int value = calculate(Turn.WHITE, depth+1, children);
 					scores.add(value);
 					legalMoves.get(i).setValue(value);
+					field = Copier.deepCopy(board);
 			}				
 			else{
 				r3 = 3;
@@ -124,6 +137,7 @@ public class CleverAI extends AI{
 				int value = calculate(Turn.BLACK, depth+1, children);
 					scores.add(value);
 					legalMoves.get(i).setValue(value);
+					field = Copier.deepCopy(board);
 			}
 			
 			int c3 = state.getC3();
@@ -131,12 +145,26 @@ public class CleverAI extends AI{
 			MoveMaker.undoAnyMove(board, temp, promotion, r, c, r2, c2, r3, c3);
 		}
 		
-		if(turn.equals(Turn.BLACK)){
-			return evaluator.max(scores);
+		int score;
+		if(turn.equals(Turn.BLACK)){			
+			score = evaluator.max(scores);
+			if(memo.has(field, Turn.WHITE)) {
+				memo.update(field, Turn.WHITE, new Edge(depth, score));
+			}
+			else {
+				memo.add(field, Turn.WHITE, new Edge(depth, score));
+			}
 		}
-		else{
-			return evaluator.min(scores);
+		else{		
+			score = evaluator.min(scores);
+			if(memo.has(field, Turn.BLACK)) {
+				memo.update(field, Turn.BLACK, new Edge(depth, score));
+			}
+			else {
+				memo.add(field, Turn.BLACK, new Edge(depth, score));
+			}
 		}
+		return score;
 	}
 	
 }
