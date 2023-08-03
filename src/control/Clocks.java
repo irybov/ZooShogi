@@ -44,6 +44,7 @@ public class Clocks{
 		
 		while(true) {
 			try {
+				TimeUnit.SECONDS.sleep(1);
 				if(turn.equals(Turn.BLACK)) {
 					Gui.nodes.setText(String.format("%,d", nodes.get()));
 					if(secondsBlack < 59) {
@@ -67,7 +68,6 @@ public class Clocks{
 				Gui.clockWhite.setText(String.format("%02d", minutesWhite)+":"
 										+String.format("%02d", secondsWhite));
 				}
-			TimeUnit.SECONDS.sleep(1);
 			}
 			catch (InterruptedException e) {
 				e.printStackTrace();

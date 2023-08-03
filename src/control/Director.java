@@ -280,13 +280,14 @@ public class Director{
 		
 		undoMove = Copier.deepCopy(board);
 		
-		Clocks.setTurn(Turn.BLACK);
+		Clocks.setTurn(Turn.PAUSE);
 		if(isEndOfGame(Turn.BLACK)){
 			game.clear();
 			Gui.lockBoard();
-			Clocks.setTurn(Turn.PAUSE);
+//			Clocks.setTurn(Turn.PAUSE);
 			return;
 		}
+		Clocks.setTurn(Turn.BLACK);
 		
 		if(isClientActivated) {
 			sendMoveToClient();
@@ -338,14 +339,15 @@ public class Director{
 			}
 		}
 
+		Clocks.setTurn(Turn.PAUSE);
 		Gui.doClick();
-		
+
 		if(isEndOfGame(Turn.WHITE)){
 			game.clear();
 			Gui.lockBoard();
-			Clocks.setTurn(Turn.PAUSE);
+//			Clocks.setTurn(Turn.PAUSE);
 			return;
-		}		
+		}
 		Clocks.setTurn(Turn.WHITE);
 	}
 	

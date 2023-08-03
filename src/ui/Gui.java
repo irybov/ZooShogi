@@ -404,9 +404,12 @@ public class Gui {
 								clickNumber = 1;
 								disableLevels();
 								moveIsDrop = false;								
-								
-									javax.swing.SwingUtilities.invokeLater(new Runnable() {
-										public void run() {
+
+								Thread t = new Thread(new Runnable() {
+									@Override
+									public void run() {								
+//									javax.swing.SwingUtilities.invokeLater(new Runnable() {
+//										public void run() {
 											try {											
 												Clocks.setNodes(0);
 												Gui.nodes.setText(" ");
@@ -417,6 +420,7 @@ public class Gui {
 											}
 										}
 									});
+								t.start();
 								return;
 								}
 							else{

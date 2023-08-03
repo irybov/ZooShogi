@@ -56,7 +56,7 @@ public class Memorizer {
 		else {
 			entry = white.get(hash);
 		}
-		return depth <= entry.getDepth();
+		return depth >= entry.getDepth();
 	}
 	
 	// returns previously calculated results
