@@ -279,17 +279,22 @@ public class Gui {
 			public void actionPerformed(ActionEvent e) {
 				forceBlack = (JButton) e.getSource();
 				disableLevels();
-				
-				javax.swing.SwingUtilities.invokeLater(new Runnable() {
-					public void run() {
+
+				Thread t = new Thread(new Runnable() {
+					@Override
+					public void run() {	
+//				javax.swing.SwingUtilities.invokeLater(new Runnable() {
+//					public void run() {
 						try {
 							director.compute();
+							updateGui();
 						}
 						catch (InterruptedException e) {
 							e.printStackTrace();
 						}
 					}
 				});
+				t.start();
 				return;
 			}
 		});
@@ -414,6 +419,7 @@ public class Gui {
 												Clocks.setNodes(0);
 												Gui.nodes.setText(" ");
 												director.compute();
+												updateGui();
 											}
 											catch (InterruptedException e) {
 												e.printStackTrace();

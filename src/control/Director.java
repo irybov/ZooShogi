@@ -340,7 +340,7 @@ public class Director{
 		}
 
 		Clocks.setTurn(Turn.PAUSE);
-		Gui.doClick();
+//		Gui.doClick();
 
 		if(isEndOfGame(Turn.WHITE)){
 			game.clear();
