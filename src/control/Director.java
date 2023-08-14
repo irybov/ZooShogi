@@ -87,9 +87,9 @@ public class Director{
 	public void setLevel(int level){
 		this.level = level;
 		if(level < 3) {
-			integrator.setLearning(false);
+			integrator.setSelfLearning(false);
 		}
-		else {integrator.setLearning(true);}
+		else {integrator.setSelfLearning(true);}
 	}	
 	private void setBoard(String[][] field){
 		board = Copier.deepCopy(field);
@@ -304,7 +304,7 @@ public class Director{
 		}		
 		else {
 			List<Node> legalMoves = generator.generateMoves(board, Turn.BLACK);
-			List<Node> nodes = new ArrayList<>(generator.sortMoves(board, legalMoves, Turn.BLACK));
+			List<Node> nodes = new ArrayList<>(generator.arrangeMoves(board, legalMoves, Turn.BLACK));
 			if(nodes.get(0).getValue() > 999) {
 				integrator.nextBest(board, nodes.get(0));
 			}
@@ -316,7 +316,7 @@ public class Director{
 				case 4:
 					nodes = generator.filterMoves(board, nodes, Turn.BLACK);
 					if(nodes.isEmpty()) {
-						nodes = generator.sortMoves(board, legalMoves, Turn.BLACK);
+						nodes = generator.arrangeMoves(board, legalMoves, Turn.BLACK);
 						nodes = generator.filterMoves(nodes, Turn.BLACK);
 					}
 				case 2: case 3: case 5: case 6: case 7:

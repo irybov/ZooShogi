@@ -50,7 +50,6 @@
                 <include>sound/**</include>
                 <include>ui/**</include>
                 <include>*.txt</include>
-                <include>ZooShogi.bat</include>
               </includes>
             </resource>
           </resources>

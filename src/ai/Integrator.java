@@ -17,6 +17,7 @@ import control.Scribe;
 import utilpack.Capture;
 import utilpack.Copier;
 import utilpack.Matrix;
+import utilpack.MoveMaker;
 import utilpack.Turn;
 import utilpack.Expositor;
 
@@ -136,7 +137,7 @@ public class Integrator {
 
 	private Scribe scribe = Scribe.getInstance();
 	private boolean selfLearning = false;
-	public void setLearning(boolean selfLearning) {this.selfLearning = selfLearning;}
+	public void setSelfLearning(boolean selfLearning) {this.selfLearning = selfLearning;}
 
 	private String[][] doMove(final Node move, String[][] field){
 		
@@ -165,22 +166,7 @@ public class Integrator {
 		String spot = field[r2][c2];
 		String pieceName = Expositor.getPieceName(field[r][c]);
 
-		if(field[r][c].equals("p") & r==2){
-			if(r==0 & c > 2){
-				field[r2][c2] = "p";
-				field[r][c] = " ";
-			}	
-			else{
-				Capture.takenPiecePlacement(field, r2, c2);
-				field[r2][c2] = "q";
-				field[r][c] = " ";
-			}
-		}
-		else{
-			Capture.takenPiecePlacement(field, r2, c2);
-			field[r2][c2] = field[r][c];
-			field[r][c] = " ";
-		}
+		MoveMaker.doBlackMove(field, r, c, r2, c2);
 		
 		if(score < -999) {
 			if(!exp.bingo(game.peek())) {

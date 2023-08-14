@@ -155,7 +155,7 @@ public class Generator {
 		return legal;
 	}
 	
-	public List<Node> sortMoves(String[][] board, List<Node> legalMoves, Turn turn){
+	public List<Node> arrangeMoves(String[][] board, List<Node> legalMoves, Turn turn){
 		
 		List<Node> sortedMoves = new ArrayList<>(legalMoves.size());
 	

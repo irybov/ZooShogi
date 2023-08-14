@@ -130,11 +130,11 @@ public final class Examiner {
 	public static boolean isPromotionWins(String[][] board, Turn turn) {
 		
 		if(turn.equals(Turn.BLACK)) {
-			return (board[3][0].equals("k")||board[3][1].equals("k")||board[3][2].equals("k")) &
+			return (board[3][0].equals("k")||board[3][1].equals("k")||board[3][2].equals("k")) &&
 			(!board[0][0].equals("K")&&!board[0][1].equals("K")&&!board[0][2].equals("K"));		
 		}
 		else if(turn.equals(Turn.WHITE)){
-			return (board[0][0].equals("K")||board[0][1].equals("K")||board[0][2].equals("K")) & 
+			return (board[0][0].equals("K")||board[0][1].equals("K")||board[0][2].equals("K")) && 
 			(!board[3][0].equals("k")&&!board[3][1].equals("k")&&!board[3][2].equals("k"));
 		}
 		return false;
@@ -155,8 +155,8 @@ public final class Examiner {
 				}
 			}
 		}		
-		return((a+b==1) || ((a+b==3 & turn.equals(Turn.BLACK)) & 
-			   (board[3][0].equals("k")||board[3][1].equals("k")||board[3][2].equals("k"))));
+		return((a+b==1) || ((a+b==3 & turn.equals(Turn.BLACK)) & isPromotionWins(board, turn)));
+//			   (board[3][0].equals("k")||board[3][1].equals("k")||board[3][2].equals("k"))));
 	}
 	
 	public static boolean isWhitePositionWin(String[][] board, Turn turn)  {
@@ -174,8 +174,8 @@ public final class Examiner {
 				}
 			}
 		}		
-		return((a+b==2) || ((a+b==3 & turn.equals(Turn.WHITE)) & 
-			   (board[0][0].equals("K")||board[0][1].equals("K")||board[0][2].equals("K"))));
+		return((a+b==2) || ((a+b==3 & turn.equals(Turn.WHITE)) & isPromotionWins(board, turn)));
+//			   (board[0][0].equals("K")||board[0][1].equals("K")||board[0][2].equals("K"))));
 	}	
 	
 }

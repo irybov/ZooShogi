@@ -80,18 +80,7 @@ public class DiceyAI extends AI {
 		int r2 = root.getRowTo();
 		int c2 = root.getColumnTo();
 
-		if(board[r][c].equals("p") & r==2){
-			board[r2][c2] = "q";
-			board[r][c] = " ";	
-		}
-		else if(r==0 & c > 2){
-			board[r2][c2] = board[r][c];
-			board[r][c] = " ";
-		}
-		else{
-			board[r2][c2] = board[r][c];
-			board[r][c] = " ";	
-		}
+		MoveMaker.doBlackMove(board, r, c, r2, c2);
 		
 		List<Node> children = generator.generateMoves(board, Turn.WHITE);
 		nodesCount += children.size();
@@ -111,6 +100,7 @@ public class DiceyAI extends AI {
 	private int calculate(Node vertex) {
 
 		int depth = 1;
+		int result = 1000;
 		Turn turn;
 		Node move = new Node(vertex.getRowFrom(), 
 							 vertex.getColumnFrom(), 
@@ -121,17 +111,16 @@ public class DiceyAI extends AI {
 		
 			turn = move.getSide();
 			
-			if(turn.equals(Turn.WHITE) && integrator.isLost(board)) {return -1000/depth;}
-			if(turn.equals(Turn.WHITE) && MovesList.isRepeated(board, Turn.BLACK)){return 0;}
-			if(turn.equals(Turn.BLACK) && MovesList.isRepeated(board, Turn.WHITE)){return 0;}
-			if(hash.isRepeated(board, turn)){return 0;}
-			if(Examiner.isBlackPositionWin(board, turn)){return 1000/depth;}
-			if(Examiner.isWhitePositionWin(board, turn)){return -1000/depth;}
+			if(turn.equals(Turn.WHITE) && integrator.isLost(board)) {return -result/depth;}
+			if(turn.equals(Turn.WHITE) && MovesList.isRepeated(board, Turn.BLACK)) {return 0;}
+			if(turn.equals(Turn.BLACK) && MovesList.isRepeated(board, Turn.WHITE)) {return 0;}
+			if(Examiner.isBlackPositionWin(board, turn)) {return result/depth;}
+			if(Examiner.isWhitePositionWin(board, turn)) {return -result/depth;}
 			
-			if(Examiner.isCheck(board, turn)){
-				if(turn.equals(Turn.WHITE)){return -1000/depth;}
-				else {return 1000/depth;}
-			}	
+			if(Examiner.isCheck(board, turn)) {
+				return turn.equals(Turn.WHITE) ? -result/depth : result/depth;
+			}
+			if(hash.isRepeated(board, turn)) {return 0;}
 			hash.addMove(board, turn);
 			nodesCount++;
 	
@@ -141,12 +130,12 @@ public class DiceyAI extends AI {
 			int c2 = move.getColumnTo();
 			String temp;
 			Board state;
-			Node child = null;
+			Node child;
 	
 			if(turn.equals(Turn.BLACK)){
 
 				state = MoveMaker.doBlackMove(board, r, c, r2, c2);
-				board = state.getBoard();
+//				board = state.getBoard();
 				temp = state.getTemp();
 	
 				if(temp != "K") {
@@ -162,16 +151,17 @@ public class DiceyAI extends AI {
 						
 						int y3 = 3;
 						Board state0 = MoveMaker.doWhiteMove(board, y, x, y2, x2);
-						board = state0.getBoard();
+//						board = state0.getBoard();
 						String temp0 = state0.getTemp();
 						
 						List<Node> leaves = generator.generateMoves(board, Turn.BLACK);
 						nodesCount += leaves.size();
-						List<Integer> scores = leaves.stream().map(Node::getValue)
+						List<Node> sorted = generator.arrangeMoves(board, leaves, Turn.BLACK);
+						List<Integer> scores = sorted.stream().map(Node::getValue)
 													 .collect(Collectors.toList());
 						current.setValue(evaluator.max(scores));
 						
-						int x3 = state.getC3();
+						int x3 = state0.getC3();
 						String promotion0 = state0.getPromotion();
 						MoveMaker.undoAnyMove(board, temp0, promotion0, y, x, y2, x2, y3, x3);
 					}				
@@ -179,16 +169,16 @@ public class DiceyAI extends AI {
 					Collections.sort(children);
 					List<Node> filtered = generator.filterMoves(children, Turn.WHITE);
 					child = filtered.get(random.nextInt(filtered.size()));
-					child.addParent(move);
-					move.addChildren(Arrays.asList(child));
+//					child.addParent(move);
+//					move.addChildren(Arrays.asList(child));
 				}
-				else {return 1000/depth;}
-				move = child;
+				else {return result/depth;}
+				depth++;
 			}
 			else{
 
 				state = MoveMaker.doWhiteMove(board, r, c, r2, c2);
-				board = state.getBoard();
+//				board = state.getBoard();
 				temp = state.getTemp();
 
 				if(temp != "k") {
@@ -204,16 +194,17 @@ public class DiceyAI extends AI {
 						
 						int y3 = 0;
 						Board state0 = MoveMaker.doBlackMove(board, y, x, y2, x2);
-						board = state0.getBoard();
+//						board = state0.getBoard();
 						String temp0 = state0.getTemp();
 						
 						List<Node> leaves = generator.generateMoves(board, Turn.WHITE);
 						nodesCount += leaves.size();
-						List<Integer> scores = leaves.stream().map(Node::getValue)
+						List<Node> sorted = generator.arrangeMoves(board, leaves, Turn.WHITE);
+						List<Integer> scores = sorted.stream().map(Node::getValue)
 													 .collect(Collectors.toList());
 						current.setValue(evaluator.min(scores));
 						
-						int x3 = state.getC3();
+						int x3 = state0.getC3();
 						String promotion0 = state0.getPromotion();
 						MoveMaker.undoAnyMove(board, temp0, promotion0, y, x, y2, x2, y3, x3);
 					}				
@@ -221,13 +212,12 @@ public class DiceyAI extends AI {
 					Collections.sort(children, Collections.reverseOrder());
 					List<Node> filtered = generator.filterMoves(children, Turn.BLACK);
 					child = filtered.get(random.nextInt(filtered.size()));
-					child.addParent(move);
-					move.addChildren(Arrays.asList(child));
+//					child.addParent(move);
+//					move.addChildren(Arrays.asList(child));
 				}
-				else {return -1000/depth;}
-				move = child;
+				else {return -result/depth;}
 			}
-			if(turn.equals(Turn.BLACK)){depth++;}
+			move = child;
 		}
 	}
 	

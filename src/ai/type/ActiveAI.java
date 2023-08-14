@@ -99,11 +99,11 @@ public class ActiveAI extends AI{
 				List<Node> filtered = null;
 				if(temp != "K" & depth < 7) {
 					children = generator.generateMoves(board, Turn.WHITE);
-					sorted = generator.sortMoves(board, children, Turn.WHITE);
+					sorted = generator.arrangeMoves(board, children, Turn.WHITE);
 					filtered = generator.filterMoves(board, sorted, Turn.WHITE);
 					if(filtered.size()==0) {
 						children = generator.generateMoves(board, Turn.WHITE);
-						sorted = generator.sortMoves(board, children, Turn.WHITE);
+						sorted = generator.arrangeMoves(board, children, Turn.WHITE);
 						filtered = generator.filterMoves(sorted, Turn.WHITE);
 					}
 					for(Node child: filtered) {
@@ -130,11 +130,11 @@ public class ActiveAI extends AI{
 				List<Node> filtered = null;
 				if(temp != "k" & depth < 7) {
 					children = generator.generateMoves(board, Turn.BLACK);
-					sorted = generator.sortMoves(board, children, Turn.BLACK);
+					sorted = generator.arrangeMoves(board, children, Turn.BLACK);
 					filtered = generator.filterMoves(board, sorted, Turn.BLACK);
 					if(filtered.size()==0) {
 						children = generator.generateMoves(board, Turn.BLACK);
-						sorted = generator.sortMoves(board, children, Turn.BLACK);
+						sorted = generator.arrangeMoves(board, children, Turn.BLACK);
 						filtered = generator.filterMoves(sorted, Turn.BLACK);
 					}
 					for(Node child: filtered) {

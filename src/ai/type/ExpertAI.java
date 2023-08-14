@@ -95,7 +95,7 @@ public class ExpertAI extends AI{
 				List<Node> sorted = null;
 				if(temp != "K" & depth < 7) {
 					children = generator.generateMoves(board, Turn.WHITE);
-					sorted = generator.sortMoves(board, children, Turn.WHITE);
+					sorted = generator.arrangeMoves(board, children, Turn.WHITE);
 					for(Node child: sorted) {
 						child.addParent(legalMoves.get(i));
 					}
@@ -119,7 +119,7 @@ public class ExpertAI extends AI{
 				List<Node> sorted = null;
 				if(temp != "k" & depth < 7) {
 					children = generator.generateMoves(board, Turn.BLACK);
-					sorted = generator.sortMoves(board, children, Turn.BLACK);
+					sorted = generator.arrangeMoves(board, children, Turn.BLACK);
 					for(Node child: sorted) {
 						child.addParent(legalMoves.get(i));
 					}

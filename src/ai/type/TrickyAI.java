@@ -105,8 +105,7 @@ public class TrickyAI extends AI{
 							legal.get(i).setValue(evaluator.evaluationMaterial(board, false));
 							if(depth < 5) {
 								input.add(Copier.deepCopy(board));
-								legal.get(i).addChildren
-								(generator.generateMoves(board, Turn.WHITE));
+								legal.get(i).addChildren(generator.generateMoves(board, Turn.WHITE));
 								for(Node child: legal.get(i).getChidren()) {
 									child.addParent(legal.get(i));
 								}
@@ -140,8 +139,7 @@ public class TrickyAI extends AI{
 							legal.get(i).setValue(evaluator.evaluationMaterial(board, false));
 							if(depth < 5) {
 								input.add(Copier.deepCopy(board));
-								legal.get(i).addChildren
-								(generator.generateMoves(board, Turn.BLACK));
+								legal.get(i).addChildren(generator.generateMoves(board, Turn.BLACK));
 								for(Node child: legal.get(i).getChidren()) {
 									child.addParent(legal.get(i));
 								}
@@ -183,13 +181,13 @@ public class TrickyAI extends AI{
         }        
         for (Node move: stack) {
         	if(!move.hasChildren()) {        	
-        		int x = move.getValue();
+        		int x = move.getValue()*move.getDepth();
         		int y = 0;
         		if(move.hasParent()) {
-        			Node current = move.getParent();
-	        		while(current.hasParent()) {
-	        			y += current.getValue();
-	        			current = current.getParent();
+        			Node parent = move.getParent();
+	        		while(parent.hasParent()) {
+	        			y += parent.getValue()*parent.getDepth();
+	        			parent = parent.getParent();
 	        		}
         		}
         		int newTrap = x-y;
@@ -197,6 +195,7 @@ public class TrickyAI extends AI{
         			root.setTrappiness(newTrap);
         		}
         	}
+//        	else break;
         }        
 		nodesCount = stack.size();
 	}

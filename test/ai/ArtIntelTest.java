@@ -46,7 +46,7 @@ public class ArtIntelTest {
 	public void set_up() {
 		es = Executors.newFixedThreadPool(cores);
 		nodes = new ArrayList<>(legal.size());
-		nodes = generator.sortMoves(board, legal, Turn.BLACK);
+		nodes = generator.arrangeMoves(board, legal, Turn.BLACK);
 	}
 
 	@Test(timeout = 8_000)
