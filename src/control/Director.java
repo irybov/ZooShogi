@@ -272,9 +272,9 @@ public class Director{
 		}
 	}
 	
-	final int cores = Runtime.getRuntime().availableProcessors();
-	final AIFactory factory = new AIFactory();
-	final Generator generator = new Generator();
+	private final int cores = Runtime.getRuntime().availableProcessors();
+	private final AIFactory factory = new AIFactory();
+	private final Generator generator = new Generator();
 	
 	public void compute() throws InterruptedException{
 		

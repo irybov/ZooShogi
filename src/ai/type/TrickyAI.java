@@ -2,10 +2,13 @@ package ai.type;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.stream.Collectors;
 
 import ai.component.Board;
 import ai.component.MovesList;
@@ -38,11 +41,11 @@ public class TrickyAI extends AI{
 		input.add(board);		
 		Queue<String[][]> poses = new LinkedList<>();
 		List<Node> legal;
+		Queue<List<Node>> moves = new LinkedList<List<Node>>();
+		moves.add(Arrays.asList(root));
 		
 		Deque<Node> stack = new ArrayDeque<>();
-		
-		Queue<List<Node>> moves = new LinkedList<List<Node>>();
-		
+				
 		while(depth < 6) {
 			
 			while(!input.isEmpty()) {
@@ -50,16 +53,10 @@ public class TrickyAI extends AI{
 			}
 			
 			while(!poses.isEmpty()) {
-				board = poses.remove();
 				
-				if(depth == 1){
-					legal = new ArrayList<>(1);
-					legal.add(root);
-				}
-				else {
-					legal = new ArrayList<>(moves.remove());
-				}
-			
+				board = poses.remove();
+				legal = new ArrayList<>(moves.remove());
+				
 				for(int i=0; i<legal.size(); i++){
 					
 					int r = legal.get(i).getRowFrom();
@@ -74,7 +71,7 @@ public class TrickyAI extends AI{
 					if(depth % 2 == 1){
 						r3 = 0;
 						state = MoveMaker.doBlackMove(board, r, c, r2, c2);
-						board = state.getBoard();
+//						board = state.getBoard();
 						temp = state.getTemp();
 							
 						hash.addMove(board, Turn.BLACK, depth);
@@ -116,7 +113,7 @@ public class TrickyAI extends AI{
 					else{
 						r3 = 3;
 						state = MoveMaker.doWhiteMove(board, r, c, r2, c2);
-						board = state.getBoard();
+//						board = state.getBoard();
 						temp = state.getTemp();					
 						
 						if(temp.equals("k")){
@@ -157,15 +154,32 @@ public class TrickyAI extends AI{
 				legal = null;
 			}		
 			depth++;			
-		}
-		
-		legal = null;
+		}		
 		input = null;
 		poses = null;
 		
+		Node node = root;
+		int total = 0;
+    	while(node.hasChildren()) {
+	    	if(node.getDepth() % 2 == 1) {
+	    		Collections.sort(node.getChidren());
+	    	}
+	    	else{
+	    		Collections.sort(node.getChidren(), Collections.reverseOrder());
+	    	}
+	    	node = node.getChidren().get(0);
+	    	if(node.hasChildren()) {
+	    		total += node.getValue();
+	    	}
+	    	else {
+	    		root.setProfit(node.getValue());
+	    	}
+    		node.setTrappiness(-total);
+    	}
+    	root.setTrappiness(-total);
+		
 		List<Integer> scores;
-
-        for (Node move: stack) {
+        for (Node move: stack) {		
         	if(move.hasChildren()) {
         		scores = new ArrayList<>(move.getChidren().size());
         		for(Node child: move.getChidren()) {
@@ -178,25 +192,10 @@ public class TrickyAI extends AI{
             		move.setValue(evaluator.max(scores));
             	}
         	}
-        }        
-        for (Node move: stack) {
-        	if(!move.hasChildren()) {        	
-        		int x = move.getValue()*move.getDepth();
-        		int y = 0;
-        		if(move.hasParent()) {
-        			Node parent = move.getParent();
-	        		while(parent.hasParent()) {
-	        			y += parent.getValue()*parent.getDepth();
-	        			parent = parent.getParent();
-	        		}
-        		}
-        		int newTrap = x-y;
-        		if(root.getTrappiness() < newTrap) {
-        			root.setTrappiness(newTrap);
-        		}
-        	}
-//        	else break;
-        }        
+        }
+//        root.setProfit(root.getProfit() - root.getValue());
+//        root.setValue(root.getValue() + root.getProfit()/10);
+        
 		nodesCount = stack.size();
 	}
 	

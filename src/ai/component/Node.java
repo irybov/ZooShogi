@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import utilpack.Expositor;
 import utilpack.Turn;
 
 public class Node implements Comparable<Node>, Serializable{
@@ -12,7 +13,8 @@ public class Node implements Comparable<Node>, Serializable{
 	private int value;
 	private List<Node> children;
 	private Node parent;
-	private int trappiness = Integer.MIN_VALUE;
+	private int trappiness;
+	private int profit;
 	
 	private final int rowFrom;
 	private final int columnFrom;
@@ -31,17 +33,26 @@ public class Node implements Comparable<Node>, Serializable{
 	@Override
 	public String toString() {
 		return "Node [depth=" + depth + ", value=" + value + ", side=" + SIDE.name() + ", "
-										+ (rowFrom) + (columnFrom) + (rowTo) + (columnTo) + "]";
+									  + Expositor.getColumnName(columnFrom) + (rowFrom+1) 
+									  + Expositor.getColumnName(columnTo) + (rowTo+1) + "]";
 	}
 
 	@Override
 	public int compareTo(Node node) {
 
 		if(this.value == node.value){
-			if(this.trappiness == node.trappiness) {
-				return 0;
+			if(this.profit == node.profit){
+				if(this.trappiness == node.trappiness) {
+					return 0;
+				}
+				else if(this.trappiness < node.trappiness) {
+					return -1;
+				}
+				else {
+					return 1;
+				}
 			}
-			else if(this.trappiness < node.trappiness){
+			else if(this.profit < node.profit){
 				return -1;			
 			}
 			else{
@@ -115,8 +126,15 @@ public class Node implements Comparable<Node>, Serializable{
 	public int getTrappiness(){
 		return trappiness;
 	}
-	public void setTrappiness(int newTrap) {
-		trappiness = newTrap;
+	public void setTrappiness(int trappiness) {
+		this.trappiness = trappiness;
+	}
+	
+	public int getProfit(){
+		return profit;
+	}
+	public void setProfit(int profit) {
+		this.profit = profit;
 	}
 	
 }

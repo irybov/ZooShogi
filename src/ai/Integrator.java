@@ -79,41 +79,27 @@ public class Integrator {
 	
 	// selects and makes best move
 	public String[][] activate(String[][] field, List<Node> moves) {
+			
+		Collections.sort(moves, Collections.reverseOrder());
 		
-		int score = Integer.MIN_VALUE+1;		
+		int maxValue = moves.get(0).getValue();
+		moves.removeIf(e -> e.getValue() < maxValue);
+		int trapScore = moves.get(0).getTrappiness();
+		moves.removeIf(e -> e.getTrappiness() < trapScore);
+		int profit = moves.get(0).getProfit();
+		moves.removeIf(e -> e.getProfit() < profit);
+		
 		Node move;
-		ArrayList<Node> random = new ArrayList<>(moves.size());
-		
-		if(moves.size() == 1) {
+		if(moves.size()==1){
 			move = moves.get(0);
-			random.add(moves.get(0));
 		}
-		else {
-			for(int i=0; i<moves.size(); i++) {
-				if(score <= moves.get(i).getValue()){
-					score = moves.get(i).getValue();				
-					random.add(moves.get(i));
-				}
-			}
-			
-			Collections.sort(random, Collections.reverseOrder());
-			
-			int prev = random.get(0).getValue();
-			random.removeIf(e -> e.getValue() < prev);
-			
-			int trap = random.get(0).getTrappiness();
-			random.removeIf(e -> e.getTrappiness() < trap);
-			
-			if(random.size()==1){
-				move = random.get(0);
-			}
-			else{
-				Collections.shuffle(random);
-				move = random.get(0);				
-			}
+		else{
+			Collections.shuffle(moves);
+			move = moves.get(0);				
 		}
+
 		ring.clear();
-		ring.addAll(random);
+		ring.addAll(moves);
 
 		moves.clear();
 		return doMove(move, field);
