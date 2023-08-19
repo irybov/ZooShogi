@@ -173,7 +173,7 @@ public class Evaluator {
 	}
 	
 	public int expected(List<Integer> scores) {		
-		return scores.stream().reduce(0, Integer::sum) / scores.size();	
+		return scores.stream().mapToInt(x -> x).sum() / scores.size();	
 	}
 	
 	public int alpha(List<Integer> scores, int alpha, int beta) {

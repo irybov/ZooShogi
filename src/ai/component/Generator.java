@@ -156,8 +156,6 @@ public class Generator {
 	}
 	
 	public List<Node> arrangeMoves(String[][] board, List<Node> legalMoves, Turn turn){
-		
-		List<Node> sortedMoves = new ArrayList<>(legalMoves.size());
 	
 		for(int i=0; i<legalMoves.size(); i++){
 
@@ -169,20 +167,25 @@ public class Generator {
 			String promotion;
 			int r3;
 			Board state;
+			int value;
 
-			if(turn.equals(Turn.BLACK)){						
+			if(turn.equals(Turn.BLACK)){
 				r3 = 0;
 				state = MoveMaker.doBlackMove(board, r, c, r2, c2);
 				board = state.getBoard();
 				temp = state.getTemp();
-				
-				int value;				
+								
 				if(temp.equals("K")){
 					value = 5000;	
 				}
-				else if(Examiner.isPromotionWins(board, Turn.BLACK) &&
-						!Examiner.isCheck(board, Turn.WHITE)){
+				else if(Examiner.isCheck(board, Turn.WHITE)){
+					value = -5000;
+				}
+				else if(Examiner.isPromotionWins(board, Turn.BLACK)){
 					value = 4000;
+				}
+				else if(Examiner.isPromotionWins(board, Turn.WHITE)){
+					value = -4000;
 				}
 /*				else if(Examiner.isCheck(board, Turn.BLACK) &&
 						!Examiner.isCheck(board, Turn.WHITE)) {
@@ -191,32 +194,29 @@ public class Generator {
 				else if(MovesList.isRepeated(board, Turn.BLACK)) {
 					value = 0;
 				}
-				else if(Examiner.isPromotionWins(board, Turn.WHITE)){
-					value = -4000;
-				}
-				else if(Examiner.isCheck(board, Turn.WHITE)){
-					value = -5000;
-				}
 				else{
 					value = evaluator.evaluationMaterial(board, false)
 							+ evaluator.evaluationPositional(board);
 				}				
 				legalMoves.get(i).setValue(value);
-				sortedMoves.add(legalMoves.get(i));
 			}		
-			else{					
+			else{
 				r3 = 3;
 				state = MoveMaker.doWhiteMove(board, r, c, r2, c2);
 				board = state.getBoard();
 				temp = state.getTemp();
-		
-				int value;				
+						
 				if(temp.equals("k")){
 					value = -5000;	
 				}
-				else if(Examiner.isPromotionWins(board, Turn.WHITE) &&
-						!Examiner.isCheck(board, Turn.BLACK)){
+				else if(Examiner.isCheck(board, Turn.BLACK)){
+					value = 5000;
+				}
+				else if(Examiner.isPromotionWins(board, Turn.WHITE)){
 						value = -4000;
+				}
+				else if(Examiner.isPromotionWins(board, Turn.BLACK)){
+					value = 4000;
 				}
 /*				else if(Examiner.isCheck(board, Turn.WHITE) &&
 						!Examiner.isCheck(board, Turn.BLACK)) {
@@ -224,28 +224,21 @@ public class Generator {
 				}*/
 				else if(MovesList.isRepeated(board, Turn.WHITE)) {
 					value = 0;
-				}
-				else if(Examiner.isPromotionWins(board, Turn.BLACK)){
-						value = 4000;
-				}
-				else if(Examiner.isCheck(board, Turn.BLACK)){
-					value = 5000;
 				}				
 				else{
 					value = evaluator.evaluationMaterial(board, false)
 							+ evaluator.evaluationPositional(board);
 				}				
-				legalMoves.get(i).setValue(value);
-				sortedMoves.add(legalMoves.get(i));		
+				legalMoves.get(i).setValue(value);		
 			}			
 			int c3 = state.getC3();
 			promotion = state.getPromotion();
 			MoveMaker.undoAnyMove(board, temp, promotion, r, c, r2, c2, r3, c3);
 		}
 				
-		if(turn.equals(Turn.BLACK)){Collections.sort(sortedMoves, Collections.reverseOrder());}
-		else{Collections.sort(sortedMoves);}
-		return sortedMoves;
+		if(turn.equals(Turn.BLACK)){Collections.sort(legalMoves, Collections.reverseOrder());}
+		else{Collections.sort(legalMoves);}
+		return legalMoves;
 	}
 	
 	public List<Node> filterMoves(List<Node> sortedMoves, Turn turn){

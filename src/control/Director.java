@@ -16,7 +16,7 @@ import ai.component.Cache;
 import ai.component.Generator;
 import ai.component.MovesList;
 import ai.component.Node;
-import ai.type.PseudoAI;
+import ai.type.GreedyAI;
 import data.*;
 import sound.Sound;
 import ui.Gui;
@@ -310,8 +310,8 @@ public class Director{
 			}
 			else {
 				switch(level){
-				case 0: case 1:
-					new PseudoAI(level, board, nodes).run();
+				case 1:
+					new GreedyAI(board, nodes).calculate();
 					break;
 				case 4:
 					nodes = generator.filterMoves(board, nodes, Turn.BLACK);
@@ -319,7 +319,7 @@ public class Director{
 						nodes = generator.arrangeMoves(board, legalMoves, Turn.BLACK);
 						nodes = generator.filterMoves(nodes, Turn.BLACK);
 					}
-				case 2: case 3: case 5: case 6: case 7:
+				case 0: case 2: case 3: case 5: case 6: case 7:
 					List<Future<Integer>> tasks = new ArrayList<>(nodes.size());
 					TaskInterceptor f19 = new TaskInterceptor(tasks);
 					ExecutorService es = Executors.newFixedThreadPool(cores);

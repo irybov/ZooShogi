@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.OptionalInt;
 import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -12,6 +13,7 @@ import ai.component.Board;
 import ai.component.MovesList;
 import ai.component.Node;
 import control.Clocks;
+import utilpack.Copier;
 import utilpack.Examiner;
 import utilpack.Matrix;
 import utilpack.MoveMaker;
@@ -94,6 +96,8 @@ public class DiceyAI extends AI {
 		
 		int sum = children.stream().mapToInt(Node::getValue).sum();		
 		return sum / children.size();
+//		OptionalInt result = children.stream().mapToInt(Node::getValue).min();
+//		return result.getAsInt();
 	}
 	
 	// monte-carlo algorithm
@@ -102,43 +106,36 @@ public class DiceyAI extends AI {
 		int depth = 1;
 		int result = 1000;
 		Turn turn;
-		Node move = new Node(vertex.getRowFrom(), 
-							 vertex.getColumnFrom(), 
-							 vertex.getRowTo(), 
-							 vertex.getColumnTo(), 
-							 vertex.getSide());		
+		Node move = vertex;
+		String[][] board = Copier.deepCopy(this.board);
+		
 		while(true) {
 		
 			turn = move.getSide();
 			
-			if(turn.equals(Turn.WHITE) && integrator.isLost(board)) {return -result/depth;}
-			if(turn.equals(Turn.WHITE) && MovesList.isRepeated(board, Turn.BLACK)) {return 0;}
-			if(turn.equals(Turn.BLACK) && MovesList.isRepeated(board, Turn.WHITE)) {return 0;}
-			if(Examiner.isBlackPositionWin(board, turn)) {return result/depth;}
-			if(Examiner.isWhitePositionWin(board, turn)) {return -result/depth;}
-			
-			if(Examiner.isCheck(board, turn)) {
-				return turn.equals(Turn.WHITE) ? -result/depth : result/depth;
-			}
-			if(hash.isRepeated(board, turn)) {return 0;}
-			hash.addMove(board, turn);
-			nodesCount++;
-	
 			int r = move.getRowFrom();
 			int c = move.getColumnFrom();
 			int r2 = move.getRowTo();
 			int c2 = move.getColumnTo();
-			String temp;
-			Board state;
-			Node child;
+			String temp = null;
+			Board state = null;
+			Node child = null;
+
+			if(hash.isRepeated(board, turn)) {return 0;}
+			hash.addMove(board, turn);
+			nodesCount++;
 	
 			if(turn.equals(Turn.BLACK)){
 
 				state = MoveMaker.doBlackMove(board, r, c, r2, c2);
 //				board = state.getBoard();
 				temp = state.getTemp();
-	
-				if(temp != "K") {
+				if(temp.equals("K")) {return result/depth;}
+				if(Examiner.isCheck(board, Turn.WHITE)) {return -result/depth;}
+				if(Examiner.isPromotionWins(board, turn)) {return result/depth;}
+//				else if(integrator.isLost(board)) {return -result/depth;}
+				if(MovesList.isRepeated(board, turn)) {return 0;}
+//				else {
 					List<Node> children = generator.generateMoves(board, Turn.WHITE);
 					nodesCount += children.size();
 					
@@ -154,9 +151,9 @@ public class DiceyAI extends AI {
 //						board = state0.getBoard();
 						String temp0 = state0.getTemp();
 						
-						List<Node> leaves = generator.generateMoves(board, Turn.BLACK);
+						List<Node> leaves = generator.generateMoves(board, turn);
 						nodesCount += leaves.size();
-						List<Node> sorted = generator.arrangeMoves(board, leaves, Turn.BLACK);
+						List<Node> sorted = generator.arrangeMoves(board, leaves, turn);
 						List<Integer> scores = sorted.stream().map(Node::getValue)
 													 .collect(Collectors.toList());
 						current.setValue(evaluator.max(scores));
@@ -169,10 +166,10 @@ public class DiceyAI extends AI {
 					Collections.sort(children);
 					List<Node> filtered = generator.filterMoves(children, Turn.WHITE);
 					child = filtered.get(random.nextInt(filtered.size()));
-//					child.addParent(move);
-//					move.addChildren(Arrays.asList(child));
-				}
-				else {return result/depth;}
+					child.addParent(move);
+					move.addChildren(Arrays.asList(child));
+//				}
+//				else {return result/depth;}
 				depth++;
 			}
 			else{
@@ -180,8 +177,11 @@ public class DiceyAI extends AI {
 				state = MoveMaker.doWhiteMove(board, r, c, r2, c2);
 //				board = state.getBoard();
 				temp = state.getTemp();
-
-				if(temp != "k") {
+				if(temp.equals("k")) {return -result/depth;}
+				if(Examiner.isCheck(board, Turn.BLACK)) {return result/depth;}
+				if(Examiner.isPromotionWins(board, turn)) {return -result/depth;}
+				if(MovesList.isRepeated(board, turn)) {return 0;}
+//				else {
 					List<Node> children = generator.generateMoves(board, Turn.BLACK);
 					nodesCount += children.size();
 					
@@ -197,9 +197,9 @@ public class DiceyAI extends AI {
 //						board = state0.getBoard();
 						String temp0 = state0.getTemp();
 						
-						List<Node> leaves = generator.generateMoves(board, Turn.WHITE);
+						List<Node> leaves = generator.generateMoves(board, turn);
 						nodesCount += leaves.size();
-						List<Node> sorted = generator.arrangeMoves(board, leaves, Turn.WHITE);
+						List<Node> sorted = generator.arrangeMoves(board, leaves, turn);
 						List<Integer> scores = sorted.stream().map(Node::getValue)
 													 .collect(Collectors.toList());
 						current.setValue(evaluator.min(scores));
@@ -212,10 +212,10 @@ public class DiceyAI extends AI {
 					Collections.sort(children, Collections.reverseOrder());
 					List<Node> filtered = generator.filterMoves(children, Turn.BLACK);
 					child = filtered.get(random.nextInt(filtered.size()));
-//					child.addParent(move);
-//					move.addChildren(Arrays.asList(child));
-				}
-				else {return -result/depth;}
+					child.addParent(move);
+					move.addChildren(Arrays.asList(child));
+//				}
+//				else {return -result/depth;}
 			}
 			move = child;
 		}

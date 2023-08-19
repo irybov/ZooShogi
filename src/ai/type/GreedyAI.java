@@ -12,41 +12,24 @@ import utilpack.Examiner;
 import utilpack.MoveMaker;
 import utilpack.Turn;
 
-public class PseudoAI implements Runnable {
+public class GreedyAI {
 	
 	private final Evaluator evaluator = new Evaluator();
 	
-	private final int level;
 	private String[][] board; 
 	private List<Node> legal;
 	
-	public PseudoAI(int level, String[][] board, List<Node> legal) {		
-		this.level = level;
+	public GreedyAI(String[][] board, List<Node> legal) {		
 		this.board = board;
 		this.legal = legal;
 	}
 	
 	private final Integrator integrator = Integrator.getInstance();
 	
-	@Override
-	public void run() {
-		algorithmSelector();		
-	}	
-	private void algorithmSelector(){
-		
-		switch(level){
-		case 0:
-			break;
-		case 1:
-			greedy();			
-			break;
-		}
-		Clocks.setNodes(legal.size());
-	}
-	
 	// greedy algorithm
-	private void greedy() {
+	public void calculate() {
 		
+		Clocks.setNodes(legal.size());
 		int score;
 		String temp;
 		
@@ -68,21 +51,20 @@ public class PseudoAI implements Runnable {
 			if(temp.equals("K")){
 				score = 2000;
 			}
-			else if(Examiner.isPromotionWins(board, Turn.BLACK) &&
-					!Examiner.isCheck(board, Turn.WHITE)){
+			else if(Examiner.isCheck(board, Turn.WHITE)){
+				score = -2000;
+			}
+			else if(Examiner.isPromotionWins(board, Turn.BLACK)){
 				score = 1000;
-			}
-			else if(MovesList.isRepeated(board, Turn.BLACK)) {
-				score = 0;
-			}
-			else if(integrator.isLost(board)) {
-				score = -1000;							
 			}
 			else if(Examiner.isPromotionWins(board, Turn.WHITE)){
 				score = -1000;
 			}
-			else if(Examiner.isCheck(board, Turn.WHITE)){
-				score = -2000;
+			else if(integrator.isLost(board)) {
+				score = -1000;							
+			}
+			else if(MovesList.isRepeated(board, Turn.BLACK)) {
+				score = 0;
 			}
 			else{
 				score = evaluator.evaluationMaterial(board, false);

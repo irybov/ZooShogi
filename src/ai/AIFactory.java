@@ -17,9 +17,11 @@ public class AIFactory {
 		AI ai = null;
 		
 		switch(level) {
-		case 2:
-//			ai = new NaiveAI(root, board);
+		case 0:
 			ai = new DiceyAI(root, board);
+			break;			
+		case 2:
+			ai = new NaiveAI(root, board);
 			break;
 		case 3:
 			ai = new TrickyAI(root, board);
