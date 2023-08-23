@@ -292,8 +292,8 @@ public class Director{
 		if(isClientActivated) {
 			sendMoveToClient();
 			int[] move = receiveMoveFromClient();
-			integrator.activate(board, move);
 			TimeUnit.SECONDS.sleep(1);
+			integrator.activate(board, move);
 		}
 		else if(!Cache.isEmpty() && Cache.hasPosition(boardState)) {
 			integrator.nextBest(board, Cache.getMove(boardState));

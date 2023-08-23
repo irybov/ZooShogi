@@ -94,10 +94,10 @@ public class DiceyAI extends AI {
 			hash.clear();
 		}
 		
-		int sum = children.stream().mapToInt(Node::getValue).sum();		
-		return sum / children.size();
-//		OptionalInt result = children.stream().mapToInt(Node::getValue).min();
-//		return result.getAsInt();
+//		int sum = children.stream().mapToInt(Node::getValue).sum();		
+//		return sum / children.size();
+		OptionalInt result = children.stream().mapToInt(Node::getValue).min();
+		return result.getAsInt();
 	}
 	
 	// monte-carlo algorithm
@@ -124,7 +124,7 @@ public class DiceyAI extends AI {
 			if(hash.isRepeated(board, turn)) {return 0;}
 			hash.addMove(board, turn);
 			nodesCount++;
-	
+
 			if(turn.equals(Turn.BLACK)){
 
 				state = MoveMaker.doBlackMove(board, r, c, r2, c2);
@@ -133,8 +133,8 @@ public class DiceyAI extends AI {
 				if(temp.equals("K")) {return result/depth;}
 				if(Examiner.isCheck(board, Turn.WHITE)) {return -result/depth;}
 				if(Examiner.isPromotionWins(board, turn)) {return result/depth;}
-//				else if(integrator.isLost(board)) {return -result/depth;}
 				if(MovesList.isRepeated(board, turn)) {return 0;}
+//				else if(integrator.isLost(board)) {return -result/depth;}
 //				else {
 					List<Node> children = generator.generateMoves(board, Turn.WHITE);
 					nodesCount += children.size();

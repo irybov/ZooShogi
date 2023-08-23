@@ -1,7 +1,6 @@
 package ai;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Deque;
@@ -14,7 +13,6 @@ import ai.component.MovesList;
 import ai.component.Node;
 import control.Clocks;
 import control.Scribe;
-import utilpack.Capture;
 import utilpack.Copier;
 import utilpack.Matrix;
 import utilpack.MoveMaker;
@@ -83,11 +81,11 @@ public class Integrator {
 		Collections.sort(moves, Collections.reverseOrder());
 		
 		int maxValue = moves.get(0).getValue();
+		int maxProfit = moves.get(0).getProfit();
+		int trappiness = moves.get(0).getTrappiness();
 		moves.removeIf(e -> e.getValue() < maxValue);
-		int trapScore = moves.get(0).getTrappiness();
-		moves.removeIf(e -> e.getTrappiness() < trapScore);
-		int profit = moves.get(0).getProfit();
-		moves.removeIf(e -> e.getProfit() < profit);
+		moves.removeIf(e -> e.getProfit() < maxProfit);
+		moves.removeIf(e -> e.getTrappiness() < trappiness);
 		
 		Node move;
 		if(moves.size()==1){
