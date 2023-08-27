@@ -20,9 +20,10 @@
         <file>
             <source> ${project.build.directory}/ZooShogi.jar</source>
             <outputDirectory>/</outputDirectory>
+<!--             <destName>ZooShogi.jar</destName> -->
         </file>
-        <file>
-<!--            <source> ${project.build.directory}/zooshogi.exe</source>
+<!--         <file>
+           <source> ${project.build.directory}/zooshogi.exe</source>
             <outputDirectory>/</outputDirectory>
         </file> -->
         <file>
