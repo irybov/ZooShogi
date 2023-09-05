@@ -86,8 +86,13 @@ public class Gui {
 	private static JToggleButton[] brain = new JToggleButton[levels.length];
 	
 	private static JMenuBar menuBar = new JMenuBar();
+	
+	private int k;
+	public Gui(int k) {
+		this.k = k;
+	}
     
-	public Gui() {
+	public void launch() {
 		
 		new Thread(() -> clocks.showClocks()).start();
 		
@@ -101,7 +106,7 @@ public class Gui {
 		// fixed positions layout
 		frame.setResizable(false);
 		frame.setLayout(null);
-		frame.setSize(1600,1000);
+		frame.setSize(1600*k,1000*k);
 		frame.setTitle("Zoo Shogi");
 		frame.add(board);
 		frame.add(handWhite);
@@ -124,57 +129,57 @@ public class Gui {
 		frame.add(nodesLabel);
 		frame.add(nodes);
 		
-		board.setBounds(500,100,600,800);
-		handBlack.setBounds(100,100,300,200);
-		handWhite.setBounds(1200,700,300,200);
-		columns.setBounds(500,50,600,50);
-		rows.setBounds(450,100,50,800);		
-		output.setFont(new Font("Dialog", Font.PLAIN, 20));
+		board.setBounds(500*k,100*k,600*k,800*k);
+		handBlack.setBounds(100*k,100*k,300*k,200*k);
+		handWhite.setBounds(1200*k,700*k,300*k,200*k);
+		columns.setBounds(500*k,50*k,600*k,50*k);
+		rows.setBounds(450*k,100*k,50*k,800*k);		
+		output.setFont(new Font("Dialog", Font.PLAIN, 20*k));
 		output.setHorizontalAlignment(JLabel.CENTER);
-		output.setBounds(100,475,300,50);
+		output.setBounds(100*k,475*k,300*k,50*k);
 		output.setOpaque(true);
 		output.setBackground(Color.LIGHT_GRAY);
-		behaveLabel.setFont(new Font("Dialog", Font.PLAIN, 25));
+		behaveLabel.setFont(new Font("Dialog", Font.PLAIN, 25*k));
 		behaveLabel.setHorizontalAlignment(JLabel.CENTER);
-		behaveLabel.setBounds(1200,450,300,50);
-		score.setFont(new Font("Dialog", Font.PLAIN, 40));
+		behaveLabel.setBounds(1200*k,450*k,300*k,50*k);
+		score.setFont(new Font("Dialog", Font.PLAIN, 40*k));
 		score.setHorizontalAlignment(JLabel.CENTER);
-		score.setBounds(100,825,300,75);
+		score.setBounds(100*k,825*k,300*k,75*k);
 		score.setOpaque(true);
 		score.setBackground(Color.LIGHT_GRAY);
-		scoreLabel.setFont(new Font("Dialog", Font.PLAIN, 45));
+		scoreLabel.setFont(new Font("Dialog", Font.PLAIN, 45*k));
 		scoreLabel.setHorizontalAlignment(JLabel.CENTER);
-		scoreLabel.setBounds(100,750,300,50);
-		columnA.setFont(new Font("Dialog", Font.PLAIN, 25));
+		scoreLabel.setBounds(100*k,750*k,300*k,50*k);
+		columnA.setFont(new Font("Dialog", Font.PLAIN, 25*k));
 		columnA.setHorizontalAlignment(JLabel.CENTER);
 //		colA.setBounds(500,50,200,50);
-		columnB.setFont(new Font("Dialog", Font.PLAIN, 25));
+		columnB.setFont(new Font("Dialog", Font.PLAIN, 25*k));
 		columnB.setHorizontalAlignment(JLabel.CENTER);
 //		colB.setBounds(700,50,200,50);
-		columnC.setFont(new Font("Dialog", Font.PLAIN, 25));
+		columnC.setFont(new Font("Dialog", Font.PLAIN, 25*k));
 		columnC.setHorizontalAlignment(JLabel.CENTER);
 //		colC.setBounds(900,50,200,50);
-		row1.setFont(new Font("Dialog", Font.PLAIN, 25));
+		row1.setFont(new Font("Dialog", Font.PLAIN, 25*k));
 		row1.setHorizontalAlignment(JLabel.CENTER);
 //		row1.setBounds(450,175,50,50);
-		row2.setFont(new Font("Dialog", Font.PLAIN, 25));
+		row2.setFont(new Font("Dialog", Font.PLAIN, 25*k));
 		row2.setHorizontalAlignment(JLabel.CENTER);
 //		row2.setBounds(450,375,50,50);
-		row3.setFont(new Font("Dialog", Font.PLAIN, 25));
+		row3.setFont(new Font("Dialog", Font.PLAIN, 25*k));
 		row3.setHorizontalAlignment(JLabel.CENTER);
 //		row3.setBounds(450,575,50,50);
-		row4.setFont(new Font("Dialog", Font.PLAIN, 25));
+		row4.setFont(new Font("Dialog", Font.PLAIN, 25*k));
 		row4.setHorizontalAlignment(JLabel.CENTER);
 //		row4.setBounds(450,775,50,50);
-		whiteHand.setFont(new Font("Dialog", Font.PLAIN, 25));
+		whiteHand.setFont(new Font("Dialog", Font.PLAIN, 25*k));
 		whiteHand.setHorizontalAlignment(JLabel.CENTER);
-		whiteHand.setBounds(1200,650,300,50);
-		blackHand.setFont(new Font("Dialog", Font.PLAIN, 25));
+		whiteHand.setBounds(1200*k,650*k,300*k,50*k);
+		blackHand.setFont(new Font("Dialog", Font.PLAIN, 25*k));
 		blackHand.setHorizontalAlignment(JLabel.CENTER);
-		blackHand.setBounds(100,50,300,50);		
-		profile.setFont(new Font("Dialog", Font.PLAIN, 25));
+		blackHand.setBounds(100*k,50*k,300*k,50*k);		
+		profile.setFont(new Font("Dialog", Font.PLAIN, 25*k));
 		profile.setHorizontalAlignment(JLabel.CENTER);
-		profile.setBounds(1200,225,300,50);
+		profile.setBounds(1200*k,225*k,300*k,50*k);
 		columns.add(columnA);
 		columns.add(columnB);
 		columns.add(columnC);
@@ -183,32 +188,32 @@ public class Gui {
 		rows.add(row3);
 		rows.add(row4);
 		
-		clockBlack.setBounds(1200,100,300,50);
-		clockBlack.setFont(new Font("Dialog", Font.PLAIN, 50));
+		clockBlack.setBounds(1200*k,100*k,300*k,50*k);
+		clockBlack.setFont(new Font("Dialog", Font.PLAIN, 50*k));
 		clockBlack.setHorizontalAlignment(JLabel.CENTER);
 		clockBlack.setOpaque(true);
 		clockBlack.setBackground(Color.BLACK);
 		clockBlack.setForeground(Color.WHITE);
-		clockWhite.setBounds(1200,175,300,50);
-		clockWhite.setFont(new Font("Dialog", Font.PLAIN, 50));
+		clockWhite.setBounds(1200*k,175*k,300*k,50*k);
+		clockWhite.setFont(new Font("Dialog", Font.PLAIN, 50*k));
 		clockWhite.setHorizontalAlignment(JLabel.CENTER);
 		clockWhite.setOpaque(true);
 		clockWhite.setBackground(Color.WHITE);
-		computer.setFont(new Font("Dialog", Font.PLAIN, 25));
+		computer.setFont(new Font("Dialog", Font.PLAIN, 25*k));
 		computer.setHorizontalAlignment(JLabel.CENTER);
-		computer.setBounds(1200,50,300,50);
-		nodesLabel.setFont(new Font("Dialog", Font.PLAIN, 25));
+		computer.setBounds(1200*k,50*k,300*k,50*k);
+		nodesLabel.setFont(new Font("Dialog", Font.PLAIN, 25*k));
 		nodesLabel.setHorizontalAlignment(JLabel.LEFT);
-		nodesLabel.setBounds(100,675,100,50);
-		nodes.setFont(new Font("Dialog", Font.PLAIN, 25));
+		nodesLabel.setBounds(100*k,675*k,100*k,50*k);
+		nodes.setFont(new Font("Dialog", Font.PLAIN, 25*k));
 		nodes.setHorizontalAlignment(JLabel.CENTER);
-		nodes.setBounds(200,675,200,50);
+		nodes.setBounds(200*k,675*k,200*k,50*k);
 		nodes.setOpaque(true);
 		nodes.setBackground(Color.LIGHT_GRAY);
 		
-		volume.setFont(new Font("Dialog", Font.PLAIN, 20));
+		volume.setFont(new Font("Dialog", Font.PLAIN, 20*k));
 		volume.setHorizontalAlignment(JCheckBox.CENTER);
-		volume.setBounds(175,550,150,50);
+		volume.setBounds(175*k,550*k,150*k,50*k);
 		volume.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				volume = (JCheckBox) e.getSource();
@@ -226,8 +231,8 @@ public class Gui {
 		frame.add(volume);
 //		sound.add(volume);
 		
-		boost.setFont(new Font("Dialog", Font.PLAIN, 25));
-		boost.setBounds(100,600,300,50);
+		boost.setFont(new Font("Dialog", Font.PLAIN, 25*k));
+		boost.setBounds(100*k,600*k,300*k,50*k);
 		boost.setPaintTicks(true);
 		boost.setSnapToTicks(true);
 		boost.setMajorTickSpacing(1);
@@ -242,8 +247,8 @@ public class Gui {
 		frame.add(boost);
 //		sound.add(boost);
 
-		newgame.setFont(new Font("Dialog", Font.PLAIN, 25));
-		newgame.setBounds(1200,300,300,50);
+		newgame.setFont(new Font("Dialog", Font.PLAIN, 25*k));
+		newgame.setBounds(1200*k,300*k,300*k,50*k);
 		newgame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				newgame = (JButton) e.getSource();
@@ -270,11 +275,11 @@ public class Gui {
 		forceBlack.setLayout(new GridLayout(2,1));
 		forceBlack.add(pushButtonLabelTop);
 		forceBlack.add(pushButtonLabelBottom);
-		pushButtonLabelTop.setFont(new Font("Dialog", Font.PLAIN, 45));
-		pushButtonLabelBottom.setFont(new Font("Dialog", Font.PLAIN, 45));
+		pushButtonLabelTop.setFont(new Font("Dialog", Font.PLAIN, 45*k));
+		pushButtonLabelBottom.setFont(new Font("Dialog", Font.PLAIN, 45*k));
 		pushButtonLabelTop.setHorizontalAlignment(JLabel.CENTER);
 		pushButtonLabelBottom.setHorizontalAlignment(JLabel.CENTER);
-		forceBlack.setBounds(250,350,150,100);		
+		forceBlack.setBounds(250*k,350*k,150*k,100*k);		
 		forceBlack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				forceBlack = (JButton) e.getSource();
@@ -304,11 +309,11 @@ public class Gui {
 		nextBestMove.setLayout(new GridLayout(2,1));
 		nextBestMove.add(nextBestMoveButtonLabelTop);
 		nextBestMove.add(nextBestMoveButtonLabelBottom);
-		nextBestMoveButtonLabelTop.setFont(new Font("Dialog", Font.PLAIN, 45));
-		nextBestMoveButtonLabelBottom.setFont(new Font("Dialog", Font.PLAIN, 45));
+		nextBestMoveButtonLabelTop.setFont(new Font("Dialog", Font.PLAIN, 45*k));
+		nextBestMoveButtonLabelBottom.setFont(new Font("Dialog", Font.PLAIN, 45*k));
 		nextBestMoveButtonLabelTop.setHorizontalAlignment(JLabel.CENTER);
 		nextBestMoveButtonLabelBottom.setHorizontalAlignment(JLabel.CENTER);
-		nextBestMove.setBounds(100,350,150,100);		
+		nextBestMove.setBounds(100*k,350*k,150*k,100*k);		
 		nextBestMove.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				nextBestMove = (JButton) e.getSource();
@@ -324,9 +329,9 @@ public class Gui {
 		});
 		frame.add(nextBestMove);
 		
-		checkWarning.setFont(new Font("Dialog", Font.PLAIN, 25));
+		checkWarning.setFont(new Font("Dialog", Font.PLAIN, 25*k));
 		checkWarning.setHorizontalAlignment(JCheckBox.CENTER);
-		checkWarning.setBounds(1250,375,200,50);
+		checkWarning.setBounds(1250*k,375*k,200*k,50*k);
 		checkWarning.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				checkWarning = (JCheckBox) e.getSource();
@@ -343,7 +348,7 @@ public class Gui {
 		});
 		frame.add(checkWarning);
 
-		levelPanel.setBounds(1200,500,300,100);
+		levelPanel.setBounds(1200*k,500*k,300*k,100*k);
 		for(int i=0; i<levels.length; i++){
 			brain[i] = new JToggleButton();
 			brain[i].setText(levels[i]);
@@ -371,7 +376,7 @@ public class Gui {
 			for(int c=0;c<3;c++) {
 				//Initialize the button in the board array
 				squares[r][c] = new JButton();
-				squares[r][c].setSize(200, 200);
+				squares[r][c].setSize(200*k, 200*k);
 				squares[r][c].setBorder(new LineBorder(Color.GRAY));
 				squares[r][c].setBackground(Color.decode("#db9356"));
 				squares[r][c].addActionListener(new ActionListener() {
@@ -460,7 +465,7 @@ public class Gui {
 		for(int c=0;c<6;c++) {
 				//Initialize the button in the board array
 				dropAreaWhite[c] = new JButton();
-				dropAreaWhite[c].setSize(100, 100);
+				dropAreaWhite[c].setSize(100*k, 100*k);
 				dropAreaWhite[c].setBorder(new LineBorder(Color.GRAY));
 				dropAreaWhite[c].setBackground(Color.decode("#db9356"));
 				dropAreaWhite[c].addActionListener(new ActionListener() {
@@ -492,7 +497,7 @@ public class Gui {
 		for(int c=0;c<6;c++) {
 				//Initialize the label in the board array
 				dropAreaBlack[c] = new JButton();
-				dropAreaBlack[c].setSize(100, 100);
+				dropAreaBlack[c].setSize(100*k, 100*k);
 				dropAreaBlack[c].setBorder(new LineBorder(Color.GRAY));
 				dropAreaBlack[c].setBackground(Color.decode("#db9356"));
 				//add each square to the GUI panel

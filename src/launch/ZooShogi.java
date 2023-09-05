@@ -5,11 +5,19 @@ import java.awt.event.*;
 import java.io.File;
 
 import javax.swing.*;
+import javax.swing.plaf.nimbus.*;
+
 import ui.Gui;
 
 public class ZooShogi {
+		
+	private static int k;
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+		
+		Dimension ss = Toolkit.getDefaultToolkit().getScreenSize();
+		if((int) ss.getWidth()/1000 < 3000) {k = 1;}
+		else {k = 2;}		
 		setup();
 	}
 
@@ -19,19 +27,19 @@ public class ZooShogi {
 		JPanel content = new JPanel();
 		//Buttons
 		JButton newGame = new JButton("START");
-		JButton settings = new JButton("SCREEN");
+		JButton settings = new JButton("STYLE");
 		JButton about = new JButton("ABOUT");
 		//Setup frame
-		launchScreen.setSize(300,300);
+		launchScreen.setSize(300*k,300*k);
 		launchScreen.setTitle("Zoo Shogi");
 		//Set content panel to layout and add buttons
 		content.setLayout(new GridLayout(3,1));
 		content.add(newGame);
 		content.add(settings);
 		content.add(about);
-		newGame.setFont(new Font("Dialog", Font.PLAIN, 25));
-		settings.setFont(new Font("Dialog", Font.PLAIN, 25));
-		about.setFont(new Font("Dialog", Font.PLAIN, 25));
+		newGame.setFont(new Font("Dialog", Font.PLAIN, 25*k));
+		settings.setFont(new Font("Dialog", Font.PLAIN, 25*k));
+		about.setFont(new Font("Dialog", Font.PLAIN, 25*k));
 		launchScreen.add(content);
 		launchScreen.setLocationRelativeTo(null);
 		launchScreen.setResizable(false);
@@ -47,24 +55,29 @@ public class ZooShogi {
 				
 				 javax.swing.SwingUtilities.invokeLater(new Runnable() {
 						public void run() {
-							new Gui();
+							new Gui(k).launch();
 							launchScreen.dispose();
 						}
 					});
 				Thread.currentThread().interrupt();
 			}
 		});
-/*
+
 		settings.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//screen settings
-				JOptionPane.showMessageDialog(launchScreen,
-					rulesMessage,
-					"Resolution",
-						JOptionPane.DEFAULT_OPTION);
+				
+				//changes GUI style 
+				LookAndFeel laf = new NimbusLookAndFeel();
+				try {
+					UIManager.setLookAndFeel(laf);
+				}
+				catch (UnsupportedLookAndFeelException exc) {
+					exc.printStackTrace();
+				}
+		
 			}
 		});
-*/
+
 		about.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//shows information
