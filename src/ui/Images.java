@@ -1,5 +1,7 @@
 package ui;
 
+import java.awt.Image;
+
 import javax.swing.ImageIcon;
 
 public class Images {
@@ -7,6 +9,7 @@ public class Images {
 	private Images() {}
 	
 	private static int count;
+	static int k;
 	
 	static synchronized Images getInstance() {
 		if(count == 0) {
@@ -31,30 +34,48 @@ public class Images {
 	
 	ImageIcon getLargeImage(String piece) {
 		
+		ImageIcon icon = null;
+		
 		switch(piece){
 		case "P":
-			return WHITE_PAWN_LARGE;
+			icon = WHITE_PAWN_LARGE;
+			break;
 		case "R":
-			return WHITE_ROOK_LARGE;
+			icon = WHITE_ROOK_LARGE;
+			break;
 		case "B":
-			return WHITE_BISHOP_LARGE;
+			icon = WHITE_BISHOP_LARGE;
+			break;
 		case "K":
-			return WHITE_KING_LARGE;
+			icon = WHITE_KING_LARGE;
+			break;
 		case "Q":
-			return WHITE_QUEEN_LARGE;
+			icon = WHITE_QUEEN_LARGE;
+			break;
 		case "p":
-			return BLACK_PAWN_LARGE;
+			icon = BLACK_PAWN_LARGE;
+			break;
 		case "r":
-			return BLACK_ROOK_LARGE;
+			icon = BLACK_ROOK_LARGE;
+			break;
 		case "b":
-			return BLACK_BISHOP_LARGE;
+			icon = BLACK_BISHOP_LARGE;
+			break;
 		case "k":
-			return BLACK_KING_LARGE;
+			icon = BLACK_KING_LARGE;
+			break;
 		case "q":
-			return BLACK_QUEEN_LARGE;
-		default:
-			return null;
+			icon = BLACK_QUEEN_LARGE;
+			break;
 		}
+		
+		if(icon != null) {
+			Image original = icon.getImage();
+			Image resized = original.getScaledInstance(icon.getIconWidth()*k, icon.getIconHeight()*k, 
+							java.awt.Image.SCALE_SMOOTH);
+			return new ImageIcon(resized);
+		}
+		else {return null;}
 	}
 
 	private static final ImageIcon WHITE_PAWN_SMALL = new ImageIcon(String.join(SLASH, "ui", "images", "small", "WP.png"));
@@ -69,31 +90,49 @@ public class Images {
 	private static final ImageIcon BLACK_QUEEN_SMALL = new ImageIcon(String.join(SLASH, "ui", "images", "small", "BQ.png"));
 	
 	ImageIcon getSmallImage(String piece) {
+
+		ImageIcon icon = null;
 		
 		switch(piece){
 		case "P":
-			return WHITE_PAWN_SMALL;
+			icon =  WHITE_PAWN_SMALL;
+			break;
 		case "R":
-			return WHITE_ROOK_SMALL;
+			icon =  WHITE_ROOK_SMALL;
+			break;
 		case "B":
-			return WHITE_BISHOP_SMALL;
+			icon =  WHITE_BISHOP_SMALL;
+			break;
 		case "K":
-			return WHITE_KING_SMALL;
+			icon =  WHITE_KING_SMALL;
+			break;
 		case "Q":
-			return WHITE_QUEEN_SMALL;
+			icon =  WHITE_QUEEN_SMALL;
+			break;
 		case "p":
-			return BLACK_PAWN_SMALL;
+			icon =  BLACK_PAWN_SMALL;
+			break;
 		case "r":
-			return BLACK_ROOK_SMALL;
+			icon =  BLACK_ROOK_SMALL;
+			break;
 		case "b":
-			return BLACK_BISHOP_SMALL;
+			icon =  BLACK_BISHOP_SMALL;
+			break;
 		case "k":
-			return BLACK_KING_SMALL;
+			icon =  BLACK_KING_SMALL;
+			break;
 		case "q":
-			return BLACK_QUEEN_SMALL;
-		default:
-			return null;
+			icon =  BLACK_QUEEN_SMALL;
+			break;
 		}
+		
+		if(icon != null) {
+			Image original = icon.getImage();
+			Image resized = original.getScaledInstance(icon.getIconWidth()*k, icon.getIconHeight()*k, 
+							java.awt.Image.SCALE_SMOOTH);
+			return new ImageIcon(resized);
+		}
+		else {return null;}
 	}
 	
 }

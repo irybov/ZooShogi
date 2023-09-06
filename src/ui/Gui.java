@@ -94,6 +94,8 @@ public class Gui {
     
 	public void launch() {
 		
+		Images.k = k;
+		
 		new Thread(() -> clocks.showClocks()).start();
 		
 		director.initBoard();
@@ -530,7 +532,7 @@ public class Gui {
 		for(int c=0;c<6;c++) {
 			dropAreaBlack[c].setBackground(Color.decode("#db9356"));
 			dropAreaBlack[c].setName(director.refreshBoard(0,c+3));
-			dropAreaBlack[c].setIcon(images.getSmallImage(dropAreaBlack[c].getName()));			
+			dropAreaBlack[c].setIcon(images.getSmallImage(dropAreaBlack[c].getName()));
 		}
 		
 		if(checkWarningEnabled){

@@ -13,10 +13,10 @@ public class ZooShogi {
 		
 	private static int k;
 
-	public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+	public static void main(String[] args) throws Exception {
 		
 		Dimension ss = Toolkit.getDefaultToolkit().getScreenSize();
-		if((int) ss.getWidth()/1000 < 3000) {k = 1;}
+		if((int) ss.getWidth()/1000 < 3) {k = 1;}
 		else {k = 2;}		
 		setup();
 	}
@@ -27,7 +27,7 @@ public class ZooShogi {
 		JPanel content = new JPanel();
 		//Buttons
 		JButton newGame = new JButton("START");
-		JButton settings = new JButton("STYLE");
+		JToggleButton settings = new JToggleButton("GUI STYLE");
 		JButton about = new JButton("ABOUT");
 		//Setup frame
 		launchScreen.setSize(300*k,300*k);
@@ -63,18 +63,30 @@ public class ZooShogi {
 			}
 		});
 
-		settings.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		settings.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
 				
-				//changes GUI style 
-				LookAndFeel laf = new NimbusLookAndFeel();
-				try {
-					UIManager.setLookAndFeel(laf);
+				int state = e.getStateChange();
+				//changes GUI style
+				if (state == ItemEvent.SELECTED) {
+					try {
+						UIManager.setLookAndFeel(new NimbusLookAndFeel());
+					}
+					catch (UnsupportedLookAndFeelException exc) {
+						exc.printStackTrace();
+					}
 				}
-				catch (UnsupportedLookAndFeelException exc) {
-					exc.printStackTrace();
+				else {
+					try {
+						UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+					}
+					catch (Exception exc) {
+						exc.printStackTrace();
+					}
 				}
-		
+				launchScreen.revalidate();
+				launchScreen.repaint();		
 			}
 		});
 
