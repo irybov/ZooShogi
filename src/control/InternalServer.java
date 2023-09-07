@@ -106,7 +106,7 @@ class InternalServer extends Thread{
 			sout = socket.getOutputStream();
 			bis = new BufferedInputStream(sin);
 			bos = new BufferedOutputStream(sout);
-			dis = new DataInputStream (bis);
+			dis = new DataInputStream(bis);
 			dos = new DataOutputStream(bos);
 						
 			while(true) {

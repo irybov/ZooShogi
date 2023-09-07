@@ -115,10 +115,9 @@
         <configuration>
           <proguardVersion>7.1.1</proguardVersion>
           <obfuscate>true</obfuscate>
-          <injar>ZooShogi-SS.jar</injar>
+          <injar>ZooShogi.jar</injar>
           <outjar>ZooShogi-PG.jar</outjar>
           <outputDirectory>${project.build.directory}</outputDirectory>
-          <proguardInclude>${basedir}/config.pro</proguardInclude>
           <options>
             <option>-dontoptimize</option>
             <option>-keep public class launch.ZooShogi {public static *;}</option>
@@ -129,25 +128,6 @@
             <lib>${java.home}/lib/rt.jar</lib>
             <lib>${java.home}/lib/jsse.jar</lib>
           </libs>
-        </configuration>
-      </plugin>
-      <plugin>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <version>3.6.0</version>
-        <executions>
-          <execution>
-            <id>make-assembly</id>
-            <phase>assembly</phase>
-            <goals>
-              <goal>single</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <descriptors>
-            <descriptor>assembly.xml</descriptor>
-          </descriptors>
-          <appendAssemblyId>false</appendAssemblyId>
         </configuration>
       </plugin>
     </plugins>

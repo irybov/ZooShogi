@@ -111,11 +111,11 @@ public class Integrator {
 		final int r2 = args[2];
 		final int c2 = args[3];
 		final int score = args[4];
-		final int nodes = args[5];
+//		final int nodes = args[5];
 		Node move = new Node(r, c, r2, c2, Turn.BLACK);
 		move.setValue(score);
 		
-		Clocks.setNodes(nodes);	
+//		Clocks.setNodes(nodes);
 		return doMove(move, field);
 	}
 

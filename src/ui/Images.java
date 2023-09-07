@@ -70,10 +70,14 @@ public class Images {
 		}
 		
 		if(icon != null) {
-			Image original = icon.getImage();
-			Image resized = original.getScaledInstance(icon.getIconWidth()*k, icon.getIconHeight()*k, 
-							java.awt.Image.SCALE_SMOOTH);
-			return new ImageIcon(resized);
+			if(k == 1) {return icon;}
+			else {
+				Image original = icon.getImage();
+				Image resized = original.getScaledInstance(icon.getIconWidth()*k, 
+								icon.getIconHeight()*k, 
+								java.awt.Image.SCALE_SMOOTH);
+				return new ImageIcon(resized);
+			}
 		}
 		else {return null;}
 	}
@@ -127,10 +131,14 @@ public class Images {
 		}
 		
 		if(icon != null) {
-			Image original = icon.getImage();
-			Image resized = original.getScaledInstance(icon.getIconWidth()*k, icon.getIconHeight()*k, 
-							java.awt.Image.SCALE_SMOOTH);
-			return new ImageIcon(resized);
+			if(k == 1) {return icon;}
+			else {
+				Image original = icon.getImage();
+				Image resized = original.getScaledInstance(icon.getIconWidth()*k, 
+								icon.getIconHeight()*k, 
+								java.awt.Image.SCALE_SMOOTH);
+				return new ImageIcon(resized);
+			}
 		}
 		else {return null;}
 	}

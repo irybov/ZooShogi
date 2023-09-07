@@ -277,21 +277,23 @@ public class Director{
 	private final Generator generator = new Generator();
 	
 	public void compute() throws InterruptedException{
+
+		Clocks.setTurn(Turn.PAUSE);
 		
+		TimeUnit.SECONDS.sleep(1);
 		undoMove = Copier.deepCopy(board);
 		
-		Clocks.setTurn(Turn.PAUSE);
 		if(isEndOfGame(Turn.BLACK)){
 			game.clear();
 			Gui.lockBoard();
-//			Clocks.setTurn(Turn.PAUSE);
 			return;
 		}
 		Clocks.setTurn(Turn.BLACK);
 		
 		if(isClientActivated) {
 			sendMoveToClient();
-			int[] move = receiveMoveFromClient();
+			final int[] move = receiveMoveFromClient();
+			Clocks.setNodes(move[5]);
 			TimeUnit.SECONDS.sleep(1);
 			integrator.activate(board, move);
 		}
@@ -345,7 +347,6 @@ public class Director{
 		if(isEndOfGame(Turn.WHITE)){
 			game.clear();
 			Gui.lockBoard();
-//			Clocks.setTurn(Turn.PAUSE);
 			return;
 		}
 		Clocks.setTurn(Turn.WHITE);

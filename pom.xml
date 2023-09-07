@@ -68,7 +68,7 @@
 		  <executable>C:\java\jdk8\bin\javac</executable>          
         </configuration>
       </plugin>
-<!--      <plugin>
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
         <version>3.2.3</version>
@@ -80,7 +80,7 @@
             </goals>
           </execution>
         </executions>
-      </plugin>  -->      
+      </plugin>      
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
