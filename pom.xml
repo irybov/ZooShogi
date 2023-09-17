@@ -41,7 +41,8 @@
                        <includes>
 	                       <include>sound/**</include>
 	                       <include>ui/**</include>					
-	                       <include>*.txt</include>
+	                       <include>config.txt</include>
+	                       <include>README.txt</include>
 <!-- 	                       <include>ZooShogi.bat</include> -->
                        </includes>
 				</resource>
@@ -149,7 +150,7 @@
 	    <executions>
 	        <execution>
 	            <id>make-assembly</id>
-	            <phase>assembly</phase>
+	            <phase>package</phase>
 	            <goals>
 	                <goal>single</goal>
 	            </goals>
