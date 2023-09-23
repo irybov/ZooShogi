@@ -21,6 +21,7 @@ import data.*;
 import sound.Sound;
 import ui.Gui;
 import utilpack.Copier;
+import utilpack.Examiner;
 import utilpack.Matrix;
 import utilpack.Expositor;
 import utilpack.Pieces;
@@ -283,7 +284,7 @@ public class Director{
 //		TimeUnit.SECONDS.sleep(1);
 		undoMove = Copier.deepCopy(board);
 		
-		if(isEndOfGame(Turn.BLACK)){
+		if(isEndOfGame(Turn.WHITE)){
 			game.clear();
 			Gui.lockBoard();
 			return;
@@ -344,7 +345,7 @@ public class Director{
 		Clocks.setTurn(Turn.PAUSE);
 //		Gui.doClick();
 
-		if(isEndOfGame(Turn.WHITE)){
+		if(isEndOfGame(Turn.BLACK)){
 			game.clear();
 			Gui.lockBoard();
 			return;
@@ -354,37 +355,21 @@ public class Director{
 	
 	private boolean isEndOfGame(Turn turn)  {
 		
-		int a = 0;
-		int b = 0;
-		
-		for(int r=0; r<4; r++){
-			for(int c=0; c<3; c++){
-				if(board[r][c].equals("K")){
-					a = 2;
-				}
-				else if(board[r][c].equals("k")){
-					b = 1;
-				}
-			}
-		}
-		
 		if(addToMoveList(Turn.BLACK)){
 			scribe.writeGameNote("end", "1/2");
 			output("draw");
 			chooseVoice("draw");
 			return true;
 		}
-		else if((a+b==2 & turn.equals(Turn.BLACK)) || (a+b==3 & turn.equals(Turn.WHITE)) & 
-				(board[0][0].equals("K")||board[0][1].equals("K")||board[0][2].equals("K"))){
-			scribe.writeGameNote("end", "1-0");
-			output("white");
+		else if(turn.equals(Turn.BLACK) && Examiner.isBlackPositionWin(board, turn)){
+			scribe.writeGameNote("end", "0-1");
+			output("black");
 			chooseVoice("mate");
 			return true;
 		}
-		else if((a+b==1 & turn.equals(Turn.WHITE)) || (a+b==3 & turn.equals(Turn.BLACK)) & 
-				(board[3][0].equals("k")||board[3][1].equals("k")||board[3][2].equals("k"))){
-			scribe.writeGameNote("end", "0-1");
-			output("black");
+		else if(turn.equals(Turn.WHITE) && Examiner.isWhitePositionWin(board, turn)){
+			scribe.writeGameNote("end", "1-0");
+			output("white");
 			chooseVoice("mate");
 			return true;
 		}		
