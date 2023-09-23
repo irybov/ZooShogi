@@ -34,7 +34,7 @@ public class Messanger {
 			if(checkWarningEnabled & Examiner.isCheck(field, Turn.BLACK)){
 				sound.playVoice("check");
 			}
-		}		
+		}
 	}
 	
 }

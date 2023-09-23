@@ -22,6 +22,7 @@ public class NaiveAI extends AI{
 	public Integer call() {
 		calculate(Turn.BLACK, 1, Arrays.asList(root));
 		Clocks.addNodes(nodesCount);
+		Clocks.setScore(root.getValue()/10);
 		return root.getValue()/10;
 	}
 

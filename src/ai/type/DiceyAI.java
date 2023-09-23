@@ -72,6 +72,7 @@ public class DiceyAI extends AI {
 	public Integer call() {
 		root.setValue(prepare());
 		Clocks.addNodes(nodesCount);
+		Clocks.setScore(root.getValue());
 		return root.getValue();
 	}
 	

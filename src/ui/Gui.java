@@ -42,15 +42,14 @@ public class Gui {
 	private static JButton[] dropAreaBlack = new JButton[6];
 	
 	// dialog windows
-	public static JLabel output = new JLabel(" ");
-	public static JLabel score = new JLabel(" ");
 	static JLabel profile = new JLabel("Player");
-
 	private static JLabel computer = new JLabel("Computer");
 	public static JLabel clockBlack = new JLabel("00:00");
 	public static JLabel clockWhite = new JLabel("00:00");
 	private static JLabel nodesLabel = new JLabel("Nodes:");
 	public static JLabel nodes = new JLabel(" ");
+	public static JLabel output = new JLabel(" ");
+	public static JLabel score = new JLabel(" ");
 	
 	// components labels
 	private static JLabel scoreLabel = new JLabel("Score:");
@@ -260,6 +259,8 @@ public class Gui {
 				if(director.isClientActive() == false) {
 					enableLevels();
 				}
+				nodes.setText(" ");
+				Clocks.setNodes(0);
 				output.setText(" ");
 				score.setText(" ");
 				director.initBoard();
@@ -285,7 +286,7 @@ public class Gui {
 		forceBlack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				forceBlack = (JButton) e.getSource();
-				disableLevels();
+				prepareGui();
 
 				Thread t = new Thread(new Runnable() {
 					@Override
@@ -323,7 +324,6 @@ public class Gui {
 				if(director.isStartOfGame() || !Cache.isEmpty()) {
 					return;
 				}
-				Clocks.setNodes(0);
 				director.undoMove();
 				updateGui();
 				return;
@@ -386,73 +386,71 @@ public class Gui {
 						JButton theButton = (JButton) e.getSource();						
 						for(int r=0;r<4;r++) {
 							for(int c=0;c<3;c++) {
-						if(theButton.equals(squares[r][c]) & clickNumber == 1 & 
-								director.isPlayerPiece(squares[r][c].getName())){
-							squares[r][c].setBackground(Color.YELLOW);
-							highlightSquares(r, c);
-							director.moveFrom(r, c, squares[r][c].getName());
-							clickNumber = 2;
-							output.setText(Expositor.getPieceName(squares[r][c].getName())
-																		+" choosen");
-							moveIsDrop = false;
-							return;
+							if(theButton.equals(squares[r][c]) & clickNumber == 1 & 
+									director.isPlayerPiece(squares[r][c].getName())){
+								squares[r][c].setBackground(Color.YELLOW);
+								highlightSquares(r, c);
+								director.moveFrom(r, c, squares[r][c].getName());
+								clickNumber = 2;
+								output.setText(Expositor.getPieceName(squares[r][c].getName())
+																			+" choosen");
+								moveIsDrop = false;
+								return;
 							}
-						else if(theButton.equals(squares[r][c]) & clickNumber == 2 & 
-								director.isPlayerPiece(squares[r][c].getName())==false){
-							if(director.moveTo(r, c)){
-								if(moveIsDrop & squares[r][c].getName().equals(" ")){
-									director.doDrop();
+							else if(theButton.equals(squares[r][c]) & clickNumber == 2 & 
+									director.isPlayerPiece(squares[r][c].getName())==false){
+								if(director.moveTo(r, c)){
+									if(moveIsDrop & squares[r][c].getName().equals(" ")){
+										director.doDrop();
+									}
+									else if(moveIsDrop & !squares[r][c].getName().equals(" ")){
+										moveIsDrop = false;
+										output.setText("Wrong move!");
+										updateGui();
+										return;
+									}
+									else{
+										director.doMove();
+									}
+									
+									prepareGui();									
+									clickNumber = 1;
+									moveIsDrop = false;								
+	
+									Thread t = new Thread(new Runnable() {
+										@Override
+										public void run() {								
+	//									javax.swing.SwingUtilities.invokeLater(new Runnable() {
+	//										public void run() {
+												try {
+													director.compute();
+													updateGui();
+												}
+												catch (InterruptedException e) {
+													e.printStackTrace();
+												}
+											}
+										});
+									t.start();
+									return;
 								}
-								else if(moveIsDrop & !squares[r][c].getName().equals(" ")){
+								else{
+									squares[r][c].setBackground(Color.decode("#db9356"));
+									clickNumber = 1;
 									moveIsDrop = false;
 									output.setText("Wrong move!");
 									updateGui();
 									return;
 								}
-								else{
-									director.doMove();
-								}
-								updateGui();
-								clickNumber = 1;
-								disableLevels();
-								moveIsDrop = false;								
-
-								Thread t = new Thread(new Runnable() {
-									@Override
-									public void run() {								
-//									javax.swing.SwingUtilities.invokeLater(new Runnable() {
-//										public void run() {
-											try {											
-												Clocks.setNodes(0);
-												Gui.nodes.setText(" ");
-												director.compute();
-												updateGui();
-											}
-											catch (InterruptedException e) {
-												e.printStackTrace();
-											}
-										}
-									});
-								t.start();
-								return;
-								}
-							else{
+							}
+							else if(theButton.equals(squares[r][c]) & clickNumber == 2 & 
+									director.isPlayerPiece(squares[r][c].getName())){
 								squares[r][c].setBackground(Color.decode("#db9356"));
 								clickNumber = 1;
 								moveIsDrop = false;
-								output.setText("Wrong move!");
+								output.setText("Wrong place!");
 								updateGui();
 								return;
-								}
-							}
-						else if(theButton.equals(squares[r][c]) & clickNumber == 2 & 
-								director.isPlayerPiece(squares[r][c].getName())){
-							squares[r][c].setBackground(Color.decode("#db9356"));
-							clickNumber = 1;
-							moveIsDrop = false;
-							output.setText("Wrong place!");
-							updateGui();
-							return;
 								}
 							}
 						}
@@ -515,6 +513,16 @@ public class Gui {
 		frame.repaint();
 	}
 	
+	private void prepareGui() {
+		
+		score.setText(" ");
+		Clocks.resetScore();
+		nodes.setText(" ");
+		Clocks.setNodes(0);
+		disableLevels();
+		updateGui();
+	}
+
 	private void updateGui() {
 		
 		for(int r=0;r<4;r++) {
@@ -787,8 +795,8 @@ public class Gui {
 				 javax.swing.SwingUtilities.invokeLater(new Runnable() {
 						public void run() {
 							if(director.loadGame()) {
-								Gui.doClick();
 								disableLevels();
+								Gui.doClick();
 								JOptionPane.showMessageDialog(loadgame,
 										"Last game loaded",
 											"Success!",

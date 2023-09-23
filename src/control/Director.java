@@ -280,7 +280,7 @@ public class Director{
 
 		Clocks.setTurn(Turn.PAUSE);
 		
-		TimeUnit.SECONDS.sleep(1);
+//		TimeUnit.SECONDS.sleep(1);
 		undoMove = Copier.deepCopy(board);
 		
 		if(isEndOfGame(Turn.BLACK)){

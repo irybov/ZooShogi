@@ -23,6 +23,7 @@ public class MasterAI extends AI{
 	public Integer call() {
 		calculate(Turn.BLACK,1,Integer.MIN_VALUE+1,Integer.MAX_VALUE,false,Arrays.asList(root));
 		Clocks.addNodes(nodesCount);
+		Clocks.setScore(root.getValue());
 		return root.getValue();
 	}
 

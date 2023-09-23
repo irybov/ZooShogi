@@ -29,6 +29,7 @@ public class TrickyAI extends AI{
 	public Integer call() {
 		calculate(board, 1);
 		Clocks.addNodes(nodesCount);
+		Clocks.setScore(root.getValue());
 		return root.getValue();
 	}
 

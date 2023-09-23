@@ -8,16 +8,16 @@ import utilpack.Turn;
 
 public class Clocks{
 	
-	private static volatile int minutesBlack = 0;
-	private static volatile int secondsBlack = 0;
-	private static volatile int minutesWhite = 0;
-	private static volatile int secondsWhite = 0;
+	private int minutesBlack = 0;
+	private int secondsBlack = 0;
+	private int minutesWhite = 0;
+	private int secondsWhite = 0;
 
-	private static volatile Turn turn = Turn.PAUSE;
-	private static volatile AtomicInteger nodes = new AtomicInteger(0);
+	private static Turn turn = Turn.PAUSE;
+	private static AtomicInteger nodes = new AtomicInteger(0);
+	private static AtomicInteger score = new AtomicInteger(0);
 	
-	private static volatile Clocks INSTANCE;
-	
+	private static volatile Clocks INSTANCE;	
 	public static Clocks getInstance() {
 		
 		if(INSTANCE == null) {
@@ -39,6 +39,13 @@ public class Clocks{
 	public static void addNodes(int count) {
 		nodes.addAndGet(count);
 	}
+	public static void setScore(int count) {
+		if(count > score.intValue())
+		score.set(count);
+	}
+	public static void resetScore() {
+		score.set(Integer.MIN_VALUE);
+	}
 	
 	public void showClocks() {
 		
@@ -47,6 +54,10 @@ public class Clocks{
 				TimeUnit.SECONDS.sleep(1);
 				if(turn.equals(Turn.BLACK)) {
 					Gui.nodes.setText(String.format("%,d", nodes.get()));
+					if(score.intValue() > Integer.MIN_VALUE) {
+						Gui.score.setText(score.intValue() > 0 ? "+" 
+						+ Integer.toString(score.intValue()) : Integer.toString(score.intValue()));
+					}
 					if(secondsBlack < 59) {
 						secondsBlack++;
 					}
@@ -78,8 +89,7 @@ public class Clocks{
 	
 	public void resetClocks() {
 		
-		nodes.set(0);
-		Gui.nodes.setText(" ");
+		resetScore();
 		turn = Turn.PAUSE;
 		minutesBlack = 0;
 		secondsBlack = 0;
