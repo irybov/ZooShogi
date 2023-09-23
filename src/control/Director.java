@@ -347,31 +347,36 @@ public class Director{
 
 		if(isEndOfGame(Turn.BLACK)){
 			game.clear();
+			Gui.doClick();
 			Gui.lockBoard();
 			return;
 		}
 		Clocks.setTurn(Turn.WHITE);
 	}
 	
-	private boolean isEndOfGame(Turn turn)  {
+	private boolean isEndOfGame(Turn turn) {
 		
-		if(addToMoveList(Turn.BLACK)){
+		if(addToMoveList(Turn.BLACK)) {
 			scribe.writeGameNote("end", "1/2");
 			output("draw");
 			chooseVoice("draw");
 			return true;
+		}		
+		if(turn.equals(Turn.BLACK) && Examiner.isBlackPositionWin(board, turn)) {
+			if(!Examiner.isCheck(board, Turn.WHITE)) {
+				scribe.writeGameNote("end", "0-1");
+				output("black");
+				chooseVoice("mate");
+				return true;
+			}
 		}
-		else if(turn.equals(Turn.BLACK) && Examiner.isBlackPositionWin(board, turn)){
-			scribe.writeGameNote("end", "0-1");
-			output("black");
-			chooseVoice("mate");
-			return true;
-		}
-		else if(turn.equals(Turn.WHITE) && Examiner.isWhitePositionWin(board, turn)){
-			scribe.writeGameNote("end", "1-0");
-			output("white");
-			chooseVoice("mate");
-			return true;
+		if(turn.equals(Turn.WHITE) && Examiner.isWhitePositionWin(board, turn)) {
+			if(!Examiner.isCheck(board, Turn.BLACK)) {
+				scribe.writeGameNote("end", "1-0");
+				output("white");
+				chooseVoice("mate");
+				return true;
+			}
 		}		
 		return false;
 	}
