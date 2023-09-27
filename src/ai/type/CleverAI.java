@@ -53,25 +53,38 @@ public class CleverAI extends AI{
 			hash.addMove(board, turn, depth);
 		}
 		
-		if(Examiner.isBlackPositionWin(board, turn)){
-			legalMoves = null;
-			return 2000+(100/depth);
-		}
-		if(Examiner.isWhitePositionWin(board, turn)){
-			legalMoves = null;
-			return -(2000+(100/depth));
-		}
-		if(Examiner.isCheck(board, turn) && depth > 1){
-			if(turn.equals(Turn.WHITE)){
-				legalMoves = null;
-				return -(1000+(100/depth));
+		if(depth > 1) {
+			if(Examiner.isPositionWon(board, turn)){
+				if(turn.equals(Turn.BLACK)){
+					legalMoves = null;
+					return 1000+(100/depth);
+				}
+				else {
+					legalMoves = null;
+					return -(1000+(100/depth));				
+				}
 			}
-			else {
-				legalMoves = null;
-				return 1000+(100/depth);				
+			if(Examiner.isCheck(board, turn)){
+				if(turn.equals(Turn.WHITE)){
+					legalMoves = null;
+					return -(1000+(100/depth));
+				}
+				else {
+					legalMoves = null;
+					return 1000+(100/depth);				
+				}
+			}
+			if(Examiner.isPromotionWins(board, turn)){
+				if(turn.equals(Turn.BLACK)){
+					legalMoves = null;
+					return 1000+(100/depth);
+				}
+				else {
+					legalMoves = null;
+					return -(1000+(100/depth));				
+				}
 			}
 		}
-
 		if(depth == 6){
 			legalMoves = null;
 			return evaluator.evaluationMaterial(board, false);

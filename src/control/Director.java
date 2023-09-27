@@ -327,9 +327,7 @@ public class Director{
 					TaskInterceptor f19 = new TaskInterceptor(tasks);
 					ExecutorService es = Executors.newFixedThreadPool(cores);
 					for(Node node : nodes) {
-						Future<Integer> score = es.submit(factory
-								.createAI(level, node, Copier.deepCopy(board)));
-						tasks.add(score);
+						tasks.add(es.submit(factory.createAI(level, node, Copier.deepCopy(board))));
 					}
 					f19.start();
 						es.shutdown();			
@@ -361,23 +359,41 @@ public class Director{
 			output("draw");
 			chooseVoice("draw");
 			return true;
-		}		
-		if(turn.equals(Turn.BLACK) && Examiner.isBlackPositionWin(board, turn)) {
-			if(!Examiner.isCheck(board, Turn.WHITE)) {
+		}
+		
+		if(Examiner.isPositionWon(board, turn)) {
+			if(turn.equals(Turn.BLACK)){
 				scribe.writeGameNote("end", "0-1");
 				output("black");
 				chooseVoice("mate");
 				return true;
 			}
-		}
-		if(turn.equals(Turn.WHITE) && Examiner.isWhitePositionWin(board, turn)) {
-			if(!Examiner.isCheck(board, Turn.BLACK)) {
+			else {
 				scribe.writeGameNote("end", "1-0");
 				output("white");
 				chooseVoice("mate");
 				return true;
 			}
-		}		
+		}
+		else {
+			if(turn.equals(Turn.BLACK)) {
+				if(!Examiner.isCheck(board, Turn.WHITE) & Examiner.isPromotionWins(board, turn)) {
+					scribe.writeGameNote("end", "0-1");
+					output("black");
+					chooseVoice("mate");
+					return true;
+				}
+			}
+			else {
+				if(!Examiner.isCheck(board, Turn.BLACK) & Examiner.isPromotionWins(board, turn)) {
+					scribe.writeGameNote("end", "1-0");
+					output("white");
+					chooseVoice("mate");
+					return true;
+				}
+			}
+		}
+		
 		return false;
 	}
 	

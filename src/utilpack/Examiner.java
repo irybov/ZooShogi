@@ -140,7 +140,7 @@ public final class Examiner {
 		return false;
 	}
 
-	public static boolean isBlackPositionWin(String[][] board, Turn turn)  {
+	public static boolean isPositionWon(String[][] board, Turn turn)  {
 		
 		int a = 0;
 		int b = 0;
@@ -154,28 +154,14 @@ public final class Examiner {
 					b = 1;
 				}
 			}
-		}		
-		return((a+b==1) || ((a+b==3 & turn.equals(Turn.BLACK)) & isPromotionWins(board, turn)));
-//			   (board[3][0].equals("k")||board[3][1].equals("k")||board[3][2].equals("k"))));
-	}
-	
-	public static boolean isWhitePositionWin(String[][] board, Turn turn)  {
+		}
 		
-		int a = 0;
-		int b = 0;
-		
-		for(int r=0; r<4; r++){
-			for(int c=0; c<3; c++){
-				if(board[r][c].equals("K")){
-					a = 2;
-				}
-				if(board[r][c].equals("k")){
-					b = 1;
-				}
-			}
-		}		
-		return((a+b==2) || ((a+b==3 & turn.equals(Turn.WHITE)) & isPromotionWins(board, turn)));
-//			   (board[0][0].equals("K")||board[0][1].equals("K")||board[0][2].equals("K"))));
+		if(turn.equals(Turn.BLACK)){
+			return(a+b==1);
+		}
+		else {
+			return(a+b==2);
+		}
 	}	
 	
 }
