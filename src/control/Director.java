@@ -16,6 +16,7 @@ import ai.component.Cache;
 import ai.component.Generator;
 import ai.component.MovesList;
 import ai.component.Node;
+import ai.type.AI;
 import ai.type.GreedyAI;
 import data.*;
 import sound.Sound;
@@ -277,6 +278,7 @@ public class Director{
 	private final AIFactory factory = new AIFactory();
 	private final Generator generator = new Generator();
 	
+	private ExecutorService es = Executors.newFixedThreadPool(cores);
 	public void compute() throws InterruptedException{
 
 		Clocks.setTurn(Turn.PAUSE);
@@ -323,16 +325,20 @@ public class Director{
 						nodes = generator.filterMoves(nodes, Turn.BLACK);
 					}
 				case 0: case 2: case 3: case 5: case 6: case 7:
-					List<Future<Integer>> tasks = new ArrayList<>(nodes.size());
-					TaskInterceptor f19 = new TaskInterceptor(tasks);
-					ExecutorService es = Executors.newFixedThreadPool(cores);
+					List<AI> ais = new ArrayList<>(nodes.size());
+//					List<Future<Integer>> tasks = new ArrayList<>(nodes.size());
+//					TaskInterceptor f19 = new TaskInterceptor(tasks);
+//					ExecutorService es = Executors.newFixedThreadPool(cores);
 					for(Node node : nodes) {
-						tasks.add(es.submit(factory.createAI(level, node, Copier.deepCopy(board))));
+						ais.add(factory.createAI(level, node, Copier.deepCopy(board)));
+//						tasks.add(es.submit(factory.createAI(level, node, Copier.deepCopy(board))));
 					}
+					TaskInterceptor f19 = new TaskInterceptor(ais, es);
 					f19.start();
-						es.shutdown();			
-						es.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
-					f19.interrupt();
+//						es.shutdown();			
+//						es.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
+					f19.join();
+//					f19.interrupt();
 					break;
 				}
 				TimeUnit.SECONDS.sleep(1);
