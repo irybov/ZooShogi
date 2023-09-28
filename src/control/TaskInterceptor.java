@@ -16,15 +16,16 @@ class TaskInterceptor extends Thread{
 	
 	public TaskInterceptor(List<AI> ais, ExecutorService es) {
 		this.ais = ais;
-		this.es = es;		
+		this.es = es;
 		tasks = new CopyOnWriteArrayList<>();
-		for(AI ai : ais) {
-			tasks.add(es.submit(ai));
-		}
 	}
 
 	@Override
 	public void run() {
+		
+		for(AI ai : ais) {
+			tasks.add(es.submit(ai));
+		}
 
 		while(!tasks.isEmpty()) {
 			for(Future<Integer> task : tasks) {
@@ -32,11 +33,13 @@ class TaskInterceptor extends Thread{
 					if(task.isDone()) {
 						if(task.get() > 999) {
 							for(Future<Integer> each : tasks) {
-								each.cancel(false);
+								each.cancel(true);
 								tasks.remove(each);
 							}
 						}
-						tasks.remove(task);
+						else {
+							tasks.remove(task);
+						}
 					}
 					else if(task.isCancelled()) {
 						tasks.remove(task);
