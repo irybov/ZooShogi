@@ -20,6 +20,12 @@ public class NaiveAI extends AI{
 	
 	@Override
 	public Integer call() {
+		try {
+			latch.await();
+		}
+		catch (InterruptedException exc) {
+			exc.printStackTrace();
+		}
 		calculate(Turn.BLACK, 1, Arrays.asList(root));
 		Clocks.addNodes(nodesCount);
 		Clocks.setScore(root.getValue()/10);

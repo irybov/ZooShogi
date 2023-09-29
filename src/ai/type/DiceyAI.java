@@ -70,6 +70,12 @@ public class DiceyAI extends AI {
 
 	@Override
 	public Integer call() {
+		try {
+			latch.await();
+		}
+		catch (InterruptedException exc) {
+			exc.printStackTrace();
+		}
 		root.setValue(prepare());
 		Clocks.addNodes(nodesCount);
 		Clocks.setScore(root.getValue());

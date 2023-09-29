@@ -27,6 +27,12 @@ public class TrickyAI extends AI{
 	
 	@Override
 	public Integer call() {
+		try {
+			latch.await();
+		}
+		catch (InterruptedException exc) {
+			exc.printStackTrace();
+		}
 		calculate(board, 1);
 		Clocks.addNodes(nodesCount);
 		Clocks.setScore(root.getValue());

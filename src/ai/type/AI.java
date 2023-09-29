@@ -3,6 +3,7 @@ package ai.type;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CountDownLatch;
 
 import ai.Integrator;
 import ai.component.Evaluator;
@@ -15,10 +16,15 @@ public abstract class AI implements Callable<Integer>{
 	
 	Node root;
 	String[][] board;
+	CountDownLatch latch;
 
 	public AI(Node root, String[][] board) {		
 		this.root = root;
 		this.board = board;
+	}
+	
+	public void setLatch(CountDownLatch latch){
+		this.latch = latch;
 	}
 		
 	final InternalHash hash = new InternalHash();
