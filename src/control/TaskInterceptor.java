@@ -34,25 +34,25 @@ class TaskInterceptor extends Thread{
 
 		while(!tasks.isEmpty()) {
 			for(Future<Integer> task : tasks) {
-				try {
 					if(task.isDone()) {
-						if(task.get() > 999) {
-							for(Future<Integer> each : tasks) {
-								each.cancel(true);
-								tasks.remove(each);
+						try {
+							if(task.get() > 999) {
+								for(Future<Integer> each : tasks) {
+									each.cancel(true);
+									tasks.remove(each);
+								}
+							}
+							else {
+								tasks.remove(task);
 							}
 						}
-						else {
-							tasks.remove(task);
+						catch (InterruptedException | ExecutionException exc) {
+							exc.printStackTrace();
 						}
 					}
 					else if(task.isCancelled()) {
 						tasks.remove(task);
 					}
-				}
-				catch (InterruptedException | ExecutionException exc) {
-					exc.printStackTrace();
-				}
 			}
 		}
 	}
