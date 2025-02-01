@@ -17,7 +17,9 @@ public class ZooShogi {
 		
 		Dimension ss = Toolkit.getDefaultToolkit().getScreenSize();
 		if((int) ss.getWidth()/1000 < 3) {k = 1;}
-		else {k = 2;}		
+		else {k = 2;}
+//			System.setProperty("sun.java2d.uiScale.enabled", "true");
+//			System.setProperty("sun.java2d.uiScale", "2.0");
 		setup();
 	}
 

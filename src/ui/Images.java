@@ -134,7 +134,8 @@ public class Images {
 			if(k == 1) {return icon;}
 			else {
 				Image original = icon.getImage();
-				Image resized = original.getScaledInstance(icon.getIconWidth()*k, 
+				Image resized = original.getScaledInstance(
+								icon.getIconWidth()*k, 
 								icon.getIconHeight()*k, 
 								java.awt.Image.SCALE_SMOOTH);
 				return new ImageIcon(resized);

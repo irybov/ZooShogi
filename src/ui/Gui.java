@@ -87,9 +87,8 @@ public class Gui {
 	private static JMenuBar menuBar = new JMenuBar();
 	
 	private int k;
-	public Gui(int k) {
-		this.k = k;
-	}
+	public Gui(int k) {this.k = k;}
+//	public Gui() {}
     
 	public void launch() {
 		
