@@ -92,7 +92,7 @@ public class ExpertAI extends AI{
 
 		nodesCount += legalMoves.size();
 		
-		List<Integer> scores = new ArrayList<>(legalMoves.size());
+		ArrayList<Integer> scores = new ArrayList<>(legalMoves.size());
 		
 		for(int i=0; i<legalMoves.size(); i++){
 
@@ -163,6 +163,7 @@ public class ExpertAI extends AI{
 			}
 		}
 		
+		scores.trimToSize();
 		if(turn.equals(Turn.BLACK)){
 			return evaluator.alpha(scores, alpha, beta);
 		}

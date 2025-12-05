@@ -94,7 +94,7 @@ public class NaiveAI extends AI{
 
 		nodesCount += legalMoves.size();
 		
-		List<Integer> scores = new ArrayList<>(legalMoves.size());
+		ArrayList<Integer> scores = new ArrayList<>(legalMoves.size());
 		
 		for(int i=0; i<legalMoves.size(); i++){
 	
@@ -151,6 +151,7 @@ public class NaiveAI extends AI{
 			MoveMaker.undoAnyMove(board, temp, promotion, r, c, r2, c2, r3, c3);
 		}
 		
+		scores.trimToSize();
 		if(turn.equals(Turn.BLACK)){
 			return evaluator.max(scores);
 		}

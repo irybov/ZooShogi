@@ -325,7 +325,7 @@ public class Director{
 						nodes = generator.filterMoves(nodes, Turn.BLACK);
 					}
 				case 0: case 2: case 3: case 5: case 6: case 7:
-					List<AI> ais = new ArrayList<>(nodes.size());
+					ArrayList<AI> ais = new ArrayList<>(nodes.size());
 //					List<Future<Integer>> tasks = new ArrayList<>(nodes.size());
 //					TaskInterceptor f19 = new TaskInterceptor(tasks);
 //					ExecutorService es = Executors.newFixedThreadPool(cores);
@@ -333,6 +333,7 @@ public class Director{
 						ais.add(factory.createAI(level, node, Copier.deepCopy(board)));
 //						tasks.add(es.submit(factory.createAI(level, node, Copier.deepCopy(board))));
 					}
+					ais.trimToSize();
 					TaskInterceptor f19 = new TaskInterceptor(ais, es);
 					f19.start();
 //						es.shutdown();			

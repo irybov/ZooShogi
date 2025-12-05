@@ -102,7 +102,7 @@ public class CleverAI extends AI{
 
 		nodesCount += legalMoves.size();
 				
-		List<Integer> scores = new ArrayList<>(legalMoves.size());
+		ArrayList<Integer> scores = new ArrayList<>(legalMoves.size());
 		String[][] field = new String[][]{{"","","","","","","","",""},
 			   							  {"","",""},
 			   							  {"","",""},
@@ -165,6 +165,7 @@ public class CleverAI extends AI{
 			MoveMaker.undoAnyMove(board, temp, promotion, r, c, r2, c2, r3, c3);
 		}
 		
+		scores.trimToSize();
 		int score;
 		if(turn.equals(Turn.BLACK)){			
 			score = evaluator.max(scores);
