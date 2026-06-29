@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import ai.component.Board;
+import ai.component.Generator;
 import ai.component.MovesList;
 import ai.component.Node;
 import control.Clocks;
@@ -21,8 +22,8 @@ import utilpack.Turn;
 
 public class DiceyAI extends AI {
 
-	public DiceyAI(Node root, String[][] board) {
-		super(root, board);
+	public DiceyAI(Node root, String[][] board, Generator generator) {
+		super(root, board, generator);
 	}
 	
 	private final InternalHash hash = new InternalHash();
@@ -163,7 +164,7 @@ public class DiceyAI extends AI {
 						List<Node> sorted = generator.arrangeMoves(board, leaves, turn);
 						List<Integer> scores = sorted.stream().map(Node::getValue)
 													 .collect(Collectors.toList());
-						current.setValue(evaluator.max(scores));
+						current.setValue(generator.evaluator.max(scores));
 						
 						int x3 = state0.getC3();
 						String promotion0 = state0.getPromotion();
@@ -209,7 +210,7 @@ public class DiceyAI extends AI {
 						List<Node> sorted = generator.arrangeMoves(board, leaves, turn);
 						List<Integer> scores = sorted.stream().map(Node::getValue)
 													 .collect(Collectors.toList());
-						current.setValue(evaluator.min(scores));
+						current.setValue(generator.evaluator.min(scores));
 						
 						int x3 = state0.getC3();
 						String promotion0 = state0.getPromotion();

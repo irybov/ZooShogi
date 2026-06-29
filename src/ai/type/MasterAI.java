@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import ai.component.Board;
+import ai.component.Generator;
 import ai.component.MovesList;
 import ai.component.Node;
 import control.Clocks;
@@ -15,8 +16,8 @@ import utilpack.Turn;
 
 public class MasterAI extends AI{
 
-	public MasterAI(Node root, String[][] board) {
-		super(root, board);
+	public MasterAI(Node root, String[][] board, Generator generator) {
+		super(root, board, generator);
 	}
 	
 	@Override
@@ -89,11 +90,11 @@ public class MasterAI extends AI{
 		}
 		if(extend == false & depth > 5){
 			legalMoves = null;
-			return evaluator.evaluationMaterial(board, false);
+			return generator.evaluator.evaluationMaterial(board, false);
 		}		
 		if(depth == 10){
 			legalMoves = null;
-			return evaluator.evaluationMaterial(board, false);
+			return generator.evaluator.evaluationMaterial(board, false);
 		}
 
 		nodesCount += legalMoves.size();
@@ -190,10 +191,10 @@ public class MasterAI extends AI{
 		}
 		
 		if(turn.equals(Turn.BLACK)){
-			return evaluator.alpha(scores, alpha, beta);
+			return generator.evaluator.alpha(scores, alpha, beta);
 		}
 		else{
-			return evaluator.beta(scores, alpha, beta);
+			return generator.evaluator.beta(scores, alpha, beta);
 		}
 	}
 	

@@ -6,6 +6,7 @@ import java.util.List;
 
 import ai.component.Board;
 import ai.component.Edge;
+import ai.component.Generator;
 import ai.component.Memorizer;
 import ai.component.MovesList;
 import ai.component.Node;
@@ -18,8 +19,8 @@ import utilpack.Turn;
 public class CleverAI extends AI{
 
 	private final Memorizer memo = Memorizer.getInstance();
-	public CleverAI(Node root, String[][] board) {
-		super(root, board);
+	public CleverAI(Node root, String[][] board, Generator generator) {
+		super(root, board, generator);
 	}
 	
 	@Override
@@ -93,7 +94,7 @@ public class CleverAI extends AI{
 		}
 		if(depth == 6){
 			legalMoves = null;
-			return evaluator.evaluationMaterial(board, false);
+			return generator.evaluator.evaluationMaterial(board, false);
 		}
 		
 		if(memo.has(board, turn)) {
@@ -167,7 +168,7 @@ public class CleverAI extends AI{
 		
 		int score;
 		if(turn.equals(Turn.BLACK)){			
-			score = evaluator.max(scores);
+			score = generator.evaluator.max(scores);
 			if(memo.has(field, Turn.WHITE)) {
 				memo.update(field, Turn.WHITE, new Edge(depth, score));
 			}
@@ -176,7 +177,7 @@ public class CleverAI extends AI{
 			}
 		}
 		else{		
-			score = evaluator.min(scores);
+			score = generator.evaluator.min(scores);
 			if(memo.has(field, Turn.BLACK)) {
 				memo.update(field, Turn.BLACK, new Edge(depth, score));
 			}

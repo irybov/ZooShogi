@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import ai.component.Board;
+import ai.component.Generator;
 import ai.component.MovesList;
 import ai.component.Node;
 import control.Clocks;
@@ -14,8 +15,8 @@ import utilpack.Turn;
 
 public class ExpertAI extends AI{
 
-	public ExpertAI(Node root, String[][] board) {
-		super(root, board);
+	public ExpertAI(Node root, String[][] board, Generator generator) {
+		super(root, board, generator);
 	}
 	
 	@Override
@@ -87,7 +88,7 @@ public class ExpertAI extends AI{
 		}
 		if(depth == 8){
 			legalMoves = null;
-			return evaluator.evaluationMaterial(board, false);
+			return generator.evaluator.evaluationMaterial(board, false);
 		}
 
 		nodesCount += legalMoves.size();
@@ -164,10 +165,10 @@ public class ExpertAI extends AI{
 		}
 		
 		if(turn.equals(Turn.BLACK)){
-			return evaluator.alpha(scores, alpha, beta);
+			return generator.evaluator.alpha(scores, alpha, beta);
 		}
 		else{
-			return evaluator.beta(scores, alpha, beta);
+			return generator.evaluator.beta(scores, alpha, beta);
 		}
 	}
 	

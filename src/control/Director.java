@@ -276,9 +276,8 @@ public class Director{
 	
 	private final int cores = Runtime.getRuntime().availableProcessors();
 	private final AIFactory factory = new AIFactory();
-	private final Generator generator = new Generator();
-	
-	private ExecutorService es = Executors.newFixedThreadPool(cores);
+	private final Generator generator = new Generator();	
+	private final ExecutorService es = Executors.newFixedThreadPool(cores);
 	public void compute() throws InterruptedException{
 
 		Clocks.setTurn(Turn.PAUSE);
@@ -330,7 +329,7 @@ public class Director{
 //					TaskInterceptor f19 = new TaskInterceptor(tasks);
 //					ExecutorService es = Executors.newFixedThreadPool(cores);
 					for(Node node : nodes) {
-						ais.add(factory.createAI(level, node, Copier.deepCopy(board)));
+						ais.add(factory.createAI(level, node, Copier.deepCopy(board), generator));
 //						tasks.add(es.submit(factory.createAI(level, node, Copier.deepCopy(board))));
 					}
 					TaskInterceptor f19 = new TaskInterceptor(ais, es);

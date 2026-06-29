@@ -11,6 +11,7 @@ import java.util.Queue;
 import java.util.stream.Collectors;
 
 import ai.component.Board;
+import ai.component.Generator;
 import ai.component.MovesList;
 import ai.component.Node;
 import control.Clocks;
@@ -21,8 +22,8 @@ import utilpack.Turn;
 
 public class TrickyAI extends AI{
 
-	public TrickyAI(Node root, String[][] board) {
-		super(root, board);
+	public TrickyAI(Node root, String[][] board, Generator generator) {
+		super(root, board, generator);
 	}
 	
 	@Override
@@ -106,7 +107,7 @@ public class TrickyAI extends AI{
 							legal.get(i).setValue(-(2000+(100/depth)));
 						}
 						else{
-							legal.get(i).setValue(evaluator.evaluationMaterial(board, false));
+							legal.get(i).setValue(generator.evaluator.evaluationMaterial(board, false));
 							if(depth < 5) {
 								input.add(Copier.deepCopy(board));
 								legal.get(i).addChildren(generator.generateMoves(board, Turn.WHITE));
@@ -140,7 +141,7 @@ public class TrickyAI extends AI{
 							legal.get(i).setValue(2000+(100/depth));
 						}
 						else{
-							legal.get(i).setValue(evaluator.evaluationMaterial(board, false));
+							legal.get(i).setValue(generator.evaluator.evaluationMaterial(board, false));
 							if(depth < 5) {
 								input.add(Copier.deepCopy(board));
 								legal.get(i).addChildren(generator.generateMoves(board, Turn.BLACK));
@@ -193,10 +194,10 @@ public class TrickyAI extends AI{
         			scores.add(child.getValue());
         		}
             	if(move.getDepth() % 2 == 1) {
-            		move.setValue(evaluator.min(scores));
+            		move.setValue(generator.evaluator.min(scores));
             	}
             	else{
-            		move.setValue(evaluator.max(scores));
+            		move.setValue(generator.evaluator.max(scores));
             	}
         	}
         }

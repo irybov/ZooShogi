@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import ai.component.Board;
+import ai.component.Generator;
 import ai.component.MovesList;
 import ai.component.Node;
 import control.Clocks;
@@ -14,8 +15,8 @@ import utilpack.Turn;
 
 public class NaiveAI extends AI{
 
-	public NaiveAI(Node root, String[][] board) {
-		super(root, board);
+	public NaiveAI(Node root, String[][] board, Generator generator) {
+		super(root, board, generator);
 	}
 	
 	@Override
@@ -89,7 +90,7 @@ public class NaiveAI extends AI{
 		}		
 		if(depth == 6){
 			legalMoves = null;
-			return evaluator.evaluationMaterial(board, true)/depth;
+			return generator.evaluator.evaluationMaterial(board, true)/depth;
 		}
 
 		nodesCount += legalMoves.size();
@@ -152,10 +153,10 @@ public class NaiveAI extends AI{
 		}
 		
 		if(turn.equals(Turn.BLACK)){
-			return evaluator.max(scores);
+			return generator.evaluator.max(scores);
 		}
 		else {
-			return evaluator.expected(scores);
+			return generator.evaluator.expected(scores);
 		}
 	}
 	

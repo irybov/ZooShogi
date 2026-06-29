@@ -17,10 +17,12 @@ public abstract class AI implements Callable<Integer>{
 	Node root;
 	String[][] board;
 	CountDownLatch latch;
+	Generator generator;
 
-	public AI(Node root, String[][] board) {		
+	public AI(Node root, String[][] board, Generator generator) {
 		this.root = root;
 		this.board = board;
+		this.generator = generator;
 	}
 	
 	public void setLatch(CountDownLatch latch){
@@ -28,8 +30,8 @@ public abstract class AI implements Callable<Integer>{
 	}
 		
 	final InternalHash hash = new InternalHash();
-	final Generator generator = new Generator();
-	final Evaluator evaluator = new Evaluator();
+//	final Generator generator = new Generator();
+//	final Evaluator evaluator = new Evaluator();
 	final Integrator integrator = Integrator.getInstance();
 	int nodesCount = 0;
 

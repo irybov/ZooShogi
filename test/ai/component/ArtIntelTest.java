@@ -1,4 +1,4 @@
-package ai;
+package ai.component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +13,7 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import ai.AIFactory;
 import ai.component.Generator;
 import ai.component.Node;
 import utilpack.Copier;
@@ -52,7 +53,7 @@ public class ArtIntelTest {
 	@Test(timeout = 8_000)
 	public void performance_timelimit_AB() {
 		level = 6;
-		nodes.forEach(node-> es.submit(factory.createAI(level, node, Copier.deepCopy(board))));
+		nodes.forEach(node-> es.submit(factory.createAI(level, node, Copier.deepCopy(board), generator)));
 		es.shutdown();
 		try {
 			es.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
@@ -65,7 +66,7 @@ public class ArtIntelTest {
 	@Test(timeout = 10_000)
 	public void performance_timelimit_EX() {
 		level = 7;
-		nodes.forEach(node-> es.submit(factory.createAI(level, node, Copier.deepCopy(board))));
+		nodes.forEach(node-> es.submit(factory.createAI(level, node, Copier.deepCopy(board), generator)));
 		es.shutdown();
 		try {
 			es.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);

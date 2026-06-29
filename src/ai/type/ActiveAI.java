@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import ai.component.Board;
+import ai.component.Generator;
 import ai.component.MovesList;
 import ai.component.Node;
 import control.Clocks;
@@ -14,8 +15,8 @@ import utilpack.Turn;
 
 public class ActiveAI extends AI{
 
-	public ActiveAI(Node root, String[][] board) {
-		super(root, board);
+	public ActiveAI(Node root, String[][] board, Generator generator) {
+		super(root, board, generator);
 	}
 	
 	@Override
@@ -89,8 +90,8 @@ public class ActiveAI extends AI{
 		}
 		if(depth == 8){
 			legalMoves = null;
-			return evaluator.evaluationMaterial(board, false)
-					+ evaluator.evaluationPositional(board);
+			return generator.evaluator.evaluationMaterial(board, false)
+					+ generator.evaluator.evaluationPositional(board);
 		}
 
 		nodesCount += legalMoves.size();
@@ -181,10 +182,10 @@ public class ActiveAI extends AI{
 		}
 		
 		if(turn.equals(Turn.BLACK)){
-			return evaluator.alpha(scores, alpha, beta);
+			return generator.evaluator.alpha(scores, alpha, beta);
 		}
 		else{
-			return evaluator.beta(scores, alpha, beta);
+			return generator.evaluator.beta(scores, alpha, beta);
 		}
 	}
 	

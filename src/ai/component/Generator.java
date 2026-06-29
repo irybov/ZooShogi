@@ -12,11 +12,11 @@ import utilpack.Turn;
 
 public class Generator {
 	
-	private final Evaluator evaluator = new Evaluator();
+	public final Evaluator evaluator = new Evaluator();
 
 	public List<Node> generateMoves(String[][] board, Turn turn) {	
 		
-		List<Node> legal = new ArrayList<>();
+	    ArrayList<Node> legal = new ArrayList<>();
 		
 		int r2, c2;
 
@@ -152,6 +152,7 @@ public class Generator {
 				}
 			}
 		}
+		legal.trimToSize();
 		return legal;
 	}
 	
